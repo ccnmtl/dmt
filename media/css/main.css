@@ -52,3 +52,13 @@ body > .container {
 #primarynav a:hover {
   color: blue;
 }
+
+td.open, td.new, td.reopened {
+	font-weight: bold;
+	color: #f00;
+}
+
+td.closed {
+		font-weight: bold;
+		color: #009900;
+}

@@ -27,6 +27,7 @@ urlpatterns = patterns(
     logout_page,
     (r'^$', 'dmt.main.views.index'),
     (r'projects/$', 'dmt.main.views.all_projects'),
+    (r'projects/(?P<id>\d+)/$', 'dmt.main.views.project'),
     (r'^admin/', include(admin.site.urls)),
     url(r'^_impersonate/', include('impersonate.urls')),
     (r'^munin/', include('munin.urls')),

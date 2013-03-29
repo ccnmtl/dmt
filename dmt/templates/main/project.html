@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Project: {{project.name}}</h1>
+
+{% if project.milestone_set.count %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Target Date</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for milestone in project.milestone_set.all %}
+		<tr>
+			<td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
+			<td>{{milestone.target_date}}</td>
+			<td class="{{milestone.status_class}}">{{milestone.status}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+
+</table>
+{% endif %}
+{% endblock %}

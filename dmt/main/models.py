@@ -49,7 +49,7 @@ class Project(models.Model):
         ordering = ['name', ]
 
     def get_absolute_url(self):
-        return "/project/%d/" % self.pid
+        return "/projects/%d/" % self.pid
 
 
 class Document(models.Model):
@@ -72,12 +72,19 @@ class Milestone(models.Model):
     mid = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
     target_date = models.DateField()
-    pid = models.ForeignKey(Project, db_column='pid')
+    project = models.ForeignKey(Project, db_column='pid')
     status = models.CharField(max_length=8)
     description = models.TextField(blank=True)
 
     class Meta:
         db_table = u'milestones'
+        ordering = ['target_date', 'name', ]
+
+    def get_absolute_url(self):
+        return "/milestone/%d/" % self.mid
+
+    def status_class(self):
+        return self.status.lower()
 
 
 class Item(models.Model):
