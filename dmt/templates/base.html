@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>dmt: {% block title %}{% endblock %}</title>
+	<title>DMT: {% block title %}{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="dmt">
   <meta name="author" content="CCNMTL">
@@ -31,7 +31,15 @@
     <div class="navbar-inner">
       <div class="container">
         <ul class="nav">
-          <li><a class="brand" href="/">dmt</a></li>
+          <li><a class="brand" href="/">DMT</a></li>
+					<li><a href="/items/">Items</a></li>
+					<li><a href="/projects/">Projects</a></li>
+					<li><a href="/clients/">Clients</a></li>
+					<li><a href="/users/">Users/Groups</a></li>
+					<li><a href="/reports/">Reports</a></li>
+					<li><a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Tutorial">Help</a></li>
+					<li><a href="/forum/">Forum</a></li>
+					<li><a href="http://wiki.ccnmtl.columbia.edu/">Wiki</a></li>
           {% block topnavbarleftitems %}{% endblock %}
         </ul>
 
@@ -73,9 +81,11 @@
           </ul>
 
           <ul class="nav pull-right">
+            {% block primarynavtabsright %}
             {% block primarynavrightextra %}{% endblock %}
 						<li><a href="/three/">Three</a></li>
 						<li><a href="/four/">Four</a></li>
+            {% endblock %}
           </ul>
         </div>
       </div>
