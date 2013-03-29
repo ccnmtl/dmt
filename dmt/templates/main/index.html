@@ -1,8 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="hero-unit">
-<h1>It works</h1>
-<p>Congratulations! Now start coding.</p>
-</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for project in projects %}
+		<tr>
+			<td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+			<td>{{project.status}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+
+</table>
 {% endblock %}

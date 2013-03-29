@@ -46,6 +46,10 @@ class Project(models.Model):
 
     class Meta:
         db_table = u'projects'
+        ordering = ['name', ]
+
+    def get_absolute_url(self):
+        return "/project/%d/" % self.pid
 
 
 class Document(models.Model):
