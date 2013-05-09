@@ -1,6 +1,6 @@
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
-from .models import Project, Milestone
+from .models import Project, Milestone, Item
 
 
 @render_to('main/index.html')
@@ -22,5 +22,9 @@ def project(request, id):
 @render_to('main/milestone.html')
 def milestone(request, id):
     m = get_object_or_404(Milestone, mid=id)
-    print m.item_set.all().count()
     return dict(milestone=m)
+
+@render_to('main/item.html')
+def item(request, id):
+    i = get_object_or_404(Item, iid=id)
+    return dict(item=i)

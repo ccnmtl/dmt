@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+
+{% block content %}
+<h1>{% if item.is_bug %}BUG:{% endif %} {{item.title}}</h1>
+{{item.mid.project.name}}
+
+{{item.description|markdown}}
+
+
+{% endblock %}

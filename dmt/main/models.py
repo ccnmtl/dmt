@@ -114,6 +114,9 @@ class Item(models.Model):
     def status_class(self):
         return self.status.lower()
 
+    def is_bug(self):
+        return self.type == "bug"
+
 
 class Notify(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')

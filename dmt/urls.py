@@ -29,6 +29,7 @@ urlpatterns = patterns(
     (r'project/$', 'dmt.main.views.all_projects'),
     (r'project/(?P<id>\d+)/$', 'dmt.main.views.project'),
     (r'milestone/(?P<id>\d+)/$', 'dmt.main.views.milestone'),
+    (r'item/(?P<id>\d+)/$', 'dmt.main.views.item'),
     (r'^admin/', include(admin.site.urls)),
     url(r'^_impersonate/', include('impersonate.urls')),
     (r'^munin/', include('munin.urls')),
