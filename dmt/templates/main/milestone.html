@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Project: {{milestone.project.name}} / {{milestone.name}}</h1>
+
+{% if milestone.item_set.count %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for item in milestone.item_set.all %}
+		<tr>
+			<td><a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
+			<td class="{{item.status_class}}">{{item.status}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+
+</table>
+{% endif %}
+{% endblock %}

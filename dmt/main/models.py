@@ -49,7 +49,7 @@ class Project(models.Model):
         ordering = ['name', ]
 
     def get_absolute_url(self):
-        return "/projects/%d/" % self.pid
+        return "/project/%d/" % self.pid
 
 
 class Document(models.Model):
@@ -107,6 +107,12 @@ class Item(models.Model):
 
     class Meta:
         db_table = u'items'
+
+    def get_absolute_url(self):
+        return "/item/%d/" % self.iid
+
+    def status_class(self):
+        return self.status.lower()
 
 
 class Notify(models.Model):
