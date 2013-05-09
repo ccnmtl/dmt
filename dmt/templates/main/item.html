@@ -9,12 +9,29 @@
 
 
 {% block content %}
-<a href="{{item.milestone.project.get_absolute_url }}">{{item.milestone.project.name}}</a>
- / <a href="{{item.milestone.get_absolute_url }}">{{item.milestone.name}}</a>
-<h1>{% if item.is_bug %}BUG:{% endif %} {{item.title}}</h1>
+<ul class="breadcrumb">
+  <li><a href="{{item.milestone.project.get_absolute_url }}">{{item.milestone.project.name}}</a> <span class="divider">/</span></li>
+  <li><a href="{{item.milestone.get_absolute_url }}">{{item.milestone.name}}</a></li>
+</ul>
+<h1>#{{item.iid}} {% if item.is_bug %}BUG:{% endif %} {{item.title}}</h1>
 
-
+STATUS {{ item.status }} {{item.r_status}}<br />
+OWNER {{item.owner}}<br />
+ASSIGNED {{item.assigned_to}}<br />
+PRIORITY: {{item.priority}}<br />
+TARGET DATE: {{item.target_date}}<br />
+ESTIMATED TIME {{item.estimated_time}}<br />
+URL: {{item.url}}<br />
+LAST_MOD: {{item.last_mod}}<br />
+NOTIFICATION <br />
+<hr />
 {{item.description|markdown}}
-
+<hr />
+ADD COMMENT
+ADD TIME
+CHANGE STATUS
+EDIT
+<hr />
+HISTORY
 
 {% endblock %}

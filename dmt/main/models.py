@@ -2,7 +2,7 @@ from django.db import models
 
 
 class User(models.Model):
-    username = models.CharField(max_length=32)
+    username = models.CharField(max_length=32, primary_key=True)
     fullname = models.CharField(max_length=128, blank=True)
     email = models.CharField(max_length=32)
     status = models.CharField(max_length=16, blank=True)
@@ -21,6 +21,9 @@ class User(models.Model):
 
     class Meta:
         db_table = u'users'
+
+    def __unicode__(self):
+        return self.fullname
 
 
 class Project(models.Model):
