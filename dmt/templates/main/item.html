@@ -9,8 +9,10 @@
 
 
 {% block content %}
+<a href="{{item.milestone.project.get_absolute_url }}">{{item.milestone.project.name}}</a>
+ / <a href="{{item.milestone.get_absolute_url }}">{{item.milestone.name}}</a>
 <h1>{% if item.is_bug %}BUG:{% endif %} {{item.title}}</h1>
-{{item.mid.project.name}}
+
 
 {{item.description|markdown}}
 

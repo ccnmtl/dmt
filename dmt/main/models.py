@@ -95,7 +95,7 @@ class Item(models.Model):
     assigned_to = models.ForeignKey(User, db_column='assigned_to',
                                     related_name='assigned_items')
     title = models.CharField(max_length=255)
-    mid = models.ForeignKey(Milestone, db_column='mid')
+    milestone = models.ForeignKey(Milestone, db_column='mid')
     status = models.CharField(max_length=16)
     description = models.TextField(blank=True)
     priority = models.IntegerField(null=True, blank=True)
