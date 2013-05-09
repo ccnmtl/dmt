@@ -16,8 +16,8 @@
 <h1>#{{item.iid}} {% if item.is_bug %}BUG:{% endif %} {{item.title}}</h1>
 
 STATUS {{ item.status }} {{item.r_status}}<br />
-OWNER {{item.owner}}<br />
-ASSIGNED {{item.assigned_to}}<br />
+OWNER <a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a><br />
+ASSIGNED <a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a><br />
 PRIORITY: {{item.priority}}<br />
 TARGET DATE: {{item.target_date}}<br />
 ESTIMATED TIME {{item.estimated_time}}<br />
@@ -32,6 +32,14 @@ ADD TIME
 CHANGE STATUS
 EDIT
 <hr />
-HISTORY
+<h2>HISTORY</h2>
+{% for event in item.events_set.all %}
+{{event.event_date_time}}: {{event.status}}<br />
+{% endfor %}
+<h2>COMMENTS</h2>
+{% for comment in item.comment_set.all %}
+{{comment.add_date_time}}: {{comment.username}}:
+{{comment.comment|safe}}<br />
+{% endfor %}
 
 {% endblock %}

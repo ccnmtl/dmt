@@ -25,6 +25,9 @@ class User(models.Model):
     def __unicode__(self):
         return self.fullname
 
+    def get_absolute_url(self):
+        return "/user/%s/" % self.username
+
 
 class Project(models.Model):
     pid = models.IntegerField(primary_key=True)
@@ -191,7 +194,7 @@ class Events(models.Model):
     eid = models.IntegerField(primary_key=True)
     status = models.CharField(max_length=32)
     event_date_time = models.DateTimeField(null=True, blank=True)
-    item = models.IntegerField(null=True, blank=True)
+    item = models.ForeignKey(Item, db_column='item')
 
     class Meta:
         db_table = u'events'
