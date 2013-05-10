@@ -8,8 +8,11 @@
 
 
 {% block content %}
-
-<h1>Project: {{milestone.project.name}} / {{milestone.name}}</h1>
+<ul class="breadcrumb">
+  <li><a href="{{milestone.project.get_absolute_url }}">{{milestone.project.name}}</a> <span class="divider">/</span></li>
+	<li class="active">{{milestone.name}}</li>
+</ul>
+<h1>Milestone: {{milestone.name}}</h1>
 
 {% if milestone.item_set.count %}
 <table class="table">
@@ -17,6 +20,11 @@
 		<tr>
 			<th>Title</th>
 			<th>Status</th>
+			<th>Priority</th>
+			<th>Target Date</th>
+			<th>Owner</th>
+			<th>Assigned To</th>
+			<th>Last Modified</th>
 		</tr>
 	</thead>
 
@@ -25,6 +33,11 @@
 		<tr>
 			<td><a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
 			<td class="{{item.status_class}}">{{item.status}}</td>
+			<td>{{item.priority}}</td>
+			<td>{{item.target_date}}</td>
+			<td><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
+			<td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>
+			<td>{{item.last_mod}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
