@@ -123,6 +123,59 @@ class Item(models.Model):
     def is_bug(self):
         return self.type == "bug"
 
+    def history(self):
+        """ interleave comments and events into one stream """
+        comments = [HistoryComment(c) for c in self.comment_set.all()]
+        events = [HistoryEvent(e) for e in self.events_set.all()]
+        merged = comments + events
+        merged.sort()
+        return merged
+
+
+class HistoryItem(object):
+    def __lt__(self, other):
+        return self.timestamp() < other.timestamp()
+
+    def status(self):
+        return ""
+
+
+class HistoryEvent(HistoryItem):
+    def __init__(self, event):
+        self.event = event
+
+    def timestamp(self):
+        return self.event.event_date_time
+
+    def status(self):
+        return self.event.status
+
+    def _get_comment(self):
+        r = self.event.comment_set.all()
+        if r.count():
+            return r[0]
+        return None
+
+    def comment(self):
+        return self._get_comment().comment
+
+    def user(self):
+        return self._get_comment().username
+
+
+class HistoryComment(HistoryItem):
+    def __init__(self, comment):
+        self.c = comment
+
+    def timestamp(self):
+        return self.c.add_date_time
+
+    def comment(self):
+        return self.c.comment
+
+    def user(self):
+        return self.c.username
+
 
 class Notify(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')
@@ -198,6 +251,7 @@ class Events(models.Model):
 
     class Meta:
         db_table = u'events'
+        ordering = ['event_date_time',]
 
 
 class NotifyProject(models.Model):
@@ -261,3 +315,4 @@ class Comment(models.Model):
 
     class Meta:
         db_table = u'comments'
+        ordering = ['add_date_time',]

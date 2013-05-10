@@ -15,15 +15,20 @@
 </ul>
 <h1>#{{item.iid}} {% if item.is_bug %}BUG:{% endif %} {{item.title}}</h1>
 
-STATUS {{ item.status }} {{item.r_status}}<br />
-OWNER <a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a><br />
-ASSIGNED <a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a><br />
-PRIORITY: {{item.priority}}<br />
-TARGET DATE: {{item.target_date}}<br />
-ESTIMATED TIME {{item.estimated_time}}<br />
-URL: {{item.url}}<br />
-LAST_MOD: {{item.last_mod}}<br />
-NOTIFICATION <br />
+<dl class="dl-horizontal">
+<dt>STATUS<dt><dd>{{ item.status }} {{item.r_status}}</dd>
+<dt>OWNER<dt><dd><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></dd>
+<dt>ASSIGNED<dt><dd><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></dd>
+<dt>PRIORITY<dt><dd>{{item.priority}}</dd>
+<dt>TARGET DATE<dt><dd>{{item.target_date}}</dd>
+{% if item.estimated_time %}
+<dt>ESTIMATED TIME<dt><dd>{{item.estimated_time}}</dd>
+{% endif %}
+{% if item.url %}
+<dt>URL<dt><dd>{{item.url}}</dd>
+{% endif %}
+<dt>LAST MOD<dt><dd>{{item.last_mod}}</dd>
+</dl>
 <hr />
 {{item.description|markdown}}
 <hr />
@@ -32,14 +37,24 @@ ADD TIME
 CHANGE STATUS
 EDIT
 <hr />
+
 <h2>HISTORY</h2>
-{% for event in item.events_set.all %}
-{{event.event_date_time}}: {{event.status}}<br />
+
+<table class="table">
+{% for history_item in item.history %}
+<tr>
+<td>{{history_item.status}}</td>
+<td>
+{{history_item.user}}
+</td>
+<td>
+{{history_item.timestamp}}
+</td>
+<td>
+{{history_item.comment|safe}}
+</td>
+</tr>
 {% endfor %}
-<h2>COMMENTS</h2>
-{% for comment in item.comment_set.all %}
-{{comment.add_date_time}}: {{comment.username}}:
-{{comment.comment|safe}}<br />
-{% endfor %}
+</table>
 
 {% endblock %}
