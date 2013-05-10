@@ -92,6 +92,9 @@ class Milestone(models.Model):
     def status_class(self):
         return self.status.lower()
 
+    def num_open_items(self):
+        return self.item_set.filter(status='OPEN').count()
+
 
 class Item(models.Model):
     iid = models.IntegerField(primary_key=True)

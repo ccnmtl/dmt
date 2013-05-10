@@ -18,6 +18,7 @@
 			<th>Name</th>
 			<th>Target Date</th>
 			<th>Status</th>
+			<th># Open</th>
 		</tr>
 	</thead>
 
@@ -27,6 +28,7 @@
 			<td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
 			<td>{{milestone.target_date}}</td>
 			<td class="{{milestone.status_class}}">{{milestone.status}}</td>
+			<td>{{milestone.num_open_items}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
