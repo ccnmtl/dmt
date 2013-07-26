@@ -24,6 +24,7 @@ def milestone(request, id):
     m = get_object_or_404(Milestone, mid=id)
     return dict(milestone=m)
 
+
 @render_to('main/item.html')
 def item(request, id):
     i = get_object_or_404(Item, iid=id)

@@ -254,7 +254,7 @@ class Events(models.Model):
 
     class Meta:
         db_table = u'events'
-        ordering = ['event_date_time',]
+        ordering = ['event_date_time', ]
 
 
 class NotifyProject(models.Model):
@@ -318,4 +318,4 @@ class Comment(models.Model):
 
     class Meta:
         db_table = u'comments'
-        ordering = ['add_date_time',]
+        ordering = ['add_date_time', ]
