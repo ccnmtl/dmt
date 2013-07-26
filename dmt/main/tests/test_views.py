@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.test.client import Client
-from .factories import ProjectFactory
+from .factories import ProjectFactory, MilestoneFactory
 
 
 class BasicTest(TestCase):
@@ -16,11 +16,37 @@ class BasicTest(TestCase):
         self.assertEquals(response.status_code, 200)
         assert "PASS" in response.content
 
-class TestProject(TestCase):
+class TestProjectViews(TestCase):
     def setUp(self):
         self.c = Client()
+
+    def test_all_projects_page(self):
+        p = ProjectFactory()
+        r = self.c.get("/project/")
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(p.name in r.content)
+        self.assertTrue(p.get_absolute_url() in r.content)
 
     def test_project_page(self):
         p = ProjectFactory()
         r = self.c.get(p.get_absolute_url())
         self.assertEqual(r.status_code, 200)
+        self.assertTrue(p.name in r.content)
+
+class TestMilestoneViews(TestCase):
+    def setUp(self):
+        self.c = Client()
+
+    def test_project_page(self):
+        m = MilestoneFactory()
+        r = self.c.get(m.project.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(m.name in r.content)
+        self.assertTrue(m.get_absolute_url() in r.content)
+
+    def test_milestone_page(self):
+        m = MilestoneFactory()
+        r = self.c.get(m.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(m.name in r.content)
+        
