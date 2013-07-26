@@ -1,5 +1,8 @@
 import factory
+from datetime import datetime
+from django.utils.timezone import utc
 from dmt.main.models import User, Project, Milestone, Item
+from dmt.main.models import Comment, Events
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -37,3 +40,21 @@ class ItemFactory(factory.DjangoModelFactory):
     title = factory.Sequence(lambda n: 'Test Item {0}'.format(n))
     milestone = factory.SubFactory(MilestoneFactory)
     status = "OPEN"
+
+
+class EventFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Events
+    eid = factory.Sequence(lambda n: n)
+    status = "OPEN"
+    event_date_time = datetime(2020, 12, 1).replace(tzinfo=utc)
+    item = factory.SubFactory(ItemFactory)
+
+
+class CommentFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Comment
+    cid = factory.Sequence(lambda n: n)
+    comment = "a comment"
+    add_date_time = datetime(2020, 12, 1).replace(tzinfo=utc)
+    username = factory.Sequence(lambda n: 'user{0}'.format(n))
+    item = factory.SubFactory(ItemFactory)
+    event = factory.SubFactory(EventFactory)

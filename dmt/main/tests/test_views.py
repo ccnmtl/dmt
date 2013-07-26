@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test.client import Client
 from .factories import ProjectFactory, MilestoneFactory, ItemFactory
+from .factories import EventFactory, CommentFactory
 
 
 class BasicTest(TestCase):
@@ -69,3 +70,19 @@ class TestItemViews(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue(i.title in r.content)
         self.assertTrue(i.get_absolute_url() in r.content)
+
+
+class TestHistory(TestCase):
+    def setUp(self):
+        self.c = Client()
+
+    def test_item_view(self):
+        i = ItemFactory()
+        e1 = EventFactory(item=i)
+        c1 = CommentFactory(item=i, event=e1)
+        e2 = EventFactory(item=i)
+        c2 = CommentFactory(item=i, event=e2)
+        r = self.c.get(i.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(c2.comment in r.content)
+        self.assertTrue(c1.comment in r.content)
