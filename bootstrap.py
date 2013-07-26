@@ -23,8 +23,7 @@ if ret:
 
 ret = subprocess.call(
     [os.path.join(vedir, 'bin', 'pip'), "install",
-     "-E", vedir,
-     "--index-url=''",
+     "--index-url=http://pypi.ccnmtl.columbia.edu/",
      "--requirement",
      os.path.join(pwd, "requirements/apps.txt")])
 if ret:
