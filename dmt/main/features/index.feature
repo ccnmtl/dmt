@@ -7,10 +7,10 @@ stuff is all hooked up properly and running.
     Scenario: Index Page Load
         Given I am not logged in
         When I access the url "/"
-        Then I see the header "It works"
+        Then I see the header "DMT"
 
     Scenario: Index Page Load With Selenium
         Using selenium
         When I access the url "/"
-        Then I see the header "It works"
+        Then I see the header "DMT"
         Finished using selenium
