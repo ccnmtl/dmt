@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .factories import UserFactory, ItemFactory
+from dmt.main.models import HistoryItem
 
 
 class UserModelTest(TestCase):
@@ -28,3 +29,9 @@ class ItemModelTest(TestCase):
     def test_history(self):
         i = ItemFactory()
         self.assertEqual(i.history(), [])
+
+
+class HistoryItemTest(TestCase):
+    def test_status(self):
+        h = HistoryItem()
+        self.assertEqual(h.status(), "")

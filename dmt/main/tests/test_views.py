@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.test.client import Client
-from .factories import ProjectFactory, MilestoneFactory
+from .factories import ProjectFactory, MilestoneFactory, ItemFactory
 
 
 class BasicTest(TestCase):
@@ -51,3 +51,21 @@ class TestMilestoneViews(TestCase):
         r = self.c.get(m.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue(m.name in r.content)
+
+
+class TestItemViews(TestCase):
+    def setUp(self):
+        self.c = Client()
+
+    def test_item_view(self):
+        i = ItemFactory()
+        r = self.c.get(i.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(i.title in r.content)
+
+    def test_milestone_view(self):
+        i = ItemFactory()
+        r = self.c.get(i.milestone.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(i.title in r.content)
+        self.assertTrue(i.get_absolute_url() in r.content)
