@@ -16,6 +16,7 @@ class BasicTest(TestCase):
         self.assertEquals(response.status_code, 200)
         assert "PASS" in response.content
 
+
 class TestProjectViews(TestCase):
     def setUp(self):
         self.c = Client()
@@ -33,6 +34,7 @@ class TestProjectViews(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue(p.name in r.content)
 
+
 class TestMilestoneViews(TestCase):
     def setUp(self):
         self.c = Client()
@@ -49,4 +51,3 @@ class TestMilestoneViews(TestCase):
         r = self.c.get(m.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue(m.name in r.content)
-        

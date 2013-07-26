@@ -27,4 +27,3 @@ class MilestoneFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Test Milestone {0}'.format(n))
     target_date = "2020-12-01"
     status = "OPEN"
-
