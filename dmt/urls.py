@@ -32,7 +32,6 @@ urlpatterns = patterns(
     (r'item/(?P<id>\d+)/$', 'dmt.main.views.item'),
     (r'^admin/', include(admin.site.urls)),
     url(r'^_impersonate/', include('impersonate.urls')),
-    (r'^munin/', include('munin.urls')),
     (r'^stats/', direct_to_template, {'template': 'stats.html'}),
     (r'smoketest/', include('smoketest.urls')),
     (r'^site_media/(?P<path>.*)$',
