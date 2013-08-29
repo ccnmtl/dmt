@@ -34,9 +34,6 @@ factory_boy==2.1.1
 python-ldap==2.4.13
 djangowind==0.10.4
 django-staticmedia==0.2.2
-#django-indexer==0.3.0
-#django-templatetag-sugar==0.1
-#django-paging==0.2.5
 South==0.8.1
 django-annoying==0.7.6
 django-nose==1.2
