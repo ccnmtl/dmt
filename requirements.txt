@@ -12,6 +12,7 @@ flake8==2.0
 mccabe==0.2.1
 pyparsing==2.0.1
 tornado==3.1
+cssselect==0.8
 BeautifulSoup==3.2.1
 lxml==3.2.3
 fuzzywuzzy==0.2
