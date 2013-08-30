@@ -23,6 +23,7 @@ class IndexViewTest(TestCase):
 
     def test_index_get_unclaimed(self):
         PMTUser.objects.create(username="testpmtuser",
+                               fullname="something that won't match",
                                email="testemail@columbia.edu",
                                status="active")
         response = self.c.get("/claim/")
@@ -30,6 +31,7 @@ class IndexViewTest(TestCase):
         self.assertFalse("You have claimed the" in response.content)
         self.assertTrue("<select " in response.content)
         self.assertTrue("value=\"testpmtuser\"" in response.content)
+        self.assertFalse("selected=" in response.content)
 
     def test_index_get_unclaimed_with_likely(self):
         PMTUser.objects.create(username="testuser",
