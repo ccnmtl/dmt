@@ -41,3 +41,11 @@ class QueryTest(TestCase):
         self.assertFalse(
             pu.username in [
                 p.username for p in list(all_unclaimed_pmt_users())])
+
+    def test_all_unclaimed_pmt_users_inactive(self):
+        pu = PMTUser.objects.create(username="testpmtuser",
+                                    email="testemail@columbia.edu",
+                                    status='inactive')
+        self.assertFalse(
+            pu.username in [
+                p.username for p in list(all_unclaimed_pmt_users())])
