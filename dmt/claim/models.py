@@ -11,3 +11,14 @@ class Claim(models.Model):
         return "%s has claimed %s" % (
             self.django_user.username,
             self.pmt_user.username)
+
+
+def all_unclaimed_pmt_users():
+    """ active PMT Users who are not yet claimed by a Django User
+    """
+    return PMTUser.objects.filter(
+        status='active'
+    ).exclude(
+        username__startswith="grp_").exclude(
+        username__in=[c.pmt_user.username for c in Claim.objects.all()]
+    )
