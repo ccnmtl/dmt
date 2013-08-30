@@ -11,6 +11,20 @@ class ClaimTest(TestCase):
         claim = Claim.objects.create(django_user=du, pmt_user=pu)
         self.assertEqual(str(claim), "testdjangouser has claimed testpmtuser")
 
+    def test_from_django_user(self):
+        du = DjangoUser.objects.create(username="testdjangouser")
+        pu = PMTUser.objects.create(username="testpmtuser",
+                                    email="testemail@columbia.edu")
+        claim = Claim.objects.create(django_user=du, pmt_user=pu)
+        self.assertEqual(claim.id, Claim.from_django_user(du).id)
+
+    def test_from_pmt_user(self):
+        du = DjangoUser.objects.create(username="testdjangouser")
+        pu = PMTUser.objects.create(username="testpmtuser",
+                                    email="testemail@columbia.edu")
+        claim = Claim.objects.create(django_user=du, pmt_user=pu)
+        self.assertEqual(claim.id, Claim.from_pmt_user(pu).id)
+
 
 class QueryTest(TestCase):
     def test_all_unclaimed_pmt_users_empty(self):

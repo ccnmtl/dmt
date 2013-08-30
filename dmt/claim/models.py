@@ -12,6 +12,14 @@ class Claim(models.Model):
             self.django_user.username,
             self.pmt_user.username)
 
+    @classmethod
+    def from_django_user(self, u):
+        return Claim.objects.get(django_user=u)
+
+    @classmethod
+    def from_pmt_user(self, u):
+        return Claim.objects.get(pmt_user=u)
+
 
 def all_unclaimed_pmt_users():
     """ active PMT Users who are not yet claimed by a Django User
