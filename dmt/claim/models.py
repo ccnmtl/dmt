@@ -9,5 +9,5 @@ class Claim(models.Model):
 
     def __unicode__(self):
         return "%s has claimed %s" % (
-            self.django_user.username, 
+            self.django_user.username,
             self.pmt_user.username)
