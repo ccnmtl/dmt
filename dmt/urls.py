@@ -31,6 +31,7 @@ urlpatterns = patterns(
     (r'milestone/(?P<id>\d+)/$', 'dmt.main.views.milestone'),
     (r'item/(?P<id>\d+)/$', 'dmt.main.views.item'),
     (r'^admin/', include(admin.site.urls)),
+    (r'^claim/', include('dmt.claim.urls')),
     url(r'^_impersonate/', include('impersonate.urls')),
     (r'^stats/', direct_to_template, {'template': 'stats.html'}),
     (r'smoketest/', include('smoketest.urls')),

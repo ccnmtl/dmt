@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if found %}
+<p>You have claimed the <b>{{pmt_user.username}}</b> account.</p>
+{% else %}
+
+<form action="." method="post" class="form form-horizontal">
+<fieldset>
+	<legend>You need to claim an account</legend>
+
+<select name="user">
+{% for user in available_users %}
+<option value="{{user.username}}" {% ifequal likely user.username %}selected="selected"{% endifequal %}>{{user.fullname}} ({{user.username}})</option>
+{% endfor %}
+</select>
+<input type="submit" value="claim account" class="btn" />
+</fieldset>
+</form>
+{% endif %}
+{% endblock %}

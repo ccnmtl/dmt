@@ -29,4 +29,4 @@ def all_unclaimed_pmt_users():
     ).exclude(
         username__startswith="grp_").exclude(
         username__in=[c.pmt_user.username for c in Claim.objects.all()]
-    )
+    ).order_by("username", "fullname")
