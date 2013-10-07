@@ -1,5 +1,5 @@
-Django==1.4.8
-Markdown==2.1.1
+Django==1.5.4
+Markdown==2.3.1
 simplejson==3.3.0
 uuid==1.30
 psycopg2==2.5.1
