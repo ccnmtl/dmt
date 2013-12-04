@@ -1,15 +1,14 @@
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
-from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 from .models import Project, Milestone, Item
 
 
-class AllProjectsView(TemplateView):
+class AllProjectsView(ListView):
     template_name = 'main/all_projects.html'
-
-    def get_context_data(self, **kwargs):
-        return dict(projects=Project.objects.all())
+    model = Project
+    context_object_name = 'projects'
 
 
 class ProjectView(DetailView):
