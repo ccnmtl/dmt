@@ -2,7 +2,10 @@ from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
-import dmt.main.views as views
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+from dmt.main.models import Project, Milestone, Item
+
 import os.path
 admin.autodiscover()
 import staticmedia
@@ -27,10 +30,10 @@ urlpatterns = patterns(
     auth_urls,
     logout_page,
     (r'^$', TemplateView.as_view(template_name="main/index.html")),
-    (r'project/$', views.AllProjectsView.as_view()),
-    (r'project/(?P<pk>\d+)/$', views.ProjectView.as_view()),
-    (r'milestone/(?P<pk>\d+)/$', views.MilestoneView.as_view()),
-    (r'item/(?P<pk>\d+)/$', views.ItemView.as_view()),
+    (r'project/$', ListView.as_view(model=Project)),
+    (r'project/(?P<pk>\d+)/$', DetailView.as_view(model=Project)),
+    (r'milestone/(?P<pk>\d+)/$', DetailView.as_view(model=Milestone)),
+    (r'item/(?P<pk>\d+)/$', DetailView.as_view(model=Item)),
     (r'^admin/', include(admin.site.urls)),
     (r'^claim/', include('dmt.claim.urls')),
     url(r'^_impersonate/', include('impersonate.urls')),
