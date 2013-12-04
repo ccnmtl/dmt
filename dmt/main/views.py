@@ -24,7 +24,7 @@ class MilestoneView(DetailView):
     context_object_name = 'milestone'
 
 
-@render_to('main/item.html')
-def item(request, id):
-    i = get_object_or_404(Item, iid=id)
-    return dict(item=i)
+class ItemView(DetailView):
+    template_name = 'main/item.html'
+    model = Item
+    context_object_name = 'item'
