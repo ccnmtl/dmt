@@ -10,27 +10,27 @@
 
 {% block content %}
 <ul class="breadcrumb">
-  <li><a href="{{item.milestone.project.get_absolute_url }}">{{item.milestone.project.name}}</a> <span class="divider">/</span></li>
-  <li><a href="{{item.milestone.get_absolute_url }}">{{item.milestone.name}}</a></li>
+  <li><a href="{{object.milestone.project.get_absolute_url }}">{{object.milestone.project.name}}</a> <span class="divider">/</span></li>
+  <li><a href="{{object.milestone.get_absolute_url }}">{{object.milestone.name}}</a></li>
 </ul>
-<h1>#{{item.iid}} {% if item.is_bug %}BUG:{% endif %} {{item.title}}</h1>
+<h1>#{{object.iid}} {% if object.is_bug %}BUG:{% endif %} {{object.title}}</h1>
 
 <dl class="dl-horizontal">
-<dt>STATUS<dt><dd>{{ item.status }} {{item.r_status}}</dd>
-<dt>OWNER<dt><dd><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></dd>
-<dt>ASSIGNED<dt><dd><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></dd>
-<dt>PRIORITY<dt><dd>{{item.priority}}</dd>
-<dt>TARGET DATE<dt><dd>{{item.target_date}}</dd>
-{% if item.estimated_time %}
-<dt>ESTIMATED TIME<dt><dd>{{item.estimated_time}}</dd>
+<dt>STATUS<dt><dd>{{ object.status }} {{object.r_status}}</dd>
+<dt>OWNER<dt><dd><a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a></dd>
+<dt>ASSIGNED<dt><dd><a href="{{object.assigned_to.get_absolute_url}}">{{object.assigned_to}}</a></dd>
+<dt>PRIORITY<dt><dd>{{object.priority}}</dd>
+<dt>TARGET DATE<dt><dd>{{object.target_date}}</dd>
+{% if object.estimated_time %}
+<dt>ESTIMATED TIME<dt><dd>{{object.estimated_time}}</dd>
 {% endif %}
-{% if item.url %}
-<dt>URL<dt><dd>{{item.url}}</dd>
+{% if object.url %}
+<dt>URL<dt><dd>{{object.url}}</dd>
 {% endif %}
-<dt>LAST MOD<dt><dd>{{item.last_mod}}</dd>
+<dt>LAST MOD<dt><dd>{{object.last_mod}}</dd>
 </dl>
 <hr />
-{{item.description|markdown}}
+{{object.description|markdown}}
 <hr />
 ADD COMMENT
 ADD TIME
@@ -41,7 +41,7 @@ EDIT
 <h2>HISTORY</h2>
 
 <table class="table">
-{% for history_item in item.history %}
+{% for history_item in object.history %}
 <tr>
 <td>{{history_item.status}}</td>
 <td>

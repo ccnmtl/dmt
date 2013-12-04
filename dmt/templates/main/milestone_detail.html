@@ -9,12 +9,12 @@
 
 {% block content %}
 <ul class="breadcrumb">
-  <li><a href="{{milestone.project.get_absolute_url }}">{{milestone.project.name}}</a> <span class="divider">/</span></li>
-	<li class="active">{{milestone.name}}</li>
+  <li><a href="{{object.project.get_absolute_url }}">{{object.project.name}}</a> <span class="divider">/</span></li>
+	<li class="active">{{object.name}}</li>
 </ul>
-<h1>Milestone: {{milestone.name}}</h1>
+<h1>Milestone: {{object.name}}</h1>
 
-{% if milestone.item_set.count %}
+{% if object.item_set.count %}
 <table class="table">
 	<thead>
 		<tr>
@@ -29,7 +29,7 @@
 	</thead>
 
 	<tbody>
-		{% for item in milestone.item_set.all %}
+		{% for item in object.item_set.all %}
 		<tr>
 			<td><a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
 			<td class="{{item.status_class}}">{{item.status}}</td>

@@ -9,9 +9,9 @@
 
 {% block content %}
 
-<h1>Project: {{project.name}}</h1>
+<h1>Project: {{object.name}}</h1>
 
-{% if project.milestone_set.count %}
+{% if object.milestone_set.count %}
 <table class="table">
 	<thead>
 		<tr>
@@ -23,7 +23,7 @@
 	</thead>
 
 	<tbody>
-		{% for milestone in project.milestone_set.all %}
+		{% for milestone in object.milestone_set.all %}
 		<tr>
 			<td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
 			<td>{{milestone.target_date}}</td>
