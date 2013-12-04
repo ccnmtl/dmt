@@ -2,6 +2,7 @@ from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
+import dmt.main.views as views
 import os.path
 admin.autodiscover()
 import staticmedia
@@ -26,7 +27,7 @@ urlpatterns = patterns(
     auth_urls,
     logout_page,
     (r'^$', TemplateView.as_view(template_name="main/index.html")),
-    (r'project/$', 'dmt.main.views.all_projects'),
+    (r'project/$', views.AllProjectsView.as_view()),
     (r'project/(?P<id>\d+)/$', 'dmt.main.views.project'),
     (r'milestone/(?P<id>\d+)/$', 'dmt.main.views.milestone'),
     (r'item/(?P<id>\d+)/$', 'dmt.main.views.item'),

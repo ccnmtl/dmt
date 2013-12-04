@@ -4,9 +4,11 @@ from django.views.generic.base import TemplateView
 from .models import Project, Milestone, Item
 
 
-@render_to('main/all_projects.html')
-def all_projects(request):
-    return dict(projects=Project.objects.all())
+class AllProjectsView(TemplateView):
+    template_name = 'main/all_projects.html'
+
+    def get_context_data(self, **kwargs):
+        return dict(projects=Project.objects.all())
 
 
 @render_to('main/project.html')
