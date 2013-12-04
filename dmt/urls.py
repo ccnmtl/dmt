@@ -25,7 +25,7 @@ urlpatterns = patterns(
     '',
     auth_urls,
     logout_page,
-    (r'^$', 'dmt.main.views.index'),
+    (r'^$', TemplateView.as_view(template_name="main/index.html")),
     (r'project/$', 'dmt.main.views.all_projects'),
     (r'project/(?P<id>\d+)/$', 'dmt.main.views.project'),
     (r'milestone/(?P<id>\d+)/$', 'dmt.main.views.milestone'),

@@ -1,11 +1,7 @@
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
+from django.views.generic.base import TemplateView
 from .models import Project, Milestone, Item
-
-
-@render_to('main/index.html')
-def index(request):
-    return dict()
 
 
 @render_to('main/all_projects.html')
