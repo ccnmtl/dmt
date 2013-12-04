@@ -18,10 +18,10 @@ class ProjectView(DetailView):
     context_object_name = 'project'
 
 
-@render_to('main/milestone.html')
-def milestone(request, id):
-    m = get_object_or_404(Milestone, mid=id)
-    return dict(milestone=m)
+class MilestoneView(DetailView):
+    template_name = 'main/milestone.html'
+    model = Milestone
+    context_object_name = 'milestone'
 
 
 @render_to('main/item.html')

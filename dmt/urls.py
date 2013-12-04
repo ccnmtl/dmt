@@ -29,7 +29,7 @@ urlpatterns = patterns(
     (r'^$', TemplateView.as_view(template_name="main/index.html")),
     (r'project/$', views.AllProjectsView.as_view()),
     (r'project/(?P<pk>\d+)/$', views.ProjectView.as_view()),
-    (r'milestone/(?P<id>\d+)/$', 'dmt.main.views.milestone'),
+    (r'milestone/(?P<pk>\d+)/$', views.MilestoneView.as_view()),
     (r'item/(?P<id>\d+)/$', 'dmt.main.views.item'),
     (r'^admin/', include(admin.site.urls)),
     (r'^claim/', include('dmt.claim.urls')),
