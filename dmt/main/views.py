@@ -1,6 +1,7 @@
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from .models import Project, Milestone, Item
 
 
@@ -11,10 +12,10 @@ class AllProjectsView(TemplateView):
         return dict(projects=Project.objects.all())
 
 
-@render_to('main/project.html')
-def project(request, id):
-    p = get_object_or_404(Project, pid=id)
-    return dict(project=p)
+class ProjectView(DetailView):
+    template_name = 'main/project.html'
+    model = Project
+    context_object_name = 'project'
 
 
 @render_to('main/milestone.html')
