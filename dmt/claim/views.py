@@ -8,6 +8,7 @@ from .models import Claim, PMTUser, all_unclaimed_pmt_users
 @login_required
 @render_to('claim/index.html')
 def index(request):
+    """ TODO: convert this to View"""
     if request.method == "POST":
         username = request.POST['user']
         pmt_user = get_object_or_404(PMTUser, username=username)
