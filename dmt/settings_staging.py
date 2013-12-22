@@ -27,6 +27,9 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 STAGING_ENV = True
 
+STATICFILES_DIRS = ()
+STATIC_ROOT = "/var/www/dmt/dmt/media/"
+
 STATSD_PREFIX = 'dmt-staging'
 SENTRY_SITE = 'dmt-staging'
 SENTRY_SERVERS = ['http://sentry.ccnmtl.columbia.edu/sentry/store/']

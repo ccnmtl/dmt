@@ -26,6 +26,9 @@ COMPRESS_ROOT = "/var/www/dmt/dmt/media/"
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+STATICFILES_DIRS = ()
+STATIC_ROOT = "/var/www/dmt/dmt/media/"
+
 SENTRY_SITE = 'dmt'
 SENTRY_SERVERS = ['http://sentry.ccnmtl.columbia.edu/sentry/store/']
 
