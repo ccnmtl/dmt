@@ -33,6 +33,19 @@ class IndexViewTest(TestCase):
         self.assertTrue("value=\"testpmtuser\"" in response.content)
         self.assertFalse("selected=" in response.content)
 
+    def test_templatetag_unclaimed(self):
+        r = self.c.get("/")
+        self.assertTrue("/claim/" in r.content)
+
+    def test_templatetag_claimed(self):
+        pu = PMTUser.objects.create(username="testpmtuser",
+                                    email="testemail@columbia.edu",
+                                    status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=pu)
+        r = self.c.get("/")
+        self.assertFalse("/claim/" in r.content)
+        self.assertTrue(("/user/%s/" % pu.username) in r.content)
+
     def test_index_get_unclaimed_with_likely(self):
         PMTUser.objects.create(username="testuser",
                                email="testemail@columbia.edu",

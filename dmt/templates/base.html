@@ -1,4 +1,5 @@
 {% load compress %}
+{% load claimtags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +50,8 @@
           {% if request.user.is_anonymous %}
           <a href="/accounts/login/?next=/" class="btn btn-success">login</a>
           {% else %}
-          logged in as {{request.user.first_name}} {{request.user.last_name}}
+{% pmtuser as pmt_user %}
+          logged in as <a href="{{pmt_user.get_absolute_url}}">{{request.user.first_name}} {{request.user.last_name}}</a>
 {% if request.user.is_superuser %}
           <a href="{% url 'impersonate-list' %}">[impersonate]</a>
 {% endif %}
