@@ -28,6 +28,9 @@ class User(models.Model):
     def get_absolute_url(self):
         return "/user/%s/" % self.username
 
+    def active(self):
+        return self.status == 'active'
+
 
 class Project(models.Model):
     pid = models.IntegerField(primary_key=True)

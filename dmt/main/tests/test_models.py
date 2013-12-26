@@ -12,6 +12,12 @@ class UserModelTest(TestCase):
         u = UserFactory()
         self.assertEqual(str(u), u.fullname)
 
+    def test_active(self):
+        u = UserFactory(status='active')
+        self.assertTrue(u.active())
+        u = UserFactory(status='inactive')
+        self.assertFalse(u.active())
+
 
 class ItemModelTest(TestCase):
     def test_gau(self):

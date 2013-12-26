@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+{% block content %}
+
+<h1>User: {{object.fullname}}</h1>
+
+<p>{{object.bio|markdown}}</p>
+
+{% endblock %}

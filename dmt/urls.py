@@ -4,7 +4,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from dmt.main.models import Project, Milestone, Item
+from dmt.main.models import Project, Milestone, Item, User
 
 admin.autodiscover()
 
@@ -30,6 +30,7 @@ urlpatterns = patterns(
     (r'project/(?P<pk>\d+)/$', DetailView.as_view(model=Project)),
     (r'milestone/(?P<pk>\d+)/$', DetailView.as_view(model=Milestone)),
     (r'item/(?P<pk>\d+)/$', DetailView.as_view(model=Item)),
+    (r'user/(?P<pk>\w+)/$', DetailView.as_view(model=User)),
     (r'^admin/', include(admin.site.urls)),
     (r'^claim/', include('dmt.claim.urls')),
     url(r'^_impersonate/', include('impersonate.urls')),
