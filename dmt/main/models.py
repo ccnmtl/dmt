@@ -21,6 +21,7 @@ class User(models.Model):
 
     class Meta:
         db_table = u'users'
+        ordering = ['fullname']
 
     def __unicode__(self):
         return self.fullname

@@ -30,6 +30,7 @@ urlpatterns = patterns(
     (r'project/(?P<pk>\d+)/$', DetailView.as_view(model=Project)),
     (r'milestone/(?P<pk>\d+)/$', DetailView.as_view(model=Milestone)),
     (r'item/(?P<pk>\d+)/$', DetailView.as_view(model=Item)),
+    (r'user/$', ListView.as_view(model=User)),
     (r'user/(?P<pk>\w+)/$', DetailView.as_view(model=User)),
     (r'^admin/', include(admin.site.urls)),
     (r'^claim/', include('dmt.claim.urls')),
