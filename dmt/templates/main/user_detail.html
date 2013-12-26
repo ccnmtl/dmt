@@ -8,8 +8,16 @@
 
 {% block content %}
 
-<h1>User: {{object.fullname}}</h1>
-
-<p>{{object.bio|markdown}}</p>
+<dl>
+<dt>Username<dt><dd>{{object.username}}</dd>
+<dt>Fullname<dt><dd>{{object.fullname}}</dd>
+<dt>E-mail<dt><dd>{{object.email}}</dd>
+<dt>Title<dt><dd>{{object.title}}</dd>
+<dt>Phone<dt><dd>{{object.phone}}</dd>
+<dt>Office<dt><dd>{{object.office}}</dd>
+{% if object.bio %}
+<dt>Bio</dt><dd>{{object.bio|markdown}}</dd>
+{% endif %}
+</dl>
 
 {% endblock %}
