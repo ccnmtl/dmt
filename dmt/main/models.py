@@ -214,6 +214,7 @@ class Client(models.Model):
 
     class Meta:
         db_table = u'clients'
+        ordering = ['lastname', 'firstname']
 
 
 class ItemClient(models.Model):

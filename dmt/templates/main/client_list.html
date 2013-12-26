@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+{% block content %}
+
+{% if is_paginated %}
+<ul class="pager">
+{% if page_obj.has_previous %}
+  <li><a href="/client/?page={{ page_obj.previous_page_number }}">previous</a></li>
+{% else %}
+  <li class="disabled"><a href="#">previous</a></li>
+{% endif %}
+<li><span class="page-current">
+ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span></li>
+{% if page_obj.has_next %}
+  <li><a href="/client/?page={{ page_obj.next_page_number }}">next</a></li>
+{% else %}
+  <li class="disabled"><a href="#">next</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+<table class="table table-striped table-condensed">
+{% for client in object_list %}
+<tr>
+<td><a href="/client/{{client.client_id}}/">{{client.lastname}}, {{client.firstname}}</a></td>
+<td>{{client.email}}</td>
+<td>{{client.school}}</td>
+<td>{{client.department}}</td>
+<td>{{client.registration_date}}</td>
+<td><a href="{{client.contact.get_absolute_url}}">{{client.contact.fullname}}</a></td>
+<td>{{client.status}}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% if is_paginated %}
+<ul class="pager">
+{% if page_obj.has_previous %}
+  <li><a href="/client/?page={{ page_obj.previous_page_number }}">previous</a></li>
+{% else %}
+  <li class="disabled"><a href="#">previous</a></li>
+{% endif %}
+<li><span class="page-current">
+ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span></li>
+{% if page_obj.has_next %}
+  <li><a href="/client/?page={{ page_obj.next_page_number }}">next</a></li>
+{% else %}
+  <li class="disabled"><a href="#">next</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+{% endblock %}

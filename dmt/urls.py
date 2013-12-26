@@ -4,7 +4,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from dmt.main.models import Project, Milestone, Item, User
+from dmt.main.models import Project, Milestone, Item, User, Client
 
 admin.autodiscover()
 
@@ -26,6 +26,7 @@ urlpatterns = patterns(
     auth_urls,
     logout_page,
     (r'^$', TemplateView.as_view(template_name="main/index.html")),
+    (r'client/$', ListView.as_view(model=Client, paginate_by=100)),
     (r'project/$', ListView.as_view(model=Project)),
     (r'project/(?P<pk>\d+)/$', DetailView.as_view(model=Project)),
     (r'milestone/(?P<pk>\d+)/$', DetailView.as_view(model=Milestone)),
