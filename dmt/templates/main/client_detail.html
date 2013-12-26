@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+
+{% block content %}
+<h1>CLIENTS: {{object.firstname}} {{object.lastname}}</h1>
+
+<dl>
+<dt>LASTNAME</dt><dd>{{object.lastname}}</dd>
+<dt>FIRSTNAME</dt><dd>{{object.firstname}}</dd>
+<dt>TITLE</dt><dd>{{object.title}}</dd>
+<dt>STATUS</dt><dd>{{object.status}}</dd>
+<dt>DEPARTMENT</dt><dd>{{object.department}}</dd>
+<dt>SCHOOL</dt><dd>{{object.school}}</dd>
+<dt>CLIENT SINCE</dt><dd>{{object.registration_date}}</dd>
+<dt>PHONE</dt><dd>{{object.phone}}</dd>
+<dt>PHONE (MOBILE)</dt><dd>{{object.phone_mobile}}</dd>
+<dt>PHONE (OTHER)</dt><dd>{{object.phone_other}}</dd>
+<dt>EMAIL</dt><dd>{{object.email}}</dd>
+<dt>SECONDARY EMAIL</dt><dd>{{object.email_secondary}}</dd>
+<dt>WEBSITE</dt><dd>{{object.website}}</dd>
+<dt>CCNMTL CONTACT</dt><dd><a href="{{object.contact.get_absolute_url}}">{{object.contact.fullname}}</a></dd>
+</dl>
+
+{% endblock %}

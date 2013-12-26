@@ -27,6 +27,7 @@ urlpatterns = patterns(
     logout_page,
     (r'^$', TemplateView.as_view(template_name="main/index.html")),
     (r'client/$', ListView.as_view(model=Client, paginate_by=100)),
+    (r'client/(?P<pk>\d+)/$', DetailView.as_view(model=Client)),
     (r'project/$', ListView.as_view(model=Project)),
     (r'project/(?P<pk>\d+)/$', DetailView.as_view(model=Project)),
     (r'milestone/(?P<pk>\d+)/$', DetailView.as_view(model=Milestone)),
