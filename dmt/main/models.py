@@ -236,10 +236,14 @@ class Node(models.Model):
     overflow = models.BooleanField(default=False)
     added = models.DateTimeField()
     modified = models.DateTimeField()
-    project = models.ForeignKey(Project, null=True)
+    project = models.ForeignKey(Project, null=True, db_column='project')
 
     class Meta:
         db_table = u'nodes'
+        ordering = ['-modified', ]
+
+    def get_absolute_url(self):
+        return "/forum/%d/" % self.nid
 
 
 class WorksOn(models.Model):

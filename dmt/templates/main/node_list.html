@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block content %}
+{% if is_paginated %}
+<ul class="pager">
+{% if page_obj.has_previous %}
+  <li><a href="/node/?page={{ page_obj.previous_page_number }}">previous</a></li>
+{% else %}
+  <li class="disabled"><a href="#">previous</a></li>
+{% endif %}
+<li><span class="page-current">
+ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span></li>
+{% if page_obj.has_next %}
+  <li><a href="/node/?page={{ page_obj.next_page_number }}">next</a></li>
+{% else %}
+  <li class="disabled"><a href="#">next</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+{% for n in object_list %}
+<h2><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h2>
+<p class="byline">
+{% if n.project %}to <a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>{% endif %}
+by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
+| {{n.added}}
+</p>
+{{n.body|markdown}}
+{% endfor %}
+{% if is_paginated %}
+<ul class="pager">
+{% if page_obj.has_previous %}
+  <li><a href="/node/?page={{ page_obj.previous_page_number }}">previous</a></li>
+{% else %}
+  <li class="disabled"><a href="#">previous</a></li>
+{% endif %}
+<li><span class="page-current">
+ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span></li>
+{% if page_obj.has_next %}
+  <li><a href="/node/?page={{ page_obj.next_page_number }}">next</a></li>
+{% else %}
+  <li class="disabled"><a href="#">next</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+{% endblock %}

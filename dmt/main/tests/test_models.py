@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .factories import UserFactory, ItemFactory
+from .factories import UserFactory, ItemFactory, NodeFactory
 from dmt.main.models import HistoryItem
 
 
@@ -41,3 +41,9 @@ class HistoryItemTest(TestCase):
     def test_status(self):
         h = HistoryItem()
         self.assertEqual(h.status(), "")
+
+
+class NodeTest(TestCase):
+    def test_get_absolute_url(self):
+        n = NodeFactory()
+        self.assertEqual(n.get_absolute_url(), "/forum/%d/" % n.nid)

@@ -2,7 +2,7 @@ import factory
 from datetime import datetime
 from django.utils.timezone import utc
 from dmt.main.models import User, Project, Milestone, Item
-from dmt.main.models import Comment, Events
+from dmt.main.models import Comment, Events, Node
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -58,3 +58,11 @@ class CommentFactory(factory.DjangoModelFactory):
     username = factory.Sequence(lambda n: 'user{0}'.format(n))
     item = factory.SubFactory(ItemFactory)
     event = factory.SubFactory(EventFactory)
+
+
+class NodeFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Node
+    nid = factory.Sequence(lambda n: n)
+    added = datetime(2020, 12, 1).replace(tzinfo=utc)
+    modified = datetime(2020, 12, 1).replace(tzinfo=utc)
+    author = factory.SubFactory(UserFactory)
