@@ -33,6 +33,7 @@ urlpatterns = patterns(
     (r'^client/$', ListView.as_view(model=Client, paginate_by=100)),
     (r'^client/(?P<pk>\d+)/$', DetailView.as_view(model=Client)),
     (r'^forum/$', ListView.as_view(model=Node, paginate_by=20)),
+    (r'^forum/(?P<pk>\d+)/$', DetailView.as_view(model=Node)),
     (r'^item/(?P<pk>\d+)/$', DetailView.as_view(model=Item)),
     (r'^milestone/(?P<pk>\d+)/$', DetailView.as_view(model=Milestone)),
     (r'^project/$', ListView.as_view(model=Project)),
