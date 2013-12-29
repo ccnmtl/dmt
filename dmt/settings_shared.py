@@ -50,6 +50,7 @@ JENKINS_TASKS = (
 PROJECT_APPS = [
     'dmt.main',
     'dmt.claim',
+    'dmt.report',
 ]
 
 ALLOWED_HOSTS = ['localhost', '.ccnmtl.columbia.edu']
@@ -119,6 +120,7 @@ INSTALLED_APPS = [
     'impersonate',
     'dmt.main',
     'dmt.claim',
+    'dmt.report',
 ]
 
 LETTUCE_APPS = (
