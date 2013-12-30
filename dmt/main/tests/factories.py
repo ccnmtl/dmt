@@ -40,6 +40,7 @@ class ItemFactory(factory.DjangoModelFactory):
     title = factory.Sequence(lambda n: 'Test Item {0}'.format(n))
     milestone = factory.SubFactory(MilestoneFactory)
     status = "OPEN"
+    priority = 1
 
 
 class EventFactory(factory.DjangoModelFactory):

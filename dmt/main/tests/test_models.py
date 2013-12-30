@@ -57,6 +57,10 @@ class ItemModelTest(TestCase):
         i = ItemFactory()
         self.assertEqual(i.history(), [])
 
+    def test_priority_label(self):
+        i = ItemFactory()
+        self.assertEqual(i.priority_label(), 'LOW')
+
 
 class HistoryItemTest(TestCase):
     def test_status(self):
