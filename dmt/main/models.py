@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import timedelta
 
 
 class User(models.Model):
@@ -32,6 +33,43 @@ class User(models.Model):
     def active(self):
         return self.status == 'active'
 
+    def active_projects(self, start, end):
+        return set(a.item.milestone.project
+                   for a in self.resolve_times_for_interval(start, end))
+
+    def project_completed_time_for_interval(self, project, start, end):
+        return sum([a.actual_time for a in ActualTime.objects.filter(
+            resolver=self,
+            item__milestone__project=project,
+            completed__gt=start.date,
+            completed__lte=end.date)], timedelta())
+
+    def resolve_times_for_interval(self, start, end):
+        return ActualTime.objects.filter(
+            resolver=self,
+            completed__gt=start.date,
+            completed__lte=end.date)
+
+    def weekly_report(self, week_start, week_end):
+        active_projects = self.active_projects(week_start, week_end)
+        # google pie chart needs max
+        max_time = timedelta()
+        total_time = timedelta()
+        for project in active_projects:
+            ptime = self.project_completed_time_for_interval(
+                project, week_start, week_end)
+            if ptime > max_time:
+                max_time = ptime
+            total_time += ptime
+            project.time = ptime
+        return dict(
+            active_projects=active_projects,
+            max_time=max_time,
+            total_time=total_time,
+            individual_times=self.resolve_times_for_interval(
+                week_start, week_end),
+        )
+
 
 class Project(models.Model):
     pid = models.IntegerField(primary_key=True)
@@ -57,6 +95,9 @@ class Project(models.Model):
     class Meta:
         db_table = u'projects'
         ordering = ['name', ]
+
+    def __unicode__(self):
+        return self.name
 
     def get_absolute_url(self):
         return "/project/%d/" % self.pid
@@ -297,7 +338,7 @@ class ActualTime(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')
     resolver = models.ForeignKey(User, db_column='resolver')
     actual_time = models.TextField(blank=True)
-    completed = models.DateTimeField(null=True, blank=True)
+    completed = models.DateTimeField(primary_key=True)
 
     class Meta:
         db_table = u'actual_times'

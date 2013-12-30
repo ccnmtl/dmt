@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load durations %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Weekly report
+	for <a href="{{u.get_absolute_url}}">{{u.fullname}}</a> for the week
+	from {{week_start}} to {{week_end}}</h2>
+<ul class="pager">
+  <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">previous week</a></li>
+  <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>
+</ul>
+
+<p><b>Total time for this week:</b> {{ total_time|hours }} hours.
+
+{% if active_projects %}
+<h3>Breakdown</h3>
+
+<table class="table table-striped table-condensed">
+	<thead>
+		<tr>
+			<th>Project</th>
+			<th>Time Spent on Project</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for project in active_projects %}
+		<tr>
+			<td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+			<td>{{project.time}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endif %}
+
+<h3>Individual Times</h3>
+
+<table class="table table-striped table-condensed">
+	<thead>
+		<tr>
+			<th>Time</th>
+			<th>Item</th>
+			<th>Completed At</th>
+			<th>Project</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for t in individual_times %}
+		<tr>
+			<td>{{t.actual_time}}</td>
+			<td><a href="{{t.item.get_absolute_url}}">{{t.item.title}}</a></td>
+			<td>{{t.completed}}</td>
+			<td><a href="{{project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<h3>Piegraph</h3>
+
+<img src="http://chart.apis.google.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;chs=800x300&amp;chds=0,{{max_time|hours}}&amp;chd=t:{% for project in active_projects %}{{project.time|hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for project in active_projects %}{{project.name}}|{% endfor %}"
+   width="800" height="300" alt="" />
+
+{% endblock %}
