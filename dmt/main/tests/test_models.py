@@ -1,6 +1,8 @@
 from django.test import TestCase
 from .factories import UserFactory, ItemFactory, NodeFactory
-from dmt.main.models import HistoryItem
+from .factories import ProjectFactory
+from datetime import datetime
+from dmt.main.models import HistoryItem, ProjectUser
 
 
 class UserModelTest(TestCase):
@@ -17,6 +19,17 @@ class UserModelTest(TestCase):
         self.assertTrue(u.active())
         u = UserFactory(status='inactive')
         self.assertFalse(u.active())
+
+
+class ProjectUserTest(TestCase):
+    def test_completed_time_for_interval(self):
+        u = UserFactory()
+        p = ProjectFactory()
+        pu = ProjectUser(p, u)
+        start = datetime(year=2013, month=12, day=16)
+        end = datetime(year=2013, month=12, day=23)
+        r = pu.completed_time_for_interval(start, end)
+        self.assertEqual(r.total_seconds(), 0.0)
 
 
 class ItemModelTest(TestCase):

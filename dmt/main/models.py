@@ -37,13 +37,6 @@ class User(models.Model):
         return set(a.item.milestone.project
                    for a in self.resolve_times_for_interval(start, end))
 
-    def project_completed_time_for_interval(self, project, start, end):
-        return sum([a.actual_time for a in ActualTime.objects.filter(
-            resolver=self,
-            item__milestone__project=project,
-            completed__gt=start.date,
-            completed__lte=end.date)], timedelta())
-
     def resolve_times_for_interval(self, start, end):
         return ActualTime.objects.filter(
             resolver=self,
@@ -56,8 +49,9 @@ class User(models.Model):
         max_time = timedelta()
         total_time = timedelta()
         for project in active_projects:
-            ptime = self.project_completed_time_for_interval(
-                project, week_start, week_end)
+            pu = ProjectUser(project, self)
+            ptime = pu.completed_time_for_interval(
+                week_start, week_end)
             if ptime > max_time:
                 max_time = ptime
             total_time += ptime
@@ -69,6 +63,19 @@ class User(models.Model):
             individual_times=self.resolve_times_for_interval(
                 week_start, week_end),
         )
+
+
+class ProjectUser(object):
+    def __init__(self, project, user):
+        self.project = project
+        self.user = user
+
+    def completed_time_for_interval(self, start, end):
+        return sum([a.actual_time for a in ActualTime.objects.filter(
+            resolver=self.user,
+            item__milestone__project=self.project,
+            completed__gt=start.date,
+            completed__lte=end.date)], timedelta())
 
 
 class Project(models.Model):
