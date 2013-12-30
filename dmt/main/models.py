@@ -50,8 +50,7 @@ class User(models.Model):
         total_time = timedelta()
         for project in active_projects:
             pu = ProjectUser(project, self)
-            ptime = pu.completed_time_for_interval(
-                week_start, week_end)
+            ptime = pu.completed_time_for_interval(week_start, week_end)
             if ptime > max_time:
                 max_time = ptime
             total_time += ptime
@@ -71,11 +70,21 @@ class ProjectUser(object):
         self.user = user
 
     def completed_time_for_interval(self, start, end):
-        return sum([a.actual_time for a in ActualTime.objects.filter(
-            resolver=self.user,
-            item__milestone__project=self.project,
-            completed__gt=start.date,
-            completed__lte=end.date)], timedelta())
+        total = timedelta()
+        for a in ActualTime.objects.filter(
+                resolver=self.user,
+                item__milestone__project=self.project,
+                completed__gt=start.date,
+                completed__lte=end.date):
+            if isinstance(a.actual_time, timedelta):
+                total += a.actual_time
+            else:
+                # intervals from the database always come in as
+                # timedelta's but factory_boy seems to make
+                # them floats, so we need to be able to handle
+                # both...
+                total += timedelta(a.actual_time)
+        return total
 
 
 class Project(models.Model):
@@ -344,7 +353,7 @@ class ProjectClient(models.Model):
 class ActualTime(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')
     resolver = models.ForeignKey(User, db_column='resolver')
-    actual_time = models.TextField(blank=True)
+    actual_time = models.FloatField(null=True, blank=True)
     completed = models.DateTimeField(primary_key=True)
 
     class Meta:

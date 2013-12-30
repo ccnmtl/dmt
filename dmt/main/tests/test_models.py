@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .factories import UserFactory, ItemFactory, NodeFactory
-from .factories import ProjectFactory
+from .factories import ProjectFactory, ActualTimeFactory
 from datetime import datetime
 from dmt.main.models import HistoryItem, ProjectUser
 
@@ -19,6 +19,14 @@ class UserModelTest(TestCase):
         self.assertTrue(u.active())
         u = UserFactory(status='inactive')
         self.assertFalse(u.active())
+
+    def test_weekly_report(self):
+        at = ActualTimeFactory()
+        u = at.resolver
+        start = datetime(year=2013, month=12, day=16)
+        end = datetime(year=2013, month=12, day=23)
+        r = u.weekly_report(start, end)
+        self.assertEqual(len(r['active_projects']), 1)
 
 
 class ProjectUserTest(TestCase):

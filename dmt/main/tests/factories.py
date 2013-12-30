@@ -1,8 +1,8 @@
 import factory
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.utils.timezone import utc
 from dmt.main.models import User, Project, Milestone, Item
-from dmt.main.models import Comment, Events, Node
+from dmt.main.models import Comment, Events, Node, ActualTime
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -66,3 +66,11 @@ class NodeFactory(factory.DjangoModelFactory):
     added = datetime(2020, 12, 1).replace(tzinfo=utc)
     modified = datetime(2020, 12, 1).replace(tzinfo=utc)
     author = factory.SubFactory(UserFactory)
+
+
+class ActualTimeFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = ActualTime
+    item = factory.SubFactory(ItemFactory)
+    resolver = factory.SubFactory(UserFactory)
+    actual_time = timedelta(hours=1).total_seconds()
+    completed = datetime(2013, 12, 20).replace(tzinfo=utc)
