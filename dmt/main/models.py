@@ -205,6 +205,11 @@ class Item(models.Model):
         labels = ['ICING', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
         return labels[self.priority]
 
+    def status_display(self):
+        if self.status == 'RESOLVED':
+            return self.r_status
+        return self.status
+
     def is_bug(self):
         return self.type == "bug"
 

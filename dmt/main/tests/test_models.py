@@ -61,6 +61,13 @@ class ItemModelTest(TestCase):
         i = ItemFactory()
         self.assertEqual(i.priority_label(), 'LOW')
 
+    def test_status_display(self):
+        i = ItemFactory()
+        self.assertEqual(i.status_display(), 'OPEN')
+        i.status = 'RESOLVED'
+        i.r_status = 'FIXED'
+        self.assertEqual(i.status_display(), 'FIXED')
+
 
 class HistoryItemTest(TestCase):
     def test_status(self):
