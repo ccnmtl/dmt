@@ -63,6 +63,23 @@ class User(models.Model):
                 week_start, week_end),
         )
 
+    def open_assigned_items(self):
+        return Item.objects.filter(
+            assigned_to=self,
+            status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS']
+            ).exclude(milestone__name='Someday/Maybe')
+
+    def resolved_owned_items(self):
+        return Item.objects.filter(
+            owner=self,
+            status='RESOLVED'
+            )
+
+    def items(self):
+        assigned = set(self.open_assigned_items())
+        owned = set(self.resolved_owned_items())
+        return list(assigned.union(owned))
+
 
 class ProjectUser(object):
     def __init__(self, project, user):
@@ -183,6 +200,10 @@ class Item(models.Model):
 
     def status_class(self):
         return self.status.lower()
+
+    def priority_label(self):
+        labels = ['ICING', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
+        return labels[self.priority]
 
     def is_bug(self):
         return self.type == "bug"
