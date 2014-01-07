@@ -53,12 +53,22 @@ body > .container {
   color: blue;
 }
 
-td.open, td.new, td.reopened {
+td.open, td.new, td.reopened, span.open {
 	font-weight: bold;
 	color: #f00;
 }
 
-td.closed {
+td.closed, span.closed {
+		font-weight: bold;
+		color: #009900;
+}
+
+td.resolved, span.resolved {
+		font-weight: bold;
+		color: #069;
+}
+
+td.verified, span.verified {
 		font-weight: bold;
 		color: #009900;
 }

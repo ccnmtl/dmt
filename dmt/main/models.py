@@ -229,6 +229,9 @@ class HistoryItem(object):
     def status(self):
         return ""
 
+    def status_class(self):
+        return ""
+
 
 class HistoryEvent(HistoryItem):
     def __init__(self, event):
@@ -240,6 +243,9 @@ class HistoryEvent(HistoryItem):
     def status(self):
         return self.event.status
 
+    def status_class(self):
+        return self.event.status_class()
+
     def _get_comment(self):
         r = self.event.comment_set.all()
         if r.count():
@@ -250,7 +256,7 @@ class HistoryEvent(HistoryItem):
         return self._get_comment().comment
 
     def user(self):
-        return self._get_comment().username
+        return User.objects.get(username=self._get_comment().username)
 
 
 class HistoryComment(HistoryItem):
@@ -264,7 +270,7 @@ class HistoryComment(HistoryItem):
         return self.c.comment
 
     def user(self):
-        return self.c.username
+        return User.objects.get(username=self.c.username)
 
 
 class Notify(models.Model):
@@ -347,6 +353,9 @@ class Events(models.Model):
     class Meta:
         db_table = u'events'
         ordering = ['event_date_time', ]
+
+    def status_class(self):
+        return self.status.lower()
 
 
 class NotifyProject(models.Model):

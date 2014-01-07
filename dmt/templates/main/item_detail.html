@@ -16,7 +16,7 @@
 <h1>#{{object.iid}} {% if object.is_bug %}BUG:{% endif %} {{object.title}}</h1>
 
 <dl class="dl-horizontal">
-<dt>STATUS<dt><dd>{{ object.status }} {{object.r_status}}</dd>
+<dt>STATUS<dt><dd><span class="{{object.status_class}}">{{ object.status }} {{object.r_status}}</span></dd>
 <dt>OWNER<dt><dd><a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a></dd>
 <dt>ASSIGNED<dt><dd><a href="{{object.assigned_to.get_absolute_url}}">{{object.assigned_to}}</a></dd>
 <dt>PRIORITY<dt><dd>{{object.priority}}</dd>
@@ -32,20 +32,15 @@
 <hr />
 {{object.description|markdown}}
 <hr />
-ADD COMMENT
-ADD TIME
-CHANGE STATUS
-EDIT
-<hr />
 
 <h2>HISTORY</h2>
 
 <table class="table">
 {% for history_item in object.history %}
 <tr>
-<td>{{history_item.status}}</td>
+<td class="{{history_item.status_class}}">{{history_item.status}}</td>
 <td>
-{{history_item.user}}
+<a href="{{history_item.user.get_absolute_url}}">{{history_item.user.fullname}}</a>
 </td>
 <td>
 <nobr>{{history_item.timestamp}}</nobr>
