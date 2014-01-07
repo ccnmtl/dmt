@@ -80,6 +80,9 @@ class User(models.Model):
         owned = set(self.resolved_owned_items())
         return list(assigned.union(owned))
 
+    def clients(self):
+        return Client.objects.filter(contact=self)
+
 
 class ProjectUser(object):
     def __init__(self, project, user):

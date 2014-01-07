@@ -37,8 +37,8 @@
 	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
 	<td class="{{item.status_class}}">{{item.status_display}}</td>
 	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
-	<td>{{item.target_date}}</td>
-	<td>{{item.last_mod}}</td>
+	<td>{{item.target_date|date:"Y-m-d"}}</td>
+	<td>{{item.last_mod|date:"Y-m-d"}}</td>
 </tr>
 {% endfor %}
 	</tbody>
