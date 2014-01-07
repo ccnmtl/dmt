@@ -31,7 +31,8 @@
 	<tbody>
 		{% for item in object.item_set.all %}
 		<tr>
-			<td><a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
+			<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
 			<td class="{{item.status_class}}">{{item.status}}</td>
 			<td class="pr{{item.priority}}">{{item.priority_label}}</td>
 			<td>{{item.target_date}}</td>
