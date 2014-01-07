@@ -70,27 +70,6 @@
     </header>
 
 {% block primarynav %}
-    <div class="navbar" id="primarynav">
-      <div class="navbar-inner">
-        <div class="container">
-          <ul class="nav">
-          {% block primarynavtabs %}
-            <li class="active"><a href="/one/">One</a></li>
-						<li><a href="/two/">Two</a></li>
-          {% endblock %}
-					{% block primarynavtabsextra %}{% endblock %}
-          </ul>
-
-          <ul class="nav pull-right">
-            {% block primarynavtabsright %}
-            {% block primarynavrightextra %}{% endblock %}
-						<li><a href="/three/">Three</a></li>
-						<li><a href="/four/">Four</a></li>
-            {% endblock %}
-          </ul>
-        </div>
-      </div>
-    </div>
 {% endblock %}
 
 {% endblock %}

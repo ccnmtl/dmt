@@ -308,6 +308,9 @@ class Client(models.Model):
         db_table = u'clients'
         ordering = ['lastname', 'firstname']
 
+    def active(self):
+        return self.status == 'active'
+
 
 class ItemClient(models.Model):
     item = models.ForeignKey(Item, db_column='iid')
