@@ -72,3 +72,29 @@ td.verified, span.verified {
 		font-weight: bold;
 		color: #009900;
 }
+
+.pr0 {
+  font-weight: bold;
+  color: #9999cc;
+}
+
+.pr1 {
+  font-weight: bold;
+  color: #069;
+}
+
+.pr2 {
+  font-weight: bold;
+  color: #090;
+}
+
+.pr3 {
+  font-weight: bold;
+  color: #f60;
+}
+
+.pr4 {
+  font-weight: bold;
+  color: #f00;
+}
+

@@ -33,7 +33,7 @@
 		<tr>
 			<td><a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
 			<td class="{{item.status_class}}">{{item.status}}</td>
-			<td>{{item.priority_label}}</td>
+			<td class="pr{{item.priority}}">{{item.priority_label}}</td>
 			<td>{{item.target_date}}</td>
 			<td><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
 			<td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>

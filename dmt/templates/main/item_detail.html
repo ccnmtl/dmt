@@ -19,7 +19,7 @@
 <dt>STATUS<dt><dd><span class="{{object.status_class}}">{{ object.status }} {{object.r_status}}</span></dd>
 <dt>OWNER<dt><dd><a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a></dd>
 <dt>ASSIGNED<dt><dd><a href="{{object.assigned_to.get_absolute_url}}">{{object.assigned_to}}</a></dd>
-<dt>PRIORITY<dt><dd>{{object.priority}}</dd>
+<dt>PRIORITY<dt><dd><span class="pr{{object.priority}}">{{object.priority_label}}</span></dd>
 <dt>TARGET DATE<dt><dd>{{object.target_date}}</dd>
 {% if object.estimated_time %}
 <dt>ESTIMATED TIME<dt><dd>{{object.estimated_time}}</dd>

@@ -37,7 +37,7 @@
 {% for item in object.items %}
 <tr>
 	<td><a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
-	<td>{{item.priority_label}}</td>
+	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
 	<td class="{{item.status_class}}">{{item.status}}</td>
 	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
 	<td>{{item.target_date}}</td>
