@@ -14,35 +14,42 @@
 
 
 {% block content %}
+
 {% if request.user.is_anonymous %}
-<p>Please Login</p>
+  <p>Please Login</p>
 {% else %}
-{% pmtuser as pmt_user %}
-<table class="table table-striped table-condensed tablesorter" id="user-items">
-	<thead>
-		<tr>
-			<th>Item</th>
-			<th>Priority</th>
-			<th>Status</th>
-			<th>Project</th>
-			<th>Target Date</th>
-			<th>Modified</th>
-		</tr>
-	</thead>
-	<tbody>
-{% for item in pmt_user.items %}
-<tr>
-	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
-	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
-	<td class="{{item.status_class}}">{{item.status_display}}</td>
-	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
-	<td>{{item.target_date|date:"Y-m-d"}}</td>
-	<td>{{item.last_mod|date:"Y-m-d"}}</td>
-</tr>
-{% endfor %}
-	</tbody>
-</table>
+  {% pmtuser as pmt_user %}
+  {% if pmt_user.username %}
+    <table class="table table-striped table-condensed tablesorter" id="user-items">
+    	<thead>
+    		<tr>
+    			<th>Item</th>
+    			<th>Priority</th>
+    			<th>Status</th>
+    			<th>Project</th>
+    			<th>Target Date</th>
+    			<th>Modified</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    {% for item in pmt_user.items %}
+    <tr>
+    	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+    	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
+    	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
+    	<td class="{{item.status_class}}">{{item.status_display}}</td>
+    	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
+    	<td>{{item.target_date|date:"Y-m-d"}}</td>
+    	<td>{{item.last_mod|date:"Y-m-d"}}</td>
+    </tr>
+    {% endfor %}
+    	</tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-error">
+    You need to <a href="/claim/">claim your account</a> first.
+    </div>
+  {% endif %}
 {% endif %}
 {% endblock %}
 
