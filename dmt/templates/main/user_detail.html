@@ -30,6 +30,7 @@
   <li><a href="#items" data-toggle="tab">Items</a></li>
   <li><a href="#clients" data-toggle="tab">Clients</a></li>
   <li><a href="#reports" data-toggle="tab">Reports</a></li>
+  <li><a href="#projects" data-toggle="tab">Projects</a></li>
 </ul>
 
 <!-- Tab panes -->
@@ -84,6 +85,16 @@
 	</div>
   <div class="tab-pane fade" id="reports">
 		<p><a href="/report/user/{{object.username}}/weekly/">Weekly Report</a></p>
+	</div>
+  <div class="tab-pane fade" id="projects">
+		{% if object.project_set.count %}
+		<ul>Caretaker for the following projects</ul>
+		{% for project in object.project_set.all %}
+		<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+
 	</div>
 </div>
 
