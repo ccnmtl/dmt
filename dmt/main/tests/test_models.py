@@ -28,6 +28,18 @@ class UserModelTest(TestCase):
         r = u.weekly_report(start, end)
         self.assertEqual(len(r['active_projects']), 1)
 
+    def test_manager_on(self):
+        u = UserFactory()
+        self.assertEqual(u.manager_on(), [])
+
+    def test_developer_on(self):
+        u = UserFactory()
+        self.assertEqual(u.developer_on(), [])
+
+    def test_guest_on(self):
+        u = UserFactory()
+        self.assertEqual(u.guest_on(), [])
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):

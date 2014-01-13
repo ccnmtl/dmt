@@ -83,6 +83,15 @@ class User(models.Model):
     def clients(self):
         return Client.objects.filter(contact=self)
 
+    def manager_on(self):
+        return [w.project for w in self.workson_set.filter(auth='manager')]
+
+    def developer_on(self):
+        return [w.project for w in self.workson_set.filter(auth='developer')]
+
+    def guest_on(self):
+        return [w.project for w in self.workson_set.filter(auth='guest')]
+
 
 class ProjectUser(object):
     def __init__(self, project, user):
