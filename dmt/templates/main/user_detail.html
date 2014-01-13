@@ -14,6 +14,13 @@
 </div>
 {% endif %}
 
+{% if object.photo_url %}
+  <div class="thumbnail pull-right">
+      <img src="{{object.photo_url}}" />
+  </div>
+{% endif %}
+
+
 <dl>
 <dt>Username<dt><dd>{{object.username}}</dd>
 <dt>Fullname<dt><dd>{{object.fullname}}</dd>
@@ -25,6 +32,7 @@
 <dt>Bio</dt><dd>{{object.bio|markdown}}</dd>
 {% endif %}
 </dl>
+
 
 <ul class="nav nav-tabs">
   <li><a href="#items" data-toggle="tab">Items</a></li>
