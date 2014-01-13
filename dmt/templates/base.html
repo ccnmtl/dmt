@@ -54,7 +54,7 @@
 {% if request.user.is_superuser %}
           <a href="{% url 'impersonate-list' %}">[impersonate]</a>
 {% endif %}
-          <a href="/logout/" class="btn btn-inverse">logout</a>
+          <a href="/accounts/logout/" class="btn btn-inverse">logout</a>
           {% endif %}
 {% endblock %}
        </p>
