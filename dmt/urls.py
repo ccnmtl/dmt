@@ -7,6 +7,7 @@ from django.views.generic.list import ListView
 from dmt.main.models import (
     Project, Milestone, Item, User, Client,
     Node)
+from dmt.main.views import SearchView
 
 admin.autodiscover()
 
@@ -30,6 +31,7 @@ urlpatterns = patterns(
     (r'^$', TemplateView.as_view(template_name="main/index.html")),
     (r'^admin/', include(admin.site.urls)),
     (r'^claim/', include('dmt.claim.urls')),
+    (r'^search/$', SearchView.as_view()),
     (r'^client/$', ListView.as_view(model=Client, paginate_by=100)),
     (r'^client/(?P<pk>\d+)/$', DetailView.as_view(model=Client)),
     (r'^forum/$', ListView.as_view(model=Node, paginate_by=20)),

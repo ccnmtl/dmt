@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Search for "{{q}}"</h1>
+
+{% if error %}
+<div class="alert alert-error">Sorry, I need at least three
+	characters to search for.</div>
+{% endif %}
+
+{% if users %}
+<p>User Matches:</p>
+<ul>
+{% for u in users %}
+<li><a href="{{u.get_absolute_url}}">{{u.fullname}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if clients %}
+<p>Client matches:</p>
+<ul>
+{% for client in clients %}
+<li><a href="/client/{{client.client_id}}/">{{client.lastname}}, {{client.firstname}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if projects %}
+<p>Project matches:</p>
+<ul>
+{% for project in projects %}
+<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if milestones %}
+<p>Milestone matches:</p>
+<ul>
+{% for milestone in milestones %}
+<li><span class="{{milestone.status_class}}">{{milestone.status}}</span> <a href="{{milestone.get_absolute_url}}">{{milestone.project.name}}:
+		{{milestone.name}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if items %}
+<p>Item matches:</p>
+<ul>
+{% for item in items %}
+<li><span class="{{item.status_class}}">{{item.status}}</span> <a href="{{item.get_absolute_url}}">{{item.title}}</a>
+ (<a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a>)</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if nodes %}
+<p>Forum post matches:</p>
+<ul>
+{% for node in nodes %}
+<li><a href="{{node.get_absolute_url}}">[{{node.added}}]
+		{{node.subject}}</a> (<a href="{{node.author.get_absolute_url}}">{{node.author.fullname}}</a>)</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

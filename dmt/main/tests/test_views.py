@@ -17,6 +17,15 @@ class BasicTest(TestCase):
         self.assertEquals(response.status_code, 200)
         assert "PASS" in response.content
 
+    def test_search(self):
+        response = self.c.get("/search/?q=foo")
+        self.assertEquals(response.status_code, 200)
+
+    def test_search_empty(self):
+        response = self.c.get("/search/?q=")
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue("alert-error" in response.content)
+
 
 class TestProjectViews(TestCase):
     def setUp(self):
