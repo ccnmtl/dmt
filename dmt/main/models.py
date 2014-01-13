@@ -147,6 +147,20 @@ class Project(models.Model):
     def get_absolute_url(self):
         return "/project/%d/" % self.pid
 
+    def active_items(self):
+        return Item.objects.filter(
+            milestone__project=self,
+            status__in=['OPEN', 'RESOLVED', 'INPROGRESS'])
+
+    def managers(self):
+        return [w.username for w in self.workson_set.filter(auth='manager')]
+
+    def developers(self):
+        return [w.username for w in self.workson_set.filter(auth='developer')]
+
+    def guests(self):
+        return [w.username for w in self.workson_set.filter(auth='guest')]
+
 
 class Document(models.Model):
     did = models.IntegerField(primary_key=True)

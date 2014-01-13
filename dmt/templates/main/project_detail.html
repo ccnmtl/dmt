@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load markup %}
+
+{% block css %}
+<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
+{% endblock %}
 
 {% block primarynavtabs %}
 {% endblock %}
@@ -11,6 +16,105 @@
 
 <h1>Project: {{object.name}}</h1>
 
+<ul class="nav nav-tabs">
+  <li><a href="#summary" data-toggle="tab">Summary</a></li>
+  <li><a href="#details" data-toggle="tab">Details</a></li>
+  <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
+  <li><a href="#reports" data-toggle="tab">Reports</a></li>
+</ul>
+
+
+<div class="tab-content">
+	<div class="tab-pane fade in active" id="summary">
+		<dl>
+			<dt>Status</dt>
+			<dd>{{object.status}}</dd>
+			<dt>Description</dt>
+			<dd>{{object.description|markdown}}</dd>
+			<dt>URL</dt>
+			<dd>{{object.url}}</dd>
+{% if object.wiki_category %}
+			<dt>Wiki Category</dt>
+			<dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}">{{object.wiki_category}}</a></dd>
+{% endif %}
+			</dd>
+			<dt>Personnel</dt>
+			<dd>
+				{% for u in object.managers %}
+						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a>{% if not forloop.last %}, {% endif %}
+					{% endfor %}
+						{% for u in object.developers %}
+						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a>{% if not forloop.last %}, {% endif %}
+						{% endfor %}
+					{% for u in object.guests %}
+						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a>{% if not forloop.last %}, {% endif %}
+						{% endfor %}
+			</dd>
+		</dl>
+
+
+<table class="table table-condensed table-striped tablesorter" id="project-items">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Status</th>
+			<th>Priority</th>
+			<th>Target Date</th>
+			<th>Owner</th>
+			<th>Assigned To</th>
+			<th>Last Modified</th>
+		</tr>
+	</thead>
+
+	<tbody>
+
+		{% for item in object.active_items %}
+		<tr>
+			<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
+			<td class="{{item.status_class}}">{{item.status}}</td>
+			<td class="pr{{item.priority}}">{{item.priority_label}}</td>
+			<td>{{item.target_date|date:"Y-m-d"}}</td>
+			<td><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
+			<td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>
+			<td>{{item.last_mod|date:"Y-m-d"}}</td>
+		</tr>
+		{% endfor %}
+</tbody>
+</table>
+
+	</div>
+
+	<div class="tab-pane fade" id="details">
+		<dl>
+			<dt>Caretaker</dt>
+			<dd><a href="{{object.caretaker.get_absolute_url}}">{{object.caretaker.first_name}} {{object.caretaker.last_name}}</a></dd>
+			<dt>type</dt>
+			<dd>{{object.type}}</dd>
+			<dt>area</dt>
+			<dd>{{object.area}}</dd>
+			<dt>restricted?</dt>
+			<dd>{{object.restricted}}</dd>
+			<dt>approach</dt>
+			<dd>{{object.approach}}</dd>
+			<dt>info url</dt>
+			<dd>{{object.info_url}}</dd>
+			<dt>entry url</dt>
+			<dd>{{object.entry_url}}</dd>
+			<dt>eval url</dt>
+			<dd>{{object.eval_url}}</dd>
+			<dt>project number</dt>
+			<dd>{{object.projnum}}</dd>
+			<dt>scale</dt>
+			<dd>{{object.scale}}</dd>
+			<dt>distrib</dt>
+			<dd>{{object.distrib}}</dd>
+			<dt>poster?</dt>
+			<dd>{{object.poster}}</dd>
+		</dl>
+	</div>
+
+	<div class="tab-pane fade" id="milestones">
 {% if object.milestone_set.count %}
 <table class="table">
 	<thead>
@@ -35,4 +139,33 @@
 
 </table>
 {% endif %}
+</div>
+
+	<div class="tab-pane fade" id="reports">
+
+		<ul>[NOT IMPLEMENTED YET]
+			<li>weekly</li>
+			<li>monthly</li>
+			<li>quarterly</li>
+			<li>semestral</li>
+			<li>annual</li>
+			<li>custom</li>
+		</ul>
+
+	</div>
+
+
+</div>
+{% endblock %}
+
+{% block js %}
+  <script src="{{STATIC_URL}}js/jquery.tablesorter.min.js"></script>
+
+<script>
+$(document).ready(function() 
+    { 
+        $("#project-items").tablesorter({sortList: [[2,1], [1,0]]}); 
+    } 
+);
+</script>
 {% endblock %}
