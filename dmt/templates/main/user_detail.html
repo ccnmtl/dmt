@@ -44,6 +44,7 @@
   <li><a href="#clients" data-toggle="tab">Clients</a></li>
   <li><a href="#reports" data-toggle="tab">Reports</a></li>
   <li><a href="#projects" data-toggle="tab">Projects</a></li>
+  <li><a href="#forum" data-toggle="tab">Forum Posts</a></li>
 </ul>
 
 <!-- Tab panes -->
@@ -133,6 +134,19 @@
 {% endif %}
 
 	</div>
+
+	<div class="tab-pane fade" id="forum">
+		{% for n in object.node_set.all %}
+<h2><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h2>
+<p class="byline">
+{% if n.project %}to <a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>{% endif %}
+{{n.added}}
+</p>
+{{n.body|markdown}}
+
+		{% endfor %}
+	</div>
+
 </div>
 
 {% endblock %}
