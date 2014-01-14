@@ -107,8 +107,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
-    'django_nose',
     'compressor',
+    'django_nose',
     'django_statsd',
     'bootstrapform',
     'lettuce.django',
@@ -126,6 +126,9 @@ INSTALLED_APPS = [
 LETTUCE_APPS = (
     'dmt.main',
 )
+
+if 'jenkins' in sys.argv:
+    COMPRESS_ENABLED = False
 
 INTERNAL_IPS = ('127.0.0.1', )
 DEBUG_TOOLBAR_PANELS = (

@@ -43,6 +43,12 @@ class User(models.Model):
             completed__gt=start.date,
             completed__lte=end.date)
 
+    def interval_time(self, start, end):
+        return interval_sum(
+            [
+                a.actual_time
+                for a in self.resolve_times_for_interval(start, end)])
+
     def weekly_report(self, week_start, week_end):
         active_projects = self.active_projects(week_start, week_end)
         # google pie chart needs max
@@ -92,6 +98,16 @@ class User(models.Model):
     def guest_on(self):
         return [w.project for w in self.workson_set.filter(auth='guest')]
 
+    def total_group_time(self, start, end):
+        return interval_sum(
+            [u.interval_time(start, end) for u in self.users_in_group()])
+
+    def user_groups(self):
+        return [ig.grp for ig in self.ingroup_set.all()]
+
+    def users_in_group(self):
+        return [ig.username for ig in self.group_members.all()]
+
 
 class ProjectUser(object):
     def __init__(self, project, user):
@@ -99,21 +115,27 @@ class ProjectUser(object):
         self.user = user
 
     def completed_time_for_interval(self, start, end):
-        total = timedelta()
-        for a in ActualTime.objects.filter(
-                resolver=self.user,
-                item__milestone__project=self.project,
-                completed__gt=start.date,
-                completed__lte=end.date):
-            if isinstance(a.actual_time, timedelta):
-                total += a.actual_time
-            else:
-                # intervals from the database always come in as
-                # timedelta's but factory_boy seems to make
-                # them floats, so we need to be able to handle
-                # both...
-                total += timedelta(a.actual_time)
-        return total
+        return interval_sum(
+            [
+                a.actual_time for a in ActualTime.objects.filter(
+                    resolver=self.user,
+                    item__milestone__project=self.project,
+                    completed__gt=start.date,
+                    completed__lte=end.date)])
+
+
+def interval_sum(intervals):
+    total = timedelta()
+    for a in intervals:
+        if isinstance(a, timedelta):
+            total += a
+        else:
+            # intervals from the database always come in as
+            # timedelta's but factory_boy seems to make
+            # them floats, so we need to be able to handle
+            # both...
+            total += timedelta(a)
+    return total
 
 
 class Project(models.Model):

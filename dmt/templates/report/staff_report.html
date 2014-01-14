@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load durations %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Staff Report for the week from {{week_start}} to {{week_end}}</h2>
+<ul class="pager">
+  <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">previous week</a></li>
+  <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>
+</ul>
+
+{% for group in groups %}
+<h3>{{group.group}}</h3>
+Total Hours: {{group.total_time}}
+
+<ul>
+{% for user in group.user_data %}
+<li>{{user.user.fullname}}: {{user.user_time}}</li>
+{% endfor %}
+</ul>
+
+{% endfor %}
+
+
+{% endblock %}
