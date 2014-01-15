@@ -30,20 +30,23 @@
 </ul>
 </div>
 <div class="col-md-10">
+{% if group.total_time %}
 <img src="http://chart.apis.google.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;
 chs=800x300&amp;chds=0,{{group.max_time|hours}}&amp;chd=t:{% for user in group.user_data %}{{user.user_time|hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for user in group.user_data %}{{user.user.fullname}}|{% endfor %}"
    width="800" height="300" alt="" />
-
+{% endif %}
 </div>
 
 </div>
 
 {% endfor %}
 
+{% if group_max_time %}
 <h3>Comprehensive Piegraph</h3>
 
 <img src="http://chart.apis.google.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;chs=800x300&amp;chds=0,{{group_max_time|hours}}&amp;chd=t:{% for group in groups %}{{group.total_time|hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for group in groups %}{{group.group}}|{% endfor %}"
    width="800" height="300" alt="" />
 
+{% endif %}
 
 {% endblock %}
