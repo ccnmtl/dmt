@@ -16,16 +16,34 @@
 </ul>
 
 {% for group in groups %}
-<h3>{{group.group}}</h3>
-Total Hours: {{group.total_time}}
+<div class="row">
+<div class="col-md-4"><h3>{{group.group}}</h3></div>
+<div class="col-md-4">Total Hours: {{group.total_time|hours}}</div>
+</div>
 
+<div class="row">
+<div class="col-md-2">
 <ul>
 {% for user in group.user_data %}
-<li>{{user.user.fullname}}: {{user.user_time}}</li>
+<li>{{user.user.fullname}}: {{user.user_time|hours}}</li>
 {% endfor %}
 </ul>
+</div>
+<div class="col-md-10">
+<img src="http://chart.apis.google.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;
+chs=800x300&amp;chds=0,{{group.max_time|hours}}&amp;chd=t:{% for user in group.user_data %}{{user.user_time|hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for user in group.user_data %}{{user.user.fullname}}|{% endfor %}"
+   width="800" height="300" alt="" />
+
+</div>
+
+</div>
 
 {% endfor %}
+
+<h3>Comprehensive Piegraph</h3>
+
+<img src="http://chart.apis.google.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;chs=800x300&amp;chds=0,{{group_max_time|hours}}&amp;chd=t:{% for group in groups %}{{group.total_time|hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for group in groups %}{{group.group}}|{% endfor %}"
+   width="800" height="300" alt="" />
 
 
 {% endblock %}
