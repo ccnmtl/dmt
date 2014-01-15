@@ -44,3 +44,7 @@ class StaffReportTest(TestCase):
     def test_staff_report(self):
         r = self.c.get("/report/staff/")
         self.assertEqual(r.status_code, 200)
+
+    def test_staff_report_previous(self):
+        r = self.c.get("/report/staff/previous/")
+        self.assertEqual(r.status_code, 302)

@@ -1,5 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from dmt.main.models import User
 from datetime import datetime, timedelta
 
@@ -26,6 +27,16 @@ class UserWeeklyView(TemplateView):
                          next_week=next_week.date,
                          ))
         return data
+
+
+class StaffReportPreviousWeekView(View):
+    def get(self, request, **kwargs):
+        now = datetime.today()
+        week_start = now + timedelta(days=-now.weekday())
+        prev_week = week_start - timedelta(weeks=1)
+        return HttpResponseRedirect(
+            "/report/staff/?date=%04d-%02d-%02d" % (
+                prev_week.year, prev_week.month, prev_week.day))
 
 
 class StaffReportView(TemplateView):
