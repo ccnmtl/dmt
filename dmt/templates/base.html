@@ -34,11 +34,28 @@
       <div class="container">
         <ul class="nav">
           <li><a class="brand" href="/">DMT</a></li>
-					<li><a href="/project/">Projects</a></li>
+					<li class="dropdown">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+Projects <span class="caret"></span>
+<ul  class="dropdown-menu">
+<li><a href="/project/">All Projects</a></li>
+{% if not request.user.is_anonymous %}
+{% pmtuser as pmt_user %}
+{% if pmt_user.recent_active_projects %}
+<li><p class="navbar-text">Your Recent Projects</p></li>
+{% for project in pmt_user.recent_active_projects %}
+<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
+{% endfor %}
+{% endif %}
+{% endif %}
+
+</ul>
+</li>
 					<li><a href="/client/">Clients</a></li>
 					<li><a href="/user/">Users/Groups</a></li>
 					<li><a href="/report/">Reports</a></li>
 					<li><a href="/forum/">Forum</a></li>
+
 					<li><a href="http://wiki.ccnmtl.columbia.edu/">Wiki</a></li>
           {% block topnavbarleftitems %}{% endblock %}
         </ul>
@@ -95,6 +112,8 @@
     </div>
   </div>
 </div>
+
+
 
 <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 

@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 class User(models.Model):
@@ -36,6 +36,13 @@ class User(models.Model):
     def active_projects(self, start, end):
         return set(a.item.milestone.project
                    for a in self.resolve_times_for_interval(start, end))
+
+    def recent_active_projects(self):
+        """ any projects touched in the last month """
+        now = datetime.today()
+        start = now - timedelta(weeks=52)
+        projects = self.active_projects(start, now)
+        return sorted(projects, key=lambda x: x.name.lower())
 
     def resolve_times_for_interval(self, start, end):
         return ActualTime.objects.filter(
