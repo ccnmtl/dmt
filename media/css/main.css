@@ -24,6 +24,7 @@ body {
 body > .container {
   background-color: #fff;
   min-height: 100%;
+	padding-top: 75px;
 }
 
 #content {
@@ -98,3 +99,6 @@ td.verified, span.verified {
   color: #f00;
 }
 
+.modal-body { max-height:100%; height:85%; }
+.twitter-typeahead {width: 100%; }
+.tt-hint {display: none;}

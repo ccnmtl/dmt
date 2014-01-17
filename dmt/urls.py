@@ -30,6 +30,7 @@ urlpatterns = patterns(
     logout_page,
     (r'^$', TemplateView.as_view(template_name="main/index.html")),
     (r'^admin/', include(admin.site.urls)),
+    (r'^api/1.0/', include('dmt.api.urls')),
     (r'^claim/', include('dmt.claim.urls')),
     (r'^search/$', SearchView.as_view()),
     (r'^client/$', ListView.as_view(model=Client, paginate_by=100)),

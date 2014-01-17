@@ -40,6 +40,18 @@ class UserModelTest(TestCase):
         u = UserFactory()
         self.assertEqual(u.guest_on(), [])
 
+    def test_clients_empty(self):
+        u = UserFactory()
+        self.assertEqual(len(u.clients()), 0)
+
+    def test_user_groups_empty(self):
+        u = UserFactory()
+        self.assertEqual(len(u.user_groups()), 0)
+
+    def test_users_in_group_empty(self):
+        u = UserFactory()
+        self.assertEqual(len(u.users_in_group()), 0)
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):

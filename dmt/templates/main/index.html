@@ -3,6 +3,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
+<link rel="stylesheet" href="{{STATIC_URL}}css/typeahead.js-bootstrap.css">
 {% endblock %}
 
 
@@ -14,8 +15,59 @@
 
 
 {% block content %}
+<ul class="nav nav-pills">
+	<li><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></li>
+	<li><a href="#" data-toggle="modal"
+	data-target="#add-tracker">Add Tracker</a></li>
+</ul>
 
-<p><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></p>
+<div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-tracker-label">Add Tracker(s)</h4>
+      </div>
+      <div class="modal-body">
+				<form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">
+					<input type="hidden" name="pid" value="0" id="tracker-pid-input" />
+
+					<div class="row">
+						<div class="col-sm-12">
+							<input type="text" name="project" placeholder="project"
+										 class="form-control" id="project-input" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-7">
+							<input type="text" name="title" placeholder="task" 
+										 id="tracker-task-input"
+										 class="form-control"/>
+						</div>
+
+						<div class="col-sm-3">
+							<input type="text" name="time" placeholder="time"
+										 id="tracker-time-input"
+										 class="form-control" />
+						</div>
+
+						<div class="col-sm-2">
+							<input type="text" name="client" placeholder="client"
+										 id="tracker-client-input"
+										 class="form-control" />
+						</div>
+					</div>
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="add-tracker-button">Add</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 {% if request.user.is_anonymous %}
   <p>Please Login</p>
 {% else %}
@@ -56,11 +108,39 @@
 
 {% block js %}
   <script src="{{STATIC_URL}}js/jquery.tablesorter.min.js"></script>
+	<script src="{{STATIC_URL}}js/typeahead.min.js"></script>
 
 <script>
 $(document).ready(function() 
     { 
-        $("#user-items").tablesorter({sortList: [[1,1], [4,0]]}); 
+        $("#user-items").tablesorter({sortList: [[1,1], [4,0]]});
+
+        $("#project-input").typeahead({
+          name: 'projects',
+          prefetch: '/api/1.0/projects/all/',
+          remote: '/api/1.0/projects/autocomplete/?q=%QUERY'
+        });
+        $("#project-input").on("typeahead:selected", function (object, datum) {
+             $("#tracker-pid-input").val(datum.pid);
+          });
+
+        $("#add-tracker-button").click(function(event) {
+           var pid = $("#tracker-pid-input").val();
+           var task = $("#tracker-task-input").val();
+           var time = $("#tracker-time-input").val();
+           var client = $("#tracker-client-input").val();
+
+           $.ajax({
+             type: "POST",
+             url: "/api/1.0/trackers/add/",
+             data: {pid: pid, task: task, time: time, client: client}
+           }).done(function (msg) {
+              $("#tracker-task-input").val("");
+              $("#tracker-time-input").val("");
+              $("#tracker-client-input").val("");
+           });
+           event.preventDefault();
+        });
     } 
 );
 </script>

@@ -48,6 +48,7 @@ JENKINS_TASKS = (
     'django_jenkins.tasks.run_pyflakes',
 )
 PROJECT_APPS = [
+    'dmt.api',
     'dmt.main',
     'dmt.claim',
     'dmt.report',
@@ -118,9 +119,11 @@ INSTALLED_APPS = [
     'smoketest',
     'django_extensions',
     'impersonate',
+    'interval',
     'dmt.main',
     'dmt.claim',
     'dmt.report',
+    'dmt.api',
 ]
 
 LETTUCE_APPS = (

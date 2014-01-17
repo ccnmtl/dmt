@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import timedelta, datetime
+from interval.fields import IntervalField
 
 
 class User(models.Model):
@@ -131,17 +132,17 @@ class ProjectUser(object):
                     completed__lte=end.date)])
 
 
+# before putting in the IntervalField, there were some
+# weird mismatches between what postgres would return
+# and what factory_boy models would return for intervals
+# this function hid the difference. Now, it looks like
+# it might be unecessary. can probably remove this
+# and replace with a plain sum() once a little
+# more testing is done
 def interval_sum(intervals):
     total = timedelta()
     for a in intervals:
-        if isinstance(a, timedelta):
-            total += a
-        else:
-            # intervals from the database always come in as
-            # timedelta's but factory_boy seems to make
-            # them floats, so we need to be able to handle
-            # both...
-            total += timedelta(a)
+        total += a
     return total
 
 
@@ -190,6 +191,20 @@ class Project(models.Model):
     def guests(self):
         return [w.username for w in self.workson_set.filter(auth='guest')]
 
+    def upcoming_milestone(self):
+        # ideally, we want a milestone that is open, in the future,
+        # and as close to today as possible
+
+        r = self.milestone_set.filter(
+            status='OPEN',
+            target_date__gte=datetime.today())
+        if r.count():
+            return r.order_by('target_date')[0]
+        # there aren't any upcoming open milestones, but we need
+        # to return *something*, so we'll just go with the latest
+        # milestone.
+        return self.milestone_set.all().order_by("-target_date")[0]
+
 
 class Document(models.Model):
     did = models.IntegerField(primary_key=True)
@@ -230,7 +245,7 @@ class Milestone(models.Model):
 
 
 class Item(models.Model):
-    iid = models.IntegerField(primary_key=True)
+    iid = models.AutoField(primary_key=True)
     type = models.CharField(max_length=12)
     owner = models.ForeignKey(User, db_column='owner',
                               related_name='owned_items')
@@ -244,7 +259,7 @@ class Item(models.Model):
     r_status = models.CharField(max_length=16, blank=True)
     last_mod = models.DateTimeField(null=True, blank=True)
     target_date = models.DateField(null=True, blank=True)
-    estimated_time = models.TextField(blank=True)
+    estimated_time = IntervalField(blank=True, null=True)
     url = models.TextField(blank=True)
 
     class Meta:
@@ -275,6 +290,18 @@ class Item(models.Model):
         merged = comments + events
         merged.sort()
         return merged
+
+    def add_resolve_time(self, user, time):
+        completed = datetime.now()
+        ActualTime.objects.create(
+            item=self,
+            resolver=user,
+            actual_time=time,
+            completed=completed)
+
+    def add_clients(self, clients):
+        # TODO: implement this
+        pass
 
 
 class HistoryItem(object):
@@ -446,7 +473,7 @@ class ProjectClient(models.Model):
 class ActualTime(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')
     resolver = models.ForeignKey(User, db_column='resolver')
-    actual_time = models.FloatField(null=True, blank=True)
+    actual_time = IntervalField(null=True, blank=True)
     completed = models.DateTimeField(primary_key=True)
 
     class Meta:

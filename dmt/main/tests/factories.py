@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from django.utils.timezone import utc
 from dmt.main.models import User, Project, Milestone, Item
 from dmt.main.models import Comment, Events, Node, ActualTime
+from dmt.main.models import Client
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -75,3 +76,17 @@ class ActualTimeFactory(factory.DjangoModelFactory):
     resolver = factory.SubFactory(UserFactory)
     actual_time = timedelta(hours=1).total_seconds()
     completed = datetime(2013, 12, 20).replace(tzinfo=utc)
+
+
+class ClientFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Client
+    client_id = factory.Sequence(lambda n: n)
+    lastname = "clientlastname"
+    firstname = "clientfirstname"
+    title = "Dr."
+    registration_date = datetime(2013, 12, 20).replace(tzinfo=utc)
+    department = "Testing"
+    school = "TestSchool"
+    email = "testclient@columbia.edu"
+    contact = factory.SubFactory(UserFactory)
+    status = 'active'
