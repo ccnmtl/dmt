@@ -177,6 +177,14 @@ def see_header(step, text):
         header = world.dom.cssselect('a.brand')[0]
         assert text.strip() == header.text_content().strip()
 
+@step(r'I see the navbar')
+def see_the_navbar(step):
+    if world.using_selenium:
+        assert world.firefox.find_element_by_css_selector("nav.navbar")
+    else:
+        navbar = world.dom.cssselect('nav.navbar')[0]
+        assert navbar
+
 @step(r'I see the page title "(.*)"')
 def see_title(step, text):
     if world.using_selenium:
