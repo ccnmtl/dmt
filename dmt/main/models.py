@@ -38,12 +38,24 @@ class User(models.Model):
         return set(a.item.milestone.project
                    for a in self.resolve_times_for_interval(start, end))
 
-    def recent_active_projects(self):
-        """ any projects touched in the last month """
+    def has_recent_active_projects(self):
         now = datetime.today()
         start = now - timedelta(weeks=52)
-        projects = self.active_projects(start, now)
-        return sorted(projects, key=lambda x: x.name.lower())
+        return self.actualtime_set.filter(
+            completed__gte=start, completed__lte=now).count() > 0
+
+    def recent_active_projects(self):
+        """ any projects touched in the last year """
+        now = datetime.today()
+        start = now - timedelta(weeks=52)
+        projects = Project.objects.raw(
+            'SELECT distinct m.pid as pid '
+            'FROM milestones m, items i, actual_times a '
+            'WHERE m.mid = i.mid AND i.iid = a.iid '
+            'AND a.resolver = %s '
+            'AND a.completed > %s '
+            'AND a.completed < %s', [self.username, start, now])
+        return sorted(set(list(projects)), key=lambda x: x.name.lower())
 
     def resolve_times_for_interval(self, start, end):
         return ActualTime.objects.filter(

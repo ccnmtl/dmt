@@ -52,6 +52,14 @@ class UserModelTest(TestCase):
         u = UserFactory()
         self.assertEqual(len(u.users_in_group()), 0)
 
+    def test_has_recent_active_projects(self):
+        u = UserFactory()
+        self.assertFalse(u.has_recent_active_projects())
+
+    def test_recent_active_projects(self):
+        u = UserFactory()
+        self.assertEqual(u.recent_active_projects(), [])
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):

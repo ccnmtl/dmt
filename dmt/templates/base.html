@@ -50,7 +50,7 @@ Projects <span class="caret"></span>
 <li><a href="/project/">All Projects</a></li>
 {% if not request.user.is_anonymous %}
 {% pmtuser as pmt_user %}
-{% if pmt_user.recent_active_projects %}
+{% if pmt_user.has_recent_active_projects %}
 <li><p class="navbar-text">Your Recent Projects</p></li>
 {% for project in pmt_user.recent_active_projects %}
 <li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
