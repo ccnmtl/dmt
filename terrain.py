@@ -168,6 +168,7 @@ def i_go_back(self):
 def wait(step,seconds):
     time.sleep(int(seconds))
 
+
 @step(r'I see the header "(.*)"')
 def see_header(step, text):
     if world.using_selenium:
@@ -177,6 +178,7 @@ def see_header(step, text):
         header = world.dom.cssselect('a.brand')[0]
         assert text.strip() == header.text_content().strip()
 
+
 @step(r'I see the navbar')
 def see_the_navbar(step):
     if world.using_selenium:
@@ -184,6 +186,7 @@ def see_the_navbar(step):
     else:
         navbar = world.dom.cssselect('nav.navbar')[0]
         assert navbar
+
 
 @step(r'I see the page title "(.*)"')
 def see_title(step, text):
