@@ -87,7 +87,6 @@ class ItemHoursViewTest(TestCase):
         Claim.objects.create(django_user=self.u, pmt_user=pu)
         self.item = ItemFactory()
 
-
     def test_post(self):
         r = self.c.post(
             "/api/1.0/items/%d/hours/" % self.item.iid,
