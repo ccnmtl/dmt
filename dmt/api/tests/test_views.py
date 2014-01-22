@@ -3,6 +3,7 @@ from django.test.client import Client
 from django.contrib.auth.models import User
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.tests.factories import MilestoneFactory, ClientFactory
+from dmt.main.tests.factories import ItemFactory
 
 
 class AllProjectsViewTest(TestCase):
@@ -71,3 +72,27 @@ class AddTrackerViewTest(TestCase):
                 client="testclient",
             ))
         self.assertEqual(r.status_code, 200)
+
+
+class ItemHoursViewTest(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        pu = PMTUser.objects.create(username="testpmtuser",
+                                    email="testemail@columbia.edu",
+                                    status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=pu)
+        self.item = ItemFactory()
+
+
+    def test_post(self):
+        r = self.c.post(
+            "/api/1.0/items/%d/hours/" % self.item.iid,
+            dict(
+                time="1 hour",
+            ))
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.content, "ok")

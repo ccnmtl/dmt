@@ -25,6 +25,17 @@ class AutocompleteProjectView(View):
         return HttpResponse(dumps(d))
 
 
+class ItemHoursView(View):
+    @method_decorator(login_required)
+    def post(self, request, pk):
+        item = get_object_or_404(Item, iid=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        time = Duration(request.POST.get('time', "1 hour"))
+        td = timedelta(seconds=time.to_seconds())
+        item.add_resolve_time(user, td)
+        return HttpResponse("ok")
+
+
 class AddTrackerView(View):
     @method_decorator(login_required)
     def post(self, request):
