@@ -24,6 +24,17 @@
 {% if object.estimated_time %}
 <dt>ESTIMATED TIME<dt><dd>{{object.estimated_time}}</dd>
 {% endif %}
+{% if object.actualtime_set.count %}
+<dt>TIME LOGGED</dt>
+<dd>
+{% for at in object.actualtime_set.all %}
+<ul>
+	<li>{{at.actual_time}} <a href="{{at.resolver.get_absolute_url}}">{{at.resolver.fullname}}</a>
+	{{at.completed}}</li>
+</ul>
+{% endfor %}
+</dd>
+{% endif %}
 {% if object.url %}
 <dt>URL<dt><dd>{{object.url}}</dd>
 {% endif %}
