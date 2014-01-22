@@ -14,7 +14,42 @@
   <li><a href="{{object.milestone.get_absolute_url }}">{{object.milestone.name}}</a></li>
 </ul>
 <h1>#{{object.iid}} {% if object.is_bug %}BUG:{% endif %} {{object.title}}</h1>
-<p><a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">Return to the old PMT</a></p>
+
+<ul class="nav nav-pills">
+	<li><a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">Return to the old PMT</a></li>
+	<li><a href="#" data-toggle="modal"
+	data-target="#add-hours">Log Time</a></li>
+</ul>
+
+<div class="modal fade" id="add-hours" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-tracker-label">Log Time</h4>
+      </div>
+      <div class="modal-body">
+				<form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">
+					<input type="hidden" name="pid" value="{{object.pid}}" id="tracker-pid-input" />
+
+					<div class="row">
+						<div class="col-sm-3">
+							<input type="text" name="time" placeholder="time"
+										 id="tracker-time-input"
+										 class="form-control" />
+						</div>
+					</div>
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="add-tracker-button">Add</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 <dl class="dl-horizontal">
 <dt>STATUS<dt><dd><span class="{{object.status_class}}">{{ object.status }} {{object.r_status}}</span></dd>
 <dt>OWNER<dt><dd><a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a></dd>
@@ -62,5 +97,28 @@
 </tr>
 {% endfor %}
 </table>
+
+{% endblock %}
+
+
+{% block js %}
+<script>
+$(document).ready(function() 
+    { 
+        $("#add-tracker-button").click(function(event) {
+           var time = $("#tracker-time-input").val();
+
+           $.ajax({
+             type: "POST",
+             url: "/api/1.0/items/{{object.iid}}/hours/",
+             data: {time: time}
+           }).done(function (msg) {
+              window.location.reload();
+           });
+           event.preventDefault();
+        });
+    } 
+);
+</script>
 
 {% endblock %}
