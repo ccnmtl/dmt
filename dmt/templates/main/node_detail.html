@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load markup %}
 
+{% block title %}Forum Post: {{object.subject}}{% endblock %}
+
 {% block content %}
 <h1><a href="{{object.get_absolute_url}}">{{object.subject}}</a></h1>
 <p class="byline">

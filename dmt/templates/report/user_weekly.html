@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load durations %}
 
+{% block title %}User Weekly
+ Report: <a href="{{u.get_absolute_url}}">{{u.fullname}}</a>
+ ({{week_start}} to {{week_end}})
+{% endblock %}
+
 {% block primarynavtabs %}
 {% endblock %}
 
