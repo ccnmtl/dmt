@@ -258,16 +258,28 @@ class Milestone(models.Model):
 
 class Item(models.Model):
     iid = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=12)
+    type = models.CharField(
+        max_length=12,
+        choices=[('bug', 'bug'), ('action item', 'action item')])
     owner = models.ForeignKey(User, db_column='owner',
                               related_name='owned_items')
     assigned_to = models.ForeignKey(User, db_column='assigned_to',
                                     related_name='assigned_items')
     title = models.CharField(max_length=255)
     milestone = models.ForeignKey(Milestone, db_column='mid')
-    status = models.CharField(max_length=16)
+    status = models.CharField(
+        max_length=16,
+        choices=[
+            ('OPEN', 'OPEN'),
+            ('INPROGRESS', 'IN PROGRESS'),
+            ('RESOLVED', 'RESOLVED'),
+            ('VERIFIED', 'VERIFIED')])
     description = models.TextField(blank=True)
-    priority = models.IntegerField(null=True, blank=True)
+    priority = models.IntegerField(
+        null=True, blank=True,
+        choices=[
+            (0, 'ICING'), (1, 'LOW'), (2, 'MEDIUM'),
+            (3, 'HIGH'), (4, 'CRITICAL')])
     r_status = models.CharField(max_length=16, blank=True)
     last_mod = models.DateTimeField(null=True, blank=True)
     target_date = models.DateField(null=True, blank=True)

@@ -10,7 +10,8 @@ from dmt.main.models import (
     Node)
 from dmt.main.views import (
     SearchView, UserViewSet, ClientViewSet, ProjectViewSet,
-    MilestoneViewSet, ItemViewSet, ProjectMilestoneList)
+    MilestoneViewSet, ItemViewSet, ProjectMilestoneList,
+    MilestoneItemList)
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -43,8 +44,10 @@ urlpatterns = patterns(
     (r'^api/1.0/', include('dmt.api.urls')),
     url(r'^api-auth/',
         include('rest_framework.urls', namespace='rest_framework')),
-    (r'^drf/projects/(?P<project_pk>\d+)/milestones/$',
-     ProjectMilestoneList.as_view()),
+    url(r'^drf/projects/(?P<pk>\d+)/milestones/$',
+        ProjectMilestoneList.as_view(), name='project-milestones'),
+    url(r'^drf/milestones/(?P<pk>\d+)/items/$',
+        MilestoneItemList.as_view(), name='milestone-items'),
     (r'^drf/', include(router.urls)),
     (r'^claim/', include('dmt.claim.urls')),
     (r'^search/$', SearchView.as_view()),

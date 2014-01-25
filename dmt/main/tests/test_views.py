@@ -125,3 +125,8 @@ class TestDRFViews(TestCase):
         p = ProjectFactory()
         r = self.c.get("/drf/projects/%d/milestones/" % p.pid)
         self.assertEqual(r.status_code, 200)
+
+    def test_milestone_items_list(self):
+        m = MilestoneFactory()
+        r = self.c.get("/drf/milestones/%d/items/" % m.mid)
+        self.assertEqual(r.status_code, 200)

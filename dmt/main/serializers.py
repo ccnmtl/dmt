@@ -22,26 +22,36 @@ class ClientSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    milestone_set = serializers.HyperlinkedRelatedField(
+        many=True,
+        view_name='milestone-detail')
+
     class Meta:
         model = Project
         fields = ('pid', 'name', 'pub_view', 'caretaker',
                   'description', 'status', 'type', 'area',
                   'url', 'restricted', 'approach', 'info_url',
                   'entry_rel', 'eval_url', 'projnum', 'scale',
-                  'distrib', 'poster', 'wiki_category')
+                  'distrib', 'poster', 'wiki_category',
+                  'milestone_set')
 
 
 class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
+    item_set = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='item-detail')
+
     class Meta:
         model = Milestone
         fields = ('mid', 'name', 'target_date', 'project', 'status',
-                  'description')
+                  'description', 'item_set')
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Item
-        fields = ('iid', 'type', 'owner', 'assigned_to', 'title',
+        fields = ('iid', 'title', 'type', 'owner', 'assigned_to',
                   'milestone', 'status', 'description', 'priority',
                   'r_status', 'last_mod', 'target_date', 'estimated_time',
                   'url')

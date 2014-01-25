@@ -76,14 +76,23 @@ class ProjectMilestoneList(generics.ListCreateAPIView):
     serializer_class = MilestoneSerializer
 
     def get_queryset(self):
-        project_pk = self.kwargs.get('project_pk', None)
-        return Milestone.objects.filter(project__pk=project_pk)
+        pk = self.kwargs.get('pk', None)
+        return Milestone.objects.filter(project__pk=pk)
 
 
 class MilestoneViewSet(viewsets.ModelViewSet):
     queryset = Milestone.objects.all()
     serializer_class = MilestoneSerializer
     paginate_by = 20
+
+
+class MilestoneItemList(generics.ListCreateAPIView):
+    model = Item
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk', None)
+        return Item.objects.filter(milestone__pk=pk)
 
 
 class ItemViewSet(viewsets.ModelViewSet):
