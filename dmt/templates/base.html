@@ -53,7 +53,7 @@ Projects <span class="caret"></span>
 {% if pmt_user.has_recent_active_projects %}
 <li><p class="navbar-text">Your Recent Projects</p></li>
 {% for project in pmt_user.recent_active_projects %}
-<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
+<li><a href="{{project.get_absolute_url}}">{{project.name|truncatechars:60}}</a></li>
 {% endfor %}
 {% endif %}
 {% endif %}
