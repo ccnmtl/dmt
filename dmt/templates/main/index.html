@@ -80,7 +80,6 @@
     		<tr>
     			<th>Item</th>
     			<th>Priority</th>
-    			<th>Status</th>
     			<th>Project</th>
     			<th>Target Date</th>
     			<th>Modified</th>
@@ -90,9 +89,15 @@
     {% for item in pmt_user.items %}
     <tr>
     	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-    	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
+    	width="14" height="14"/>
+ {% endif %}
+<a href="{{item.get_absolute_url}}">{{item.title}}</a>
+{% ifequal item.status "OPEN" %}
+{% else %}
+<span class="{{item.status_class}} badge pull-right">{{item.status_display}}</span>
+{% endifequal %}
+</td>
     	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
-    	<td class="{{item.status_class}}">{{item.status_display}}</td>
     	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
     	<td>{{item.target_date|date:"Y-m-d"}}</td>
     	<td>{{item.last_mod|date:"Y-m-d"}}</td>
@@ -115,7 +120,7 @@
 <script>
 $(document).ready(function() 
     { 
-        $("#user-items").tablesorter({sortList: [[1,1], [4,0]]});
+        $("#user-items").tablesorter({sortList: [[1,1], [3,0]]});
 
         $("#project-input").typeahead({
           name: 'projects',
