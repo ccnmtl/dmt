@@ -40,14 +40,14 @@ class User(models.Model):
 
     def has_recent_active_projects(self):
         now = datetime.today()
-        start = now - timedelta(weeks=52)
+        start = now - timedelta(weeks=5)
         return self.actualtime_set.filter(
             completed__gte=start, completed__lte=now).count() > 0
 
     def recent_active_projects(self):
         """ any projects touched in the last year """
         now = datetime.today()
-        start = now - timedelta(weeks=52)
+        start = now - timedelta(weeks=5)
         projects = Project.objects.raw(
             'SELECT distinct m.pid as pid '
             'FROM milestones m, items i, actual_times a '
