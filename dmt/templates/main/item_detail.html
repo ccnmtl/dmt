@@ -12,7 +12,7 @@
 
 {% block content %}
 <ul class="breadcrumb">
-  <li><a href="{{object.milestone.project.get_absolute_url }}">{{object.milestone.project.name}}</a> <span class="divider">/</span></li>
+  <li><a href="{{object.milestone.project.get_absolute_url }}">{{object.milestone.project.name}}</a></li>
   <li><a href="{{object.milestone.get_absolute_url }}">{{object.milestone.name}}</a></li>
 </ul>
 <h1>#{{object.iid}} {% if object.is_bug %}BUG:{% endif %} {{object.title}}</h1>
