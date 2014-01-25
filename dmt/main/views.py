@@ -77,9 +77,7 @@ class ProjectMilestoneList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         project_pk = self.kwargs.get('project_pk', None)
-        if project_pk is not None:
-            return Milestone.objects.filter(project__pk=project_pk)
-        return []
+        return Milestone.objects.filter(project__pk=project_pk)
 
 
 class MilestoneViewSet(viewsets.ModelViewSet):
