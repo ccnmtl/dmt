@@ -1,6 +1,11 @@
 from django.db.models import Q
 from django.views.generic.base import TemplateView
+from rest_framework import viewsets
 from .models import Project, Milestone, Item, Node, User, Client
+from .serializers import (
+    UserSerializer, ClientSerializer, ProjectSerializer,
+    MilestoneSerializer, ItemSerializer)
+from rest_framework import generics
 
 
 class SearchView(TemplateView):
@@ -47,3 +52,43 @@ class SearchView(TemplateView):
                 Q(subject__icontains=q)
             ),
         )
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class ClientViewSet(viewsets.ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    paginate_by = 10
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    paginate_by = 20
+
+
+class ProjectMilestoneList(generics.ListCreateAPIView):
+    model = Milestone
+    serializer_class = MilestoneSerializer
+
+    def get_queryset(self):
+        project_pk = self.kwargs.get('project_pk', None)
+        if project_pk is not None:
+            return Milestone.objects.filter(project__pk=project_pk)
+        return []
+
+
+class MilestoneViewSet(viewsets.ModelViewSet):
+    queryset = Milestone.objects.all()
+    serializer_class = MilestoneSerializer
+    paginate_by = 20
+
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    paginate_by = 20

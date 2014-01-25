@@ -124,6 +124,7 @@ INSTALLED_APPS = [
     'dmt.claim',
     'dmt.report',
     'dmt.api',
+    'rest_framework',
 ]
 
 LETTUCE_APPS = (
@@ -194,4 +195,13 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+    'rest_framework.serializers.HyperlinkedModelSerializer',
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
 }

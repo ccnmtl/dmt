@@ -95,3 +95,33 @@ class TestHistory(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue(c2.comment in r.content)
         self.assertTrue(c1.comment in r.content)
+
+
+class TestDRFViews(TestCase):
+    def setUp(self):
+        self.c = Client()
+
+    def test_clients_list(self):
+        r = self.c.get("/drf/clients/")
+        self.assertEqual(r.status_code, 200)
+
+    def test_projects_list(self):
+        r = self.c.get("/drf/projects/")
+        self.assertEqual(r.status_code, 200)
+
+    def test_users_list(self):
+        r = self.c.get("/drf/users/")
+        self.assertEqual(r.status_code, 200)
+
+    def test_milestones_list(self):
+        r = self.c.get("/drf/milestones/")
+        self.assertEqual(r.status_code, 200)
+
+    def test_items_list(self):
+        r = self.c.get("/drf/items/")
+        self.assertEqual(r.status_code, 200)
+
+    def test_project_milestones_list(self):
+        p = ProjectFactory()
+        r = self.c.get("/drf/projects/%d/milestones/" % p.pid)
+        self.assertEqual(r.status_code, 200)
