@@ -92,7 +92,10 @@ class MilestoneItemList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         pk = self.kwargs.get('pk', None)
-        return Item.objects.filter(milestone__pk=pk)
+        return Item.objects.filter(
+            milestone__pk=pk).prefetch_related(
+            'owner', 'assigned_to',
+            'milestone')
 
 
 class ItemViewSet(viewsets.ModelViewSet):
