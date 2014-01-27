@@ -79,21 +79,33 @@ Projects <span class="caret"></span>
 				</ul>
 
 
-        <p class="navbar-text pull-right">
+				<ul class="nav navbar-nav navbar-right">
           {% block topnavbarrightitems %}{% endblock %}
 {% block usernav %}
           {% if request.user.is_anonymous %}
-          <a href="/accounts/login/?next=/" class="btn btn-success">login</a>
+          <li><a href="/accounts/login/?next=/" class="btn btn-success">login</a></li>
           {% else %}
 {% pmtuser as pmt_user %}
-          logged in as <a href="{{pmt_user.get_absolute_url}}">{{request.user.first_name}} {{request.user.last_name}}</a>
-{% if request.user.is_superuser %}
-          <a href="{% url 'impersonate-list' %}">[impersonate]</a>
-{% endif %}
-          <a href="/accounts/logout/" class="btn btn-inverse">logout</a>
+          <li class="navbar-text">
+						<div class="btn-group">
+							<a class="btn btn-default btn-xs" href="{{pmt_user.get_absolute_url}}">{{request.user.first_name}} {{request.user.last_name}}</a>
+							<button type="button" class="btn btn-default btn-xs
+																					 dropdown-toggle"
+											data-toggle="dropdown">
+								<span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+							<ul class="dropdown-menu" role="menu">
+								{% if request.user.is_superuser %}
+								<li><a href="{% url 'impersonate-list' %}">Impersonate</a></li>
+								{% endif %}
+								<li><a href="/accounts/logout/">logout</a></li>
+							</ul>
+						</div>
+					</li>
           {% endif %}
 {% endblock %}
-       </p>
+				</ul>
 
        </div>
   </nav>
