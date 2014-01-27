@@ -58,7 +58,7 @@ urlpatterns = patterns(
     (r'^forum/(?P<pk>\d+)/$', DetailView.as_view(model=Node)),
     (r'^item/(?P<pk>\d+)/$', DetailView.as_view(model=Item)),
     (r'^milestone/(?P<pk>\d+)/$', DetailView.as_view(model=Milestone)),
-    (r'^project/$', ListView.as_view(model=Project)),
+    (r'^project/$', FilterView.as_view(model=Project)),
     (r'^project/(?P<pk>\d+)/$', DetailView.as_view(model=Project)),
     (r'^report/', include('dmt.report.urls')),
     (r'^user/$', FilterView.as_view(model=User)),
