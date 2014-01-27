@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
 from .factories import ProjectFactory, MilestoneFactory, ItemFactory
@@ -100,6 +101,10 @@ class TestHistory(TestCase):
 class TestDRFViews(TestCase):
     def setUp(self):
         self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
 
     def test_clients_list(self):
         r = self.c.get("/drf/clients/")
