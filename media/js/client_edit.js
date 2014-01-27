@@ -1,5 +1,3 @@
-// Require.js allows us to configure shortcut alias
-// Their usage will become more apparent futher along in the tutorial.
 require.config({
   paths: {
     // Major libraries
@@ -14,7 +12,6 @@ require.config({
     urlArgs: "bust=" +  (new Date()).getTime()
 
 });
-
 
 function getCookie(name) {
     var cookieValue = null;
@@ -40,7 +37,6 @@ require([
     'views/client_edit_app'
 ], function($, Backbone, Client, AppView) {
         var csrftoken = getCookie('csrftoken');
-
         var oldSync = Backbone.sync;
 
         Backbone.sync = function(method, model, options) {

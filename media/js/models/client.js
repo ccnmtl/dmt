@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone'
-], function($, _, Backbone){
+], function($, _, Backbone) {
 
     var Client = Backbone.Model.extend({
         idAttribute: "client_id",
@@ -11,14 +11,13 @@ define([
                 lastname: "",
                 firstname: "",
                 status: "active",
-                email: "@columbia.edu",
                 title: "Instructor",
-                registration_date: "2000-09-01",
+                registration_date: "",
+                email: "",
                 department: "",
                 school: "",
                 add_affiliation: "",
                 phone: "",
-                contact: "/drf/users/dbeeby/",
                 comments: "",
                 email_secondary: "",
                 phone_mobile: "",
@@ -32,6 +31,12 @@ define([
         },
 
         initialize: function() {
+        },
+
+        toFullJSON: function() {
+            var j = this.toJSON();
+            j['active'] = j['status'] == 'active';
+            return j;
         }
     });
 

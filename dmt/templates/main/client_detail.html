@@ -10,31 +10,97 @@
 
 
 {% block content %}
-<p><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=client;client_id={{object.client_id}}">Return to the old PMT</a></p>
-{% if not object.active %}
+
+<span id="client-id" style="display: none;">{{object.client_id}}</span>
+
+<script data-main="{{STATIC_URL}}js/client_edit"
+				src="{{STATIC_URL}}js/libs/require/require.js"></script>
+
+<script type="text/template" id="client-template">
+
+
+  <div>
+<ul class="breadcrumb">
+  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+	<li><a href="/client/">Clients</a></li>
+  <li class="active"><%= firstname %> <%= lastname %></li>
+</ul>
+
+<ul class="nav nav-pills">
+	<li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=client;client_id=<%= client_id %>">Return
+	to the old PMT</a></li>
+	<li><a href="#" id="edit-link"><span class="glyphicon glyphicon-pencil"></span></a></li>
+</ul>
+
+<div id="view">
+
+<% if (!active) { %>
 <div class="alert alert-danger">
-<p><b>{{object.firstname}} {{object.lastname}}</b> is inactive</p>
+<p><b>{{object.firstname}} {{object.lastname}}</b> is inactive.
+<button id="activate" class="btn btn-success">ACTIVATE</button>
+</p>
 </div>
-{% endif %}
+<% } %>
 
-
-<h1>CLIENTS: {{object.firstname}} {{object.lastname}}</h1>
+<h1>CLIENT: <%= firstname %> <%= lastname %></h1>
 
 <dl>
-<dt>LASTNAME</dt><dd>{{object.lastname}}</dd>
-<dt>FIRSTNAME</dt><dd>{{object.firstname}}</dd>
-<dt>TITLE</dt><dd>{{object.title}}</dd>
-<dt>STATUS</dt><dd>{{object.status}}</dd>
-<dt>DEPARTMENT</dt><dd>{{object.department}}</dd>
-<dt>SCHOOL</dt><dd>{{object.school}}</dd>
-<dt>CLIENT SINCE</dt><dd>{{object.registration_date}}</dd>
-<dt>PHONE</dt><dd>{{object.phone}}</dd>
-<dt>PHONE (MOBILE)</dt><dd>{{object.phone_mobile}}</dd>
-<dt>PHONE (OTHER)</dt><dd>{{object.phone_other}}</dd>
-<dt>EMAIL</dt><dd>{{object.email}}</dd>
-<dt>SECONDARY EMAIL</dt><dd>{{object.email_secondary}}</dd>
-<dt>WEBSITE</dt><dd>{{object.website}}</dd>
-<dt>CCNMTL CONTACT</dt><dd><a href="{{object.contact.get_absolute_url}}">{{object.contact.fullname}}</a></dd>
+<dt>TITLE</dt><dd><%= title %></dd>
+<dt>DEPARTMENT</dt><dd><%= department %></dd>
+<dt>SCHOOL</dt><dd><%= school %></dd>
+
+<dt>CLIENT SINCE</dt><dd><%= registration_date %></dd>
+
+<dt>PHONE</dt><dd><%= phone %></dd>
+<dt>PHONE (MOBILE)</dt><dd><%= phone_mobile %></dd>
+<dt>PHONE (OTHER)</dt><dd><%= phone_other %></dd>
+<dt>EMAIL</dt><dd><%= email %></dd>
+<dt>SECONDARY EMAIL</dt><dd><%= email_secondary %></dd>
+<dt>WEBSITE</dt><dd><%= website_url %></dd>
 </dl>
+</div>
+
+<div id="edit">
+
+<% if (active) { %>
+<button id="activate" class="btn btn-danger">DEACTIVATE</button>
+<% } %>
+<dl>
+<dt>LASTNAME</dt><dd>
+<input class="lastname-input" type="text"
+ value="<%= lastname %>" name="lastname"/></dd>
+<dt>FIRSTNAME</dt><dd>
+<input class="firstname-input" type="text"
+ value="<%= firstname %>" name="firstname"/></dd>
+<dt>TITLE</dt><dd><input class="title-input" type="text"
+ value="<%= title %>" name="title"/></dd>
+<dt>DEPARTMENT</dt><dd><input class="department-input"
+ type="text" value="<%= department %>" name="department"/></dd>
+<dt>SCHOOL</dt><dd><input class="school-input" type="text"
+ value="<%= school %>" name="school"/></dd>
+
+<dt>CLIENT SINCE</dt><dd><input class="registration_date-input"
+ type="text" value="<%= registration_date %>" name="registration_date"/></dd>
+
+<dt>PHONE</dt><dd><input class="phone-input" type="text"
+ value="<%= phone %>" name="phone"/></dd>
+<dt>PHONE (MOBILE)</dt><dd><input class="phone_mobile-input"
+ type="text" value="<%= phone_mobile %>" name="status"/></dd>
+<dt>PHONE (OTHER)</dt><dd><input class="phone_other-input" type="text"
+ value="<%= phone_other %>" name="phone_other"/></dd>
+<dt>EMAIL</dt><dd><input class="email-input" type="text"
+ value="<%= email %>" name="email"/></dd>
+<dt>SECONDARY EMAIL</dt><dd><input class="email_secondary-input"
+ type="text" value="<%= email_secondary %>" name="email_secondary"/></dd>
+<dt>WEBSITE</dt><dd><input class="website_url-input"
+ type="text" value="<%= website_url %>" name="website_url"/></dd>
+</dl>
+<button id="save" class="btn btn-primary">save</button>
+</div>
+
+	</div>
+</script>
+
+<div id="client-container"></div>
 
 {% endblock %}

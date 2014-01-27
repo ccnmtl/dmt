@@ -53,10 +53,6 @@ urlpatterns = patterns(
     (r'^search/$', SearchView.as_view()),
     (r'^client/$', ListView.as_view(model=Client, paginate_by=100)),
     (r'^client/(?P<pk>\d+)/$', DetailView.as_view(model=Client)),
-    (r'^client/(?P<pk>\d+)/edit/$',
-     DetailView.as_view(
-         model=Client,
-         template_name="main/client_edit.html")),
     (r'^forum/$', ListView.as_view(model=Node, paginate_by=20)),
     (r'^forum/(?P<pk>\d+)/$', DetailView.as_view(model=Node)),
     (r'^item/(?P<pk>\d+)/$', DetailView.as_view(model=Item)),
