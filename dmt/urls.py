@@ -61,7 +61,7 @@ urlpatterns = patterns(
     (r'^project/$', ListView.as_view(model=Project)),
     (r'^project/(?P<pk>\d+)/$', DetailView.as_view(model=Project)),
     (r'^report/', include('dmt.report.urls')),
-    (r'^user/$', ListView.as_view(model=User)),
+    (r'^user/$', FilterView.as_view(model=User)),
     (r'^user/(?P<pk>\w+)/$', DetailView.as_view(model=User)),
     url(r'^_impersonate/', include('impersonate.urls')),
     (r'^stats/$', TemplateView.as_view(template_name="stats.html")),
