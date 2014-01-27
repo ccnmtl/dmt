@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load bootstrap %}
 {% block title %}Clients List{% endblock %}
 
 {% block primarynavtabs %}
@@ -13,6 +13,14 @@
   <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
 	<li class="active">Clients</li>
 </ul>
+
+<ul class="nav nav-tabs">
+  <li><a href="#list" data-toggle="tab">List</a></li>
+  <li><a href="#filter" data-toggle="tab">Filter</a></li>
+</ul>
+
+<div class="tab-content">
+        <div class="tab-pane fade in active" id="list">
 
 {% if is_paginated %}
 <ul class="pager">
@@ -38,8 +46,8 @@
 <tr>
 <td><a href="/client/{{client.client_id}}/">{{client.lastname}}, {{client.firstname}}</a></td>
 <td>{{client.email}}</td>
-<td>{{client.school}}</td>
-<td>{{client.department}}</td>
+<td><a href="?school={{client.school|urlencode}}">{{client.school}}</a></td>
+<td><a href="?department={{client.department|urlencode}}">{{client.department}}</a></td>
 <td>{{client.registration_date}}</td>
 <td><a href="{{client.contact.get_absolute_url}}">{{client.contact.fullname}}</a></td>
 <td>{{client.status}}</td>
@@ -65,5 +73,16 @@
 </ul>
 
 {% endif %}
+</div>
+<div class="tab-pane fade" id="filter">
+
+<p><a class="btn btn-success" href="/client/">Clear Filter</a></p>
+<hr />
+<form action="" method="get">
+  {{ filter.form|bootstrap }}
+  <input type="submit" class="btn btn-primary" value="filter" />
+</form>
+</div>
+</div>
 
 {% endblock %}
