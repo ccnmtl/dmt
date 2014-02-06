@@ -137,6 +137,25 @@ Projects <span class="caret"></span>
 <script src="{{STATIC_URL}}bootstrap/js/bootstrap.js"></script>
 {% endcompress %}
 
+
+<script src="//cdn.ravenjs.com/1.1.9/jquery,native,require/raven.min.js"></script>
+<script>
+Raven.config('https://416166385bf0416f8156c63fd3aebb95@sentry.ccnmtl.columbia.edu/2', {
+    whitelistUrls: [/dmt\.ccnmtl\.columbia\.edu/]
+}).install();
+{% if not request.user.is_anonymous %}
+Raven.setUser({
+    email: '{{request.user.email}}',
+    id: '{{request.user.username}}'
+});
+{% else %}
+Raven.setUser({
+    email: 'none',
+    id: 'anonymous'
+});
+{% endif %}
+</script>
+
 {% block js %}{% endblock %}
 
 {% if STAGING_ENV %}
