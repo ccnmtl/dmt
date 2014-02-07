@@ -13,9 +13,6 @@
 
 <span id="client-id" style="display: none;">{{object.client_id}}</span>
 
-<script data-main="{{STATIC_URL}}js/client_edit"
-				src="{{STATIC_URL}}js/libs/require/require.js"></script>
-
 <script type="text/template" id="client-template">
 
 
@@ -102,5 +99,11 @@
 </script>
 
 <div id="client-container"></div>
+
+{% endblock %}
+
+{% block js %}
+<script data-main="{{STATIC_URL}}js/client_edit"
+				src="{{STATIC_URL}}js/libs/require/require.js"></script>
 
 {% endblock %}
