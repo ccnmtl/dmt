@@ -518,7 +518,7 @@ class ActualTime(models.Model):
 
 
 class Attachment(models.Model):
-    item = models.ForeignKey(Item, db_column='iid')
+    item = models.ForeignKey(Item, db_column='item_id')
     filename = models.CharField(max_length=128, blank=True)
     title = models.CharField(max_length=128, blank=True)
     type = models.CharField(max_length=8, blank=True)
@@ -529,6 +529,20 @@ class Attachment(models.Model):
 
     class Meta:
         db_table = u'attachment'
+
+    def image(self):
+        return self.type in ("jpg", "png", "gif")
+
+    def get_absolute_url(self):
+        return "/attachment/%d/" % self.id
+
+    def src(self):
+        # really have to think through all of this,
+        # particularly on how to work attachments while
+        # both the PMT and DMT exist. The PMT's approach
+        # needs to die in a fire, but cutting over
+        # will be tricky
+        return ""
 
 
 class Comment(models.Model):

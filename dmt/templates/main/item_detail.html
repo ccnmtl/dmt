@@ -82,6 +82,28 @@
 {{object.description|markdown}}
 <hr />
 
+{% if item.attachment_set.all.count %}
+<h2>Attachments</h2>
+
+<table class="table table-condensed">
+	{% for attachment in item.attachment_set.all %}
+	<tr>
+		<td>
+			<a href="{{attachment.get_absolute_url}}">{{attachment.title|default:attachment.filename}}</a>
+		</td>
+		<td><i>[{{attachment.last_mod}}]</i></td>
+		<td>{{attachment.author.fullname}}</td>
+	</tr>
+	{% if attachment.image %}
+	<tr><td colspan="3"><img src="{{attachment.src}}" /></td></tr>
+	{% else %}
+	<tr><td colspan="3">{{attachment.description|markdown}}</td></tr>
+	{% endif %}
+{% endfor %}
+</table>
+{% endif %}
+
+
 <h2>HISTORY</h2>
 
 <table class="table">
