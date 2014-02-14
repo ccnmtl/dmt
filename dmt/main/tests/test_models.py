@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .factories import UserFactory, ItemFactory, NodeFactory
 from .factories import ProjectFactory, ActualTimeFactory
-from datetime import datetime
+from datetime import datetime, timedelta
 from dmt.main.models import HistoryItem, ProjectUser
 
 
@@ -99,6 +99,23 @@ class ItemModelTest(TestCase):
         i.status = 'RESOLVED'
         i.r_status = 'FIXED'
         self.assertEqual(i.status_display(), 'FIXED')
+
+    def test_target_date_status(self):
+        now = datetime.now()
+        i = ItemFactory(target_date=(now + timedelta(days=8)).date())
+        self.assertEqual(i.target_date_status(), "ok")
+
+        i = ItemFactory(target_date=(now + timedelta(days=3)).date())
+        self.assertEqual(i.target_date_status(), "upcoming")
+
+        i = ItemFactory(target_date=(now).date())
+        self.assertEqual(i.target_date_status(), "due")
+
+        i = ItemFactory(target_date=(now - timedelta(days=2)).date())
+        self.assertEqual(i.target_date_status(), "overdue")
+
+        i = ItemFactory(target_date=(now - timedelta(days=80)).date())
+        self.assertEqual(i.target_date_status(), "late")
 
 
 class HistoryItemTest(TestCase):

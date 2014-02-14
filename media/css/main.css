@@ -99,6 +99,23 @@ td.verified, span.verified {
   color: #f00;
 }
 
+td.ok {
+		color: #9999cc;
+}
+td.upcoming {
+		color: #069;
+}
+td.due {
+		color: #009900;
+}
+td.overdue {
+		color: #f60;
+}
+td.late {
+		color: #f00;
+}
+
+
 .modal-body { max-height:100%; height:85%; }
 .twitter-typeahead {width: 100%; }
 .tt-hint {display: none;}

@@ -304,6 +304,19 @@ class Item(models.Model):
             return self.r_status
         return self.status
 
+    def target_date_status(self):
+        overdue = (datetime.now().date() - self.target_date).days
+        if overdue < -7:
+            return "ok"
+        elif overdue < -1:
+            return "upcoming"
+        elif overdue < 1:
+            return "due"
+        elif overdue < 7:
+            return "overdue"
+        else:
+            return "late"
+
     def is_bug(self):
         return self.type == "bug"
 
