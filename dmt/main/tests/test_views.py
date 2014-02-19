@@ -98,6 +98,15 @@ class TestHistory(TestCase):
         self.assertTrue(c1.comment in r.content)
 
 
+class TestFeeds(TestCase):
+    def setUp(self):
+        self.c = Client()
+
+    def test_forum_feed(self):
+        r = self.c.get("/feeds/forum/rss/")
+        self.assertEquals(r.status_code, 200)
+
+
 class TestDRFViews(TestCase):
     def setUp(self):
         self.c = Client()

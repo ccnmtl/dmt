@@ -13,6 +13,7 @@ from dmt.main.views import (
     SearchView, UserViewSet, ClientViewSet, ProjectViewSet,
     MilestoneViewSet, ItemViewSet, ProjectMilestoneList,
     MilestoneItemList)
+from dmt.main.feeds import ForumFeed
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -63,6 +64,7 @@ urlpatterns = patterns(
     (r'^report/', include('dmt.report.urls')),
     (r'^user/$', FilterView.as_view(model=User)),
     (r'^user/(?P<pk>\w+)/$', DetailView.as_view(model=User)),
+    (r'^feeds/forum/rss/$', ForumFeed()),
     url(r'^_impersonate/', include('impersonate.urls')),
     (r'^stats/$', TemplateView.as_view(template_name="stats.html")),
     (r'^smoketest/', include('smoketest.urls')),
