@@ -149,3 +149,15 @@ class InProgressItemView(View):
         # TODO: send email
         # TODO: update milestone status
         return HttpResponseRedirect(item.get_absolute_url())
+
+
+class VerifyItemView(View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        comment = markdown.markdown(request.POST.get('comment', u''))
+        item.verify(user, comment)
+        item.touch()
+        # TODO: send email
+        # TODO: update milestone status
+        return HttpResponseRedirect(item.get_absolute_url())

@@ -113,6 +113,7 @@
 {% endif %}
 
 {% if object.verifiable %}
+<form action="verify/" method="post" role="form">
 <div class="modal fade" id="verify" tabindex="-1" role="dialog" aria-labelledby="verify-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -121,17 +122,18 @@
         <h4 class="modal-title" id="verify-label">Verify</h4>
       </div>
       <div class="modal-body">
-				<form id="add-tracker-form" action="verify/" method="post" role="form">
-
-				</form>
+				<div class="form-group">
+					<textarea name="comment" class="form-control" rows="5"></textarea>
+				</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="add-tracker-button">Verify</button>
+        <input type="submit" class="btn btn-primary" value="Verify" />
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+</form>
 {% endif %}
 
 {% if object.reopenable %}
