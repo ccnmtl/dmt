@@ -391,6 +391,20 @@ class Item(models.Model):
             comment="<b>verified</b><br />\n%s" % comment,
             add_date_time=datetime.now())
 
+    def mark_in_progress(self, user, comment):
+        self.status = 'INPROGRESS'
+        self.r_status = ''
+        self.save()
+        e = Events.objects.create(
+            status="INPROGRESS",
+            event_date_time=datetime.now(),
+            item=self)
+        Comment.objects.create(
+            event=e,
+            username=user.username,
+            comment="<b>marked as in progress</b><br />\n%s" % comment,
+            add_date_time=datetime.now())
+
 
 class HistoryItem(object):
     def __lt__(self, other):

@@ -80,8 +80,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-primary"
-        id="add-tracker-button" value="Resolve" />
+        <input type="submit" class="btn btn-primary" value="Resolve" />
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -90,6 +89,7 @@
 {% endif %}
 
 {% if object.inprogressable %}
+<form action="inprogress/" method="post" role="form">
 <div class="modal fade" id="mark-in-progress" tabindex="-1" role="dialog" aria-labelledby="inprogress-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -98,17 +98,18 @@
         <h4 class="modal-title" id="inprogress-label">Mark as In Progress</h4>
       </div>
       <div class="modal-body">
-				<form id="add-tracker-form" action="inprogress/" method="post" role="form">
-
-				</form>
+				<div class="form-group">
+					<textarea name="comment" class="form-control" rows="5"></textarea>
+				</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="add-tracker-button">Mark as In Progress</button>
+        <input type="submit" class="btn btn-primary" value="Mark as In Progress" />
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+</form>
 {% endif %}
 
 {% if object.verifiable %}
