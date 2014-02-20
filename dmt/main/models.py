@@ -353,7 +353,7 @@ class Item(models.Model):
         return self.status in ['RESOLVED', 'INPROGRESS', 'VERIFIED', 'CLOSED']
 
     def touch(self):
-        self.last_mode = datetime.now()
+        self.last_mod = datetime.now()
         self.save()
 
     def add_comment(self, user, body):
@@ -361,6 +361,34 @@ class Item(models.Model):
             item=self,
             username=user.username,
             comment=body,
+            add_date_time=datetime.now())
+
+    def resolve(self, user, r_status, comment):
+        self.status = "RESOLVED"
+        self.r_status = r_status
+        self.save()
+        e = Events.objects.create(
+            status="RESOLVED",
+            event_date_time=datetime.now(),
+            item=self)
+        Comment.objects.create(
+            event=e,
+            username=user.username,
+            comment="<b>resolved %s</b><br />\n%s" % (r_status, comment),
+            add_date_time=datetime.now())
+
+    def verify(self, user, comment):
+        self.status = 'VERIFIED'
+        self.r_status = ''
+        self.save()
+        e = Events.objects.create(
+            status="VERIFIED",
+            event_date_time=datetime.now(),
+            item=self)
+        Comment.objects.create(
+            event=e,
+            username=user.username,
+            comment="<b>verified</b><br />\n%s" % comment,
             add_date_time=datetime.now())
 
 

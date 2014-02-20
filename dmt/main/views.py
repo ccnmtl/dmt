@@ -119,3 +119,21 @@ class AddCommentView(View):
         item.touch()
         # TODO: send email
         return HttpResponseRedirect(item.get_absolute_url())
+
+
+class ResolveItemView(View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        r_status = request.POST.get('r_status', u'FIXED')
+        comment = markdown.markdown(request.POST.get('comment', u''))
+        if (item.assigned_to.username == item.owner.username and
+                item.owner.username == user.username):
+            # streamline self-assigned item verification
+            item.verify(user, comment)
+        else:
+            item.resolve(user, r_status, comment)
+        item.touch()
+        # TODO: send email
+        # TODO: update milestone status
+        return HttpResponseRedirect(item.get_absolute_url())

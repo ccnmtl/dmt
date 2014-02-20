@@ -52,6 +52,7 @@
 
 
 {% if object.resolvable %}
+<form action="resolve/" method="post" role="form">
 <div class="modal fade" id="resolve" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -60,17 +61,32 @@
         <h4 class="modal-title" id="resolve-label">Resolve Item</h4>
       </div>
       <div class="modal-body">
-				<form id="add-tracker-form" action="resolve/" method="post" role="form">
+				<div class="form-group">
+					<label for="resolve-status">Resolve Status</label>
+					<select class="form-control" id="resolve-status" name="r_status">
+						<option value="FIXED">FIXED</option>
+						<option value="INVALID">INVALID</option>
+						<option value="WORKSFORME">WORKSFORME</option>
+						<option value="WONTFIX">WONTFIX</option>
+						<option value="DUPLICATE">DUPLICATE</option>
+						<option value="NEEDINFO">NEEDINFO</option>
+					</select>
+				</div>
 
-				</form>
+				<div class="form-group">
+					<textarea name="comment" class="form-control" rows="5"></textarea>
+				</div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="add-tracker-button">Resolve</button>
+        <input type="submit" class="btn btn-primary"
+        id="add-tracker-button" value="Resolve" />
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+</form>
 {% endif %}
 
 {% if object.inprogressable %}
@@ -195,7 +211,8 @@
 <div class="btn-group">
 {% if object.resolvable %}
 	<a class="btn btn-success" href="#" data-toggle="modal"
-		 data-target="#resolve">Resolve</a>
+		 data-target="#resolve"><span class="glyphicon
+		 glyphicon-ok"></span> Resolve</a>
 {% endif %}
 
 {% if object.inprogressable %}
@@ -205,19 +222,24 @@
 
 {% if object.verifiable %}
 	<a class="btn btn-success" href="#" data-toggle="modal"
-		 data-target="#verify">Verify</a>
+		 data-target="#verify"><span class="glyphicon
+		 glyphicon-ok"></span> Verify</a>
 {% endif %}
 
 {% if object.reopenable %}
 	<a class="btn btn-danger" href="#" data-toggle="modal"
-		 data-target="#reopen">Reopen</a>
+		 data-target="#reopen"><span class="glyphicon
+		 glyphicon-repeat"></span> Reopen</a>
 {% endif %}
 </div>
 <div class="btn-group pull-right">
 	<a class="btn btn-primary" href="#" data-toggle="modal"
 	data-target="#add-comment">Add Comment</a>
 	<a class="btn btn-primary" href="#" data-toggle="modal"
-	data-target="#add-hours">Log Time</a>
+	data-target="#add-hours"><span class="glyphicon
+		 glyphicon-time"> Log Time</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+		 data-target="#split">Split Item</a>
 </div>
 </div>
 
