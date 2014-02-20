@@ -255,6 +255,35 @@ class Milestone(models.Model):
     def num_open_items(self):
         return self.item_set.filter(status='OPEN').count()
 
+    def update_milestone(self):
+        if self.should_be_closed():
+            self.close_milestone()
+        else:
+            self.open_milestone()
+
+    def should_be_closed(self):
+        if self.target_date_passed():
+            # target date passed but there are open items
+            return self.num_unclosed_items() == 0
+        # target date hasn't passed yet
+        return False
+
+    def close_milestone(self):
+        if self.status != "CLOSED":
+            self.status = "CLOSED"
+            self.save()
+
+    def open_milestone(self):
+        self.status = "OPEN"
+        self.save()
+
+    def target_date_passed(self):
+        return self.target_date < datetime.now().date()
+
+    def num_unclosed_items(self):
+        return self.item_set.filter(
+            status__in=['OPEN', 'INPROGRESS', 'RESOLVED']).count()
+
 
 class Item(models.Model):
     iid = models.AutoField(primary_key=True)

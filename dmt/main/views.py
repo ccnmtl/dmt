@@ -135,7 +135,7 @@ class ResolveItemView(View):
             item.resolve(user, r_status, comment)
         item.touch()
         # TODO: send email
-        # TODO: update milestone status
+        item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -147,7 +147,7 @@ class InProgressItemView(View):
         item.mark_in_progress(user, comment)
         item.touch()
         # TODO: send email
-        # TODO: update milestone status
+        item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -159,7 +159,7 @@ class VerifyItemView(View):
         item.verify(user, comment)
         item.touch()
         # TODO: send email
-        # TODO: update milestone status
+        item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -171,5 +171,5 @@ class ReopenItemView(View):
         item.reopen(user, comment)
         item.touch()
         # TODO: send email
-        # TODO: update milestone status
+        item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
