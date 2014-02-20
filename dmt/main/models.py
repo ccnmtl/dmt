@@ -340,6 +340,29 @@ class Item(models.Model):
         # TODO: implement this
         pass
 
+    def resolvable(self):
+        return self.status in ['OPEN', 'INPROGRESS', 'NEW']
+
+    def inprogressable(self):
+        return self.status == 'OPEN'
+
+    def verifiable(self):
+        return self.status == 'RESOLVED'
+
+    def reopenable(self):
+        return self.status in ['RESOLVED', 'INPROGRESS', 'VERIFIED', 'CLOSED']
+
+    def touch(self):
+        self.last_mode = datetime.now()
+        self.save()
+
+    def add_comment(self, user, body):
+        Comment.objects.create(
+            item=self,
+            username=user.username,
+            comment=body,
+            add_date_time=datetime.now())
+
 
 class HistoryItem(object):
     def __lt__(self, other):
@@ -467,7 +490,7 @@ class WorksOn(models.Model):
 
 
 class Events(models.Model):
-    eid = models.IntegerField(primary_key=True)
+    eid = models.AutoField(primary_key=True)
     status = models.CharField(max_length=32)
     event_date_time = models.DateTimeField(null=True, blank=True)
     item = models.ForeignKey(Item, db_column='item')
@@ -546,7 +569,7 @@ class Attachment(models.Model):
 
 
 class Comment(models.Model):
-    cid = models.IntegerField(primary_key=True)
+    cid = models.AutoField(primary_key=True)
     comment = models.TextField()
     add_date_time = models.DateTimeField(null=True, blank=True)
     username = models.CharField(max_length=32)

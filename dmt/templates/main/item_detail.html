@@ -20,8 +20,6 @@
 
 <ul class="nav nav-pills">
 	<li><a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">Return to the old PMT</a></li>
-	<li><a href="#" data-toggle="modal"
-	data-target="#add-hours">Log Time</a></li>
 </ul>
 
 <div class="modal fade" id="add-hours" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
@@ -53,6 +51,117 @@
 </div><!-- /.modal -->
 
 
+{% if object.resolvable %}
+<div class="modal fade" id="resolve" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="resolve-label">Resolve Item</h4>
+      </div>
+      <div class="modal-body">
+				<form id="add-tracker-form" action="resolve/" method="post" role="form">
+
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="add-tracker-button">Resolve</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}
+
+{% if object.inprogressable %}
+<div class="modal fade" id="mark-in-progress" tabindex="-1" role="dialog" aria-labelledby="inprogress-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="inprogress-label">Mark as In Progress</h4>
+      </div>
+      <div class="modal-body">
+				<form id="add-tracker-form" action="inprogress/" method="post" role="form">
+
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="add-tracker-button">Mark as In Progress</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}
+
+{% if object.verifiable %}
+<div class="modal fade" id="verify" tabindex="-1" role="dialog" aria-labelledby="verify-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="verify-label">Verify</h4>
+      </div>
+      <div class="modal-body">
+				<form id="add-tracker-form" action="verify/" method="post" role="form">
+
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="add-tracker-button">Verify</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}
+
+{% if object.reopenable %}
+<div class="modal fade" id="reopen" tabindex="-1" role="dialog" aria-labelledby="reopen-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="reopen-label">Reopen</h4>
+      </div>
+      <div class="modal-body">
+				<form id="add-tracker-form" action="reopen/" method="post" role="form">
+
+				</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="add-tracker-button">Reopen</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}
+
+<form action="comment/" method="post" role="form">
+<div class="modal fade" id="add-comment" tabindex="-1" role="dialog" aria-labelledby="add-comment-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-comment-label">Add Comment</h4>
+      </div>
+      <div class="modal-body">
+					<div class="form-group">
+						<textarea name="comment" class="form-control" rows="5"></textarea>
+					</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="Add Comment" />
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+
 <dl class="dl-horizontal">
 <dt>STATUS<dt><dd><span class="{{object.status_class}}">{{ object.status }} {{object.r_status}}</span></dd>
 <dt>OWNER<dt><dd><a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a></dd>
@@ -81,6 +190,37 @@
 <hr />
 {{object.description|markdown}}
 <hr />
+
+<div class="btn-toolbar">
+<div class="btn-group">
+{% if object.resolvable %}
+	<a class="btn btn-success" href="#" data-toggle="modal"
+		 data-target="#resolve">Resolve</a>
+{% endif %}
+
+{% if object.inprogressable %}
+	<a class="btn btn-default" href="#" data-toggle="modal"
+		 data-target="#mark-in-progress">Mark as In-Progress</a>
+{% endif %}
+
+{% if object.verifiable %}
+	<a class="btn btn-success" href="#" data-toggle="modal"
+		 data-target="#verify">Verify</a>
+{% endif %}
+
+{% if object.reopenable %}
+	<a class="btn btn-danger" href="#" data-toggle="modal"
+		 data-target="#reopen">Reopen</a>
+{% endif %}
+</div>
+<div class="btn-group pull-right">
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+	data-target="#add-comment">Add Comment</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+	data-target="#add-hours">Log Time</a>
+</div>
+</div>
+
 
 {% if item.attachment_set.all.count %}
 <h2>Attachments</h2>
@@ -145,5 +285,4 @@ $(document).ready(function()
     } 
 );
 </script>
-
 {% endblock %}

@@ -1,7 +1,11 @@
 from django.db.models import Q
-from django.views.generic.base import TemplateView
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.views.generic.base import TemplateView, View
 from rest_framework import viewsets
+import markdown
 from .models import Project, Milestone, Item, Node, User, Client
+from dmt.claim.models import Claim
 from .serializers import (
     UserSerializer, ClientSerializer, ProjectSerializer,
     MilestoneSerializer, ItemSerializer)
@@ -102,3 +106,16 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     paginate_by = 20
+
+
+class AddCommentView(View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        body = request.POST.get('comment', u'')
+        if body == '':
+            return HttpResponseRedirect(item.get_absolute_url())
+        item.add_comment(user, markdown.markdown(body))
+        item.touch()
+        # TODO: send email
+        return HttpResponseRedirect(item.get_absolute_url())
