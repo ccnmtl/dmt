@@ -137,6 +137,7 @@
 {% endif %}
 
 {% if object.reopenable %}
+<form action="reopen/" method="post" role="form">
 <div class="modal fade" id="reopen" tabindex="-1" role="dialog" aria-labelledby="reopen-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -145,17 +146,18 @@
         <h4 class="modal-title" id="reopen-label">Reopen</h4>
       </div>
       <div class="modal-body">
-				<form id="add-tracker-form" action="reopen/" method="post" role="form">
-
-				</form>
+				<div class="form-group">
+					<textarea name="comment" class="form-control" rows="5"></textarea>
+				</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="add-tracker-button">Reopen</button>
+        <input type="submit" class="btn btn-primary" value="Reopen" />
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+</form>
 {% endif %}
 
 <form action="comment/" method="post" role="form">

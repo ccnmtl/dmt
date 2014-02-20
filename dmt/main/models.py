@@ -405,6 +405,20 @@ class Item(models.Model):
             comment="<b>marked as in progress</b><br />\n%s" % comment,
             add_date_time=datetime.now())
 
+    def reopen(self, user, comment):
+        self.status = 'OPEN'
+        self.r_status = ''
+        self.save()
+        e = Events.objects.create(
+            status="OPEN",
+            event_date_time=datetime.now(),
+            item=self)
+        Comment.objects.create(
+            event=e,
+            username=user.username,
+            comment="<b>reopened</b><br />\n%s" % comment,
+            add_date_time=datetime.now())
+
 
 class HistoryItem(object):
     def __lt__(self, other):
