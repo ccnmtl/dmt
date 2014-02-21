@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import timedelta, datetime
 from interval.fields import IntervalField
+from taggit.managers import TaggableManager
 
 
 class User(models.Model):
@@ -315,6 +316,8 @@ class Item(models.Model):
     estimated_time = IntervalField(blank=True, null=True)
     url = models.TextField(blank=True)
 
+    tags = TaggableManager()
+
     class Meta:
         db_table = u'items'
 
@@ -583,6 +586,8 @@ class Node(models.Model):
     added = models.DateTimeField()
     modified = models.DateTimeField()
     project = models.ForeignKey(Project, null=True, db_column='project')
+
+    tags = TaggableManager()
 
     class Meta:
         db_table = u'nodes'

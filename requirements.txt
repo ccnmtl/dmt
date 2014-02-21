@@ -53,3 +53,4 @@ django-impersonate==0.7.0
 django-pgsql-interval-field==0.9.3
 django-filter==0.7
 djangorestframework==2.3.12
+django-taggit==0.11.2
