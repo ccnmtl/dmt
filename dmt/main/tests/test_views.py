@@ -10,6 +10,14 @@ from .factories import EventFactory, CommentFactory
 class BasicTest(TestCase):
     def setUp(self):
         self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_root(self):
         response = self.c.get("/")
@@ -33,6 +41,14 @@ class BasicTest(TestCase):
 class TestProjectViews(TestCase):
     def setUp(self):
         self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_all_projects_page(self):
         p = ProjectFactory()
@@ -51,6 +67,14 @@ class TestProjectViews(TestCase):
 class TestMilestoneViews(TestCase):
     def setUp(self):
         self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_project_page(self):
         m = MilestoneFactory()
@@ -69,6 +93,14 @@ class TestMilestoneViews(TestCase):
 class TestItemViews(TestCase):
     def setUp(self):
         self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_item_view(self):
         i = ItemFactory()
@@ -193,6 +225,14 @@ class TestItemWorkflow(TestCase):
 class TestHistory(TestCase):
     def setUp(self):
         self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_item_view(self):
         i = ItemFactory()

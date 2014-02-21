@@ -4,6 +4,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+from django_filters.views import FilterView
 from rest_framework import viewsets
 import markdown
 from .models import Project, Milestone, Item, Node, User, Client, ItemClient
@@ -14,13 +17,20 @@ from .serializers import (
 from rest_framework import generics
 
 
+def has_claim(user):
+    r = Claim.objects.filter(django_user=user)
+    return r.count() == 1
+
+
 class LoggedInMixin(object):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
+        if not has_claim(self.request.user):
+            return HttpResponseRedirect("/claim/")
         return super(LoggedInMixin, self).dispatch(*args, **kwargs)
 
 
-class SearchView(TemplateView):
+class SearchView(LoggedInMixin, TemplateView):
     template_name = "main/search_results.html"
 
     def get_context_data(self, **kwargs):
@@ -237,3 +247,49 @@ class SplitItemView(LoggedInMixin, View):
         # TODO: send email
         item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
+
+
+class ItemDetailView(LoggedInMixin, DetailView):
+    model = Item
+
+
+class IndexView(LoggedInMixin, TemplateView):
+    template_name = "main/index.html"
+
+
+class ClientListView(LoggedInMixin, FilterView):
+    model = Client
+    paginate_by = 100
+
+
+class ClientDetailView(LoggedInMixin, DetailView):
+    model = Client
+
+
+class ForumView(LoggedInMixin, ListView):
+    model = Node
+    paginate_by = 20
+
+
+class NodeDetailView(LoggedInMixin, DetailView):
+    model = Node
+
+
+class MilestoneDetailView(LoggedInMixin, DetailView):
+    model = Milestone
+
+
+class ProjectListView(LoggedInMixin, FilterView):
+    model = Project
+
+
+class ProjectDetailView(LoggedInMixin, DetailView):
+    model = Project
+
+
+class UserListView(LoggedInMixin, FilterView):
+    model = User
+
+
+class UserDetailView(LoggedInMixin, DetailView):
+    model = User

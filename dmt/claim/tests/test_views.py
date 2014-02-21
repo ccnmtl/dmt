@@ -35,7 +35,7 @@ class IndexViewTest(TestCase):
 
     def test_templatetag_unclaimed(self):
         r = self.c.get("/")
-        self.assertTrue("/claim/" in r.content)
+        self.assertEqual(r.status_code, 302)
 
     def test_templatetag_claimed(self):
         pu = PMTUser.objects.create(username="testpmtuser",
