@@ -83,12 +83,14 @@ Projects <span class="caret"></span>
           {% block topnavbarrightitems %}{% endblock %}
 {% block usernav %}
           {% if request.user.is_anonymous %}
-          <li><a href="/accounts/login/?next=/" class="btn btn-success">login</a></li>
+          <li><a href="/accounts/login/?next=/" class="btn btn-xs "><span class="glyphicon
+								glyphicon-log-in"></span> login</a></li>
           {% else %}
 {% pmtuser as pmt_user %}
           <li class="navbar-text">
 						<div class="btn-group">
-							<a class="btn btn-default btn-xs" href="{{pmt_user.get_absolute_url}}">{{request.user.first_name}} {{request.user.last_name}}</a>
+							<a class="btn btn-default btn-xs" href="{{pmt_user.get_absolute_url}}"><span class="glyphicon
+								glyphicon-user"></span> {{request.user.first_name}} {{request.user.last_name}}</a>
 							<button type="button" class="btn btn-default btn-xs
 																					 dropdown-toggle"
 											data-toggle="dropdown">
@@ -99,7 +101,8 @@ Projects <span class="caret"></span>
 								{% if request.user.is_superuser %}
 								<li><a href="{% url 'impersonate-list' %}">Impersonate</a></li>
 								{% endif %}
-								<li><a href="/accounts/logout/">logout</a></li>
+								<li><a href="/accounts/logout/"><span class="glyphicon
+								glyphicon-log-out"></span> logout</a></li>
 							</ul>
 						</div>
 					</li>
