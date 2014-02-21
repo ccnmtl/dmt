@@ -4,12 +4,32 @@
 {% block title %}Forum Post: {{object.subject}}{% endblock %}
 
 {% block content %}
+<ul class="breadcrumb">
+  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+  <li><a href="/forum/">Forum</a></li>
+</ul>
 <h1><a href="{{object.get_absolute_url}}">{{object.subject}}</a></h1>
-<p class="byline">
+<p><span class="text-muted">
 {% if object.project %}to <a href="{{object.project.get_absolute_url}}">{{object.project.name}}</a>{% endif %}
 by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
-| {{object.added}}
+| {{object.added}}</span>
 </p>
 {{object.body|markdown}}
+
+{% if object.replies %}
+<h2>Replies</h2>
+
+<table class="table">
+{% for reply in object.get_replies %}
+<tr>
+	<td>
+			<span class="text-muted">by <a href="{{reply.author.get_absolute_url}}">{{reply.author.fullname}}</a><br />
+			at {{reply.added}}</span>
+	</td>
+	<td>{{reply.body|markdown}}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
 
 {% endblock %}

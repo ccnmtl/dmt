@@ -268,6 +268,7 @@ class ClientDetailView(LoggedInMixin, DetailView):
 
 class ForumView(LoggedInMixin, ListView):
     model = Node
+    queryset = Node.objects.filter(reply_to=0)
     paginate_by = 20
 
 

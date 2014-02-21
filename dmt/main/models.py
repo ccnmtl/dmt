@@ -596,6 +596,9 @@ class Node(models.Model):
     def get_absolute_url(self):
         return "/forum/%d/" % self.nid
 
+    def get_replies(self):
+        return Node.objects.filter(reply_to=self.nid).order_by("modified")
+
 
 class WorksOn(models.Model):
     username = models.ForeignKey(User, db_column='username')
