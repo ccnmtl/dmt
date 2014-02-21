@@ -279,10 +279,8 @@
 <tr>
 <td class="{{history_item.status_class}}">{{history_item.status}}</td>
 <td>
-<a href="{{history_item.user.get_absolute_url}}">{{history_item.user.fullname}}</a>
-</td>
-<td>
-<nobr>{{history_item.timestamp}}</nobr>
+by <a href="{{history_item.user.get_absolute_url}}">{{history_item.user.fullname}}</a><br />
+<nobr>at {{history_item.timestamp}}</nobr>
 </td>
 <td>
 {{history_item.comment|safe}}
