@@ -575,7 +575,7 @@ class ItemClient(models.Model):
 
 
 class Node(models.Model):
-    nid = models.IntegerField(primary_key=True)
+    nid = models.AutoField(primary_key=True)
     subject = models.CharField(max_length=256, blank=True)
     body = models.TextField(blank=True)
     author = models.ForeignKey(User, db_column='author')
@@ -598,6 +598,24 @@ class Node(models.Model):
 
     def get_replies(self):
         return Node.objects.filter(reply_to=self.nid).order_by("modified")
+
+    def add_reply(self, user, body):
+        Node.objects.create(
+            subject='Re: ' + self.subject,
+            body=body,
+            author=user,
+            reply_to=self.nid,
+            replies=0,
+            type='comment',
+            added=datetime.now(),
+            modified=datetime.now(),
+            project=self.project)
+        self.replies = Node.objects.filter(reply_to=self.nid).count()
+        self.save()
+
+    def touch(self):
+        self.modified = datetime.now()
+        self.save()
 
 
 class WorksOn(models.Model):

@@ -11,7 +11,7 @@ from dmt.main.views import (
     SplitItemView, ItemDetailView, IndexView, ClientListView,
     ClientDetailView, ForumView, NodeDetailView, MilestoneDetailView,
     ProjectListView, ProjectDetailView, UserListView,
-    UserDetailView)
+    UserDetailView, NodeReplyView)
 from dmt.main.feeds import ForumFeed
 
 router = routers.DefaultRouter()
@@ -56,6 +56,7 @@ urlpatterns = patterns(
     (r'^client/(?P<pk>\d+)/$', ClientDetailView.as_view()),
     (r'^forum/$', ForumView.as_view()),
     (r'^forum/(?P<pk>\d+)/$', NodeDetailView.as_view()),
+    (r'^forum/(?P<pk>\d+)/reply/$', NodeReplyView.as_view()),
     (r'^item/(?P<pk>\d+)/$', ItemDetailView.as_view()),
     (r'^item/(?P<pk>\d+)/comment/$', AddCommentView.as_view()),
     (r'^item/(?P<pk>\d+)/resolve/$', ResolveItemView.as_view()),

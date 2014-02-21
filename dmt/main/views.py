@@ -294,3 +294,19 @@ class UserListView(LoggedInMixin, FilterView):
 
 class UserDetailView(LoggedInMixin, DetailView):
     model = User
+
+
+class NodeReplyView(LoggedInMixin, View):
+    def post(self, request, pk):
+        node = get_object_or_404(Node, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        body = request.POST.get('body', u'')
+        if body == '':
+            return HttpResponseRedirect(node.get_absolute_url())
+
+        node.add_reply(user, body)
+        node.touch()
+        # TODO: send email
+        # TODO: preview mode
+        # TODO: tags
+        return HttpResponseRedirect(node.get_absolute_url())

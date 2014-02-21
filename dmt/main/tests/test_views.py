@@ -3,8 +3,9 @@ from django.test import TestCase
 from django.test.client import Client
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Item
-from .factories import ProjectFactory, MilestoneFactory, ItemFactory
-from .factories import EventFactory, CommentFactory
+from .factories import (
+    ProjectFactory, MilestoneFactory, ItemFactory, NodeFactory,
+    EventFactory, CommentFactory)
 
 
 class BasicTest(TestCase):
@@ -244,6 +245,38 @@ class TestHistory(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue(c2.comment in r.content)
         self.assertTrue(c1.comment in r.content)
+
+
+class TestForum(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+    def test_forum_index(self):
+        r = self.c.get("/forum/")
+        self.assertEqual(r.status_code, 200)
+
+    def test_node(self):
+        n = NodeFactory()
+        r = self.c.get(n.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+
+    def test_node_reply(self):
+        n = NodeFactory()
+        r = self.c.post(
+            n.get_absolute_url() + "reply/",
+            dict(body="this is a comment"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(n.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue("this is a comment" in r.content)
 
 
 class TestFeeds(TestCase):

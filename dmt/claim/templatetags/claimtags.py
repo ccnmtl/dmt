@@ -16,6 +16,8 @@ class PMTUserNode(template.Node):
         self.var_name = var_name
 
     def render(self, context):
+        if 'request' not in context:
+            return ''
         u = context['request'].user
         r = Claim.objects.filter(django_user=u)
         if r.count() > 0:

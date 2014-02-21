@@ -16,9 +16,16 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
 </p>
 {{object.body|markdown}}
 
-{% if object.replies %}
-<h2>Replies</h2>
+<ul class="nav nav-tabs">
+	{% if object.replies %}
+	<li><a href="#replies" data-toggle="tab">Replies</a></li>
+	{% endif %}
+	<li><a href="#add-reply" data-toggle="tab">Add Reply</a></li>
+</ul>
 
+<div class="tab-content">
+{% if object.replies %}
+  <div class="tab-pane fade in active" id="replies">
 <table class="table">
 {% for reply in object.get_replies %}
 <tr>
@@ -30,6 +37,19 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
 </tr>
 {% endfor %}
 </table>
+</div>
+  <div class="tab-pane fade in" id="add-reply">
+{% else %}
+  <div class="tab-pane fade in active" id="add-reply">
 {% endif %}
+<form action="reply/" method="post">
+	<div class="form-group">
+		<textarea name="body" class="form-control" rows="10"></textarea>
+	</div>
 
+<div class="pull-right"><input type="submit" value="Add Reply" class="btn btn-primary" /></div>
+</fieldset>
+</form>
+</div>
+</div>
 {% endblock %}
