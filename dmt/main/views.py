@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic.base import TemplateView, View
 from rest_framework import viewsets
 import markdown
-from .models import Project, Milestone, Item, Node, User, Client
+from .models import Project, Milestone, Item, Node, User, Client, ItemClient
 from dmt.claim.models import Claim
 from .serializers import (
     UserSerializer, ClientSerializer, ProjectSerializer,
@@ -170,6 +170,62 @@ class ReopenItemView(View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.reopen(user, comment)
         item.touch()
+        # TODO: send email
+        item.milestone.update_milestone()
+        return HttpResponseRedirect(item.get_absolute_url())
+
+
+class SplitItemView(View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+
+        new_items = []
+        for k in request.POST.keys():
+            if not k.startswith('title_'):
+                continue
+            title = request.POST.get(k, False)
+            if not title:
+                continue
+            new_item = Item.objects.create(
+                type=item.type,
+                owner=item.owner,
+                assigned_to=item.assigned_to,
+                title=title,
+                milestone=item.milestone,
+                status='OPEN',
+                r_status='',
+                description='',
+                priority=item.priority,
+                target_date=item.target_date,
+                estimated_time=item.estimated_time,
+                url=item.url)
+            new_item.add_event(
+                'OPEN',
+                user,
+                (
+                    "<b>%s added</b>"
+                    "<p>Split from <a href='%s'>#%d</a></p>" % (
+                        item.type, item.get_absolute_url(),
+                        item.iid)))
+            new_item.touch()
+            new_item.setup_default_notification()
+            new_item.add_project_notification()
+            # TODO: copy tags
+            for ic in item.itemclient_set.all():
+                ItemClient.objects.create(item=new_item, client=ic.client)
+            new_items.append(new_item)
+        if len(new_items) > 0:
+            comment = (
+                "<p>Split into:</p>"
+                "<ul>%s</ul>" % "".join(
+                    [
+                        "<li><a href='%s'>#%d %s</a></li>" % (
+                            i.get_absolute_url(),
+                            i.iid, i.title) for i in new_items
+                    ]))
+            item.verify(user, comment)
+            item.touch()
         # TODO: send email
         item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())

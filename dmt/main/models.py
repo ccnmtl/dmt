@@ -448,6 +448,33 @@ class Item(models.Model):
             comment="<b>reopened</b><br />\n%s" % comment,
             add_date_time=datetime.now())
 
+    def add_event(self, status, user, comment):
+        e = Events.objects.create(
+            status=status,
+            event_date_time=datetime.now(),
+            item=self)
+        Comment.objects.create(
+            event=e,
+            username=user.username,
+            comment=comment,
+            add_date_time=datetime.now())
+
+    def setup_default_notification(self):
+        self.add_cc(self.owner)
+        self.add_cc(self.assigned_to)
+
+    def add_project_notification(self):
+        for n in NotifyProject.objects.filter(pid=self.milestone.project):
+            self.add_cc(n.username)
+
+    def add_cc(self, user):
+        if user.status == "inactive":
+            # don't bother with inactive users
+            return
+        Notify.objects.get_or_create(
+            item=self,
+            username=user)
+
 
 class HistoryItem(object):
     def __lt__(self, other):
