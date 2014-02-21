@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from rest_framework import viewsets
 import markdown
@@ -10,6 +12,12 @@ from .serializers import (
     UserSerializer, ClientSerializer, ProjectSerializer,
     MilestoneSerializer, ItemSerializer)
 from rest_framework import generics
+
+
+class LoggedInMixin(object):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoggedInMixin, self).dispatch(*args, **kwargs)
 
 
 class SearchView(TemplateView):
@@ -108,7 +116,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     paginate_by = 20
 
 
-class AddCommentView(View):
+class AddCommentView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
@@ -121,7 +129,7 @@ class AddCommentView(View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
-class ResolveItemView(View):
+class ResolveItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
@@ -139,7 +147,7 @@ class ResolveItemView(View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
-class InProgressItemView(View):
+class InProgressItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
@@ -151,7 +159,7 @@ class InProgressItemView(View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
-class VerifyItemView(View):
+class VerifyItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
@@ -163,7 +171,7 @@ class VerifyItemView(View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
-class ReopenItemView(View):
+class ReopenItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
@@ -175,7 +183,7 @@ class ReopenItemView(View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
-class SplitItemView(View):
+class SplitItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
