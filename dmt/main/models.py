@@ -239,6 +239,18 @@ class Project(models.Model):
     def recent_forum_posts(self, count=10):
         return self.node_set.all()[:count]
 
+    def add_node(self, subject, user, body):
+        Node.objects.create(
+            subject=subject,
+            body=body,
+            author=user,
+            reply_to=0,
+            replies=0,
+            type='post',
+            added=datetime.now(),
+            modified=datetime.now(),
+            project=self)
+
 
 class Document(models.Model):
     did = models.IntegerField(primary_key=True)

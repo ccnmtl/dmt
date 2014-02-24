@@ -64,6 +64,23 @@ class TestProjectViews(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue(p.name in r.content)
 
+    def test_add_node(self):
+        p = ProjectFactory()
+        r = self.c.post(
+            p.get_absolute_url() + "add_node/",
+            dict(subject='node subject', body="this is the body"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(p.get_absolute_url())
+        self.assertTrue("node subject" in r.content)
+        self.assertTrue("this is the body" in r.content)
+
+    def test_add_node_empty_body(self):
+        p = ProjectFactory()
+        r = self.c.post(
+            p.get_absolute_url() + "add_node/",
+            dict(subject='node subject', body=""))
+        self.assertEqual(r.status_code, 302)
+
 
 class TestMilestoneViews(TestCase):
     def setUp(self):
@@ -298,6 +315,13 @@ class TestForum(TestCase):
         r = self.c.get(n.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue("this is a comment" in r.content)
+
+    def test_node_reply_empty_body(self):
+        n = NodeFactory()
+        r = self.c.post(
+            n.get_absolute_url() + "reply/",
+            dict(body=""))
+        self.assertEqual(r.status_code, 302)
 
 
 class TestFeeds(TestCase):

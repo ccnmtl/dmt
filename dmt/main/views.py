@@ -324,3 +324,17 @@ class ProjectAddTodoView(LoggedInMixin, View):
                 continue
             project.add_todo(user, title)
         return HttpResponseRedirect(project.get_absolute_url())
+
+
+class ProjectAddNodeView(LoggedInMixin, View):
+    def post(self, request, pk):
+        project = get_object_or_404(Project, pid=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        body = request.POST.get('body', u'')
+        if body == '':
+            return HttpResponseRedirect(project.get_absolute_url())
+        project.add_node(request.POST.get('subject', ''), user, body)
+        # TODO: send email
+        # TODO: preview mode
+        # TODO: tags
+        return HttpResponseRedirect(project.get_absolute_url())
