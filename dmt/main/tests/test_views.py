@@ -222,6 +222,27 @@ class TestItemWorkflow(TestCase):
                  other_param="sub item two"))
         self.assertEqual(r.status_code, 302)
 
+    def test_add_todos(self):
+        i = ItemFactory()
+        project = i.milestone.project
+        r = self.c.post(
+            project.get_absolute_url() + "add_todo/",
+            dict(title_0="this is a todo"))
+        self.assertEqual(r.status_code, 302)
+
+        r = self.c.get(project.get_absolute_url())
+        self.assertTrue("this is a todo" in r.content)
+
+    def test_add_todos_bad_params(self):
+        i = ItemFactory()
+        project = i.milestone.project
+        r = self.c.post(
+            project.get_absolute_url() + "add_todo/",
+            dict(title_0="this is a todo",
+                 some_other_param="foo",
+                 title_1=""))
+        self.assertEqual(r.status_code, 302)
+
 
 class TestHistory(TestCase):
     def setUp(self):

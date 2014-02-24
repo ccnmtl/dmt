@@ -310,3 +310,17 @@ class NodeReplyView(LoggedInMixin, View):
         # TODO: preview mode
         # TODO: tags
         return HttpResponseRedirect(node.get_absolute_url())
+
+
+class ProjectAddTodoView(LoggedInMixin, View):
+    def post(self, request, pk):
+        project = get_object_or_404(Project, pid=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        for k in request.POST.keys():
+            if not k.startswith('title_'):
+                continue
+            title = request.POST.get(k, False)
+            if not title:
+                continue
+            project.add_todo(user, title)
+        return HttpResponseRedirect(project.get_absolute_url())

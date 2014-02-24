@@ -25,8 +25,8 @@
 <ul class="nav nav-pills">
 	<li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=project;pid={{object.pid}}">Return to the old PMT</a></li>
 	<li><a href="#" data-toggle="modal"
-	data-target="#add-tracker"><span class="glyphicon
-								glyphicon-time"></span> Add Tracker</a></li>
+	data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span> Add Tracker</a></li>
+	<li><a href="#" data-toggle="modal" data-target="#add-todo">Add Todo(s)</a></li>
 </ul>
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
@@ -68,6 +68,50 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<form id="add-todo-form" action="add_todo/" method="post" role="form">
+<div class="modal fade" id="add-todo" tabindex="-1" role="dialog" aria-labelledby="add-todo-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-todo-label">Add Todo(s)</h4>
+      </div>
+      <div class="modal-body">
+				<div class="form-group">
+					<input type="text" name="title_0" placeholder="task title" 
+								 id="todo-title-input-0" class="form-control"/>
+				</div>
+
+				<div class="form-group">
+					<input type="text" name="title_1" placeholder="task title" 
+								 id="todo-title-input-1" class="form-control"/>
+				</div>
+
+				<div class="form-group">
+					<input type="text" name="title_2" placeholder="task title" 
+								 id="todo-title-input-2" class="form-control"/>
+				</div>
+
+				<div class="form-group">
+					<input type="text" name="title_3" placeholder="task title" 
+								 id="todo-title-input-3" class="form-control"/>
+				</div>
+
+				<div class="form-group">
+					<input type="text" name="title_4" placeholder="task title" 
+								 id="todo-title-input-4" class="form-control"/>
+				</div>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary"
+        id="add-todo-button" value="Add"/>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
 
 
 <ul class="nav nav-tabs">

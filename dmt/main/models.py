@@ -218,6 +218,23 @@ class Project(models.Model):
         # milestone.
         return self.milestone_set.all().order_by("-target_date")[0]
 
+    def add_todo(self, user, title):
+        milestone = self.upcoming_milestone()
+        item = Item.objects.create(
+            milestone=milestone,
+            type='action item',
+            owner=user,
+            assigned_to=user,
+            title=title,
+            priority=1,
+            status='OPEN',
+            r_status='',
+            estimated_time='0',
+            target_date=milestone.target_date,
+            description='')
+        item.add_event('OPEN', user, "<b>action item added</b>")
+        milestone.update_milestone()
+
 
 class Document(models.Model):
     did = models.IntegerField(primary_key=True)
