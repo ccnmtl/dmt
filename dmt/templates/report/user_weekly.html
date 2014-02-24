@@ -62,7 +62,7 @@
 			<td>{{t.actual_time}}</td>
 			<td><a href="{{t.item.get_absolute_url}}">{{t.item.title}}</a></td>
 			<td>{{t.completed}}</td>
-			<td><a href="{{project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
+			<td><a href="{{t.item.milestone.project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
 		</tr>
 		{% endfor %}
 	</tbody>
