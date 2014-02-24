@@ -231,6 +231,7 @@ class Project(models.Model):
             r_status='',
             estimated_time='0',
             target_date=milestone.target_date,
+            last_mod=datetime.now(),
             description='')
         item.add_event('OPEN', user, "<b>action item added</b>")
         milestone.update_milestone()
