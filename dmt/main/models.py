@@ -236,6 +236,9 @@ class Project(models.Model):
         item.add_event('OPEN', user, "<b>action item added</b>")
         milestone.update_milestone()
 
+    def recent_forum_posts(self, count=10):
+        return self.node_set.all()[:count]
+
 
 class Document(models.Model):
     did = models.IntegerField(primary_key=True)

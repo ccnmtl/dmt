@@ -254,7 +254,7 @@
 	</div>
 
 	<div class="tab-pane fade" id="forum">
-		{% for n in object.node_set.all %}
+		{% for n in object.recent_forum_posts %}
 <h2><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h2>
 <p class="byline">
 by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
