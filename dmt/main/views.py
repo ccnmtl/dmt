@@ -307,7 +307,6 @@ class NodeReplyView(LoggedInMixin, View):
 
         node.add_reply(user, body)
         node.touch()
-        # TODO: send email
         # TODO: preview mode
         # TODO: tags
         return HttpResponseRedirect(node.get_absolute_url())
@@ -335,7 +334,6 @@ class ProjectAddNodeView(LoggedInMixin, View):
         if body == '':
             return HttpResponseRedirect(project.get_absolute_url())
         project.add_node(request.POST.get('subject', ''), user, body)
-        # TODO: send email
         # TODO: preview mode
         # TODO: tags
         return HttpResponseRedirect(project.get_absolute_url())

@@ -4,6 +4,7 @@ from datetime import timedelta, datetime
 from interval.fields import IntervalField
 from taggit.managers import TaggableManager
 from django.core.mail import send_mail
+import textwrap
 
 
 class User(models.Model):
@@ -242,7 +243,7 @@ class Project(models.Model):
         return self.node_set.all()[:count]
 
     def add_node(self, subject, user, body):
-        Node.objects.create(
+        n = Node.objects.create(
             subject=subject,
             body=body,
             author=user,
@@ -252,6 +253,38 @@ class Project(models.Model):
             added=datetime.now(),
             modified=datetime.now(),
             project=self)
+        self.email_post(n, body, user)
+
+    def email_post(self, node, body, user):
+        body = textwrap.fill(body, replace_whitespace=False)
+        body = """
+project: %s
+author: %s
+%s
+
+-- \nthis message sent automatically by the PMT forum.
+to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
+        """ % (self.name, user.fullname, body, node.get_absolute_url())
+        addresses = [
+            u.email for u in self.all_personnel_in_project()
+            if u != user]
+        subject = "[PMT Forum %s]: %s" % (self.name, node.subject)
+        send_mail(subject, body, user.email,
+                  addresses, fail_silently=settings.DEBUG)
+
+    def personnel_in_project(self):
+        return [
+            w.username for w in WorksOn.objects.filter(project=self)
+            if w.username.status == 'active']
+
+    def all_personnel_in_project(self):
+        users = set([u for u in self.personnel_in_project()
+                     if not u.grp])
+        groups = [u for u in self.personnel_in_project()
+                  if u.grp]
+        for g in groups:
+            users.update(u.users_in_group())
+        return list(users)
 
 
 class Document(models.Model):
@@ -516,9 +549,8 @@ class Item(models.Model):
     def update_email(self, comment, user):
         body = comment.replace(
             "<b>", "").replace("</b>", "").replace("<br />", "\n")
-        # TODO: wrap at 72 columns
+        body = textwrap.fill(body, replace_whitespace=False)
         # TODO: handle no user specified
-        # TODO truncate project title, and subject
         email_subj = "[PMT:%s] Attn:%s-%s" % (
             truncate_string(self.milestone.project.name),
             self.assigned_to.fullname,
@@ -682,7 +714,7 @@ class Node(models.Model):
         return Node.objects.filter(reply_to=self.nid).order_by("modified")
 
     def add_reply(self, user, body):
-        Node.objects.create(
+        n = Node.objects.create(
             subject='Re: ' + self.subject,
             body=body,
             author=user,
@@ -694,6 +726,24 @@ class Node(models.Model):
             project=self.project)
         self.replies = Node.objects.filter(reply_to=self.nid).count()
         self.save()
+        self.email_reply(body, user, n)
+
+    def email_reply(self, body, user, reply):
+        if self.author == user:
+            # self-reply
+            return
+        body = textwrap.fill(body, replace_whitespace=False)
+        subject = "[PMT Forum] %s" % reply.subject
+        if self.project:
+            subject = "[PMT Forum: %s] %s" % (self.project.name, reply.subject)
+            body = "project: %s\nauthor: %s\n\n--\n%s" % (
+                self.project.name, user.fullname, body)
+        body += (
+            "\n\n-- \nthis message sent automatically by the PMT forum.\n"
+            "to reply, please visit <http://dmt.ccnmtl.columbia.edu%s>\n" % (
+                self.get_absolute_url()))
+        send_mail(subject, body, user.email,
+                  [self.author.email], fail_silently=settings.DEBUG)
 
     def touch(self):
         self.modified = datetime.now()
