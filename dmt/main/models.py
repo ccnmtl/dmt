@@ -740,7 +740,7 @@ class Node(models.Model):
                 self.project.name, user.fullname, body)
         body += (
             "\n\n-- \nthis message sent automatically by the PMT forum.\n"
-            "to reply, please visit <http://dmt.ccnmtl.columbia.edu%s>\n" % (
+            "to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n" % (
                 self.get_absolute_url()))
         send_mail(subject, body, user.email,
                   [self.author.email], fail_silently=settings.DEBUG)
