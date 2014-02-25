@@ -1,7 +1,9 @@
 from django.db import models
+from django.conf import settings
 from datetime import timedelta, datetime
 from interval.fields import IntervalField
 from taggit.managers import TaggableManager
+from django.core.mail import send_mail
 
 
 class User(models.Model):
@@ -510,6 +512,53 @@ class Item(models.Model):
         Notify.objects.get_or_create(
             item=self,
             username=user)
+
+    def update_email(self, comment, user):
+        body = comment.replace(
+            "<b>", "").replace("</b>", "").replace("<br />", "\n")
+        # TODO: wrap at 72 columns
+        # TODO: handle no user specified
+        # TODO truncate project title, and subject
+        email_subj = "[PMT:%s] Attn:%s-%s" % (
+            truncate_string(self.milestone.project.name),
+            self.assigned_to.fullname,
+            truncate_string(self.title))
+        email_body = """
+project:\t%s
+by:\t\t%s
+%s:\t%d
+title:\t\t%s
+
+%s
+
+%s URL: https://dmt.ccnmtl.columbia.edu%s
+
+Please do not reply to this message.
+""" % (
+            self.milestone.project.name,
+            user.fullname,
+            self.type, self.iid, self.title,
+            body, self.type, self.get_absolute_url()
+        )
+        addresses = [u.email for u in self.users_to_email(user)]
+        send_mail(email_subj, email_body, user.email,
+                  addresses, fail_silently=settings.DEBUG)
+
+    def users_to_email(self, skip=None):
+        return [
+            n.username
+            for n in Notify.objects.filter(
+                item=self)
+            if (n.username.status == 'active'
+                and not n.username.grp
+                and n.username != skip)]
+
+
+def truncate_string(full_string, length=20):
+    if len(full_string) > length:
+        return full_string[:length] + "..."
+    else:
+        return full_string
 
 
 class HistoryItem(object):

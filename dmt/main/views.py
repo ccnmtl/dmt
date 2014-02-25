@@ -135,7 +135,7 @@ class AddCommentView(LoggedInMixin, View):
             return HttpResponseRedirect(item.get_absolute_url())
         item.add_comment(user, markdown.markdown(body))
         item.touch()
-        # TODO: send email
+        item.update_email(body, user)
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -152,7 +152,7 @@ class ResolveItemView(LoggedInMixin, View):
         else:
             item.resolve(user, r_status, comment)
         item.touch()
-        # TODO: send email
+        item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -164,7 +164,7 @@ class InProgressItemView(LoggedInMixin, View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.mark_in_progress(user, comment)
         item.touch()
-        # TODO: send email
+        item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -176,7 +176,7 @@ class VerifyItemView(LoggedInMixin, View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.verify(user, comment)
         item.touch()
-        # TODO: send email
+        item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -188,7 +188,7 @@ class ReopenItemView(LoggedInMixin, View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.reopen(user, comment)
         item.touch()
-        # TODO: send email
+        item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -244,7 +244,8 @@ class SplitItemView(LoggedInMixin, View):
                     ]))
             item.verify(user, comment)
             item.touch()
-        # TODO: send email
+            item.update_email(comment, user)
+
         item.milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
 
