@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul class="breadcrumb">
+  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+  <li><a href="/tag/">Tags</a></li>
+  <li class="active">{{object.name}}</li>
+</ul>
+<h1>Tag: {{object.name}}</h1>
+
+{% if items %}
+<h2>Items</h2>
+<ul> 
+{% for item in items %}
+<li><a href="{{item.get_absolute_url}}">{{item.title}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

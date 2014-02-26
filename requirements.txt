@@ -54,3 +54,5 @@ django-pgsql-interval-field==0.9.3
 django-filter==0.7
 djangorestframework==2.3.12
 django-taggit==0.11.2
+django-templatetag-sugar==0.1
+django-taggit-templatetags==0.4.6dev

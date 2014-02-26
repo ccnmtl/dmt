@@ -12,7 +12,8 @@ from dmt.main.views import (
     ClientDetailView, ForumView, NodeDetailView, MilestoneDetailView,
     ProjectListView, ProjectDetailView, UserListView,
     UserDetailView, NodeReplyView, ProjectAddTodoView,
-    ProjectAddNodeView)
+    ProjectAddNodeView, TagItemView, RemoveTagFromItemView,
+    TagDetailView, TagListView)
 from dmt.main.feeds import ForumFeed
 
 router = routers.DefaultRouter()
@@ -65,6 +66,9 @@ urlpatterns = patterns(
     (r'^item/(?P<pk>\d+)/verify/$', VerifyItemView.as_view()),
     (r'^item/(?P<pk>\d+)/reopen/$', ReopenItemView.as_view()),
     (r'^item/(?P<pk>\d+)/split/$', SplitItemView.as_view()),
+    (r'^item/(?P<pk>\d+)/tag/$', TagItemView.as_view()),
+    (r'^item/(?P<pk>\d+)/remove_tag/(?P<slug>[^/]+)/$',
+     RemoveTagFromItemView.as_view()),
     (r'^milestone/(?P<pk>\d+)/$', MilestoneDetailView.as_view()),
     (r'^project/$', ProjectListView.as_view()),
     (r'^project/(?P<pk>\d+)/$', ProjectDetailView.as_view()),
@@ -73,6 +77,8 @@ urlpatterns = patterns(
     (r'^report/', include('dmt.report.urls')),
     (r'^user/$', UserListView.as_view()),
     (r'^user/(?P<pk>\w+)/$', UserDetailView.as_view()),
+    (r'^tag/$', TagListView.as_view()),
+    (r'^tag/(?P<slug>[^/]+)/$', TagDetailView.as_view()),
     (r'^feeds/forum/rss/$', ForumFeed()),
     url(r'^_impersonate/', include('impersonate.urls')),
     (r'^stats/$', TemplateView.as_view(template_name="stats.html")),

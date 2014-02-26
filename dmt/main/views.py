@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
 from rest_framework import viewsets
+from taggit.models import Tag
 import markdown
 from .models import Project, Milestone, Item, Node, User, Client, ItemClient
 from dmt.claim.models import Claim
@@ -193,6 +194,42 @@ class ReopenItemView(LoggedInMixin, View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
+def clean_tags(s):
+    tags = s.split(',')
+    tags = [t.strip() for t in tags]
+    tags = [t.lower() for t in tags]
+    # TODO: other punctuation, etc to remove?
+    return tags
+
+
+def tag_object_count(tag):
+    """ how many objects total have this tag? """
+    return (Item.objects.filter(tags__name__in=[tag.name]).count() +
+            Node.objects.filter(tags__name__in=[tag.name]).count())
+
+
+class TagItemView(LoggedInMixin, View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, pk=pk)
+        tags = request.POST.get('tags', u'')
+        item.tags.add(*clean_tags(tags))
+        item.touch()
+        return HttpResponseRedirect(item.get_absolute_url())
+
+
+class RemoveTagFromItemView(LoggedInMixin, View):
+    def get(self, request, pk, slug):
+        # TODO: make this happen through POST requests
+        item = get_object_or_404(Item, pk=pk)
+        tag = get_object_or_404(Tag, slug=slug)
+        item.tags.remove(tag)
+        if tag_object_count(tag) == 0:
+            # if you're the last one out, turn off the lights...
+            tag.delete()
+        item.touch()
+        return HttpResponseRedirect(item.get_absolute_url())
+
+
 class SplitItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
@@ -295,6 +332,20 @@ class UserListView(LoggedInMixin, FilterView):
 
 class UserDetailView(LoggedInMixin, DetailView):
     model = User
+
+
+class TagListView(LoggedInMixin, ListView):
+    model = Tag
+
+
+class TagDetailView(LoggedInMixin, DetailView):
+    model = Tag
+
+    def get_context_data(self, **kwargs):
+        context = super(TagDetailView, self).get_context_data(**kwargs)
+        context['items'] = Item.objects.filter(
+            tags__name__in=[self.object.name])
+        return context
 
 
 class NodeReplyView(LoggedInMixin, View):

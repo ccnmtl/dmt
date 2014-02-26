@@ -119,3 +119,10 @@ td.late {
 .modal-body { max-height:100%; height:85%; }
 .twitter-typeahead {width: 100%; }
 .tt-hint {display: none;}
+
+.tag .remove-link {
+		visibility: hidden;
+}
+.tag:hover .remove-link {
+		visibility: visible;
+}

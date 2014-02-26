@@ -127,6 +127,7 @@ INSTALLED_APPS = [
     'dmt.api',
     'rest_framework',
     'taggit',
+    'taggit_templatetags',
 ]
 
 LETTUCE_APPS = (
