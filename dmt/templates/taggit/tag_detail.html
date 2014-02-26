@@ -17,4 +17,14 @@
 </ul>
 {% endif %}
 
+{% if nodes %}
+<h2>Forum Posts</h2>
+<ul> 
+{% for node in nodes %}
+<li><a href="{{node.get_absolute_url}}">{{node.title}}</a></li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
 {% endblock %}

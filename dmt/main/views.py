@@ -345,6 +345,8 @@ class TagDetailView(LoggedInMixin, DetailView):
         context = super(TagDetailView, self).get_context_data(**kwargs)
         context['items'] = Item.objects.filter(
             tags__name__in=[self.object.name])
+        context['nodes'] = Node.objects.filter(
+            tags__name__in=[self.object.name])
         return context
 
 
