@@ -74,6 +74,7 @@ class SearchView(LoggedInMixin, TemplateView):
                 Q(body__icontains=q) |
                 Q(subject__icontains=q)
             ),
+            tags=Tag.objects.filter(name__icontains=q),
         )
 
 

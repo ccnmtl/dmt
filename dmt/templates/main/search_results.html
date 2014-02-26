@@ -11,6 +11,15 @@
 	characters to search for.</div>
 {% endif %}
 
+{% if tags %}
+<p>Tag Matches:</p>
+<ul>
+{% for t in tags %}
+<li><a href="/tag/{{t.slug}}/"><span class="label label-info">{{t.name}}</span></a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% if users %}
 <p>User Matches:</p>
 <ul>
