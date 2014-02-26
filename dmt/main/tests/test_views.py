@@ -360,6 +360,42 @@ class TestForum(TestCase):
         self.assertEqual(r.status_code, 302)
 
 
+class TestForumTagViews(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+    def test_add_tag(self):
+        i = NodeFactory()
+        r = self.c.post(i.get_absolute_url() + "tag/",
+                        dict(tags="tagone, tagtwo"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(i.get_absolute_url())
+        self.assertTrue("tagone" in r.content)
+        r = self.c.get("/tag/")
+        self.assertTrue("tagone" in r.content)
+        r = self.c.get("/tag/tagone/")
+        self.assertTrue("tagone" in r.content)
+        self.assertTrue(str(i.nid) in r.content)
+
+    def test_remove_tag(self):
+        i = NodeFactory()
+        r = self.c.post(i.get_absolute_url() + "tag/",
+                        dict(tags="tagone, tagtwo"))
+        r = self.c.get(i.get_absolute_url() + "remove_tag/tagtwo/")
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(i.get_absolute_url())
+        self.assertTrue("tagtwo" not in r.content)
+        self.assertTrue("tagone" in r.content)
+
+
 class TestFeeds(TestCase):
     def setUp(self):
         self.c = Client()

@@ -391,3 +391,25 @@ class ProjectAddNodeView(LoggedInMixin, View):
         # TODO: preview mode
         # TODO: tags
         return HttpResponseRedirect(project.get_absolute_url())
+
+
+class TagNodeView(LoggedInMixin, View):
+    def post(self, request, pk):
+        node = get_object_or_404(Node, pk=pk)
+        tags = request.POST.get('tags', u'')
+        node.tags.add(*clean_tags(tags))
+        node.touch()
+        return HttpResponseRedirect(node.get_absolute_url())
+
+
+class RemoveTagFromNodeView(LoggedInMixin, View):
+    def get(self, request, pk, slug):
+        # TODO: make this happen through POST requests
+        node = get_object_or_404(Node, pk=pk)
+        tag = get_object_or_404(Tag, slug=slug)
+        node.tags.remove(tag)
+        if tag_object_count(tag) == 0:
+            # if you're the last one out, turn off the lights...
+            tag.delete()
+        node.touch()
+        return HttpResponseRedirect(node.get_absolute_url())

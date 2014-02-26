@@ -14,6 +14,25 @@
 by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
 | {{object.added}}</span>
 </p>
+<p>TAGS:
+{% if object.tags %}
+{% for tag in object.tags.all %}
+<span class="tag">
+<a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
+<a href="remove_tag/{{tag.slug}}/" class="remove-link">x</a>
+</span>
+{% endfor %}
+<br />
+{% endif %}
+<form action="tag/" method="post">
+<div class="input-group">
+<input class="form-control" type="text" placeholder="add tags (comma seperated)"
+			 name="tags" />
+<span class="input-group-btn"><input type="submit" value="tag"
+																		 class="btn btn-default" /></span>
+</div>
+</form>
+
 {{object.body|markdown}}
 
 <ul class="nav nav-tabs">

@@ -13,6 +13,7 @@ from dmt.main.views import (
     ProjectListView, ProjectDetailView, UserListView,
     UserDetailView, NodeReplyView, ProjectAddTodoView,
     ProjectAddNodeView, TagItemView, RemoveTagFromItemView,
+    TagNodeView, RemoveTagFromNodeView,
     TagDetailView, TagListView)
 from dmt.main.feeds import ForumFeed
 
@@ -59,6 +60,9 @@ urlpatterns = patterns(
     (r'^forum/$', ForumView.as_view()),
     (r'^forum/(?P<pk>\d+)/$', NodeDetailView.as_view()),
     (r'^forum/(?P<pk>\d+)/reply/$', NodeReplyView.as_view()),
+    (r'^forum/(?P<pk>\d+)/tag/$', TagNodeView.as_view()),
+    (r'^forum/(?P<pk>\d+)/remove_tag/(?P<slug>[^/]+)/$',
+     RemoveTagFromNodeView.as_view()),
     (r'^item/(?P<pk>\d+)/$', ItemDetailView.as_view()),
     (r'^item/(?P<pk>\d+)/comment/$', AddCommentView.as_view()),
     (r'^item/(?P<pk>\d+)/resolve/$', ResolveItemView.as_view()),
