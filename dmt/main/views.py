@@ -388,9 +388,9 @@ class ProjectAddNodeView(LoggedInMixin, View):
         body = request.POST.get('body', u'')
         if body == '':
             return HttpResponseRedirect(project.get_absolute_url())
-        project.add_node(request.POST.get('subject', ''), user, body)
+        tags = clean_tags(request.POST.get('tags', u''))
+        project.add_node(request.POST.get('subject', ''), user, body, tags)
         # TODO: preview mode
-        # TODO: tags
         return HttpResponseRedirect(project.get_absolute_url())
 
 

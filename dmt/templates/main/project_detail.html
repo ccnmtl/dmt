@@ -27,6 +27,7 @@
 	<li><a href="#" data-toggle="modal"
 	data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span> Add Tracker</a></li>
 	<li><a href="#" data-toggle="modal" data-target="#add-todo">Add Todo(s)</a></li>
+	<li><a href="#" data-toggle="modal" data-target="#add-node">Add Forum Post</a></li>
 </ul>
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
@@ -109,6 +110,36 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <input type="submit" class="btn btn-primary"
         id="add-todo-button" value="Add"/>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+<form id="add-node-form" action="add_node/" method="post" role="form">
+<div class="modal fade" id="add-node" tabindex="-1" role="dialog" aria-labelledby="add-node-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-node-label">Post to Project Forum</h4>
+      </div>
+      <div class="modal-body">
+				<div class="form-group">
+					<input type="text" name="subject" id="forum-post-subject"
+								 class="form-control" placeholder="title/subject" />
+				</div>
+				<div class="form-group">
+					<textarea name="body" class="form-control" rows="10"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="tags">Tags</label>
+					<input type="text" name="tags" id="forum-tags" placeholder="tags" class="form-control" />
+				</div>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" id="add-node-button" value="Post"/>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -259,35 +290,6 @@
 
 
 
-<ul class="nav nav-pills">
-	<li><a href="#" data-toggle="modal" data-target="#add-node">Add Forum Post</a></li>
-</ul>
-
-<form id="add-node-form" action="add_node/" method="post" role="form">
-<div class="modal fade" id="add-node" tabindex="-1" role="dialog" aria-labelledby="add-node-label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="add-node-label">Post to Project Forum</h4>
-      </div>
-      <div class="modal-body">
-				<div class="form-group">
-					<input type="text" name="subject" id="forum-post-subject"
-								 class="form-control" placeholder="title/subject" />
-				</div>
-				<div class="form-group">
-					<textarea name="body" class="form-control" rows="10"></textarea>
-				</div>
-			</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-primary" id="add-node-button" value="Post"/>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-</form>
 
 
 
@@ -297,6 +299,13 @@
 by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 | {{n.added}}
 </p>
+{% if n.tags %}
+<p>TAGS:
+{% for tag in n.tags.all %}
+<span class="tag">
+<a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
+</span>
+{% endfor %}</p>{% endif %}
 {{n.body|markdown}}
 
 		{% endfor %}

@@ -39,6 +39,15 @@
 by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 | {{n.added}}</span>
 </p>
+{% if n.tags %}
+<p>TAGS:
+{% for tag in n.tags.all %}
+<span class="tag">
+<a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
+</span>
+{% endfor %}</p>
+{% endif %}
+
 {{n.body|markdown}}
 
 {% endfor %}

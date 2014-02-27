@@ -244,7 +244,7 @@ class Project(models.Model):
     def recent_forum_posts(self, count=10):
         return self.node_set.all()[:count]
 
-    def add_node(self, subject, user, body):
+    def add_node(self, subject, user, body, tags=None):
         n = Node.objects.create(
             subject=subject,
             body=body,
@@ -255,6 +255,8 @@ class Project(models.Model):
             added=datetime.now(),
             modified=datetime.now(),
             project=self)
+        if tags:
+            n.tags.add(*tags)
         self.email_post(n, body, user)
 
     def email_post(self, node, body, user):
