@@ -39,7 +39,7 @@
 by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 | {{n.added}}</span>
 </p>
-{% if n.tags %}
+{% if n.tags.count %}
 <p>TAGS:
 {% for tag in n.tags.all %}
 <span class="tag">

@@ -15,7 +15,7 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
 | {{object.added}}</span>
 </p>
 <p>TAGS:
-{% if object.tags %}
+{% if object.tags.count %}
 {% for tag in object.tags.all %}
 <span class="tag">
 <a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
