@@ -337,6 +337,7 @@ class UserDetailView(LoggedInMixin, DetailView):
 
 class TagListView(LoggedInMixin, ListView):
     model = Tag
+    queryset = Tag.objects.all().order_by("name")
 
 
 class TagDetailView(LoggedInMixin, DetailView):
