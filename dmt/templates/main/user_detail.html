@@ -138,12 +138,19 @@
 	</div>
 
 	<div class="tab-pane fade" id="forum">
-		{% for n in object.node_set.all %}
+		{% for n in object.recent_forum_posts %}
 <h2><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h2>
 <p class="byline">
 {% if n.project %}to <a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>{% endif %}
 {{n.added}}
 </p>
+{% if n.tags.count %}
+<p>TAGS:
+{% for tag in n.tags.all %}
+<span class="tag">
+<a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
+</span>
+{% endfor %}</p>{% endif %}
 {{n.body|markdown}}
 
 		{% endfor %}

@@ -132,6 +132,9 @@ class User(models.Model):
     def users_in_group(self):
         return [ig.username for ig in self.group_members.all()]
 
+    def recent_forum_posts(self, count=10):
+        return self.node_set.all()[:count]
+
 
 class ProjectUser(object):
     def __init__(self, project, user):
