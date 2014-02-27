@@ -9,6 +9,7 @@ from django.views.generic.list import ListView
 from django_filters.views import FilterView
 from rest_framework import viewsets
 from taggit.models import Tag
+from taggit.utils import parse_tags
 import markdown
 from .models import Project, Milestone, Item, Node, User, Client, ItemClient
 from dmt.claim.models import Claim
@@ -196,10 +197,8 @@ class ReopenItemView(LoggedInMixin, View):
 
 
 def clean_tags(s):
-    tags = s.split(',')
-    tags = [t.strip() for t in tags]
+    tags = parse_tags(s)
     tags = [t.lower() for t in tags]
-    # TODO: other punctuation, etc to remove?
     return tags
 
 
@@ -371,13 +370,14 @@ class ProjectAddTodoView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        tags = clean_tags(request.POST.get('tags', u''))
         for k in request.POST.keys():
             if not k.startswith('title_'):
                 continue
             title = request.POST.get(k, False)
             if not title:
                 continue
-            project.add_todo(user, title)
+            project.add_todo(user, title, tags)
         return HttpResponseRedirect(project.get_absolute_url())
 
 

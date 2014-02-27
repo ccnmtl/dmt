@@ -221,7 +221,7 @@ class Project(models.Model):
         # milestone.
         return self.milestone_set.all().order_by("-target_date")[0]
 
-    def add_todo(self, user, title):
+    def add_todo(self, user, title, tags=None):
         milestone = self.upcoming_milestone()
         item = Item.objects.create(
             milestone=milestone,
@@ -237,6 +237,8 @@ class Project(models.Model):
             last_mod=datetime.now(),
             description='')
         item.add_event('OPEN', user, "<b>action item added</b>")
+        if tags:
+            item.tags.add(*tags)
         milestone.update_milestone()
 
     def recent_forum_posts(self, count=10):

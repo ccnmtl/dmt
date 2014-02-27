@@ -280,7 +280,8 @@ class TestItemWorkflow(TestCase):
         project = i.milestone.project
         r = self.c.post(
             project.get_absolute_url() + "add_todo/",
-            dict(title_0="this is a todo"))
+            dict(title_0="this is a todo",
+                 tags="one two"))
         self.assertEqual(r.status_code, 302)
 
         r = self.c.get(project.get_absolute_url())
