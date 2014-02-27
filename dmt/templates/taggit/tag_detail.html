@@ -10,18 +10,52 @@
 
 {% if items %}
 <h2>Items</h2>
+    <table class="table table-striped table-condensed">
+    	<thead>
+    		<tr>
+    			<th>Item</th>
+    			<th>Priority</th>
+    			<th>Project</th>
+					<th>Assigned To</th>
+					<th>Owner</th>
+    			<th>Target Date</th>
+    			<th>Modified</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+
 <ul> 
 {% for item in items %}
-<li><a href="{{item.get_absolute_url}}">{{item.title}}</a></li>
+    <tr>
+    	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+    	width="14" height="14"/>
+ {% endif %}
+<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:80}}</a>
+{% ifequal item.status "OPEN" %}
+{% else %}
+<span class="{{item.status_class}} badge pull-right">{{item.status_display}}</span>
+{% endifequal %}
+</td>
+    	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
+    	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name|truncatechars:40}}</a></td>
+			<td><a href="{{item.owner.get_absolute_url}}">{{item.owner.fullname}}</a></td>
+			<td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to.fullname}}</a></td>
+    	<td class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
+    	<td>{{item.last_mod|date:"Y-m-d"}}</td>
+    </tr>
 {% endfor %}
-</ul>
+</table>
 {% endif %}
 
 {% if nodes %}
 <h2>Forum Posts</h2>
 <ul> 
 {% for node in nodes %}
-<li><a href="{{node.get_absolute_url}}">{{node.subject}}</a></li>
+<li><a href="{{node.get_absolute_url}}">{{node.subject}}</a>
+{% if node.project %}
+[<a href="{{node.project.get_absolute_url}}">{{node.project.name}}</a>]
+{% endif %}
+	by <a href="{{node.author.get_absolute_url}}">{{node.author.fullname}}</a>, {{node.added}}</li>
 {% endfor %}
 </ul>
 
