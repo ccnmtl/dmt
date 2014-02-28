@@ -544,6 +544,20 @@ class Item(models.Model):
                 assigned_to.fullname, comment),
             add_date_time=datetime.now())
 
+    def change_owner(self, user, owner, comment):
+        self.owner = owner
+        self.save()
+        e = Events.objects.create(
+            status="OPEN",
+            event_date_time=datetime.now(),
+            item=self)
+        Comment.objects.create(
+            event=e,
+            username=user.username,
+            comment="<b>ownership changed to %s</b><br />\n%s" % (
+                owner.fullname, comment),
+            add_date_time=datetime.now())
+
     def set_priority(self, priority, user):
         old_priority = self.priority
         self.priority = priority

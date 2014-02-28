@@ -313,6 +313,15 @@ class TestItemWorkflow(TestCase):
         r = self.c.get(i.get_absolute_url())
         self.assertTrue(u.fullname in r.content)
 
+    def test_change_owner(self):
+        i = ItemFactory()
+        u = UserFactory()
+        r = self.c.post(i.get_absolute_url() + "owner/",
+                        dict(owner=u.username))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(i.get_absolute_url())
+        self.assertTrue(u.fullname in r.content)
+
 
 class TestHistory(TestCase):
     def setUp(self):

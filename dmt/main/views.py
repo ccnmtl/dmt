@@ -210,6 +210,20 @@ class ReassignItemView(LoggedInMixin, View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
+class ChangeOwnerItemView(LoggedInMixin, View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        owner = get_object_or_404(
+            User,
+            username=request.POST.get('owner', ''))
+        comment = markdown.markdown(request.POST.get('comment', u''))
+        item.change_owner(user, owner, comment)
+        item.touch()
+        item.update_email(request.POST.get('comment', u''), user)
+        return HttpResponseRedirect(item.get_absolute_url())
+
+
 def clean_tags(s):
     tags = parse_tags(s)
     tags = [t.lower() for t in tags]
