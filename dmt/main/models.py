@@ -136,6 +136,24 @@ class User(models.Model):
     def recent_forum_posts(self, count=10):
         return self.node_set.all()[:count]
 
+    def progress_report(self):
+        now = datetime.today()
+        week_start = now + timedelta(days=-now.weekday())
+        hours_logged = self.interval_time(
+            week_start,
+            week_start + timedelta(days=7))
+        hours_logged = hours_logged.total_seconds() / 3600.
+        week_percentage = min(
+            int((hours_logged / 35.) * 100),
+            100)
+        target_hours = min(now.weekday(), 5) * 7
+        target_percentage = min(int((target_hours / 35.) * 100), 100)
+        return dict(hours_logged=hours_logged,
+                    week_percentage=week_percentage,
+                    target_hours=target_hours,
+                    target_percentage=target_percentage,
+                    behind=week_percentage < (target_percentage - 20))
+
 
 class ProjectUser(object):
     def __init__(self, project, user):

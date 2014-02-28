@@ -17,6 +17,7 @@
 
 
 {% block content %}
+
 <ul class="nav nav-pills">
 	<li><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></li>
 	<li><a href="#" data-toggle="modal"
@@ -75,6 +76,13 @@
   <p>Please Login</p>
 {% else %}
   {% pmtuser as pmt_user %}
+	{% with pmt_user.progress_report as progress %}
+<div class="progress">
+  <div class="progress-bar {% if progress.behind %}progress-bar-warning{% else %}progress-bar-success{% endif %}" role="progressbar"
+			 aria-valuenow="{{progress.week_percentage}}" aria-valuemin="0"
+			 aria-valuemax="100" style="width: {{progress.week_percentage}}%;">{{progress.hours_logged}} hours</div>
+</div>
+	{% endwith %}
   {% if pmt_user.username %}
     <table class="table table-striped table-condensed tablesorter" id="user-items">
     	<thead>
