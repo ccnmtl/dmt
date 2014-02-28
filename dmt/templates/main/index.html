@@ -80,7 +80,7 @@
 <div class="progress">
   <div class="progress-bar {% if progress.behind %}progress-bar-warning{% else %}progress-bar-success{% endif %}" role="progressbar"
 			 aria-valuenow="{{progress.week_percentage}}" aria-valuemin="0"
-			 aria-valuemax="100" style="width: {{progress.week_percentage}}%;">{{progress.hours_logged|float_format}} hours</div>
+			 aria-valuemax="100" style="width: {{progress.week_percentage}}%;">{{progress.hours_logged|floatformat}} hours</div>
 </div>
 	{% endwith %}
   {% if pmt_user.username %}
