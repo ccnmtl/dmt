@@ -2,6 +2,7 @@ from annoying.decorators import render_to
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django_statsd.clients import statsd
 from .models import Claim, PMTUser, all_unclaimed_pmt_users
 
 
@@ -15,6 +16,7 @@ def index(request):
         Claim.objects.create(
             django_user=request.user,
             pmt_user=pmt_user)
+        statsd.incr('claim.user_claimed')
         return HttpResponseRedirect("/claim/")
     else:
         r = Claim.objects.filter(django_user=request.user)

@@ -4,6 +4,7 @@ from datetime import timedelta, datetime
 from interval.fields import IntervalField
 from taggit.managers import TaggableManager
 from django.core.mail import send_mail
+from django_statsd.clients import statsd
 import textwrap
 
 
@@ -276,6 +277,7 @@ to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
             u.email for u in self.all_personnel_in_project()
             if u != user]
         subject = "[PMT Forum %s]: %s" % (self.name, node.subject)
+        statsd.incr('main.email_sent')
         send_mail(subject, body, user.email,
                   addresses, fail_silently=settings.DEBUG)
 
@@ -348,6 +350,7 @@ class Milestone(models.Model):
         if self.status != "CLOSED":
             self.status = "CLOSED"
             self.save()
+            statsd.incr('main.milestone_closed')
 
     def open_milestone(self):
         self.status = "OPEN"
@@ -625,6 +628,7 @@ Please do not reply to this message.
         addresses = [u.email for u in self.users_to_email(user)]
         send_mail(email_subj, email_body, user.email,
                   addresses, fail_silently=settings.DEBUG)
+        statsd.incr('main.email_sent')
 
     def users_to_email(self, skip=None):
         return [
@@ -794,6 +798,7 @@ class Node(models.Model):
                 self.get_absolute_url()))
         send_mail(subject, body, user.email,
                   [self.author.email], fail_silently=settings.DEBUG)
+        statsd.incr('main.email_sent')
 
     def touch(self):
         self.modified = datetime.now()

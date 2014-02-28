@@ -7,6 +7,7 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
+from django_statsd.clients import statsd
 from rest_framework import viewsets
 from taggit.models import Tag
 from taggit.utils import parse_tags
@@ -139,6 +140,7 @@ class AddCommentView(LoggedInMixin, View):
         item.add_comment(user, markdown.markdown(body))
         item.touch()
         item.update_email(body, user)
+        statsd.incr('main.comment_added')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -157,6 +159,7 @@ class ResolveItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
+        statsd.incr('main.resolved')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -169,6 +172,7 @@ class InProgressItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
+        statsd.incr('main.inprogress')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -181,6 +185,7 @@ class VerifyItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
+        statsd.incr('main.verified')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -193,6 +198,7 @@ class ReopenItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
+        statsd.incr('main.reopened')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -207,6 +213,7 @@ class ReassignItemView(LoggedInMixin, View):
         item.reassign(user, assigned_to, comment)
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
+        statsd.incr('main.reassigned')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -221,6 +228,7 @@ class ChangeOwnerItemView(LoggedInMixin, View):
         item.change_owner(user, owner, comment)
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
+        statsd.incr('main.changed_owner')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -242,6 +250,7 @@ class TagItemView(LoggedInMixin, View):
         tags = request.POST.get('tags', u'')
         item.tags.add(*clean_tags(tags))
         item.touch()
+        statsd.incr('main.tag_added')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -252,6 +261,7 @@ class ItemPriorityView(LoggedInMixin, View):
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
         item.set_priority(int(priority), user)
         item.touch()
+        statsd.incr('main.priority_changed')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -264,7 +274,9 @@ class RemoveTagFromItemView(LoggedInMixin, View):
         if tag_object_count(tag) == 0:
             # if you're the last one out, turn off the lights...
             tag.delete()
+            statsd.incr('main.tag_deleted')
         item.touch()
+        statsd.incr('main.tag_removed')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -322,6 +334,7 @@ class SplitItemView(LoggedInMixin, View):
             item.update_email(comment, user)
 
         item.milestone.update_milestone()
+        statsd.incr('main.item_split')
         return HttpResponseRedirect(item.get_absolute_url())
 
 
@@ -401,6 +414,7 @@ class NodeReplyView(LoggedInMixin, View):
         node.touch()
         # TODO: preview mode
         # TODO: tags
+        statsd.incr('main.forum_reply')
         return HttpResponseRedirect(node.get_absolute_url())
 
 
@@ -416,6 +430,7 @@ class ProjectAddTodoView(LoggedInMixin, View):
             if not title:
                 continue
             project.add_todo(user, title, tags)
+            statsd.incr('main.todo_added')
         return HttpResponseRedirect(project.get_absolute_url())
 
 
@@ -429,6 +444,7 @@ class ProjectAddNodeView(LoggedInMixin, View):
         tags = clean_tags(request.POST.get('tags', u''))
         project.add_node(request.POST.get('subject', ''), user, body, tags)
         # TODO: preview mode
+        statsd.incr('main.forum_post')
         return HttpResponseRedirect(project.get_absolute_url())
 
 
@@ -438,6 +454,7 @@ class TagNodeView(LoggedInMixin, View):
         tags = request.POST.get('tags', u'')
         node.tags.add(*clean_tags(tags))
         node.touch()
+        statsd.incr('main.tag_added')
         return HttpResponseRedirect(node.get_absolute_url())
 
 
@@ -450,5 +467,7 @@ class RemoveTagFromNodeView(LoggedInMixin, View):
         if tag_object_count(tag) == 0:
             # if you're the last one out, turn off the lights...
             tag.delete()
+            statsd.incr('main.tag_deleted')
         node.touch()
+        statsd.incr('main.tag_removed')
         return HttpResponseRedirect(node.get_absolute_url())
