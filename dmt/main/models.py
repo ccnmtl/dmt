@@ -530,6 +530,20 @@ class Item(models.Model):
             comment="<b>reopened</b><br />\n%s" % comment,
             add_date_time=datetime.now())
 
+    def reassign(self, user, assigned_to, comment):
+        self.assigned_to = assigned_to
+        self.save()
+        e = Events.objects.create(
+            status="OPEN",
+            event_date_time=datetime.now(),
+            item=self)
+        Comment.objects.create(
+            event=e,
+            username=user.username,
+            comment="<b>reassigned to %s</b><br />\n%s" % (
+                assigned_to.fullname, comment),
+            add_date_time=datetime.now())
+
     def set_priority(self, priority, user):
         old_priority = self.priority
         self.priority = priority

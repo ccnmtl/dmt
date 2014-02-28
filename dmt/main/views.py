@@ -196,6 +196,20 @@ class ReopenItemView(LoggedInMixin, View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
+class ReassignItemView(LoggedInMixin, View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        assigned_to = get_object_or_404(
+            User,
+            username=request.POST.get('assigned_to', ''))
+        comment = markdown.markdown(request.POST.get('comment', u''))
+        item.reassign(user, assigned_to, comment)
+        item.touch()
+        item.update_email(request.POST.get('comment', u''), user)
+        return HttpResponseRedirect(item.get_absolute_url())
+
+
 def clean_tags(s):
     tags = parse_tags(s)
     tags = [t.lower() for t in tags]

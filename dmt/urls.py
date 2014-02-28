@@ -14,7 +14,7 @@ from dmt.main.views import (
     UserDetailView, NodeReplyView, ProjectAddTodoView,
     ProjectAddNodeView, TagItemView, RemoveTagFromItemView,
     TagNodeView, RemoveTagFromNodeView,
-    TagDetailView, TagListView, ItemPriorityView)
+    TagDetailView, TagListView, ItemPriorityView, ReassignItemView)
 from dmt.main.feeds import ForumFeed
 
 router = routers.DefaultRouter()
@@ -71,10 +71,11 @@ urlpatterns = patterns(
     (r'^item/(?P<pk>\d+)/reopen/$', ReopenItemView.as_view()),
     (r'^item/(?P<pk>\d+)/split/$', SplitItemView.as_view()),
     (r'^item/(?P<pk>\d+)/tag/$', TagItemView.as_view()),
-    (r'^item/(?P<pk>\d+)/priority/(?P<priority>\d)/$',
-     ItemPriorityView.as_view()),
     (r'^item/(?P<pk>\d+)/remove_tag/(?P<slug>[^/]+)/$',
      RemoveTagFromItemView.as_view()),
+    (r'^item/(?P<pk>\d+)/priority/(?P<priority>\d)/$',
+     ItemPriorityView.as_view()),
+    (r'^item/(?P<pk>\d+)/assigned_to/$', ReassignItemView.as_view()),
     (r'^milestone/(?P<pk>\d+)/$', MilestoneDetailView.as_view()),
     (r'^project/$', ProjectListView.as_view()),
     (r'^project/(?P<pk>\d+)/$', ProjectDetailView.as_view()),

@@ -5,7 +5,7 @@ from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Item
 from .factories import (
     ProjectFactory, MilestoneFactory, ItemFactory, NodeFactory,
-    EventFactory, CommentFactory)
+    EventFactory, CommentFactory, UserFactory)
 
 
 class BasicTest(TestCase):
@@ -303,6 +303,15 @@ class TestItemWorkflow(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
         self.assertTrue("CRITICAL" in r.content)
+
+    def test_reassign(self):
+        i = ItemFactory()
+        u = UserFactory()
+        r = self.c.post(i.get_absolute_url() + "assigned_to/",
+                        dict(assigned_to=u.username))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(i.get_absolute_url())
+        self.assertTrue(u.fullname in r.content)
 
 
 class TestHistory(TestCase):
