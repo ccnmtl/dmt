@@ -297,6 +297,13 @@ class TestItemWorkflow(TestCase):
                  title_1=""))
         self.assertEqual(r.status_code, 302)
 
+    def test_change_priority(self):
+        i = ItemFactory()
+        r = self.c.get(i.get_absolute_url() + "priority/4/")
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(i.get_absolute_url())
+        self.assertTrue("CRITICAL" in r.content)
+
 
 class TestHistory(TestCase):
     def setUp(self):

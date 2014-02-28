@@ -217,6 +217,16 @@ class TagItemView(LoggedInMixin, View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
+class ItemPriorityView(LoggedInMixin, View):
+    def get(self, request, pk, priority):
+        # TODO: make this happen through POST
+        item = get_object_or_404(Item, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        item.set_priority(int(priority), user)
+        item.touch()
+        return HttpResponseRedirect(item.get_absolute_url())
+
+
 class RemoveTagFromItemView(LoggedInMixin, View):
     def get(self, request, pk, slug):
         # TODO: make this happen through POST requests

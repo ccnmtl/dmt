@@ -126,3 +126,10 @@ td.late {
 .tag:hover .remove-link {
 		visibility: visible;
 }
+
+.priority-select {
+   visibility: hidden;
+}
+dd:hover .priority-select {
+   visibility: visible;
+}

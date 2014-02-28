@@ -245,7 +245,18 @@
 <dt>STATUS<dt><dd><span class="{{object.status_class}}">{{ object.status }} {{object.r_status}}</span></dd>
 <dt>OWNER<dt><dd><a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a></dd>
 <dt>ASSIGNED<dt><dd><a href="{{object.assigned_to.get_absolute_url}}">{{object.assigned_to}}</a></dd>
-<dt>PRIORITY<dt><dd><span class="pr{{object.priority}}">{{object.priority_label}}</span></dd>
+<dt>PRIORITY<dt>
+		<dd>
+			<span class="pr{{object.priority}}">{{object.priority_label}}</span>
+			<span class="priority-select">
+			CHANGE TO: 
+			{% ifequal object.priority 0 %}{% else %}<a href="priority/0/" class="pr0 btn btn-default btn-xs">ICING</a>{% endifequal %}
+			{% ifequal object.priority 1 %}{% else %}<a href="priority/1/" class="pr1  btn btn-default btn-xs">LOW</a>{% endifequal %}
+			{% ifequal object.priority 2 %}{% else %}<a href="priority/2/" class="pr2 btn btn-default btn-xs">MEDIUM</a>{% endifequal %}
+			{% ifequal object.priority 3 %}{% else %}<a href="priority/3/" class="pr3 btn btn-default btn-xs">HIGH</a>{% endifequal %}
+			{% ifequal object.priority 4 %}{% else %}<a href="priority/4/" class="pr4 btn btn-default btn-xs">CRITICAL</a>{% endifequal %}
+			</span>
+</dd>
 <dt>TARGET DATE<dt><dd>{{object.target_date}}</dd>
 {% if object.estimated_time %}
 <dt>ESTIMATED TIME<dt><dd>{{object.estimated_time}}</dd>

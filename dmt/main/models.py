@@ -361,6 +361,11 @@ class Milestone(models.Model):
             status__in=['OPEN', 'INPROGRESS', 'RESOLVED']).count()
 
 
+def priority_label_f(priority):
+    labels = ['ICING', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
+    return labels[priority]
+
+
 class Item(models.Model):
     iid = models.AutoField(primary_key=True)
     type = models.CharField(
@@ -403,8 +408,7 @@ class Item(models.Model):
         return self.status.lower()
 
     def priority_label(self):
-        labels = ['ICING', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
-        return labels[self.priority]
+        return priority_label_f(self.priority)
 
     def status_display(self):
         if self.status == 'RESOLVED':
@@ -525,6 +529,17 @@ class Item(models.Model):
             username=user.username,
             comment="<b>reopened</b><br />\n%s" % comment,
             add_date_time=datetime.now())
+
+    def set_priority(self, priority, user):
+        old_priority = self.priority
+        self.priority = priority
+        self.save()
+        self.add_event(
+            self.status,
+            user,
+            "<b>changed priority from %s to %s</b>" % (
+                priority_label_f(old_priority),
+                priority_label_f(priority)))
 
     def add_event(self, status, user, comment):
         e = Events.objects.create(
