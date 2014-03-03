@@ -922,3 +922,10 @@ class Comment(models.Model):
     class Meta:
         db_table = u'comments'
         ordering = ['add_date_time', ]
+
+
+class StatusUpdate(models.Model):
+    project = models.ForeignKey(Project)
+    user = models.ForeignKey(User)
+    added = models.DateTimeField(auto_now_add=True)
+    body = models.TextField(blank=True, default=u"")
