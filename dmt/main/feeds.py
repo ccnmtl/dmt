@@ -1,5 +1,5 @@
 from django.contrib.syndication.views import Feed
-from .models import Node
+from .models import Node, StatusUpdate
 
 
 class ForumFeed(Feed):
@@ -23,3 +23,21 @@ class ForumFeed(Feed):
 
     def item_link(self, item):
         return "https://dmt.ccnmtl.columbia.edu" + item.get_absolute_url()
+
+
+class StatusUpdateFeed(Feed):
+    title = "PMT Status Updates"
+    link = "/status/"
+    description = "recent status updates"
+
+    def items(self):
+        return StatusUpdate.objects.order_by("-added")[:30]
+
+    def item_description(self, item):
+        return """<a href="%s">%s</a>:  %s  -- <a href="%s">%s</a>  (%s)""" % (
+            item.project.get_absolute_url(),
+            item.project.name,
+            item.body,
+            item.user.get_absolute_url(),
+            item.user.fullname,
+            item.added)

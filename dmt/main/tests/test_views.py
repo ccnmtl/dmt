@@ -458,7 +458,13 @@ class TestFeeds(TestCase):
         self.c = Client()
 
     def test_forum_feed(self):
+        NodeFactory()
         r = self.c.get("/feeds/forum/rss/")
+        self.assertEquals(r.status_code, 200)
+
+    def test_status_feed(self):
+        StatusUpdateFactory()
+        r = self.c.get("/feeds/status/")
         self.assertEquals(r.status_code, 200)
 
 
