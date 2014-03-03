@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% load claimtags %}
+{% pmtuser as pmt_user %}
+
 {% block content %}
 
 {% if is_paginated %}
@@ -26,7 +29,11 @@
 <a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a>:
  {{su.body}}
  &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>
- ({{su.added.date}})</p>
+ ({{su.added.date}})
+
+<a href="{{su.get_absolute_url}}"><span class="glyphicon glyphicon-edit"></span></a>
+
+</p>
 
 {% endfor %}
 

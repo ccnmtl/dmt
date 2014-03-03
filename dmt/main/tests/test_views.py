@@ -5,7 +5,7 @@ from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Item
 from .factories import (
     ProjectFactory, MilestoneFactory, ItemFactory, NodeFactory,
-    EventFactory, CommentFactory, UserFactory)
+    EventFactory, CommentFactory, UserFactory, StatusUpdateFactory)
 
 
 class BasicTest(TestCase):
@@ -102,6 +102,15 @@ class TestProjectViews(TestCase):
             p.get_absolute_url() + "add_update/",
             dict(body=""))
         self.assertEqual(r.status_code, 302)
+
+    def test_edit_statusupdate(self):
+        s = StatusUpdateFactory()
+        r = self.c.post(
+            s.get_absolute_url(),
+            dict(body="xyzzy"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(s.get_absolute_url())
+        self.assertTrue("xyzzy" in r.content)
 
 
 class TestMilestoneViews(TestCase):

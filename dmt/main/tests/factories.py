@@ -2,7 +2,7 @@ import factory
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
 from dmt.main.models import User, Project, Milestone, Item
-from dmt.main.models import Comment, Events, Node, ActualTime
+from dmt.main.models import Comment, Events, Node, ActualTime, StatusUpdate
 from dmt.main.models import Client
 
 
@@ -90,3 +90,10 @@ class ClientFactory(factory.DjangoModelFactory):
     email = "testclient@columbia.edu"
     contact = factory.SubFactory(UserFactory)
     status = 'active'
+
+
+class StatusUpdateFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = StatusUpdate
+    project = factory.SubFactory(ProjectFactory)
+    user = factory.SubFactory(UserFactory)
+    body = "some text as a body"

@@ -938,3 +938,6 @@ class StatusUpdate(models.Model):
 
     class Meta:
         ordering = ['-added']
+
+    def get_absolute_url(self):
+        return "/status/%d/" % self.id

@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
 from django_statsd.clients import statsd
@@ -14,6 +15,7 @@ from taggit.utils import parse_tags
 import markdown
 from .models import (
     Project, Milestone, Item, Node, User, Client, ItemClient, StatusUpdate)
+from .forms import StatusUpdateForm
 from dmt.claim.models import Claim
 from .serializers import (
     UserSerializer, ClientSerializer, ProjectSerializer,
@@ -356,6 +358,11 @@ class ClientListView(LoggedInMixin, FilterView):
 class StatusUpdateListView(LoggedInMixin, ListView):
     model = StatusUpdate
     paginate_by = 20
+
+
+class StatusUpdateUpdateView(LoggedInMixin, UpdateView):
+    model = StatusUpdate
+    form_class = StatusUpdateForm
 
 
 class ClientDetailView(LoggedInMixin, DetailView):
