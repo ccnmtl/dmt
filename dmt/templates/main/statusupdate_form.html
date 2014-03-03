@@ -3,11 +3,16 @@
 
 {% block content %}
 
-<p class="pull-right"><a class="btn btn-xs btn-danger" href="delete/">delete</a></p>
+<p class="pull-right"><a class="btn btn-xs btn-danger"
+												 href="delete/"><span class="glyphicon
+																										 glyphicon-trash"></span>
+		delete</a></p>
 
 <form action="." method="post">{% csrf_token %}
+<fieldset><legend>Edit Status Update</legend>
 {{form|bootstrap}}
 <input type="submit" class="btn btn-primary" value="save" />
+</fieldset>
 </form>
 
 
