@@ -78,6 +78,7 @@ class SearchView(LoggedInMixin, TemplateView):
                 Q(subject__icontains=q)
             ),
             tags=Tag.objects.filter(name__icontains=q),
+            status_updates=StatusUpdate.objects.filter(body__icontains=q),
         )
 
 
@@ -350,6 +351,11 @@ class IndexView(LoggedInMixin, TemplateView):
 class ClientListView(LoggedInMixin, FilterView):
     model = Client
     paginate_by = 100
+
+
+class StatusUpdateListView(LoggedInMixin, ListView):
+    model = StatusUpdate
+    paginate_by = 20
 
 
 class ClientDetailView(LoggedInMixin, DetailView):

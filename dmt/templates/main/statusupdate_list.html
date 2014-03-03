@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if is_paginated %}
+<ul class="pager">
+{% if page_obj.has_previous %}
+  <li><a href="/status/?page={{ page_obj.previous_page_number }}">previous</a></li>
+{% else %}
+  <li class="disabled"><a href="#">previous</a></li>
+{% endif %}
+<li><span class="page-current">
+ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span></li>
+{% if page_obj.has_next %}
+  <li><a href="/status/?page={{ page_obj.next_page_number }}">next</a></li>
+{% else %}
+  <li class="disabled"><a href="#">next</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+
+{% for su in statusupdate_list %}
+<p>
+<a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a>:
+ {{su.body}}
+ &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>
+ ({{su.added.date}})</p>
+
+{% endfor %}
+
+
+{% if is_paginated %}
+<ul class="pager">
+{% if page_obj.has_previous %}
+  <li><a href="/status/?page={{ page_obj.previous_page_number }}">previous</a></li>
+{% else %}
+  <li class="disabled"><a href="#">previous</a></li>
+{% endif %}
+<li><span class="page-current">
+ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span></li>
+{% if page_obj.has_next %}
+  <li><a href="/status/?page={{ page_obj.next_page_number }}">next</a></li>
+{% else %}
+  <li class="disabled"><a href="#">next</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+
+{% endblock %}

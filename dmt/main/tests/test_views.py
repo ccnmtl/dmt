@@ -93,6 +93,9 @@ class TestProjectViews(TestCase):
         r = self.c.get(self.pu.get_absolute_url())
         self.assertTrue("xyzzy" in r.content)
 
+        r = self.c.get("/status/")
+        self.assertTrue("xyzzy" in r.content)
+
     def test_add_status_empty_body(self):
         p = ProjectFactory()
         r = self.c.post(
