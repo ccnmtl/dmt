@@ -136,6 +136,9 @@ class User(models.Model):
     def recent_forum_posts(self, count=10):
         return self.node_set.all()[:count]
 
+    def recent_status_updates(self, count=20):
+        return self.statusupdate_set.all()[:count]
+
     def progress_report(self):
         now = datetime.today()
         week_start = now + timedelta(days=-now.weekday())
@@ -265,6 +268,9 @@ class Project(models.Model):
 
     def recent_forum_posts(self, count=10):
         return self.node_set.all()[:count]
+
+    def recent_status_updates(self, count=20):
+        return self.statusupdate_set.all()[:count]
 
     def add_node(self, subject, user, body, tags=None):
         n = Node.objects.create(
@@ -929,3 +935,6 @@ class StatusUpdate(models.Model):
     user = models.ForeignKey(User)
     added = models.DateTimeField(auto_now_add=True)
     body = models.TextField(blank=True, default=u"")
+
+    class Meta:
+        ordering = ['-added']

@@ -12,7 +12,8 @@ from rest_framework import viewsets
 from taggit.models import Tag
 from taggit.utils import parse_tags
 import markdown
-from .models import Project, Milestone, Item, Node, User, Client, ItemClient
+from .models import (
+    Project, Milestone, Item, Node, User, Client, ItemClient, StatusUpdate)
 from dmt.claim.models import Claim
 from .serializers import (
     UserSerializer, ClientSerializer, ProjectSerializer,
@@ -445,6 +446,19 @@ class ProjectAddNodeView(LoggedInMixin, View):
         project.add_node(request.POST.get('subject', ''), user, body, tags)
         # TODO: preview mode
         statsd.incr('main.forum_post')
+        return HttpResponseRedirect(project.get_absolute_url())
+
+
+class ProjectAddStatusUpdateView(LoggedInMixin, View):
+    def post(self, request, pk):
+        project = get_object_or_404(Project, pid=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        body = request.POST.get('body', u'')
+        if body == '':
+            return HttpResponseRedirect(project.get_absolute_url())
+        StatusUpdate.objects.create(
+            project=project, user=user, body=body)
+        statsd.incr('main.status_update')
         return HttpResponseRedirect(project.get_absolute_url())
 
 

@@ -81,6 +81,25 @@ class TestProjectViews(TestCase):
             dict(subject='node subject', body=""))
         self.assertEqual(r.status_code, 302)
 
+    def test_add_status_update(self):
+        p = ProjectFactory()
+        r = self.c.post(
+            p.get_absolute_url() + "add_update/",
+            dict(body="xyzzy"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(p.get_absolute_url())
+        self.assertTrue("xyzzy" in r.content)
+
+        r = self.c.get(self.pu.get_absolute_url())
+        self.assertTrue("xyzzy" in r.content)
+
+    def test_add_status_empty_body(self):
+        p = ProjectFactory()
+        r = self.c.post(
+            p.get_absolute_url() + "add_update/",
+            dict(body=""))
+        self.assertEqual(r.status_code, 302)
+
 
 class TestMilestoneViews(TestCase):
     def setUp(self):

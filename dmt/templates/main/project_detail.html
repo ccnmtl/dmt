@@ -28,6 +28,7 @@
 	data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span> Add Tracker</a></li>
 	<li><a href="#" data-toggle="modal" data-target="#add-todo">Add Todo(s)</a></li>
 	<li><a href="#" data-toggle="modal" data-target="#add-node">Add Forum Post</a></li>
+	<li><a href="#" data-toggle="modal" data-target="#add-update">Add Status Update</a></li>
 </ul>
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
@@ -146,6 +147,30 @@
 </div><!-- /.modal -->
 </form>
 
+<form id="add-update-form" action="add_update/" method="post" role="form">
+<div class="modal fade" id="add-update" tabindex="-1" role="dialog" aria-labelledby="add-update-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-update-label">Status Update</h4>
+      </div>
+      <div class="modal-body">
+				<div class="form-group">
+					<textarea name="body" class="form-control" rows="3"></textarea>
+					<span class="help-block">Keep it short and succinct. More
+					like a tweet than a blog post.</span>
+				</div>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" id="add-update-button" value="Post"/>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
 
 <ul class="nav nav-tabs">
   <li><a href="#summary" data-toggle="tab">Summary</a></li>
@@ -153,6 +178,7 @@
   <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
   <li><a href="#reports" data-toggle="tab">Reports</a></li>
 	<li><a href="#forum" data-toggle="tab">Forum Posts</a></li>
+	<li><a href="#updates" data-toggle="tab">Status Updates</a></li>
 </ul>
 
 
@@ -287,12 +313,6 @@
 	</div>
 
 	<div class="tab-pane fade" id="forum">
-
-
-
-
-
-
 		{% for n in object.recent_forum_posts %}
 <h2><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h2>
 <p class="byline">
@@ -310,6 +330,13 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 
 		{% endfor %}
 	</div>
+
+	<div class="tab-pane fade" id="updates">
+		{% for n in object.recent_status_updates %}
+
+<p>{{n.body}} &mdash; <a href="{{n.user.get_absolute_url}}">{{n.user.fullname}}</a> ({{n.added.date}})</p>
+		{% endfor %}
+</div>
 
 </div>
 {% endblock %}

@@ -47,6 +47,7 @@
   <li><a href="#reports" data-toggle="tab">Reports</a></li>
   <li><a href="#projects" data-toggle="tab">Projects</a></li>
   <li><a href="#forum" data-toggle="tab">Forum Posts</a></li>
+  <li><a href="#updates" data-toggle="tab">Status Updates</a></li>
 </ul>
 
 <!-- Tab panes -->
@@ -155,6 +156,16 @@
 
 		{% endfor %}
 	</div>
+
+	<div class="tab-pane fade" id="updates">
+		{% for n in object.recent_status_updates %}
+
+<p>
+<a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>: {{n.body}} &mdash; {{n.added.date}}</p>
+		{% endfor %}
+
+</div>
+
 
 </div>
 
