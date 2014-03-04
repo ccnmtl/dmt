@@ -133,6 +133,7 @@
 <script>
 $(document).ready(function() 
     { 
+  {% pmtuser as pmt_user %}
   {% if pmt_user.items %}
         $("#user-items").tablesorter({sortList: [[1,1], [3,0]]});
   {% endif %}
