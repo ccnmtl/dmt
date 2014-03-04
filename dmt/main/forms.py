@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import StatusUpdate, Node, User
+from .models import StatusUpdate, Node, User, Project, Milestone
 
 
 class StatusUpdateForm(ModelForm):
@@ -20,3 +20,15 @@ class UserUpdateForm(ModelForm):
         fields = ["fullname", "email", "type", "title", "phone",
                   "bio", "photo_url", "photo_width", "photo_height",
                   "campus", "building", "room"]
+
+
+class ProjectUpdateForm(ModelForm):
+    class Meta:
+        model = Project
+        exclude = ['pid', ]
+
+
+class MilestoneUpdateForm(ModelForm):
+    class Meta:
+        model = Milestone
+        exclude = ['mid', 'project', 'status']

@@ -15,7 +15,9 @@ from taggit.utils import parse_tags
 import markdown
 from .models import (
     Project, Milestone, Item, Node, User, Client, ItemClient, StatusUpdate)
-from .forms import StatusUpdateForm, NodeUpdateForm, UserUpdateForm
+from .forms import (
+    StatusUpdateForm, NodeUpdateForm, UserUpdateForm, ProjectUpdateForm,
+    MilestoneUpdateForm)
 from dmt.claim.models import Claim
 from .serializers import (
     UserSerializer, ClientSerializer, ProjectSerializer,
@@ -406,6 +408,11 @@ class ProjectDetailView(LoggedInMixin, DetailView):
     model = Project
 
 
+class ProjectUpdateView(LoggedInMixin, UpdateView):
+    model = Project
+    form_class = ProjectUpdateForm
+
+
 class UserListView(LoggedInMixin, FilterView):
     model = User
 
@@ -417,6 +424,11 @@ class UserDetailView(LoggedInMixin, DetailView):
 class UserUpdateView(LoggedInMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
+
+
+class MilestoneUpdateView(LoggedInMixin, UpdateView):
+    model = Milestone
+    form_class = MilestoneUpdateForm
 
 
 class TagListView(LoggedInMixin, ListView):
