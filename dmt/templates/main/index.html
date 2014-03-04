@@ -84,6 +84,7 @@
 </div>
 	{% endwith %}
   {% if pmt_user.username %}
+  {% if pmt_user.items %}
     <table class="table table-striped table-condensed tablesorter" id="user-items">
     	<thead>
     		<tr>
@@ -115,6 +116,9 @@
     	</tbody>
     </table>
   {% else %}
+  <p>You have no active items right now.</p>
+  {% endif %}
+  {% else %}
     <div class="alert alert-error">
     You need to <a href="/claim/">claim your account</a> first.
     </div>
@@ -129,8 +133,9 @@
 <script>
 $(document).ready(function() 
     { 
+  {% if pmt_user.items %}
         $("#user-items").tablesorter({sortList: [[1,1], [3,0]]});
-
+  {% endif %}
         $("#project-input").typeahead({
           name: 'projects',
           prefetch: '/api/1.0/projects/all/',
