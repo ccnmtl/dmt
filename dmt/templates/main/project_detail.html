@@ -213,7 +213,7 @@
 			</dd>
 		</dl>
 
-
+{% if object.active_items %}
 <table class="table table-condensed table-striped tablesorter" id="project-items">
 	<thead>
 		<tr>
@@ -243,6 +243,9 @@
 		{% endfor %}
 </tbody>
 </table>
+{% else %}
+<p>no active items</p>
+{% endif %}
 
 	</div>
 
@@ -350,7 +353,9 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 <script>
 $(document).ready(function() 
     { 
+{% if object.active_items %}
         $("#project-items").tablesorter({sortList: [[2,1], [1,0]]}); 
+{% endif %}
 
         $("#add-tracker-button").click(function(event) {
            var pid = $("#tracker-pid-input").val();
