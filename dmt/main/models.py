@@ -266,6 +266,30 @@ class Project(models.Model):
             item.tags.add(*tags)
         milestone.update_milestone()
 
+    def add_item(self, type='action item', title="",
+                 assigned_to=None, owner=None, milestone=None,
+                 priority=1, description="", tags=None):
+        item = Item.objects.create(
+            milestone=milestone,
+            type=type,
+            owner=owner,
+            assigned_to=assigned_to,
+            title=title,
+            priority=priority,
+            status='OPEN',
+            r_status='',
+            estimated_time='0',
+            target_date=milestone.target_date,
+            last_mod=datetime.now(),
+            description=description)
+        item.add_event('OPEN', owner, "<b>%s added</b>" % type)
+        if tags:
+            item.tags.add(*tags)
+        item.setup_default_notification()
+        item.add_project_notification()
+        item.update_email("%s added" % type, owner)
+        milestone.update_milestone()
+
     def recent_forum_posts(self, count=10):
         return self.node_set.all()[:count]
 
@@ -353,6 +377,9 @@ class Milestone(models.Model):
 
     def status_class(self):
         return self.status.lower()
+
+    def is_open(self):
+        return self.status == 'OPEN'
 
     def num_open_items(self):
         return self.item_set.filter(status='OPEN').count()

@@ -485,6 +485,33 @@ class ProjectAddTodoView(LoggedInMixin, View):
         return HttpResponseRedirect(project.get_absolute_url())
 
 
+class ProjectAddItemView(LoggedInMixin, View):
+    item_type = "action item"
+
+    def post(self, request, pk):
+        project = get_object_or_404(Project, pid=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        title = request.POST.get('title', u"somebody forgot to enter a title")
+        tags = clean_tags(request.POST.get('tags', u''))
+        description = request.POST.get('description', u'')
+        assigned_to = get_object_or_404(
+            User, username=request.POST.get('assigned_to'))
+        milestone = get_object_or_404(
+            Milestone, mid=request.POST.get('milestone'))
+        priority = request.POST.get('priority', '1')
+        project.add_item(
+            type=self.item_type,
+            title=title,
+            assigned_to=assigned_to,
+            owner=user,
+            milestone=milestone,
+            priority=priority,
+            description=description,
+            tags=tags)
+        statsd.incr('main.%s_added' % (self.item_type.replace(' ', '_')))
+        return HttpResponseRedirect(project.get_absolute_url())
+
+
 class ProjectAddNodeView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)

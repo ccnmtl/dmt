@@ -328,6 +328,19 @@ class TestItemWorkflow(TestCase):
                  title_1=""))
         self.assertEqual(r.status_code, 302)
 
+    def test_add_bug(self):
+        i = ItemFactory()
+        project = i.milestone.project
+        r = self.c.post(
+            project.get_absolute_url() + "add_bug/",
+            dict(title='test bug', description='test',
+                 priority='1', milestone=i.milestone.mid,
+                 owner=i.owner.username,
+                 assigned_to=i.assigned_to.username,
+                 tags="tagone, tagtwo"))
+        r = self.c.get(project.get_absolute_url())
+        self.assertTrue("test bug" in r.content)
+
     def test_change_priority(self):
         i = ItemFactory()
         r = self.c.get(i.get_absolute_url() + "priority/4/")

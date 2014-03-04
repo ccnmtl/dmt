@@ -20,19 +20,25 @@
   <li class="active">{{object.name}}</li>
 </ul>
 
+<div class="btn-group">
+	<a class="btn btn-default" href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=project;pid={{object.pid}}">Return to the old PMT</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+	data-target="#add-bug"><span class="glyphicon glyphicon-plus"></span> Bug</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+	data-target="#add-action-item"><span class="glyphicon glyphicon-plus"></span> Action Item</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+	data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span> Add Tracker</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-todo"><span class="glyphicon glyphicon-tasks"></span> Add Todo(s)</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-node"><span class="glyphicon glyphicon-comment"></span> Add Forum Post</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-update">Add Status Update</a>
+</div>
+
+
 <p class="pull-right"><a href="edit/" class="btn btn-primary btn-xs"
 												 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
 
 <h1>Project: {{object.name}}</h1>
 
-<ul class="nav nav-pills">
-	<li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=project;pid={{object.pid}}">Return to the old PMT</a></li>
-	<li><a href="#" data-toggle="modal"
-	data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span> Add Tracker</a></li>
-	<li><a href="#" data-toggle="modal" data-target="#add-todo">Add Todo(s)</a></li>
-	<li><a href="#" data-toggle="modal" data-target="#add-node">Add Forum Post</a></li>
-	<li><a href="#" data-toggle="modal" data-target="#add-update">Add Status Update</a></li>
-</ul>
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
   <div class="modal-dialog">
@@ -73,6 +79,160 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<form id="add-bug-form" action="add_bug/" method="post" role="form">
+<div class="modal fade" id="add-bug" tabindex="-1" role="dialog" aria-labelledby="add-bug-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-bug-label">Add Bug</h4>
+      </div>
+      <div class="modal-body">
+				<div class="form-group">
+					<label for="bug-title">Title</label>
+					<input type="text" name="title" placeholder="bug title" id="bug-title" class="form-control"/>
+				</div>
+
+				<div class="form-group">
+					<label for="bug-assigned_to">Assigned To</label>
+					<select name="assigned_to" id="bug-assigned_to"
+									class="form-control">
+						{% for user in object.all_personnel_in_project %}
+						<option value="{{user.username}}"
+										{% ifequal user.username object.caretaker.username %}
+										selected="selected"
+										{% endifequal %}
+										>{{user.fullname}}</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="bug-milestones">Milestone</label>
+					<select name="milestone" id="bug-milestone"
+									class="form-control">
+						{% for milestone in object.milestone_set.all %}
+						<option 
+							 value="{{milestone.mid}}"
+							 {% ifequal milestone.mid object.upcoming_milestone.mid %}
+							 selected="selected"
+							 {% endifequal %}
+							 >
+							{{milestone.name}}
+							{% if not milestone.is_open %}[CLOSED]{% endif %}
+						</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="bug-priority">Priority</label>
+					<select name="priority" id="bug-priority" class="form-control">
+						<option value="0">ICING</option>
+						<option value="1" selected="selected">LOW</option>
+						<option value="2">MEDIUM</option>
+						<option value="3">HIGH</option>
+						<option value="4">CRITICAL</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<textarea name="description" class="form-control" rows="5" placeholder="description"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="bug-tags">Tags</label>
+					<input type="text" name="tags" id="bug-tags" placeholder="tags" class="form-control" />
+				</div>
+
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" id="add-bug-button" value="Add"/>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+<form id="add-action-item-form" action="add_action_item/" method="post" role="form">
+<div class="modal fade" id="add-action-item" tabindex="-1" role="dialog" aria-labelledby="add-action_item-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-action_item-label">Add Action Item</h4>
+      </div>
+      <div class="modal-body">
+				<div class="form-group">
+					<label for="action_item-title">Title</label>
+					<input type="text" name="title" placeholder="action_item title" id="action_item-title" class="form-control"/>
+				</div>
+
+				<div class="form-group">
+					<label for="action_item-assigned_to">Assigned To</label>
+					<select name="assigned_to" id="action_item-assigned_to"
+									class="form-control">
+						{% for user in object.all_personnel_in_project %}
+						<option value="{{user.username}}"
+										{% ifequal user.username object.caretaker.username %}
+										selected="selected"
+										{% endifequal %}
+										>{{user.fullname}}</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="action_item-milestones">Milestone</label>
+					<select name="milestone" id="action_item-milestone"
+									class="form-control">
+						{% for milestone in object.milestone_set.all %}
+						<option 
+							 value="{{milestone.mid}}"
+							 {% ifequal milestone.mid object.upcoming_milestone.mid %}
+							 selected="selected"
+							 {% endifequal %}
+							 >
+							{{milestone.name}}
+							{% if not milestone.is_open %}[CLOSED]{% endif %}
+						</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="action_item-priority">Priority</label>
+					<select name="priority" id="action_item-priority" class="form-control">
+						<option value="0">ICING</option>
+						<option value="1" selected="selected">LOW</option>
+						<option value="2">MEDIUM</option>
+						<option value="3">HIGH</option>
+						<option value="4">CRITICAL</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<textarea name="description" class="form-control" rows="5" placeholder="description"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="action_item-tags">Tags</label>
+					<input type="text" name="tags" id="action_item-tags" placeholder="tags" class="form-control" />
+				</div>
+
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" id="add-action_item-button" value="Add"/>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
 
 <form id="add-todo-form" action="add_todo/" method="post" role="form">
 <div class="modal fade" id="add-todo" tabindex="-1" role="dialog" aria-labelledby="add-todo-label" aria-hidden="true">
