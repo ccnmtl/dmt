@@ -17,7 +17,7 @@ from .models import (
     Project, Milestone, Item, Node, User, Client, ItemClient, StatusUpdate)
 from .forms import (
     StatusUpdateForm, NodeUpdateForm, UserUpdateForm, ProjectUpdateForm,
-    MilestoneUpdateForm)
+    MilestoneUpdateForm, ItemUpdateForm)
 from dmt.claim.models import Claim
 from .serializers import (
     UserSerializer, ClientSerializer, ProjectSerializer,
@@ -429,6 +429,11 @@ class UserUpdateView(LoggedInMixin, UpdateView):
 class MilestoneUpdateView(LoggedInMixin, UpdateView):
     model = Milestone
     form_class = MilestoneUpdateForm
+
+
+class ItemUpdateView(LoggedInMixin, UpdateView):
+    model = Item
+    form_class = ItemUpdateForm
 
 
 class TagListView(LoggedInMixin, ListView):
