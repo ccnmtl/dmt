@@ -416,6 +416,29 @@ class TestForum(TestCase):
             dict(body=""))
         self.assertEqual(r.status_code, 302)
 
+    def test_edit_node(self):
+        n = NodeFactory()
+        r = self.c.get(n.get_absolute_url() + "edit/")
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue("<form" in r.content)
+        r = self.c.post(
+            n.get_absolute_url() + "edit/",
+            dict(subject='new subject', body='xyzzy'))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(n.get_absolute_url())
+        self.assertTrue("new subject" in r.content)
+        self.assertTrue("xyzzy" in r.content)
+
+    def test_delete_node(self):
+        n = NodeFactory()
+        r = self.c.get(n.get_absolute_url() + "delete/")
+        self.assertTrue("<form" in r.content)
+        r = self.c.post(
+            n.get_absolute_url() + "delete/",
+            params=dict())
+        r = self.c.get(n.get_absolute_url())
+        self.assertEquals(r.status_code, 404)
+
 
 class TestForumTagViews(TestCase):
     def setUp(self):

@@ -8,7 +8,11 @@
   <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
   <li><a href="/forum/">Forum</a></li>
 </ul>
+
+<p class="pull-right"><a href="edit/" class="btn btn-primary btn-xs"
+												 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
 <h1><a href="{{object.get_absolute_url}}">{{object.subject}}</a></h1>
+
 <p><span class="text-muted">
 {% if object.project %}to <a href="{{object.project.get_absolute_url}}">{{object.project.name}}</a>{% endif %}
 by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>

@@ -16,7 +16,8 @@ from dmt.main.views import (
     TagNodeView, RemoveTagFromNodeView,
     TagDetailView, TagListView, ItemPriorityView, ReassignItemView,
     ChangeOwnerItemView, ProjectAddStatusUpdateView,
-    StatusUpdateListView, StatusUpdateUpdateView, StatusUpdateDeleteView)
+    StatusUpdateListView, StatusUpdateUpdateView, StatusUpdateDeleteView,
+    NodeUpdateView, NodeDeleteView)
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed
 
 router = routers.DefaultRouter()
@@ -65,6 +66,8 @@ urlpatterns = patterns(
     (r'^forum/(?P<pk>\d+)/tag/$', TagNodeView.as_view()),
     (r'^forum/(?P<pk>\d+)/remove_tag/(?P<slug>[^/]+)/$',
      RemoveTagFromNodeView.as_view()),
+    (r'^forum/(?P<pk>\d+)/edit/$', NodeUpdateView.as_view()),
+    (r'^forum/(?P<pk>\d+)/delete/$', NodeDeleteView.as_view()),
     (r'^item/(?P<pk>\d+)/$', ItemDetailView.as_view()),
     (r'^item/(?P<pk>\d+)/comment/$', AddCommentView.as_view()),
     (r'^item/(?P<pk>\d+)/resolve/$', ResolveItemView.as_view()),
