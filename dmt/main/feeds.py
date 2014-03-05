@@ -35,9 +35,10 @@ class StatusUpdateFeed(Feed):
 
     def item_description(self, item):
         return """<a href="%s">%s</a>:  %s  -- <a href="%s">%s</a>  (%s)""" % (
-            item.project.get_absolute_url(),
+            ("https://dmt.ccnmtl.columbia.edu"
+             + item.project.get_absolute_url()),
             item.project.name,
             item.body,
-            item.user.get_absolute_url(),
+            "https://dmt.ccnmtl.columbia.edu" + item.user.get_absolute_url(),
             item.user.fullname,
-            item.added)
+            item.added.date())

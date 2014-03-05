@@ -968,3 +968,6 @@ class StatusUpdate(models.Model):
 
     def get_absolute_url(self):
         return "/status/%d/" % self.id
+
+    def __unicode__(self):
+        return "%s - %s" % (self.project.name, self.user.fullname)
