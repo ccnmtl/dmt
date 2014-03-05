@@ -74,6 +74,17 @@ class TestProjectViews(TestCase):
         self.assertTrue("node subject" in r.content)
         self.assertTrue("this is the body" in r.content)
 
+    def test_add_node_with_tags(self):
+        p = ProjectFactory()
+        r = self.c.post(
+            p.get_absolute_url() + "add_node/",
+            dict(subject='node subject', body="this is the body",
+                 tags="tagone, tagtwo"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(p.get_absolute_url())
+        self.assertTrue("node subject" in r.content)
+        self.assertTrue("this is the body" in r.content)
+
     def test_add_node_empty_body(self):
         p = ProjectFactory()
         r = self.c.post(
@@ -338,6 +349,19 @@ class TestItemWorkflow(TestCase):
                  owner=i.owner.username,
                  assigned_to=i.assigned_to.username,
                  tags="tagone, tagtwo"))
+        r = self.c.get(project.get_absolute_url())
+        self.assertTrue("test bug" in r.content)
+
+    def test_add_bug_no_tags(self):
+        i = ItemFactory()
+        project = i.milestone.project
+        r = self.c.post(
+            project.get_absolute_url() + "add_bug/",
+            dict(title='test bug', description='test',
+                 priority='1', milestone=i.milestone.mid,
+                 owner=i.owner.username,
+                 assigned_to=i.assigned_to.username,
+                 tags=""))
         r = self.c.get(project.get_absolute_url())
         self.assertTrue("test bug" in r.content)
 

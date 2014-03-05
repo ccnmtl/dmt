@@ -1,6 +1,7 @@
 from django.test import TestCase
-from .factories import UserFactory, ItemFactory, NodeFactory
-from .factories import ProjectFactory, ActualTimeFactory
+from .factories import (
+    UserFactory, ItemFactory, NodeFactory, ProjectFactory,
+    ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
 from dmt.main.models import HistoryItem, ProjectUser
 
@@ -72,6 +73,31 @@ class ProjectUserTest(TestCase):
         self.assertEqual(r.total_seconds(), 0.0)
 
 
+class MilestoneTest(TestCase):
+    def test_close_empty_milestone(self):
+        m = MilestoneFactory()
+        self.assertEqual(m.status, "OPEN")
+        m.close_milestone()
+        self.assertEqual(m.status, "CLOSED")
+        m.close_milestone()
+        self.assertEqual(m.status, "CLOSED")
+
+    def test_num_unclosed_items_empty_milestone(self):
+        m = MilestoneFactory()
+        self.assertEqual(m.num_unclosed_items(), 0)
+
+    def test_should_be_closed_passed_milestone(self):
+        m = MilestoneFactory(
+            target_date=datetime(year=2000, month=1, day=1).date())
+        self.assertTrue(m.should_be_closed())
+
+    def test_update_milestone_passed_milestone(self):
+        m = MilestoneFactory(
+            target_date=datetime(year=2000, month=1, day=1).date())
+        m.update_milestone()
+        self.assertEqual(m.status, "CLOSED")
+
+
 class ItemModelTest(TestCase):
     def test_gau(self):
         i = ItemFactory()
@@ -116,6 +142,15 @@ class ItemModelTest(TestCase):
 
         i = ItemFactory(target_date=(now - timedelta(days=80)).date())
         self.assertEqual(i.target_date_status(), "late")
+
+    def test_add_project_notification(self):
+        i = ItemFactory()
+        i.add_project_notification()
+
+    def test_add_cc_inactive_user(self):
+        i = ItemFactory()
+        u = UserFactory(status='inactive')
+        i.add_cc(u)
 
 
 class HistoryItemTest(TestCase):
