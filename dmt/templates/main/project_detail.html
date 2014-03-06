@@ -361,15 +361,9 @@
 			</dd>
 			<dt>Personnel</dt>
 			<dd>
-				{% for u in object.managers %}
+				{% for u in object.personnel_in_project %}
 						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a>{% if not forloop.last %}, {% endif %}
-					{% endfor %}
-						{% for u in object.developers %}
-						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a>{% if not forloop.last %}, {% endif %}
-						{% endfor %}
-					{% for u in object.guests %}
-						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a>{% if not forloop.last %}, {% endif %}
-						{% endfor %}
+				{% endfor %}
 			</dd>
 		</dl>
 
