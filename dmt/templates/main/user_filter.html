@@ -24,6 +24,7 @@
 		<tr>
 			<th>User</th>
 			<th>Title</th>
+			<th>Hours Assigned</th>
 			<th>Email</th>
 			<th>Phone</th>
 			<th>Status</th>
@@ -34,6 +35,7 @@
 <tr>
 	<td><a href="{{user.get_absolute_url}}">{{user.fullname}}</a></td>
 	<td>{{user.title}}</td>
+  <td>{{user.total_assigned_time|floatformat}}</td>
 	<td>{{user.email}}</td>
 	<td>{{user.phone}}</td>
 	<td><a href="?status={{user.status}}">{{user.status}}</a></td>

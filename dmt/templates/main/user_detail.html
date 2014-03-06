@@ -35,6 +35,9 @@
 <dl>
 <dt>Username<dt><dd>{{object.username}}</dd>
 <dt>Fullname<dt><dd>{{object.fullname}}</dd>
+<dt>Total Time
+	Assigned</dt><dd>{{object.total_assigned_time|floatformat}} hours</dd>
+<dt>Total Time Logged</dt><dd>{{object.total_resolve_times|floatformat}} hours</dd>
 {% if object.email %}<dt>E-mail<dt><dd>{{object.email}}</dd>{% endif %}
 {% if object.title %}<dt>Title<dt><dd>{{object.title}}</dd>{% endif %}
 {% if object.phone %}<dt>Phone<dt><dd>{{object.phone}}</dd>{% endif %}
@@ -43,6 +46,7 @@
 <dt>Bio</dt><dd>{{object.bio|markdown}}</dd>
 {% endif %}
 </dl>
+
 
 
 <ul class="nav nav-tabs">

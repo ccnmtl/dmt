@@ -68,6 +68,19 @@ class User(models.Model):
             completed__gt=start.date,
             completed__lte=end.date)
 
+    def total_resolve_times(self):
+        return interval_sum(
+            a.actual_time for a in ActualTime.objects.filter(
+                resolver=self)).total_seconds() / 3600.
+
+    def total_assigned_time(self):
+        return interval_sum(
+            [
+                i.estimated_time
+                for i in Item.objects.filter(
+                    assigned_to=self,
+                    status='OPEN')]).total_seconds() / 3600.
+
     def interval_time(self, start, end):
         return interval_sum(
             [

@@ -61,6 +61,14 @@ class UserModelTest(TestCase):
         u = UserFactory()
         self.assertEqual(u.recent_active_projects(), [])
 
+    def test_total_resolve_times(self):
+        u = UserFactory()
+        self.assertEqual(u.total_resolve_times(), 0.)
+
+    def test_total_assigned_time(self):
+        u = UserFactory()
+        self.assertEqual(u.total_assigned_time(), 0.)
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):
