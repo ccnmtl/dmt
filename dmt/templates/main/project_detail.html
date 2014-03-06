@@ -394,7 +394,7 @@
 			<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
 	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
 			<td class="{{item.status_class}}">{{item.status}}</td>
-			<td class="pr{{item.priority}}">{{item.priority_label}}</td>
+			<td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
 			<td>{{item.target_date|date:"Y-m-d"}}</td>
 			<td><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
 			<td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>

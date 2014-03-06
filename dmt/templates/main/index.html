@@ -107,7 +107,7 @@
 <span class="{{item.status_class}} badge pull-right">{{item.status_display}}</span>
 {% endifequal %}
 </td>
-    	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
+    	<td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
     	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name|truncatechars:40}}</a></td>
     	<td class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
     	<td>{{item.last_mod|date:"Y-m-d"}}</td>
