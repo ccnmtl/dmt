@@ -14,7 +14,9 @@ from taggit.models import Tag
 from taggit.utils import parse_tags
 import markdown
 from .models import (
-    Project, Milestone, Item, Node, User, Client, ItemClient, StatusUpdate)
+    Project, Milestone, Item, Node, User, Client, ItemClient, StatusUpdate,
+    ActualTime)
+from .models import interval_sum
 from .forms import (
     StatusUpdateForm, NodeUpdateForm, UserUpdateForm, ProjectUpdateForm,
     MilestoneUpdateForm, ItemUpdateForm)
@@ -23,6 +25,7 @@ from .serializers import (
     UserSerializer, ClientSerializer, ProjectSerializer,
     MilestoneSerializer, ItemSerializer)
 from rest_framework import generics
+from datetime import datetime, timedelta
 
 
 def has_claim(user):
@@ -562,3 +565,90 @@ class RemoveTagFromNodeView(LoggedInMixin, View):
         node.touch()
         statsd.incr('main.tag_removed')
         return HttpResponseRedirect(node.get_absolute_url())
+
+
+class DashboardView(LoggedInMixin, TemplateView):
+    template_name = "main/dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        total_open_items = Item.objects.filter(
+            status__in=['OPEN', 'INPROGRESS'])
+        open_sm_items = Item.objects.filter(
+            status__in=['OPEN', 'INPROGRESS'],
+            milestone__name='Someday/Maybe')
+        # item counts
+        context['total_open_items'] = total_open_items.count()
+        context['open_sm_items'] = open_sm_items.count()
+        context['open_non_sm_items'] = (
+            total_open_items.count() - open_sm_items.count())
+
+        # hour estimates
+        total_hours_estimated = interval_sum(
+            [i.estimated_time for i in total_open_items]
+        ).total_seconds() / 3600.
+
+        sm_hours_estimated = interval_sum(
+            [i.estimated_time for i in open_sm_items]
+        ).total_seconds() / 3600.
+
+        context['sm_hours_estimated'] = sm_hours_estimated
+        context['non_sm_hours_estimated'] = (
+            total_hours_estimated - sm_hours_estimated)
+
+        # recent/upcoming milestones
+        now = datetime.now()
+        four_weeks_ago = now - timedelta(weeks=4)
+        four_weeks_future = now + timedelta(weeks=4)
+
+        context['milestones'] = Milestone.objects.filter(
+            target_date__gt=four_weeks_ago,
+            target_date__lt=four_weeks_future,
+            ).order_by("target_date")
+
+        # active projects
+        times_logged = ActualTime.objects.filter(completed__gt=four_weeks_ago)
+        all_active_items = set([a.item for a in times_logged])
+        all_active_projects = set(
+            [i.milestone.project for i in all_active_items])
+        all_active_users = set([a.resolver for a in times_logged])
+
+        for p in all_active_projects:
+            p.recent_hours = interval_sum(
+                [a.actual_time for a in times_logged
+                 if a.item.milestone.project == p]).total_seconds() / 3600.
+
+        for u in all_active_users:
+            u.recent_hours = interval_sum(
+                [a.actual_time for a in times_logged
+                 if a.resolver == u]).total_seconds() / 3600.
+
+        context['active_projects'] = sorted(list(all_active_projects),
+                                            key=lambda x: x.recent_hours,
+                                            reverse=True)
+        context['active_users'] = sorted(list(all_active_users),
+                                         key=lambda x: x.recent_hours,
+                                         reverse=True)
+
+        # week by week breakdown
+        week_start = now + timedelta(days=-now.weekday())
+        week_end = week_start + timedelta(days=6)
+
+        weeks = [
+            (week_start, week_end),
+            (week_start - timedelta(weeks=1), week_end - timedelta(weeks=1)),
+            (week_start - timedelta(weeks=2), week_end - timedelta(weeks=3)),
+            (week_start - timedelta(weeks=3), week_end - timedelta(weeks=4)),
+        ]
+
+        breakdowns = [
+            interval_sum(
+                [a.actual_time for a in ActualTime.objects.filter(
+                    completed__gte=monday,
+                    completed__lte=sunday,
+                    )]).total_seconds() / 3600.
+            for (monday, sunday) in weeks]
+
+        context['breakdowns'] = breakdowns
+        print str(context)
+        return context

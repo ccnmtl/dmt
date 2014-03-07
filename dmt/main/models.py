@@ -397,6 +397,11 @@ class Milestone(models.Model):
     def num_open_items(self):
         return self.item_set.filter(status='OPEN').count()
 
+    def estimated_time_remaining(self):
+        return interval_sum(
+            [i.estimated_time for i in self.item_set.filter(status='OPEN')]
+        ).total_seconds() / 3600.
+
     def update_milestone(self):
         if self.should_be_closed():
             self.close_milestone()

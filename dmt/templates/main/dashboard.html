@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="jumbotron">
+<div class="row">
+<div class="col-xs-6">
+<ul class="list-group">
+<li class="list-group-item"><b>{{non_sm_hours_estimated|floatformat}}</b> hours estimated in <b>{{open_non_sm_items}}</b> items</li>
+<li class="list-group-item">{{sm_hours_estimated|floatformat}} hours in {{open_sm_items}} Someday/Maybe items</li>
+</ul>
+</div>
+<div class="col-xs-6">
+<ul class="list-group">
+<li class="list-group-item"><b>{{breakdowns.0|floatformat}}</b> hours logged this week</li>
+<li class="list-group-item"><b>{{breakdowns.1|floatformat}}</b> hours logged last week</li>
+<li class="list-group-item"><b>{{breakdowns.2|floatformat}}</b> hours logged 2 weeks ago</li>
+<li class="list-group-item"><b>{{breakdowns.3|floatformat}}</b> hours logged 3 weeks ago</li>
+</ul>
+</div>
+</div>
+</div>
+
+<h2>Recent/Upcoming Milestones</h2>
+
+{% if milestones.count %}
+<table class="table table-condensed">
+{% for milestone in milestones %}
+<tr>
+	<td class="{{milestone.status_class}}">{{milestone.status}}</td>
+	<td>{{milestone.target_date}}</td>
+	<td><a href="{{milestone.project.get_absolute_url}}">{{milestone.project.name}}</a></td>
+	<td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
+	<td>{{milestone.estimated_time_remaining|floatformat}} hours ({{milestone.num_open_items}} items)</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No Recent/Upcoming Milestones</p>
+{% endif %}
+
+<h2>Active Projects</h2>
+{% if active_projects %}
+<table class="table table-condensed">
+{% for project in active_projects %}
+<tr>
+	<td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+  <td><b>{{project.recent_hours|floatformat}}</b> hours logged</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No active projects.</p>
+{% endif %}
+
+<h2>Active Users</h2>
+{% if active_users %}
+<table class="table table-condensed">
+{% for user in active_users %}
+<tr>
+	<td><a href="{{user.get_absolute_url}}">{{user.fullname}}</a></td>
+  <td><b>{{user.recent_hours|floatformat}}</b> hours logged</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No active users.</p>
+{% endif %}
+
+{% endblock %}

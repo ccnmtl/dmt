@@ -38,6 +38,10 @@ class BasicTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTrue("alert-error" in response.content)
 
+    def test_dashboard(self):
+        response = self.c.get("/dashboard/")
+        self.assertEqual(response.status_code, 200)
+
 
 class TestProjectViews(TestCase):
     def setUp(self):

@@ -19,7 +19,7 @@ from dmt.main.views import (
     StatusUpdateListView, StatusUpdateUpdateView, StatusUpdateDeleteView,
     NodeUpdateView, NodeDeleteView, UserUpdateView,
     ProjectUpdateView, MilestoneUpdateView, ItemUpdateView,
-    ProjectAddItemView)
+    ProjectAddItemView, DashboardView)
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed
 
 router = routers.DefaultRouter()
@@ -107,6 +107,7 @@ urlpatterns = patterns(
     (r'^user/(?P<pk>\w+)/edit/$', UserUpdateView.as_view()),
     (r'^tag/$', TagListView.as_view()),
     (r'^tag/(?P<slug>[^/]+)/$', TagDetailView.as_view()),
+    (r'^dashboard/$', DashboardView.as_view()),
     (r'^feeds/forum/rss/$', ForumFeed()),
     (r'^feeds/status/$', StatusUpdateFeed()),
     url(r'^_impersonate/', include('impersonate.urls')),
