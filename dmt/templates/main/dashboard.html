@@ -31,9 +31,11 @@
 <tr>
 	<td class="{{milestone.status_class}}">{{milestone.status}}</td>
 	<td>{{milestone.target_date}}</td>
+	<td>{{milestone.estimated_time_remaining|floatformat}} hours
+	({{milestone.num_open_items}} items)</td>
 	<td><a href="{{milestone.project.get_absolute_url}}">{{milestone.project.name}}</a></td>
 	<td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
-	<td>{{milestone.estimated_time_remaining|floatformat}} hours ({{milestone.num_open_items}} items)</td>
+
 </tr>
 {% endfor %}
 </table>
