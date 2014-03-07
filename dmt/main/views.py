@@ -624,12 +624,14 @@ class DashboardView(LoggedInMixin, TemplateView):
                 [a.actual_time for a in times_logged
                  if a.resolver == u]).total_seconds() / 3600.
 
-        context['active_projects'] = sorted(list(all_active_projects),
-                                            key=lambda x: x.recent_hours,
-                                            reverse=True)
-        context['active_users'] = sorted(list(all_active_users),
-                                         key=lambda x: x.recent_hours,
-                                         reverse=True)
+        context['active_projects'] = [p for p in sorted(list(all_active_projects),
+                                                        key=lambda x: x.recent_hours,
+                                                        reverse=True)
+                                      if p.recent_hours > 10.]
+        context['active_users'] = [u for u in sorted(list(all_active_users),
+                                                     key=lambda x: x.recent_hours,
+                                                     reverse=True)
+                                   if u.recent_hours > 10.]
 
         # week by week breakdown
         week_start = now + timedelta(days=-now.weekday())
@@ -651,4 +653,7 @@ class DashboardView(LoggedInMixin, TemplateView):
             for (monday, sunday) in weeks]
 
         context['breakdowns'] = breakdowns
+
+        context['status_updates'] = StatusUpdate.objects.filter(
+            added__gte=two_weeks_ago)
         return context

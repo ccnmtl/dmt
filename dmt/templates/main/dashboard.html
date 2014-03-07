@@ -42,7 +42,7 @@
 <p>No Recent/Upcoming Milestones</p>
 {% endif %}
 
-<h2>Active Projects</h2>
+<h2>Most Active Projects</h2>
 {% if active_projects %}
 <table class="table table-condensed">
 {% for project in active_projects %}
@@ -56,7 +56,7 @@
 <p>No active projects.</p>
 {% endif %}
 
-<h2>Active Users</h2>
+<h2>Most Active Users</h2>
 {% if active_users %}
 <table class="table table-condensed">
 {% for user in active_users %}
@@ -69,5 +69,16 @@
 {% else %}
 <p>No active users.</p>
 {% endif %}
+
+<h2>Recent Status Updates</h2>
+
+{% for su in status_updates %}
+<p>
+<a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a>:
+ {{su.body}}
+ &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>
+ ({{su.added.date}})
+</p>
+{% endfor %}
 
 {% endblock %}
