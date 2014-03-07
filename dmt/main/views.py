@@ -605,10 +605,14 @@ class DashboardView(LoggedInMixin, TemplateView):
         context['milestones'] = Milestone.objects.filter(
             target_date__gt=four_weeks_ago,
             target_date__lt=four_weeks_future,
-            ).order_by("target_date")
+            ).order_by("target_date").select_related('project')
 
         # active projects
-        times_logged = ActualTime.objects.filter(completed__gt=two_weeks_ago)
+        times_logged = ActualTime.objects.filter(
+            completed__gt=two_weeks_ago).select_related(
+            'item').select_related(
+            'item__milestone').select_related(
+            'item__milestone__project')
         all_active_items = set([a.item for a in times_logged])
         all_active_projects = set(
             [i.milestone.project for i in all_active_items])
@@ -624,14 +628,17 @@ class DashboardView(LoggedInMixin, TemplateView):
                 [a.actual_time for a in times_logged
                  if a.resolver == u]).total_seconds() / 3600.
 
-        context['active_projects'] = [p for p in sorted(list(all_active_projects),
-                                                        key=lambda x: x.recent_hours,
-                                                        reverse=True)
-                                      if p.recent_hours > 10.]
-        context['active_users'] = [u for u in sorted(list(all_active_users),
-                                                     key=lambda x: x.recent_hours,
-                                                     reverse=True)
-                                   if u.recent_hours > 10.]
+        context['active_projects'] = [
+            p for p in sorted(list(all_active_projects),
+                              key=lambda x: x.recent_hours,
+                              reverse=True)
+            if p.recent_hours > 10.]
+        context['active_users'] = [
+            u for u in sorted(
+                list(all_active_users),
+                key=lambda x: x.recent_hours,
+                reverse=True)
+            if u.recent_hours > 10.]
 
         # week by week breakdown
         week_start = now + timedelta(days=-now.weekday())
