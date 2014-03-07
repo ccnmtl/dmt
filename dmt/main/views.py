@@ -610,8 +610,7 @@ class DashboardView(LoggedInMixin, TemplateView):
         # active projects
         times_logged = ActualTime.objects.filter(
             completed__gt=two_weeks_ago).select_related(
-            'item').select_related(
-            'item__milestone').select_related(
+            'item', 'resolver', 'item__milestone',
             'item__milestone__project')
         all_active_items = set([a.item for a in times_logged])
         all_active_projects = set(
