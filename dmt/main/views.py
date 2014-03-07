@@ -600,6 +600,7 @@ class DashboardView(LoggedInMixin, TemplateView):
         now = datetime.now()
         four_weeks_ago = now - timedelta(weeks=4)
         four_weeks_future = now + timedelta(weeks=4)
+        two_weeks_ago = now - timedelta(weeks=2)
 
         context['milestones'] = Milestone.objects.filter(
             target_date__gt=four_weeks_ago,
@@ -607,7 +608,7 @@ class DashboardView(LoggedInMixin, TemplateView):
             ).order_by("target_date")
 
         # active projects
-        times_logged = ActualTime.objects.filter(completed__gt=four_weeks_ago)
+        times_logged = ActualTime.objects.filter(completed__gt=two_weeks_ago)
         all_active_items = set([a.item for a in times_logged])
         all_active_projects = set(
             [i.milestone.project for i in all_active_items])
@@ -637,8 +638,8 @@ class DashboardView(LoggedInMixin, TemplateView):
         weeks = [
             (week_start, week_end),
             (week_start - timedelta(weeks=1), week_end - timedelta(weeks=1)),
-            (week_start - timedelta(weeks=2), week_end - timedelta(weeks=3)),
-            (week_start - timedelta(weeks=3), week_end - timedelta(weeks=4)),
+            (week_start - timedelta(weeks=2), week_end - timedelta(weeks=2)),
+            (week_start - timedelta(weeks=3), week_end - timedelta(weeks=3)),
         ]
 
         breakdowns = [
@@ -650,5 +651,4 @@ class DashboardView(LoggedInMixin, TemplateView):
             for (monday, sunday) in weeks]
 
         context['breakdowns'] = breakdowns
-        print str(context)
         return context
