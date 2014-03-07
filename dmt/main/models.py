@@ -111,13 +111,16 @@ class User(models.Model):
         return Item.objects.filter(
             assigned_to=self,
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS']
-            ).exclude(milestone__name='Someday/Maybe')
+            ).exclude(
+            milestone__name='Someday/Maybe').select_related(
+            'milestone', 'milestone__project')
 
     def resolved_owned_items(self):
         return Item.objects.filter(
             owner=self,
             status='RESOLVED'
-            )
+            ).select_related(
+            'milestone', 'milestone__project')
 
     def items(self):
         assigned = set(self.open_assigned_items())
@@ -128,13 +131,16 @@ class User(models.Model):
         return Client.objects.filter(contact=self)
 
     def manager_on(self):
-        return [w.project for w in self.workson_set.filter(auth='manager')]
+        return [w.project for w in self.workson_set.filter(
+                auth='manager').select_related('project')]
 
     def developer_on(self):
-        return [w.project for w in self.workson_set.filter(auth='developer')]
+        return [w.project for w in self.workson_set.filter(
+                auth='developer').select_related('project')]
 
     def guest_on(self):
-        return [w.project for w in self.workson_set.filter(auth='guest')]
+        return [w.project for w in self.workson_set.filter(
+                auth='guest').select_related('project')]
 
     def total_group_time(self, start, end):
         return interval_sum(
