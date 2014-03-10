@@ -4,6 +4,8 @@ from django_statsd.clients import statsd
 from datetime import datetime, timedelta
 import time
 from .models import Item, ActualTime, interval_sum
+from .models import User
+from dmt.claim.models import Claim
 
 
 @periodic_task(run_every=crontab(hour='*', minute='*', day_of_week='*'))
@@ -69,3 +71,11 @@ def hours_logged_report():
             ).total_seconds() / 3600.))
     end = time.time()
     statsd.timing('celery.hours_logged_report', int((end - start) * 1000))
+
+
+@periodic_task(run_every=crontab(hour='*', minute='*', day_of_week='*'))
+def user_stats():
+    active_users = User.objects.filter(status='active', grp=False).count()
+    claimed = Claim.objects.all().count()
+    statsd.gauge('users.active', active_users)
+    statsd.gauge('users.claimed', claimed)
