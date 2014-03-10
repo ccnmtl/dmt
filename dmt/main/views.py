@@ -510,6 +510,7 @@ class ProjectAddItemView(LoggedInMixin, View):
             milestone=milestone,
             priority=priority,
             description=description,
+            estimated_time=request.POST.get('estimated_time', '1 hour'),
             tags=tags)
         statsd.incr('main.%s_added' % (self.item_type.replace(' ', '_')))
         return HttpResponseRedirect(project.get_absolute_url())
