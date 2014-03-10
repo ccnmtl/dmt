@@ -31,6 +31,7 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
             'PASSWORD': '',
         }
     }
+    CELERY_ALWAYS_EAGER = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 SOUTH_TESTS_MIGRATE = False
@@ -98,6 +99,9 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), "templates"),
 )
 
+import djcelery
+djcelery.setup_loader()
+
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,6 +132,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'taggit',
     'taggit_templatetags',
+    'djcelery',
 ]
 
 LETTUCE_APPS = (
@@ -155,6 +160,9 @@ STATSD_PREFIX = 'dmt'
 STATSD_HOST = '127.0.0.1'
 STATSD_PORT = 8125
 STATSD_PATCHES = ['django_statsd.patches.db', ]
+
+BROKER_URL = "amqp://localhost:5672//dmt"
+CELERYD_CONCURRENCY = 2
 
 THUMBNAIL_SUBDIR = "thumbs"
 EMAIL_SUBJECT_PREFIX = "[dmt] "

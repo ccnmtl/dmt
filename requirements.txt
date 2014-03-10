@@ -33,6 +33,14 @@ pytz==2013b
 durations==0.3.3
 factory_boy==2.1.1
 python-ldap==2.4.13
+anyjson==0.3.3
+amqp==1.4.3
+amqplib==1.0.2
+kombu==3.0.12
+librabbitmq==1.0.1
+billiard==3.3.0.14
+celery==3.1.8
+
 djangowind==0.11.0
 django-staticmedia==0.2.2
 South==0.8.4
@@ -56,3 +64,4 @@ djangorestframework==2.3.12
 django-taggit==0.11.2
 django-templatetag-sugar==0.1
 django-taggit-templatetags==0.4.6dev
+django-celery==3.0.11
