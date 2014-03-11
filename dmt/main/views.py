@@ -645,7 +645,7 @@ class DashboardView(LoggedInMixin, TemplateView):
         week_end = week_start + timedelta(days=6)
 
         weeks = [
-            (week_start, week_end),
+            (week_start, now),
             (week_start - timedelta(weeks=1), week_end - timedelta(weeks=1)),
             (week_start - timedelta(weeks=2), week_end - timedelta(weeks=2)),
             (week_start - timedelta(weeks=3), week_end - timedelta(weeks=3)),
