@@ -365,6 +365,11 @@ class StatusUpdateListView(LoggedInMixin, ListView):
     paginate_by = 20
 
 
+class MilestoneListView(LoggedInMixin, ListView):
+    model = Milestone
+    paginate_by = 50
+
+
 class StatusUpdateUpdateView(LoggedInMixin, UpdateView):
     model = StatusUpdate
     form_class = StatusUpdateForm

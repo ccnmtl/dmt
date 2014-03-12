@@ -153,6 +153,10 @@ class TestMilestoneViews(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue(m.name in r.content)
 
+    def test_milestone_index(self):
+        r = self.c.get("/milestone/")
+        self.assertEqual(r.status_code, 200)
+
 
 class TestItemViews(TestCase):
     def setUp(self):

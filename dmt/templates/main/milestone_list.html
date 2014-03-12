@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if is_paginated %}
+<ul class="pager">
+{% if page_obj.has_previous %}
+  <li><a href="/milestone/?page={{ page_obj.previous_page_number }}">previous</a></li>
+{% else %}
+  <li class="disabled"><a href="#">previous</a></li>
+{% endif %}
+<li><span class="page-current">
+ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span></li>
+{% if page_obj.has_next %}
+  <li><a href="/milestone/?page={{ page_obj.next_page_number }}">next</a></li>
+{% else %}
+  <li class="disabled"><a href="#">next</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+<table class="table table-condensed table-striped">
+<thead>
+	<tr>
+		<th>date</th>
+		<th>status</th>
+		<th>project</th>
+		<th>milestone</th>
+		<th># open items</th>
+	</tr>
+</thead>
+<tbody>
+{% for milestone in milestone_list %}
+<tr>
+<td>{{milestone.target_date}}</td>
+<td class="{{milestone.status_class}}">{{milestone.status}}</td>
+<td><a href="{{milestone.project.get_absolute_url}}">{{milestone.project.name}}</a></td>
+<td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
+<td>{{milestone.num_open_items}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+
+{% if is_paginated %}
+<ul class="pager">
+{% if page_obj.has_previous %}
+  <li><a href="/milestone/?page={{ page_obj.previous_page_number }}">previous</a></li>
+{% else %}
+  <li class="disabled"><a href="#">previous</a></li>
+{% endif %}
+<li><span class="page-current">
+ Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span></li>
+{% if page_obj.has_next %}
+  <li><a href="/milestone/?page={{ page_obj.next_page_number }}">next</a></li>
+{% else %}
+  <li class="disabled"><a href="#">next</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+{% endblock %}

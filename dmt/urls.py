@@ -19,7 +19,7 @@ from dmt.main.views import (
     StatusUpdateListView, StatusUpdateUpdateView, StatusUpdateDeleteView,
     NodeUpdateView, NodeDeleteView, UserUpdateView,
     ProjectUpdateView, MilestoneUpdateView, ItemUpdateView,
-    ProjectAddItemView, DashboardView)
+    ProjectAddItemView, DashboardView, MilestoneListView)
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed
 
 router = routers.DefaultRouter()
@@ -85,6 +85,7 @@ urlpatterns = patterns(
      ItemPriorityView.as_view()),
     (r'^item/(?P<pk>\d+)/assigned_to/$', ReassignItemView.as_view()),
     (r'^item/(?P<pk>\d+)/owner/$', ChangeOwnerItemView.as_view()),
+    (r'^milestone/$', MilestoneListView.as_view()),
     (r'^milestone/(?P<pk>\d+)/$', MilestoneDetailView.as_view()),
     (r'^milestone/(?P<pk>\d+)/edit/$', MilestoneUpdateView.as_view()),
     (r'^project/$', ProjectListView.as_view()),
