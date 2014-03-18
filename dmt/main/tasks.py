@@ -119,7 +119,8 @@ def total_hours_logged_by_project():
 def total_hours_estimated_by_project():
     q = """SELECT m.pid, extract ('epoch' from sum(i.estimated_time)::interval)
            FROM items i, milestones m
-           WHERE i.mid = m.mid GROUP BY m.pid;"""
+           WHERE i.status = 'OPEN'
+             AND i.mid = m.mid GROUP BY m.pid;"""
     cursor = connection.cursor()
     cursor.execute(q)
     for (pid, seconds) in cursor.fetchall():
@@ -140,6 +141,7 @@ def total_hours_logged_by_milestone():
 def total_hours_estimated_by_milestone():
     q = """SELECT i.mid, extract ('epoch' from sum(i.estimated_time)::interval)
            FROM items i
+           WHERE i.status = 'OPEN'
            GROUP BY i.mid;"""
     cursor = connection.cursor()
     cursor.execute(q)
