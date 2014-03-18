@@ -1,5 +1,6 @@
 from celery.decorators import periodic_task
 from celery.task.schedules import crontab
+from django.db import connection
 from django_statsd.clients import statsd
 from datetime import datetime, timedelta
 import time
@@ -98,3 +99,62 @@ def user_stats():
     claimed = Claim.objects.all().count()
     statsd.gauge('users.active', active_users)
     statsd.gauge('users.claimed', claimed)
+
+
+def seconds_to_hours(seconds):
+    return seconds / 3600.
+
+
+def total_hours_logged_by_project():
+    q = """SELECT m.pid, extract ('epoch' from sum(a.actual_time)::interval)
+           FROM actual_times a, items i, milestones m
+           WHERE a.iid = i.iid
+             AND i.mid = m.mid GROUP BY m.pid;"""
+    cursor = connection.cursor()
+    cursor.execute(q)
+    for (pid, seconds) in cursor.fetchall():
+        yield (pid, seconds_to_hours(seconds))
+
+
+def total_hours_estimated_by_project():
+    q = """SELECT m.pid, extract ('epoch' from sum(i.estimated_time)::interval)
+           FROM items i, milestones m
+           WHERE i.mid = m.mid GROUP BY m.pid;"""
+    cursor = connection.cursor()
+    cursor.execute(q)
+    for (pid, seconds) in cursor.fetchall():
+        yield (pid, seconds_to_hours(seconds))
+
+
+def total_hours_logged_by_milestone():
+    q = """SELECT i.mid, extract ('epoch' from sum(a.actual_time)::interval)
+           FROM actual_times a, items i
+           WHERE a.iid = i.iid
+           GROUP BY i.mid;"""
+    cursor = connection.cursor()
+    cursor.execute(q)
+    for (mid, seconds) in cursor.fetchall():
+        yield (mid, seconds_to_hours(seconds))
+
+
+def total_hours_estimated_by_milestone():
+    q = """SELECT i.mid, extract ('epoch' from sum(i.estimated_time)::interval)
+           FROM items i
+           GROUP BY i.mid;"""
+    cursor = connection.cursor()
+    cursor.execute(q)
+    for (mid, seconds) in cursor.fetchall():
+        yield (mid, seconds_to_hours(seconds))
+
+
+@periodic_task(run_every=crontab(hour='*', minute='*', day_of_week='*'))
+def total_hours_estimated_vs_logged():
+    for pid, hours in total_hours_estimated_by_project():
+        statsd.gauge("projects.%d.hours_estimated" % pid, int(hours))
+    for pid, hours in total_hours_logged_by_project():
+        statsd.gauge("projects.%d.hours_logged" % pid, int(hours))
+
+    for mid, hours in total_hours_estimated_by_milestone():
+        statsd.gauge("milestones.%d.hours_estimated" % mid, int(hours))
+    for mid, hours in total_hours_logged_by_milestone():
+        statsd.gauge("milestones.%d.hours_logged" % mid, int(hours))
