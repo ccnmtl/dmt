@@ -5,7 +5,7 @@ from django_statsd.clients import statsd
 from datetime import datetime, timedelta
 import time
 from .models import Item, ActualTime, interval_sum
-from .models import User
+from .models import User, Milestone
 from dmt.claim.models import Claim
 
 
@@ -160,3 +160,11 @@ def total_hours_estimated_vs_logged():
         statsd.gauge("milestones.%d.hours_estimated" % mid, int(hours))
     for mid, hours in total_hours_logged_by_milestone():
         statsd.gauge("milestones.%d.hours_logged" % mid, int(hours))
+
+
+@periodic_task(run_every=crontab(hour=1, minute=0, day_of_week='*'))
+def close_passed_milestones():
+    now = datetime.now()
+    for milestone in Milestone.objects.filter(
+            status='OPEN', target_date__lt=now):
+        milestone.update_milestone()
