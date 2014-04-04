@@ -289,6 +289,7 @@ class Project(models.Model):
     def add_item(self, type='action item', title="",
                  assigned_to=None, owner=None, milestone=None,
                  priority=1, description="", estimated_time="1 hour",
+                 status='OPEN', r_status='',
                  tags=None):
         time = Duration(estimated_time)
         td = timedelta(seconds=time.to_seconds())
@@ -299,8 +300,8 @@ class Project(models.Model):
             assigned_to=assigned_to,
             title=title,
             priority=priority,
-            status='OPEN',
-            r_status='',
+            status=status,
+            r_status=r_status,
             estimated_time=td,
             target_date=milestone.target_date,
             last_mod=datetime.now(),
