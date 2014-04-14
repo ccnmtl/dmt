@@ -7,8 +7,7 @@ from django.views.generic import View
 from dmt.claim.models import Claim
 from dmt.main.models import Project, Item, Client
 
-from datetime import timedelta
-from durations import Duration
+from simpleduration import Duration
 from json import dumps
 
 
@@ -30,8 +29,8 @@ class ItemHoursView(View):
     def post(self, request, pk):
         item = get_object_or_404(Item, iid=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        time = Duration(request.POST.get('time', "1 hour"))
-        td = timedelta(seconds=time.to_seconds())
+        d = Duration(request.POST.get('time', "1 hour"))
+        td = d.timedelta()
         item.add_resolve_time(user, td)
         return HttpResponse("ok")
 
@@ -41,10 +40,10 @@ class AddTrackerView(View):
     def post(self, request):
         pid = request.POST.get('pid', None)
         task = request.POST.get('task', None)
-        time = Duration(request.POST.get('time', "1 hour"))
+        d = Duration(request.POST.get('time', "1 hour"))
         client_uni = request.POST.get('client', '')
 
-        td = timedelta(seconds=time.to_seconds())
+        td = d.timedelta()
         # two required fields
         if None in [pid, task]:
             return HttpResponse("bad request")

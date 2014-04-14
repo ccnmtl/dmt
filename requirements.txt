@@ -30,7 +30,7 @@ pylint==0.28.0
 six==1.2.0
 python-dateutil==2.1
 pytz==2013b
-durations==0.3.3
+simpleduration==0.1.0
 factory_boy==2.1.1
 python-ldap==2.4.13
 anyjson==0.3.3
