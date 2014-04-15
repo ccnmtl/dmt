@@ -260,6 +260,20 @@ class TestItemWorkflow(TestCase):
         self.assertTrue("RESOLVED" in r.content)
         self.assertTrue("FIXED" in r.content)
 
+    def test_resolve_with_time(self):
+        i = ItemFactory()
+        r = self.c.post(
+            i.get_absolute_url() + "resolve/",
+            dict(comment='this is a comment',
+                 time='2.5 hours',
+                 r_status='FIXED'))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(i.get_absolute_url())
+        self.assertTrue("this is a comment" in r.content)
+        self.assertTrue("RESOLVED" in r.content)
+        self.assertTrue("FIXED" in r.content)
+        self.assertTrue("2:30:00" in r.content)
+
     def test_resolve_self_assigned(self):
         i = ItemFactory(owner=self.pu, assigned_to=self.pu)
         r = self.c.post(

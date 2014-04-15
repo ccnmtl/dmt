@@ -26,6 +26,7 @@ from .serializers import (
     MilestoneSerializer, ItemSerializer)
 from rest_framework import generics
 from datetime import datetime, timedelta
+from simpleduration import Duration
 
 
 def has_claim(user):
@@ -168,6 +169,11 @@ class ResolveItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
+        t = request.POST.get('time', False)
+        if t:
+            d = Duration(request.POST.get('time', "1 hour"))
+            td = d.timedelta()
+            item.add_resolve_time(user, td)
         statsd.incr('main.resolved')
         return HttpResponseRedirect(item.get_absolute_url())
 
