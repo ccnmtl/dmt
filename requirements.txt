@@ -65,3 +65,4 @@ django-taggit==0.11.2
 django-templatetag-sugar==0.1
 django-taggit-templatetags==0.4.6dev
 django-celery==3.0.11
+flower==0.6.0
