@@ -140,6 +140,14 @@ class ItemViewSet(viewsets.ModelViewSet):
     paginate_by = 20
 
 
+def log_time(item, user, request):
+    t = request.POST.get('time', False)
+    if t:
+        d = Duration(request.POST.get('time', "1 hour"))
+        td = d.timedelta()
+        item.add_resolve_time(user, td)
+
+
 class AddCommentView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
@@ -150,6 +158,7 @@ class AddCommentView(LoggedInMixin, View):
         item.add_comment(user, markdown.markdown(body))
         item.touch()
         item.update_email(body, user)
+        log_time(item, user, request)
         statsd.incr('main.comment_added')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -169,11 +178,7 @@ class ResolveItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
-        t = request.POST.get('time', False)
-        if t:
-            d = Duration(request.POST.get('time', "1 hour"))
-            td = d.timedelta()
-            item.add_resolve_time(user, td)
+        log_time(item, user, request)
         statsd.incr('main.resolved')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -187,6 +192,7 @@ class InProgressItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
+        log_time(item, user, request)
         statsd.incr('main.inprogress')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -200,6 +206,7 @@ class VerifyItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
+        log_time(item, user, request)
         statsd.incr('main.verified')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -213,6 +220,7 @@ class ReopenItemView(LoggedInMixin, View):
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
+        log_time(item, user, request)
         statsd.incr('main.reopened')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -228,6 +236,7 @@ class ReassignItemView(LoggedInMixin, View):
         item.reassign(user, assigned_to, comment)
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
+        log_time(item, user, request)
         statsd.incr('main.reassigned')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -243,6 +252,7 @@ class ChangeOwnerItemView(LoggedInMixin, View):
         item.change_owner(user, owner, comment)
         item.touch()
         item.update_email(request.POST.get('comment', u''), user)
+        log_time(item, user, request)
         statsd.incr('main.changed_owner')
         return HttpResponseRedirect(item.get_absolute_url())
 
