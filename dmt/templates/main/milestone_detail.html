@@ -19,7 +19,10 @@
 <p class="pull-right"><a href="edit/" class="btn btn-primary btn-xs"
 												 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
 
-<h1>Milestone: {{object.name}}</h1>
+<h1>Milestone: {{object.name}} <img src="http://nanny.cul.columbia.edu/render/?target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_logged&target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_estimated&_salt=1369503684.466&height=20&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=100&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
+		 width="100" height="20" />
+</h1>
+
 
 {% if object.description %}
 {{object.description|markdown}}
