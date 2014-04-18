@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from dmt.claim.models import Claim
-from dmt.main.models import Project, Item, Client
+from dmt.main.models import Project, Item, Client, User
 
 from simpleduration import Duration
 from json import dumps
@@ -32,6 +32,40 @@ class ItemHoursView(View):
         d = Duration(request.POST.get('time', "1 hour"))
         td = d.timedelta()
         item.add_resolve_time(user, td)
+        return HttpResponse("ok")
+
+
+class GitUpdateView(View):
+    def post(self, request):
+        iid = request.POST.get('iid', None)
+        item = get_object_or_404(Item, iid=iid)
+        email = request.POST.get('email', None)
+        if '@' not in email:
+            email = email + "@columbia.edu"
+        user = get_object_or_404(User, email=email)
+        status = request.POST.get('status', '')
+        resolve_time = request.POST.get('resolve_time', '')
+        comment = request.POST.get('comment', '')
+        if status == 'FIXED':
+            item.status = 'RESOLVED'
+            item.r_status = 'FIXED'
+            item.add_event("RESOLVED", user, comment)
+            item.save()
+            item.update_email(
+                "%s $%d %s updated\n%s\n" % (
+                    item.type, item.iid, item.title, comment),
+                user)
+        elif comment != "":
+            item.add_comment(user, comment)
+            item.update_email(
+                "comment added to %s $%d %s updated\n%s\n" % (
+                    item.type, item.iid, item.title, comment),
+                user)
+        if resolve_time != "":
+            d = Duration(resolve_time)
+            td = d.timedelta()
+            item.add_resolve_time(user, td)
+        item.touch()
         return HttpResponse("ok")
 
 

@@ -95,3 +95,47 @@ class ItemHoursViewTest(TestCase):
             ))
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.content, "ok")
+
+
+class GitUpdateViewTest(TestCase):
+    def setUp(self):
+        self.c = Client()
+
+    def test_post_fixed(self):
+        i = ItemFactory()
+        i.save()
+        r = self.c.post(
+            "/api/1.0/git/",
+            dict(status='FIXED',
+                 iid=i.iid,
+                 email=i.assigned_to.email,
+                 comment="a comment")
+            )
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.content, "ok")
+
+    def test_post_fixed_with_resolve_time(self):
+        i = ItemFactory()
+        i.save()
+        r = self.c.post(
+            "/api/1.0/git/",
+            dict(status='FIXED',
+                 iid=i.iid,
+                 email=i.assigned_to.email,
+                 resolve_time='1 hour',
+                 comment="a comment")
+            )
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.content, "ok")
+
+    def test_post_comment(self):
+        i = ItemFactory()
+        i.save()
+        r = self.c.post(
+            "/api/1.0/git/",
+            dict(iid=i.iid,
+                 email=i.assigned_to.email,
+                 comment="a comment")
+            )
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.content, "ok")
