@@ -45,6 +45,14 @@
 {% if object.bio %}
 <dt>Bio</dt><dd>{{object.bio|markdown}}</dd>
 {% endif %}
+{% with object.user_groups as groups %}
+{% if groups %}
+<dt>Groups</dt><dd>
+{% for g in groups %}<a href="{{g.get_absolute_url}}">{{g.group_fullname}}</a>{% if not forloop.last %}, {% endif %}
+{% endfor %}
+</dd>
+{% endif %}
+{% endwith %}
 </dl>
 
 

@@ -69,6 +69,10 @@ class UserModelTest(TestCase):
         u = UserFactory()
         self.assertEqual(u.total_assigned_time(), 0.)
 
+    def test_group_fullname(self):
+        u = UserFactory(fullname="foo (group)")
+        self.assertEqual(u.group_fullname(), "foo")
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):

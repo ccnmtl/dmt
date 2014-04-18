@@ -177,6 +177,10 @@ class User(models.Model):
                     target_percentage=target_percentage,
                     behind=week_percentage < (target_percentage - 20))
 
+    def group_fullname(self):
+        f = self.fullname
+        return f.replace(" (group)", "")
+
 
 class ProjectUser(object):
     def __init__(self, project, user):
