@@ -4,7 +4,7 @@ from settings_shared import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'lettuce.db',
+        'NAME': ':memory:',
         'HOST': '',
         'PORT': '',
         'USER': '',

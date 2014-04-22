@@ -43,6 +43,10 @@ enum34==0.9.23
 parse-type==0.3.4
 parse==1.6.3
 behave==1.2.4
+wsgi_intercept==0.3
+mechanize==0.2.5
+recordtype==1.1
+urlparse2==1.0
 
 djangowind==0.12.1
 django-staticmedia==0.2.2
