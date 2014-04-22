@@ -39,6 +39,10 @@ kombu==3.0.12
 librabbitmq==1.0.1
 billiard==3.3.0.14
 celery==3.1.8
+enum34==0.9.23
+parse-type==0.3.4
+parse==1.6.3
+behave==1.2.4
 
 djangowind==0.12.1
 django-staticmedia==0.2.2
