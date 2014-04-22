@@ -117,7 +117,6 @@ INSTALLED_APPS = [
     'django_nose',
     'django_statsd',
     'bootstrapform',
-    'lettuce.django',
     'debug_toolbar',
     'waffle',
     'django_jenkins',
@@ -134,10 +133,6 @@ INSTALLED_APPS = [
     'taggit_templatetags',
     'djcelery',
 ]
-
-LETTUCE_APPS = (
-    'dmt.main',
-)
 
 if 'jenkins' in sys.argv:
     COMPRESS_ENABLED = False

@@ -19,7 +19,6 @@ fuzzywuzzy==0.2
 sure==1.2.2
 ipython==0.13.2
 ipdb==0.7
-lettuce==0.2.14
 rdflib==3.1.0
 selenium==2.20.0
 coverage==3.5.3
