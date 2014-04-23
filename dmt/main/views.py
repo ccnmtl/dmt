@@ -265,8 +265,7 @@ def clean_tags(s):
 
 def tag_object_count(tag):
     """ how many objects total have this tag? """
-    return (Item.objects.filter(tags__name__in=[tag.name]).count() +
-            Node.objects.filter(tags__name__in=[tag.name]).count())
+    return tag.taggit_taggeditem_items.all().count()
 
 
 class TagItemView(LoggedInMixin, View):
@@ -470,10 +469,32 @@ class TagDetailView(LoggedInMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TagDetailView, self).get_context_data(**kwargs)
-        context['items'] = Item.objects.filter(
-            tags__name__in=[self.object.name])
-        context['nodes'] = Node.objects.filter(
-            tags__name__in=[self.object.name])
+
+        # this is really terrible, but currently django-taggit has a
+        # bug where the TagManager generates incorrect SQL when the
+        # content object doesn't use 'id' as its primary key. Ie,
+        # the code should look like:
+        #
+        #        context['items'] = Item.objects.filter(
+        #            tags__name__in=[self.object.name])
+        #
+        # but that generates SQL errors. instead, we use some
+        # magic methods and ugly introspection. Once this bug
+        # is fixed in taggit, or the PMT is completely migrated
+        # and our tables get normal 'id' columns, this can
+        # be cleaned up.
+
+        context['items'] = [
+            ti.content_object
+            for ti
+            in self.object.taggit_taggeditem_items.all()
+            if ti.content_object.__class__ == Item]
+
+        context['nodes'] = [
+            ti.content_object
+            for ti
+            in self.object.taggit_taggeditem_items.all()
+            if ti.content_object.__class__ == Node]
         return context
 
 
