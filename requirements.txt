@@ -66,6 +66,7 @@ django-jenkins==0.15.0
 django-smoketest==0.2.2
 django-extensions==1.1.1
 django-stagingcontext==0.1.0
+django-ga-context==0.1.0
 django-impersonate==0.7.0
 django-pgsql-interval-field==0.9.3
 django-filter==0.7
