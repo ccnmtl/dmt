@@ -1,4 +1,4 @@
-Django==1.6.3
+Django==1.6.4
 Markdown==2.3.1
 simplejson==3.3.0
 uuid==1.30
