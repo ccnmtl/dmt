@@ -67,7 +67,8 @@ class User(models.Model):
         return ActualTime.objects.filter(
             resolver=self,
             completed__gt=start.date,
-            completed__lte=end.date)
+            completed__lte=end.date
+        ).select_related('item', 'item__milestone', 'item__milestone__project')
 
     def total_resolve_times(self):
         return interval_sum(
@@ -89,6 +90,8 @@ class User(models.Model):
                 for a in self.resolve_times_for_interval(start, end)])
 
     def weekly_report(self, week_start, week_end):
+        # TODO: rename to something more generic now that this is
+        # used for more than just weekly reports
         active_projects = self.active_projects(week_start, week_end)
         # google pie chart needs max
         max_time = timedelta()

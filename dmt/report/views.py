@@ -1,8 +1,33 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
+from dmt.claim.models import Claim
 from dmt.main.models import User
+from dmt.main.views import LoggedInMixin
 from datetime import datetime, timedelta
+
+
+class YearlyReviewView(LoggedInMixin, View):
+    def get(self, request):
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        return HttpResponseRedirect("/report/user/%s/yearly/" % user.username)
+
+
+class UserYearlyView(TemplateView):
+    template_name = "report/user_yearly.html"
+
+    def get_context_data(self, **kwargs):
+        username = kwargs['pk']
+        user = get_object_or_404(User, username=username)
+        now = datetime.today()
+        interval_start = now + timedelta(days=-365)
+        interval_end = now
+        data = user.weekly_report(interval_start, interval_end)
+        data.update(dict(u=user, now=now,
+                         interval_start=interval_start.date,
+                         interval_end=interval_end.date,
+                         ))
+        return data
 
 
 class UserWeeklyView(TemplateView):

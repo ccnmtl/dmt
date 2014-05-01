@@ -24,6 +24,25 @@ class UserWeeklyTest(TestCase):
         self.assertEqual(r.status_code, 200)
 
 
+class UserYearlyTest(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username='testuser',
+                                         fullname='test user')
+
+    def test_yearly_review_redirect(self):
+        r = self.c.get("/report/yearly_review/")
+        self.assertEqual(r.status_code, 302)
+
+    def test_user_yearly(self):
+        r = self.c.get("/report/user/testuser/yearly/")
+        self.assertEqual(r.status_code, 200)
+
+
 class StaffReportTest(TestCase):
     def setUp(self):
         self.c = Client()
