@@ -2,10 +2,7 @@ MANAGE=./manage.py
 APP=dmt
 FLAKE8=./ve/bin/flake8
 
-jenkins: ./ve/bin/python
-	make validate
-	make test
-	make flake8
+jenkins: ./ve/bin/python validate test flake8
 
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
@@ -16,10 +13,10 @@ test: ./ve/bin/python
 flake8: ./ve/bin/python
 	$(FLAKE8) $(APP) --max-complexity=10
 
-runserver: ./ve/bin/python
+runserver: ./ve/bin/python validate
 	$(MANAGE) runserver
 
-migrate: ./ve/bin/python
+migrate: ./ve/bin/python validate jenkins
 	$(MANAGE) migrate
 
 validate: ./ve/bin/python
@@ -54,9 +51,7 @@ rebase:
 # this out on a new machine to set up dev
 # database, etc. You probably *DON'T* want
 # to run it after that, though.
-install: ./ve/bin/python
-	make validate
-	make jenkins
+install: ./ve/bin/python validate jenkins
 	createdb $(APP)
 	$(MANAGE) syncdb --noinput
 	make migrate
