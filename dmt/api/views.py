@@ -7,7 +7,7 @@ from django.views.generic import View
 from dmt.claim.models import Claim
 from dmt.main.models import Project, Item, Client, User
 
-from simpleduration import Duration
+from simpleduration import Duration, InvalidDuration
 from json import dumps
 
 
@@ -29,7 +29,14 @@ class ItemHoursView(View):
     def post(self, request, pk):
         item = get_object_or_404(Item, iid=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        d = Duration(request.POST.get('time', "1 hour"))
+        try:
+            d = Duration(request.POST.get('time', "1 hour"))
+        except InvalidDuration:
+            # eventually, this needs to get back to the user
+            # via form validation, but for now
+            # we just deal with it...
+            d = Duration("0 minutes")
+
         td = d.timedelta()
         item.add_resolve_time(user, td)
         return HttpResponse("ok")
@@ -62,9 +69,15 @@ class GitUpdateView(View):
                     item.type, item.iid, item.title, comment),
                 user)
         if resolve_time != "":
-            d = Duration(resolve_time)
-            td = d.timedelta()
-            item.add_resolve_time(user, td)
+            try:
+                d = Duration(resolve_time)
+                td = d.timedelta()
+                item.add_resolve_time(user, td)
+            except InvalidDuration:
+                # eventually, this needs to get back to the user
+                # via form validation, but for now
+                # we just deal with it...
+                pass
         item.touch()
         return HttpResponse("ok")
 
@@ -74,7 +87,13 @@ class AddTrackerView(View):
     def post(self, request):
         pid = request.POST.get('pid', None)
         task = request.POST.get('task', None)
-        d = Duration(request.POST.get('time', "1 hour"))
+        try:
+            d = Duration(request.POST.get('time', "1 hour"))
+        except InvalidDuration:
+            # eventually, this needs to get back to the user
+            # via form validation, but for now
+            # we just deal with it...
+            d = Duration("0 minutes")
         client_uni = request.POST.get('client', '')
 
         td = d.timedelta()

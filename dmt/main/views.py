@@ -26,7 +26,7 @@ from .serializers import (
     MilestoneSerializer, ItemSerializer)
 from rest_framework import generics
 from datetime import datetime, timedelta
-from simpleduration import Duration
+from simpleduration import Duration, InvalidDuration
 
 
 def has_claim(user):
@@ -143,9 +143,12 @@ class ItemViewSet(viewsets.ModelViewSet):
 def log_time(item, user, request):
     t = request.POST.get('time', False)
     if t:
-        d = Duration(request.POST.get('time', "1 hour"))
-        td = d.timedelta()
-        item.add_resolve_time(user, td)
+        try:
+            d = Duration(request.POST.get('time', "1 hour"))
+            td = d.timedelta()
+            item.add_resolve_time(user, td)
+        except InvalidDuration:
+            pass
 
 
 class AddCommentView(LoggedInMixin, View):

@@ -5,7 +5,7 @@ from interval.fields import IntervalField
 from taggit.managers import TaggableManager
 from django.core.mail import send_mail
 from django_statsd.clients import statsd
-from simpleduration import Duration
+from simpleduration import Duration, InvalidDuration
 import textwrap
 
 
@@ -298,7 +298,10 @@ class Project(models.Model):
                  priority=1, description="", estimated_time="1 hour",
                  status='OPEN', r_status='',
                  tags=None):
-        d = Duration(estimated_time)
+        try:
+            d = Duration(estimated_time)
+        except InvalidDuration:
+            d = Duration("0 minutes")
         td = d.timedelta()
         item = Item.objects.create(
             milestone=milestone,
