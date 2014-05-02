@@ -49,3 +49,14 @@ rebase:
 	make test
 	make migrate
 	make flake8
+
+# run this one the very first time you check
+# this out on a new machine to set up dev
+# database, etc. You probably *DON'T* want
+# to run it after that, though.
+install: ./ve/bin/python
+	make validate
+	make jenkins
+	createdb $(APP)
+	$(MANAGE) syncdb --noinput
+	make migrate
