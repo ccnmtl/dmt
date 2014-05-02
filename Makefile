@@ -2,6 +2,11 @@ MANAGE=./manage.py
 APP=dmt
 FLAKE8=./ve/bin/flake8
 
+jenkins: ./ve/bin/python
+	make validate
+	make test
+	make flake8
+
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
 
@@ -22,11 +27,6 @@ validate: ./ve/bin/python
 
 shell: ./ve/bin/python
 	$(MANAGE) shell_plus
-
-jenkins: ./ve/bin/python
-	make validate
-	make test
-	make flake8
 
 clean:
 	rm -rf ve
