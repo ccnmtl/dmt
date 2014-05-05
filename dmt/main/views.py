@@ -179,7 +179,8 @@ class ResolveItemView(LoggedInMixin, View):
         else:
             item.resolve(user, r_status, comment)
         item.touch()
-        item.update_email(request.POST.get('comment', u''), user)
+        item.update_email("resolved %s\n----\n" % (r_status)
+                          + request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
         log_time(item, user, request)
         statsd.incr('main.resolved')
@@ -193,7 +194,8 @@ class InProgressItemView(LoggedInMixin, View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.mark_in_progress(user, comment)
         item.touch()
-        item.update_email(request.POST.get('comment', u''), user)
+        item.update_email("marked as in progress\n----\n"
+                          + request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
         log_time(item, user, request)
         statsd.incr('main.inprogress')
@@ -207,7 +209,8 @@ class VerifyItemView(LoggedInMixin, View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.verify(user, comment)
         item.touch()
-        item.update_email(request.POST.get('comment', u''), user)
+        item.update_email("verified\n-----\n"
+                          + request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
         log_time(item, user, request)
         statsd.incr('main.verified')
@@ -221,7 +224,8 @@ class ReopenItemView(LoggedInMixin, View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.reopen(user, comment)
         item.touch()
-        item.update_email(request.POST.get('comment', u''), user)
+        item.update_email("reopened\n-----\n"
+                          + request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
         log_time(item, user, request)
         statsd.incr('main.reopened')
@@ -238,7 +242,8 @@ class ReassignItemView(LoggedInMixin, View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.reassign(user, assigned_to, comment)
         item.touch()
-        item.update_email(request.POST.get('comment', u''), user)
+        item.update_email("reassigned\n----\n"
+                          + request.POST.get('comment', u''), user)
         log_time(item, user, request)
         statsd.incr('main.reassigned')
         return HttpResponseRedirect(item.get_absolute_url())
@@ -254,7 +259,8 @@ class ChangeOwnerItemView(LoggedInMixin, View):
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.change_owner(user, owner, comment)
         item.touch()
-        item.update_email(request.POST.get('comment', u''), user)
+        item.update_email("owner changed\n-----\n"
+                          + request.POST.get('comment', u''), user)
         log_time(item, user, request)
         statsd.incr('main.changed_owner')
         return HttpResponseRedirect(item.get_absolute_url())
