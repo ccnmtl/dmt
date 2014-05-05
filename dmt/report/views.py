@@ -13,7 +13,7 @@ class YearlyReviewView(LoggedInMixin, View):
         return HttpResponseRedirect("/report/user/%s/yearly/" % user.username)
 
 
-class UserYearlyView(TemplateView):
+class UserYearlyView(LoggedInMixin, TemplateView):
     template_name = "report/user_yearly.html"
 
     def get_context_data(self, **kwargs):
@@ -30,7 +30,7 @@ class UserYearlyView(TemplateView):
         return data
 
 
-class UserWeeklyView(TemplateView):
+class UserWeeklyView(LoggedInMixin, TemplateView):
     template_name = "report/user_weekly.html"
 
     def get_context_data(self, **kwargs):
@@ -54,7 +54,7 @@ class UserWeeklyView(TemplateView):
         return data
 
 
-class StaffReportPreviousWeekView(View):
+class StaffReportPreviousWeekView(LoggedInMixin, View):
     def get(self, request, **kwargs):
         now = datetime.today()
         week_start = now + timedelta(days=-now.weekday())
@@ -64,7 +64,7 @@ class StaffReportPreviousWeekView(View):
                 prev_week.year, prev_week.month, prev_week.day))
 
 
-class StaffReportView(TemplateView):
+class StaffReportView(LoggedInMixin, TemplateView):
     template_name = "report/staff_report.html"
 
     def get_context_data(self, **kwargs):
