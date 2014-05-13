@@ -290,6 +290,13 @@ class Project(models.Model):
     def remove_personnel(self, user):
         WorksOn.objects.filter(project=self, username=user).delete()
 
+    def all_users_not_in_project(self):
+        already_in = set([w.username
+                          for w in WorksOn.objects.filter(project=self)])
+        all_users = set(User.objects.filter(status='active'))
+        return sorted(list(all_users - already_in),
+                      key=lambda x: x.fullname.lower())
+
     def upcoming_milestone(self):
         # ideally, we want a milestone that is open, in the future,
         # and as close to today as possible

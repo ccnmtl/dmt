@@ -416,6 +416,19 @@
 				title="remove user from project" class="remove-link">[remove]</a></span></li>
 				{% endfor %}
 		</ul>
+
+		<form action="/project/{{object.pid}}/add_user/" method="post">
+			<p>Add Personnel:</p>
+			<select name="username">
+				{% for user in object.all_users_not_in_project %}
+				<option value="{{user.username}}">
+					{{user.fullname}}
+				</option>
+				{% endfor %}
+			</select> <input type="submit" value="add" class="btn
+			btn-primary" />
+		</form>
+
 	</div>
 
 	<div class="tab-pane fade" id="details">

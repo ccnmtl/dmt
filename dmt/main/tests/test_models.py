@@ -273,3 +273,11 @@ class ProjectTest(TestCase):
         self.assertEqual(p.managers(), [])
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [])
+
+    def test_all_users_not_in_project(self):
+        p = ProjectFactory()
+        u1 = UserFactory(status='active')
+        u2 = UserFactory(status='active')
+        p.add_manager(u1)
+        self.assertTrue(u2 in p.all_users_not_in_project())
+        self.assertFalse(u1 in p.all_users_not_in_project())

@@ -539,6 +539,14 @@ class ProjectRemoveUserView(LoggedInMixin, View):
         return HttpResponseRedirect(project.get_absolute_url())
 
 
+class ProjectAddUserView(LoggedInMixin, View):
+    def post(self, request, pk):
+        project = get_object_or_404(Project, pid=pk)
+        user = get_object_or_404(User, username=request.POST.get('username'))
+        project.add_personnel(user)
+        return HttpResponseRedirect(project.get_absolute_url())
+
+
 class ProjectAddTodoView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
