@@ -287,6 +287,9 @@ class Project(models.Model):
     def set_guests(self, users):
         self.set_personnel(users, auth='guest')
 
+    def remove_personnel(self, user):
+        WorksOn.objects.filter(project=self, username=user).delete()
+
     def upcoming_milestone(self):
         # ideally, we want a milestone that is open, in the future,
         # and as close to today as possible

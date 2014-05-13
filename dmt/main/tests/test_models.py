@@ -263,3 +263,13 @@ class ProjectTest(TestCase):
         self.assertEqual(p.managers(), [])
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [u])
+
+    def test_remove_personnel(self):
+        p = ProjectFactory()
+        u = UserFactory()
+        p.add_manager(u)
+        self.assertEqual(p.managers(), [u])
+        p.remove_personnel(u)
+        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.developers(), [])
+        self.assertEqual(p.guests(), [])
