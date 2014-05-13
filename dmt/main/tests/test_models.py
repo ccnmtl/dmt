@@ -175,3 +175,91 @@ class NodeTest(TestCase):
     def test_get_absolute_url(self):
         n = NodeFactory()
         self.assertEqual(n.get_absolute_url(), "/forum/%d/" % n.nid)
+
+
+class ProjectTest(TestCase):
+    def test_managers_empty(self):
+        p = ProjectFactory()
+        self.assertEqual(p.managers(), [])
+
+    def test_developers_empty(self):
+        p = ProjectFactory()
+        self.assertEqual(p.developers(), [])
+
+    def test_guests_empty(self):
+        p = ProjectFactory()
+        self.assertEqual(p.guests(), [])
+
+    def test_managers(self):
+        p = ProjectFactory()
+        u = UserFactory()
+        p.add_manager(u)
+        self.assertEqual(p.managers(), [u])
+
+    def test_developers(self):
+        p = ProjectFactory()
+        u = UserFactory()
+        p.add_developer(u)
+        self.assertEqual(p.developers(), [u])
+
+    def test_guests(self):
+        p = ProjectFactory()
+        u = UserFactory()
+        p.add_guest(u)
+        self.assertEqual(p.guests(), [u])
+
+    def test_set_managers(self):
+        p = ProjectFactory()
+        u1 = UserFactory()
+        u2 = UserFactory()
+        p.set_managers([u1, u2])
+        self.assertEqual(p.managers(), [u1, u2])
+        p.set_managers([u1])
+        self.assertEqual(p.managers(), [u1])
+
+    def test_set_developers(self):
+        p = ProjectFactory()
+        u1 = UserFactory()
+        u2 = UserFactory()
+        p.set_developers([u1, u2])
+        self.assertEqual(p.developers(), [u1, u2])
+        p.set_developers([u1])
+        self.assertEqual(p.developers(), [u1])
+
+    def test_set_guests(self):
+        p = ProjectFactory()
+        u1 = UserFactory()
+        u2 = UserFactory()
+        p.set_guests([u1, u2])
+        self.assertEqual(p.guests(), [u1, u2])
+        p.set_guests([u1])
+        self.assertEqual(p.guests(), [u1])
+
+    def test_only_one_role_allowed(self):
+        p = ProjectFactory()
+        u = UserFactory()
+        p.add_manager(u)
+        self.assertEqual(p.managers(), [u])
+        self.assertEqual(p.developers(), [])
+        self.assertEqual(p.guests(), [])
+        p.add_developer(u)
+        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.developers(), [u])
+        self.assertEqual(p.guests(), [])
+        p.add_guest(u)
+        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.developers(), [])
+        self.assertEqual(p.guests(), [u])
+
+        p.set_managers([u])
+        self.assertEqual(p.managers(), [u])
+        self.assertEqual(p.developers(), [])
+        self.assertEqual(p.guests(), [])
+        p.set_developers([u])
+        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.developers(), [u])
+        self.assertEqual(p.guests(), [])
+        p.set_guests([u])
+        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.developers(), [])
+        self.assertEqual(p.guests(), [u])

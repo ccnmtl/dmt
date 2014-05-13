@@ -259,6 +259,35 @@ class Project(models.Model):
     def guests(self):
         return [w.username for w in self.workson_set.filter(auth='guest')]
 
+    def add_manager(self, user):
+        self.add_personnel(user, auth='manager')
+
+    def add_developer(self, user):
+        self.add_personnel(user, auth='developer')
+
+    def add_guest(self, user):
+        self.add_personnel(user, auth='guest')
+
+    def add_personnel(self, user, auth='guest'):
+        # make sure we don't duplicate any
+        WorksOn.objects.filter(project=self, username=user).delete()
+        WorksOn.objects.create(username=user, project=self, auth=auth)
+
+    def set_managers(self, users):
+        WorksOn.objects.filter(project=self, auth='manager').delete()
+        for u in users:
+            self.add_manager(u)
+
+    def set_developers(self, users):
+        WorksOn.objects.filter(project=self, auth='developer').delete()
+        for u in users:
+            self.add_developer(u)
+
+    def set_guests(self, users):
+        WorksOn.objects.filter(project=self, auth='guest').delete()
+        for u in users:
+            self.add_guest(u)
+
     def upcoming_milestone(self):
         # ideally, we want a milestone that is open, in the future,
         # and as close to today as possible
