@@ -343,6 +343,7 @@
 
 <ul class="nav nav-tabs">
   <li><a href="#summary" data-toggle="tab">Summary</a></li>
+	<li><a href="#personnel" data-toggle="tab">Personnel</a></li>
   <li><a href="#details" data-toggle="tab">Details</a></li>
   <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
   <li><a href="#reports" data-toggle="tab">Reports</a></li>
@@ -369,13 +370,6 @@
 			<dt>Wiki Category</dt>
 			<dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}">{{object.wiki_category}}</a></dd>
 {% endif %}
-			</dd>
-			<dt>Personnel</dt>
-			<dd>
-				{% for u in object.personnel_in_project %}
-						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a> [<a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
-				title="remove user from project">x</a>]{% if not forloop.last %}, {% endif %}
-				{% endfor %}
 			</dd>
 		</dl>
 
@@ -413,6 +407,15 @@
 <p>no active items</p>
 {% endif %}
 
+	</div>
+
+  <div class="tab-pane fade" id="personnel">
+		<ul>
+				{% for u in object.personnel_in_project %}
+						<li><span class="personnel"><a href="{{u.get_absolute_url}}">{{u.fullname}}</a> <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
+				title="remove user from project" class="remove-link">[remove]</a></span></li>
+				{% endfor %}
+		</ul>
 	</div>
 
 	<div class="tab-pane fade" id="details">

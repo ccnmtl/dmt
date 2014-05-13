@@ -133,3 +133,10 @@ td.late {
 dd:hover .priority-select {
    visibility: visible;
 }
+
+.personnel .remove-link {
+		visibility: hidden;
+}
+.personnel:hover .remove-link {
+		visibility: visible;
+}
