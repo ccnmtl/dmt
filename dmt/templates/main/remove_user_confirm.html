@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="." method="post">
+<p>Are you sure you want to remove <b>{{user.fullname}}</b> from
+	the <b>{{project.name}}</b> Project?
+
+<input type="submit" value="Yes, remove" class="btn btn-danger" />
+
+</form>
+
+{% endblock %}

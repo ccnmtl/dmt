@@ -127,6 +127,16 @@ class TestProjectViews(TestCase):
         r = self.c.get(s.get_absolute_url())
         self.assertTrue("xyzzy" in r.content)
 
+    def test_remove_user(self):
+        p = ProjectFactory()
+        u = UserFactory()
+        p.add_manager(u)
+        r = self.c.get(p.get_absolute_url() + "remove_user/%s/" % u.username)
+        self.assertTrue(u.fullname in r.content)
+        self.assertTrue(u in p.managers())
+        self.c.post(p.get_absolute_url() + "remove_user/%s/" % u.username)
+        self.assertTrue(u not in p.managers())
+
 
 class TestMilestoneViews(TestCase):
     def setUp(self):

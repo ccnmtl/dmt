@@ -373,7 +373,8 @@
 			<dt>Personnel</dt>
 			<dd>
 				{% for u in object.personnel_in_project %}
-						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a>{% if not forloop.last %}, {% endif %}
+						<a href="{{u.get_absolute_url}}">{{u.fullname}}</a> [<a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
+				title="remove user from project">x</a>]{% if not forloop.last %}, {% endif %}
 				{% endfor %}
 			</dd>
 		</dl>

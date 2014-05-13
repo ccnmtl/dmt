@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
@@ -521,6 +521,22 @@ class NodeReplyView(LoggedInMixin, View):
         # TODO: tags
         statsd.incr('main.forum_reply')
         return HttpResponseRedirect(node.get_absolute_url())
+
+
+class ProjectRemoveUserView(LoggedInMixin, View):
+    template_name = "main/remove_user_confirm.html"
+
+    def get(self, request, pk, username):
+        project = get_object_or_404(Project, pid=pk)
+        user = get_object_or_404(User, username=username)
+        return render(request, self.template_name,
+                      dict(project=project, user=user))
+
+    def post(self, request, pk, username):
+        project = get_object_or_404(Project, pid=pk)
+        user = get_object_or_404(User, username=username)
+        project.remove_personnel(user)
+        return HttpResponseRedirect(project.get_absolute_url())
 
 
 class ProjectAddTodoView(LoggedInMixin, View):
