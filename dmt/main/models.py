@@ -99,8 +99,7 @@ class User(models.Model):
         for project in active_projects:
             pu = ProjectUser(project, self)
             ptime = pu.completed_time_for_interval(week_start, week_end)
-            if ptime > max_time:
-                max_time = ptime
+            max_time = max(ptime, max_time)
             total_time += ptime
             project.time = ptime
         return dict(
