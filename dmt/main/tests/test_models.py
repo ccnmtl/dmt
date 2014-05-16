@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core import mail
 import unittest
 from .factories import (
     UserFactory, ItemFactory, NodeFactory, ProjectFactory,
@@ -180,6 +181,24 @@ class NodeTest(TestCase):
     def test_get_absolute_url(self):
         n = NodeFactory()
         self.assertEqual(n.get_absolute_url(), "/forum/%d/" % n.nid)
+
+    def test_email_reply_self_reply(self):
+        n = NodeFactory()
+        n.email_reply("", n.author, None)
+        # should not send an email when it's a self-reply
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_email_reply_with_project(self):
+        n = NodeFactory()
+        p = ProjectFactory()
+        n.project = p
+        u = UserFactory()
+        n.save()
+
+        class DummyReply(object):
+            subject = "a subject"
+        n.email_reply("", u, DummyReply())
+        self.assertEqual(len(mail.outbox), 1)
 
 
 class ProjectTest(TestCase):
