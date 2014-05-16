@@ -281,3 +281,16 @@ class ProjectTest(TestCase):
         p.add_manager(u1)
         self.assertTrue(u2 in p.all_users_not_in_project())
         self.assertFalse(u1 in p.all_users_not_in_project())
+
+    def test_add_item_invalid_duration(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserFactory()
+        p.add_item(type='action item', title="new item",
+                   assigned_to=u, owner=u, milestone=m,
+                   priority=1, description="",
+                   estimated_time="Invalid Estimated Time",
+                   status='OPEN', r_status='')
+        self.assertTrue(m.item_set.all().count() > 0)
+        i = m.item_set.all()[0]
+        self.assertEqual(i.estimated_time.seconds, 0)
