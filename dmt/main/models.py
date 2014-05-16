@@ -415,6 +415,11 @@ to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
             users.update(u.users_in_group())
         return list(users)
 
+    def current_date(self):
+        """ very simple helper that makes it easier to set the
+        default date on add-* forms"""
+        return datetime.now().date()
+
 
 class Document(models.Model):
     did = models.IntegerField(primary_key=True)
