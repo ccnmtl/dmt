@@ -145,6 +145,15 @@ class TestProjectViews(TestCase):
         self.assertEqual(r.status_code, 302)
         self.assertTrue(u in p.all_personnel_in_project())
 
+    def test_add_milestone(self):
+        p = ProjectFactory()
+        r = self.c.post(p.get_absolute_url() + "add_milestone/",
+                        dict(name="NEW TEST MILESTONE",
+                             target_date="2020-01-01"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(p.get_absolute_url())
+        self.assertTrue("NEW TEST MILESTONE" in r.content)
+
 
 class TestMilestoneViews(TestCase):
     def setUp(self):

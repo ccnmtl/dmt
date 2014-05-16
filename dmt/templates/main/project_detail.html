@@ -40,6 +40,41 @@
 <h1>Project: {{object.name}}</h1>
 
 
+<form id="add-milestone-form" action="add_milestone/" method="post" role="form">
+<div class="modal fade" id="add-milestone" tabindex="-1" role="dialog" aria-labelledby="add-milestone-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-milestone-label">Add New Milestone</h4>
+      </div>
+      <div class="modal-body">
+
+					<div class="row">
+						<div class="col-sm-7">
+							<input type="text" name="name" placeholder="name" 
+										 id="milestone-name-input"
+										 class="form-control"/>
+						</div>
+
+						<div class="col-sm-3">
+							<input type="text" name="target_date" placeholder="2014-01-01"
+										 id="milestone-date-input"
+										 class="form-control" />
+						</div>
+
+					</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" id="add-milestone-button" value="Add" />
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -462,6 +497,12 @@
 	</div>
 
 	<div class="tab-pane fade" id="milestones">
+
+<p class="pull-right">
+	<a class="btn btn-primary btn-sm" href="#" data-toggle="modal"
+		 data-target="#add-milestone"><span class="glyphicon glyphicon-plus"></span>
+		Add New Milestone</a></p>
+
 {% if object.milestone_set.count %}
 <table class="table">
 	<thead>

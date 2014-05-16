@@ -433,11 +433,11 @@ class Document(models.Model):
 
 
 class Milestone(models.Model):
-    mid = models.IntegerField(primary_key=True)
+    mid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     target_date = models.DateField()
     project = models.ForeignKey(Project, db_column='pid')
-    status = models.CharField(max_length=8)
+    status = models.CharField(max_length=8, default='OPEN')
     description = models.TextField(blank=True)
 
     class Meta:

@@ -20,7 +20,7 @@ from dmt.main.views import (
     NodeUpdateView, NodeDeleteView, UserUpdateView,
     ProjectUpdateView, MilestoneUpdateView, ItemUpdateView,
     ProjectAddItemView, DashboardView, MilestoneListView,
-    ProjectRemoveUserView, ProjectAddUserView,
+    ProjectRemoveUserView, ProjectAddUserView, ProjectAddMilestoneView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed
 
@@ -98,6 +98,8 @@ urlpatterns = patterns(
      ProjectAddItemView.as_view(item_type='action item')),
     (r'^project/(?P<pk>\d+)/add_todo/$', ProjectAddTodoView.as_view()),
     (r'^project/(?P<pk>\d+)/add_node/$', ProjectAddNodeView.as_view()),
+    (r'^project/(?P<pk>\d+)/add_milestone/$',
+     ProjectAddMilestoneView.as_view()),
     (r'^project/(?P<pk>\d+)/add_update/$',
      ProjectAddStatusUpdateView.as_view()),
     (r'^project/(?P<pk>\d+)/edit/$', ProjectUpdateView.as_view()),

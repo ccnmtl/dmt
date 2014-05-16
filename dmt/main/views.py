@@ -620,6 +620,17 @@ class ProjectAddStatusUpdateView(LoggedInMixin, View):
         return HttpResponseRedirect(project.get_absolute_url())
 
 
+class ProjectAddMilestoneView(LoggedInMixin, View):
+    def post(self, request, pk):
+        project = get_object_or_404(Project, pid=pk)
+        Milestone.objects.create(
+            project=project, name=request.POST.get('name', 'new milestone'),
+            status='OPEN',
+            target_date=request.POST.get('target_date', datetime.now().date())
+        )
+        return HttpResponseRedirect(project.get_absolute_url())
+
+
 class TagNodeView(LoggedInMixin, View):
     def post(self, request, pk):
         node = get_object_or_404(Node, pk=pk)
