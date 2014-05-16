@@ -109,6 +109,10 @@ class MilestoneTest(TestCase):
         m.update_milestone()
         self.assertEqual(m.status, "CLOSED")
 
+    def test_estimated_time_remaining(self):
+        m = MilestoneFactory()
+        self.assertEqual(m.estimated_time_remaining(), 0.)
+
 
 class ItemModelTest(TestCase):
     def test_gau(self):
