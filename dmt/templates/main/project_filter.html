@@ -3,6 +3,10 @@
 
 {% block title %}Projects{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
+{% endblock %}
+
 {% block primarynavtabs %}
 {% endblock %}
 
@@ -19,7 +23,7 @@
 <div class="tab-content">
         <div class="tab-pane fade in active" id="list">
 
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped tablesorter" id="projects-table">
 	<thead>
 		<tr>
 			<th>Name</th>
@@ -59,4 +63,14 @@
 
 
 </div>
+{% endblock %}
+
+{% block js %}
+  <script src="{{STATIC_URL}}js/jquery.tablesorter.min.js"></script>
+<script>
+$(document).ready(function() 
+    { 
+        $("#projects-table").tablesorter({sortList: [[1,1]]});
+});
+</script>
 {% endblock %}
