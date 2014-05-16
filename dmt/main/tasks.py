@@ -105,6 +105,9 @@ def seconds_to_hours(seconds):
     return seconds / 3600.
 
 
+# NOTE: these functions aren't really testable
+# the SQL is postgresql-only (since it uses PG's 'interval' datatype)
+# and breaks in SQLite. If you change them, be extra careful.
 def total_hours_logged_by_project():
     q = """SELECT m.pid, extract ('epoch' from sum(a.actual_time)::interval)
            FROM actual_times a, items i, milestones m

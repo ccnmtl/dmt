@@ -1,6 +1,7 @@
 from django.test import TestCase
 from dmt.main.tasks import (
-    get_item_counts_by_status, item_counts, hours_logged)
+    get_item_counts_by_status, item_counts, hours_logged,
+    seconds_to_hours)
 
 
 class TestHelpers(TestCase):
@@ -16,3 +17,6 @@ class TestHelpers(TestCase):
 
     def test_hours_logged(self):
         self.assertEqual(hours_logged(), 0)
+
+    def test_seconds_to_hours(self):
+        self.assertEqual(seconds_to_hours(3600), 1.)
