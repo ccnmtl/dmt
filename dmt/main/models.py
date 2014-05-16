@@ -215,7 +215,7 @@ def interval_sum(intervals):
 
 
 class Project(models.Model):
-    pid = models.IntegerField(primary_key=True)
+    pid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     pub_view = models.BooleanField(default=False)
     caretaker = models.ForeignKey(User, db_column='caretaker')
@@ -422,7 +422,7 @@ to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
 
 
 class Document(models.Model):
-    did = models.IntegerField(primary_key=True)
+    did = models.AutoField(primary_key=True)
     pid = models.ForeignKey(Project, db_column='pid')
     filename = models.CharField(max_length=128, blank=True)
     title = models.CharField(max_length=128, blank=True)
@@ -840,7 +840,7 @@ class Notify(models.Model):
 
 
 class Client(models.Model):
-    client_id = models.IntegerField(primary_key=True)
+    client_id = models.AutoField(primary_key=True)
     lastname = models.CharField(max_length=64, blank=True)
     firstname = models.CharField(max_length=64, blank=True)
     title = models.CharField(max_length=128, blank=True)
