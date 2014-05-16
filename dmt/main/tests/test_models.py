@@ -3,6 +3,7 @@ from django.core import mail
 import unittest
 from .factories import (
     UserFactory, ItemFactory, NodeFactory, ProjectFactory,
+    AttachmentFactory,
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
 from dmt.main.models import HistoryItem, ProjectUser, truncate_string
@@ -318,6 +319,27 @@ class ProjectTest(TestCase):
         self.assertTrue(m.item_set.all().count() > 0)
         i = m.item_set.all()[0]
         self.assertEqual(i.estimated_time.seconds, 0)
+
+
+class TestAttachment(TestCase):
+    def test_image(self):
+        a = AttachmentFactory(type='jpg')
+        self.assertTrue(a.image())
+        a = AttachmentFactory(type='png')
+        self.assertTrue(a.image())
+        a = AttachmentFactory(type='gif')
+        self.assertTrue(a.image())
+        a = AttachmentFactory(type='doc')
+        self.assertFalse(a.image())
+
+    def test_get_absolute_url(self):
+        a = AttachmentFactory()
+        self.assertEqual(a.get_absolute_url(), "/attachment/%d/" % a.id)
+
+    def test_src(self):
+        a = AttachmentFactory()
+        # not really implemented yet
+        self.assertEqual(a.src(), "")
 
 
 class TestHelpers(unittest.TestCase):
