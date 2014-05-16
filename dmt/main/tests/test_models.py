@@ -1,9 +1,10 @@
 from django.test import TestCase
+import unittest
 from .factories import (
     UserFactory, ItemFactory, NodeFactory, ProjectFactory,
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
-from dmt.main.models import HistoryItem, ProjectUser
+from dmt.main.models import HistoryItem, ProjectUser, truncate_string
 
 
 class UserModelTest(TestCase):
@@ -298,3 +299,9 @@ class ProjectTest(TestCase):
         self.assertTrue(m.item_set.all().count() > 0)
         i = m.item_set.all()[0]
         self.assertEqual(i.estimated_time.seconds, 0)
+
+
+class TestHelpers(unittest.TestCase):
+    def test_truncate_string(self):
+        self.assertEqual(truncate_string("foobar", length=5), "fooba...")
+        self.assertEqual(truncate_string("foobar", length=10), "foobar")
