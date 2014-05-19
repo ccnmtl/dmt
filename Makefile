@@ -11,7 +11,7 @@ test: ./ve/bin/python
 	$(MANAGE) jenkins
 
 flake8: ./ve/bin/python
-	$(FLAKE8) $(APP) --max-complexity=8
+	$(FLAKE8) $(APP) --max-complexity=7
 
 runserver: ./ve/bin/python validate
 	$(MANAGE) runserver

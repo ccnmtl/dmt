@@ -42,13 +42,18 @@ class ItemHoursView(View):
         return HttpResponse("ok")
 
 
+def normalize_email(email):
+    if '@' not in email:
+        return email + "@columbia.edu"
+    return email
+
+
 class GitUpdateView(View):
     def post(self, request):
         iid = request.POST.get('iid', None)
         item = get_object_or_404(Item, iid=iid)
         email = request.POST.get('email', None)
-        if '@' not in email:
-            email = email + "@columbia.edu"
+        email = normalize_email(email)
         user = get_object_or_404(User, email=email)
         status = request.POST.get('status', '')
         resolve_time = request.POST.get('resolve_time', '')
