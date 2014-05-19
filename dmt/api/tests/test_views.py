@@ -73,6 +73,21 @@ class AddTrackerViewTest(TestCase):
             ))
         self.assertEqual(r.status_code, 200)
 
+    def test_with_duplicate_clients(self):
+        self.client = ClientFactory()
+        self.client2 = ClientFactory()
+        self.client2.email = self.client.email
+        self.client2.save()
+        r = self.c.post(
+            "/api/1.0/trackers/add/",
+            dict(
+                pid=self.project.pid,
+                task="test",
+                time="1 hour",
+                client="testclient",
+            ))
+        self.assertEqual(r.status_code, 200)
+
 
 class ItemHoursViewTest(TestCase):
     def setUp(self):
