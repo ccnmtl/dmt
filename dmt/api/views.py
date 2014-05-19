@@ -112,11 +112,11 @@ class AddTrackerView(View):
             priority=1, target_date=milestone.target_date,
             estimated_time=td)
         if client_uni != '':
-            try:
-                client = Client.objects.get(
-                    email=client_uni + "@columbia.edu")
-                item.add_clients([client])
-            except Client.DoesNotExist:
+            r = Client.objects.filter(
+                email=client_uni + "@columbia.edu")
+            if r.count() > 0:
+                item.add_clients([r[0]])
+            else:
                 pass
         item.add_resolve_time(user, td)
         return HttpResponse("ok")
