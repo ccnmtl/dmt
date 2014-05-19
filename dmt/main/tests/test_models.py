@@ -3,7 +3,7 @@ from django.core import mail
 import unittest
 from .factories import (
     UserFactory, ItemFactory, NodeFactory, ProjectFactory,
-    AttachmentFactory,
+    AttachmentFactory, ClientFactory,
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
 from dmt.main.models import HistoryItem, ProjectUser, truncate_string
@@ -170,6 +170,20 @@ class ItemModelTest(TestCase):
         i = ItemFactory()
         u = UserFactory(status='inactive')
         i.add_cc(u)
+
+    def test_add_clients(self):
+        i = ItemFactory()
+        c = ClientFactory()
+        i.add_clients([c])
+        self.assertTrue(c in [ic.client for ic in i.itemclient_set.all()])
+
+    def test_copy_clients_to_new_item(self):
+        i = ItemFactory()
+        c = ClientFactory()
+        i.add_clients([c])
+        i2 = ItemFactory()
+        i.copy_clients_to_new_item(i2)
+        self.assertTrue(c in [ic.client for ic in i2.itemclient_set.all()])
 
 
 class HistoryItemTest(TestCase):

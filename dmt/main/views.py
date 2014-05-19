@@ -14,7 +14,7 @@ from taggit.models import Tag
 from taggit.utils import parse_tags
 import markdown
 from .models import (
-    Project, Milestone, Item, Node, User, Client, ItemClient, StatusUpdate,
+    Project, Milestone, Item, Node, User, Client, StatusUpdate,
     ActualTime)
 from .models import interval_sum
 from .forms import (
@@ -349,9 +349,7 @@ class SplitItemView(LoggedInMixin, View):
             new_item.touch()
             new_item.setup_default_notification()
             new_item.add_project_notification()
-            # TODO: copy tags
-            for ic in item.itemclient_set.all():
-                ItemClient.objects.create(item=new_item, client=ic.client)
+            item.copy_clients_to_new_item(new_item)
             new_items.append(new_item)
         if len(new_items) > 0:
             comment = (

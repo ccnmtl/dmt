@@ -583,8 +583,8 @@ class Item(models.Model):
             completed=completed)
 
     def add_clients(self, clients):
-        # TODO: implement this
-        pass
+        for c in clients:
+            ItemClient.objects.create(item=self, client=c)
 
     def resolvable(self):
         return self.status in ['OPEN', 'INPROGRESS', 'NEW']
@@ -770,6 +770,10 @@ Please do not reply to this message.
             if (n.username.status == 'active'
                 and not n.username.grp
                 and n.username != skip)]
+
+    def copy_clients_to_new_item(self, new_item):
+        for ic in self.itemclient_set.all():
+            ItemClient.objects.create(item=new_item, client=ic.client)
 
 
 def truncate_string(full_string, length=20):
