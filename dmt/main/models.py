@@ -766,6 +766,34 @@ Please do not reply to this message.
         for ic in self.itemclient_set.all():
             ItemClient.objects.create(item=new_item, client=ic.client)
 
+    def clone_to_new_item(self, new_title, user):
+        new_item = Item.objects.create(
+            type=self.type,
+            owner=self.owner,
+            assigned_to=self.assigned_to,
+            title=new_title,
+            milestone=self.milestone,
+            status='OPEN',
+            r_status='',
+            description='',
+            priority=self.priority,
+            target_date=self.target_date,
+            estimated_time=self.estimated_time,
+            url=self.url)
+        new_item.add_event(
+            'OPEN',
+            user,
+            (
+                "<b>%s added</b>"
+                "<p>Split from <a href='%s'>#%d</a></p>" % (
+                    self.type, self.get_absolute_url(),
+                    self.iid)))
+        new_item.touch()
+        new_item.setup_default_notification()
+        new_item.add_project_notification()
+        self.copy_clients_to_new_item(new_item)
+        return new_item
+
 
 def truncate_string(full_string, length=20):
     if len(full_string) > length:

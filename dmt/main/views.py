@@ -322,31 +322,7 @@ class SplitItemView(LoggedInMixin, View):
         titles = [request.POST.get(k) for k in request.POST.keys()
                   if k.startswith('title_') and request.POST.get(k, False)]
         for title in titles:
-            new_item = Item.objects.create(
-                type=item.type,
-                owner=item.owner,
-                assigned_to=item.assigned_to,
-                title=title,
-                milestone=item.milestone,
-                status='OPEN',
-                r_status='',
-                description='',
-                priority=item.priority,
-                target_date=item.target_date,
-                estimated_time=item.estimated_time,
-                url=item.url)
-            new_item.add_event(
-                'OPEN',
-                user,
-                (
-                    "<b>%s added</b>"
-                    "<p>Split from <a href='%s'>#%d</a></p>" % (
-                        item.type, item.get_absolute_url(),
-                        item.iid)))
-            new_item.touch()
-            new_item.setup_default_notification()
-            new_item.add_project_notification()
-            item.copy_clients_to_new_item(new_item)
+            new_item = item.clone_to_new_item(title, user)
             new_items.append(new_item)
         if len(new_items) > 0:
             comment = (
