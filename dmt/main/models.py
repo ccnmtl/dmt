@@ -552,16 +552,7 @@ class Item(models.Model):
 
     def target_date_status(self):
         overdue = (datetime.now().date() - self.target_date).days
-        if overdue < -7:
-            return "ok"
-        elif overdue < -1:
-            return "upcoming"
-        elif overdue < 1:
-            return "due"
-        elif overdue < 7:
-            return "overdue"
-        else:
-            return "late"
+        return overdue_days_to_string(overdue)
 
     def is_bug(self):
         return self.type == "bug"
@@ -781,6 +772,19 @@ def truncate_string(full_string, length=20):
         return full_string[:length] + "..."
     else:
         return full_string
+
+
+def overdue_days_to_string(overdue):
+    levels = [
+        (-7, "ok"),
+        (-1, "upcoming"),
+        (1, "due"),
+        (7, "overdue"),
+    ]
+    for days, level in levels:
+        if overdue < days:
+            return level
+    return "late"
 
 
 class HistoryItem(object):
