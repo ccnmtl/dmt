@@ -319,12 +319,9 @@ class SplitItemView(LoggedInMixin, View):
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
 
         new_items = []
-        for k in request.POST.keys():
-            if not k.startswith('title_'):
-                continue
-            title = request.POST.get(k, False)
-            if not title:
-                continue
+        titles = [request.POST.get(k) for k in request.POST.keys()
+                  if k.startswith('title_') and request.POST.get(k, False)]
+        for title in titles:
             new_item = Item.objects.create(
                 type=item.type,
                 owner=item.owner,
