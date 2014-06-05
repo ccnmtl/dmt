@@ -6,7 +6,10 @@ from .factories import (
     AttachmentFactory, ClientFactory,
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
-from dmt.main.models import HistoryItem, ProjectUser, truncate_string
+from dmt.main.models import (
+    HistoryItem, ProjectUser, truncate_string,
+    HistoryEvent
+)
 
 
 class UserModelTest(TestCase):
@@ -190,6 +193,37 @@ class HistoryItemTest(TestCase):
     def test_status(self):
         h = HistoryItem()
         self.assertEqual(h.status(), "")
+
+
+class DummyResultSet(object):
+    def __init__(self, n):
+        self.n = n
+
+    def count(self):
+        return self.n
+
+
+class DummyQuerySet(object):
+    def __init__(self, rs):
+        self.rs = rs
+
+    def all(self):
+        return self.rs
+
+
+class DummyEvent(object):
+    def __init__(self, qs):
+        self.comment_set = qs
+
+
+def HistoryEventTest(TestCase):
+    def test_get_comment_no_result(self):
+        rs = DummyResultSet(0)
+        qs = DummyQuerySet(rs)
+        e = DummyEvent(qs)
+        h = HistoryEvent(e)
+
+        self.assertEqual(h._get_comment(), None)
 
 
 class NodeTest(TestCase):
