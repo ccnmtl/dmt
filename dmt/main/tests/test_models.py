@@ -390,6 +390,14 @@ class TestAttachment(TestCase):
         self.assertEqual(a.src(), "")
 
 
+class TestClient(TestCase):
+    def test_active(self):
+        c = ClientFactory(status='active')
+        self.assertTrue(c.active())
+        c = ClientFactory(status='inactive')
+        self.assertFalse(c.active())
+
+
 class TestHelpers(unittest.TestCase):
     def test_truncate_string(self):
         self.assertEqual(truncate_string("foobar", length=5), "fooba...")
