@@ -199,7 +199,7 @@ class DummyResultSet(object):
     def __init__(self, n):
         self.n = n
 
-    def count(self):
+    def exists(self):
         return self.n
 
 
@@ -218,7 +218,7 @@ class DummyEvent(object):
 
 def HistoryEventTest(TestCase):
     def test_get_comment_no_result(self):
-        rs = DummyResultSet(0)
+        rs = DummyResultSet(False)
         qs = DummyQuerySet(rs)
         e = DummyEvent(qs)
         h = HistoryEvent(e)

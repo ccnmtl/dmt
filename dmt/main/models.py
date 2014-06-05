@@ -841,7 +841,7 @@ class HistoryEvent(HistoryItem):
 
     def _get_comment(self):
         r = self.event.comment_set.all()
-        if r.count():
+        if r.exists():
             return r[0]
         return None
 
