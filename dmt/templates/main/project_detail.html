@@ -505,7 +505,7 @@
 		Add New Milestone</a></p>
 
 {% if object.milestone_set.count %}
-<table class="table">
+<table class="table table-condensed table-striped tablesorter" id="milestone-table">
 	<thead>
 		<tr>
 			<th>Name</th>
@@ -581,9 +581,13 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 <script>
 $(document).ready(function() 
     { 
-{% if object.active_items %}
-        $("#project-items").tablesorter({sortList: [[2,1], [1,0]]}); 
-{% endif %}
+        {% if object.active_items %}
+            $("#project-items").tablesorter({sortList: [[2,1], [1,0]]});
+        {% endif %}
+        
+        {% if object.milestone_set.count %}
+            $("#milestone-table").tablesorter({sortList: [[1,1], [1,0]]});
+        {% endif %}
 
         $("#add-tracker-button").click(function(event) {
            var pid = $("#tracker-pid-input").val();
