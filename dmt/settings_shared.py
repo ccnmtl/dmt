@@ -81,6 +81,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'gacontext.ga_processor',
     'djangowind.context.context_processor',
     'django.core.context_processors.static',
+    'dmt.main.contextprocessors.graphite_base_processor',
 )
 
 MIDDLEWARE_CLASSES = [
@@ -215,3 +216,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+GRAPHITE_BASE = "https://nanny-render.cul.columbia.edu/render/"
