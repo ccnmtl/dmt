@@ -217,4 +217,4 @@ REST_FRAMEWORK = {
     ]
 }
 
-GRAPHITE_BASE = "http://nanny.cul.columbia.edu/render/"
+GRAPHITE_BASE = "https://nanny-render.cul.columbia.edu/render/"
