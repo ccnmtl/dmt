@@ -87,6 +87,7 @@ urlpatterns = patterns(
      ItemPriorityView.as_view()),
     (r'^item/(?P<pk>\d+)/assigned_to/$', ReassignItemView.as_view()),
     (r'^item/(?P<pk>\d+)/owner/$', ChangeOwnerItemView.as_view()),
+    (r'^group/$', GroupListView.as_view()),
     (r'^milestone/$', MilestoneListView.as_view()),
     (r'^milestone/(?P<pk>\d+)/$', MilestoneDetailView.as_view()),
     (r'^milestone/(?P<pk>\d+)/edit/$', MilestoneUpdateView.as_view()),

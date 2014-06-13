@@ -5,9 +5,6 @@
 <form action="." method="post">{% csrf_token %}
 <fieldset><legend>Edit Item</legend>
 {{form|bootstrap}}
-{% for e in item_milestones %}
-{{e.name}}</br>
-{% endfor %}
 <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
 <input type="submit" value="Save" class="btn btn-primary" />
 </fieldset>
