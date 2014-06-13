@@ -439,6 +439,13 @@ class ItemUpdateView(LoggedInMixin, UpdateView):
     form_class = ItemUpdateForm
 
 
+class ItemDeleteView(LoggedInMixin, DeleteView):
+    model = Item
+
+    def get_success_url(self):
+        return self.object.milestone.get_absolute_url()
+
+
 class TagListView(LoggedInMixin, ListView):
     model = Tag
     queryset = Tag.objects.all().order_by("name")
@@ -539,12 +546,15 @@ class ProjectAddItemView(LoggedInMixin, View):
 
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        title = request.POST.get('title', u"somebody forgot to enter a title")
+        title = request.POST.get('title', u"Untitled")
+        if len(title) == 0:
+            title = "Untitled"
         tags = clean_tags(request.POST.get('tags', u''))
         description = request.POST.get('description', u'')
         assigned_to = get_object_or_404(
             User, username=request.POST.get('assigned_to'))
+        owner = get_object_or_404(
+            User, username=request.POST.get('owner'))
         milestone = get_object_or_404(
             Milestone, mid=request.POST.get('milestone'))
         priority = request.POST.get('priority', '1')
@@ -552,7 +562,7 @@ class ProjectAddItemView(LoggedInMixin, View):
             type=self.item_type,
             title=title,
             assigned_to=assigned_to,
-            owner=user,
+            owner=owner,
             milestone=milestone,
             priority=priority,
             description=description,

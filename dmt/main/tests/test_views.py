@@ -1,11 +1,10 @@
+from .factories import ProjectFactory, MilestoneFactory, ItemFactory, \
+    NodeFactory, EventFactory, CommentFactory, UserFactory, StatusUpdateFactory
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Item
-from .factories import (
-    ProjectFactory, MilestoneFactory, ItemFactory, NodeFactory,
-    EventFactory, CommentFactory, UserFactory, StatusUpdateFactory)
 
 
 class BasicTest(TestCase):
@@ -154,6 +153,59 @@ class TestProjectViews(TestCase):
         r = self.c.get(p.get_absolute_url())
         self.assertTrue("NEW TEST MILESTONE" in r.content)
 
+    def test_add_action_item_empty_request(self):
+        p = ProjectFactory()
+        r = self.c.post(p.get_absolute_url() + "add_action_item/",
+                        dict())
+        self.assertEquals(r.status_code, 404)
+
+    def test_add_action_item(self):
+        u = UserFactory()
+        milestone = MilestoneFactory()
+
+        r = self.c.post(milestone.project.get_absolute_url() +
+                        "add_action_item/",
+                        {"assigned_to": u.username,
+                         "milestone": milestone.mid,
+                         "owner": u.username})
+        self.assertEqual(r.status_code, 302)
+
+        items = Item.objects.filter(milestone=milestone, assigned_to=u)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].assigned_to, u)
+        self.assertEqual(items[0].title, "Untitled")
+
+    def test_add_action_item_empty_title(self):
+        u = UserFactory()
+        milestone = MilestoneFactory()
+
+        r = self.c.post(milestone.project.get_absolute_url() +
+                        "add_action_item/",
+                        {"assigned_to": u.username,
+                         "milestone": milestone.mid,
+                         "owner": u.username,
+                         "title": ""})
+        self.assertEqual(r.status_code, 302)
+
+        items = Item.objects.filter(milestone=milestone, assigned_to=u)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].assigned_to, u)
+        self.assertEqual(items[0].title, "Untitled")
+
+    def test_add_action_item_owner(self):
+        u = UserFactory()
+        milestone = MilestoneFactory()
+
+        r = self.c.post(milestone.project.get_absolute_url() +
+                        "add_action_item/",
+                        {"assigned_to": u.username,
+                         "milestone": milestone.mid,
+                         "owner": u.username})
+        self.assertEqual(r.status_code, 302)
+
+        items = Item.objects.filter(milestone=milestone, owner=u)
+        self.assertEqual(len(items), 1)
+
 
 class TestMilestoneViews(TestCase):
     def setUp(self):
@@ -209,6 +261,24 @@ class TestItemViews(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue(i.title in r.content)
         self.assertTrue(i.get_absolute_url() in r.content)
+
+    def test_delete_item_view(self):
+        i = ItemFactory()
+        iid = i.iid
+        milestone = i.milestone
+        r = self.c.post(i.get_absolute_url() + "delete/")
+        # should redirect us to the milestone
+        self.assertEquals(r.status_code, 302)
+        self.assertTrue(r['Location'].endswith(milestone.get_absolute_url()))
+        # make sure it's gone
+        q = Item.objects.filter(iid=iid)
+        self.assertEquals(q.count(), 0)
+
+    def test_delete_item_confirm(self):
+        i = ItemFactory()
+        r = self.c.get(i.get_absolute_url() + "delete/")
+        self.assertEquals(r.status_code, 200)
+        self.assertTrue("<form" in r.content)
 
 
 class TestItemTagViews(TestCase):
