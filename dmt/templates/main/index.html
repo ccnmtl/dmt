@@ -103,7 +103,7 @@
     	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
     	width="14" height="14"/>
  {% endif %}
-<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:80}}</a>
+<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a>
 {% ifequal item.status "OPEN" %}
 {% else %}
 <span class="{{item.status_class}} badge pull-right">{{item.status_display}}</span>
