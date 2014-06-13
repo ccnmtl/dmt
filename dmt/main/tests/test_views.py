@@ -160,11 +160,11 @@ class TestProjectViews(TestCase):
         self.assertEquals(r.status_code, 404)
 
     def test_add_action_item(self):
-        p = ProjectFactory()
         u = UserFactory()
         milestone = MilestoneFactory()
 
-        r = self.c.post(p.get_absolute_url() + "add_action_item/",
+        r = self.c.post(milestone.project.get_absolute_url() +
+                        "add_action_item/",
                         {"assigned_to": u.username,
                          "milestone": milestone.mid})
         self.assertEquals(r.status_code, 302)
