@@ -546,7 +546,6 @@ class ProjectAddItemView(LoggedInMixin, View):
 
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
         title = request.POST.get('title', u"Untitled")
         if len(title) == 0:
             title = "Untitled"
