@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from django import forms
 from .models import StatusUpdate, Node, User, Project, Milestone, Item
 
 
@@ -35,9 +36,18 @@ class MilestoneUpdateForm(ModelForm):
 
 
 class ItemUpdateForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ItemUpdateForm, self).__init__(*args, **kwargs)
+        passed_item = kwargs.get('instance')
+        milestone = Milestone.objects.get(item=passed_item)
+        project = Project.objects.get(milestone=milestone)
+        project_milestones = project.milestone_set.all()
+        self.fields['milestone'].queryset = project_milestones
+
     class Meta:
         model = Item
-        exclude = ['iid', 'milestone', 'owner',
+        exclude = ['iid', 'owner',
                    'assigned_to', 'status', 'r_status', 'last_mod',
                    'tags', 'priority']
 
