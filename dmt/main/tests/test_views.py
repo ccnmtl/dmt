@@ -1,11 +1,10 @@
+from .factories import ProjectFactory, MilestoneFactory, ItemFactory, \
+    NodeFactory, EventFactory, CommentFactory, UserFactory, StatusUpdateFactory
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Item
-from .factories import (
-    ProjectFactory, MilestoneFactory, ItemFactory, NodeFactory,
-    EventFactory, CommentFactory, UserFactory, StatusUpdateFactory)
 
 
 class BasicTest(TestCase):
@@ -153,6 +152,26 @@ class TestProjectViews(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get(p.get_absolute_url())
         self.assertTrue("NEW TEST MILESTONE" in r.content)
+
+    def test_add_action_item_empty_request(self):
+        p = ProjectFactory()
+        r = self.c.post(p.get_absolute_url() + "add_action_item/",
+                        dict())
+        self.assertEquals(r.status_code, 404)
+
+    def test_add_action_item(self):
+        p = ProjectFactory()
+        u = UserFactory()
+        milestone = MilestoneFactory()
+
+        r = self.c.post(p.get_absolute_url() + "add_action_item/",
+                        {"assigned_to": u.username,
+                         "milestone": milestone.mid})
+        self.assertEquals(r.status_code, 302)
+
+        items = Item.objects.filter(milestone=milestone)
+        self.assertEquals(len(items), 1)
+        self.assertEquals(items[0].assigned_to, u)
 
 
 class TestMilestoneViews(TestCase):
@@ -614,3 +633,5 @@ class TestDRFViews(TestCase):
         m = MilestoneFactory()
         r = self.c.get("/drf/milestones/%d/items/" % m.mid)
         self.assertEqual(r.status_code, 200)
+
+

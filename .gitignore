@@ -7,3 +7,5 @@ media/CACHE
 local_settings.py
 .coverage
 celerybeat-schedule
+.project
+.pydevproject
