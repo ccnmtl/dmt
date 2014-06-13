@@ -9,3 +9,4 @@ local_settings.py
 celerybeat-schedule
 .project
 .pydevproject
+.DS_Store
