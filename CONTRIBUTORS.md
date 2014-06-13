@@ -9,4 +9,5 @@ from the following:
 * Nik Nyby, <nnyby@columbia.edu>
 * James Davis, <jedavis@columbia.edu>
 * Rachelle White, <leahrachelle.w@gmail.com>
+* Jonah Bossewitch <jonahb@columbia.edu>
 
