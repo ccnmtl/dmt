@@ -633,5 +633,3 @@ class TestDRFViews(TestCase):
         m = MilestoneFactory()
         r = self.c.get("/drf/milestones/%d/items/" % m.mid)
         self.assertEqual(r.status_code, 200)
-
-
