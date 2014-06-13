@@ -1,6 +1,14 @@
 .table th.center, .table td.center  { text-align:center; }
 .table th.right, .table td.right    { text-align:right; }
 
+.table th.header { 
+    background-image: url('../img/bg.gif'); 
+    cursor: pointer;
+    background-repeat: no-repeat;
+	background-position: center right;
+	padding-right:16px !important;
+} 
+
 .table th.headerSortable:hover {
   cursor:pointer;
 }
