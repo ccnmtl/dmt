@@ -8,4 +8,10 @@ from the following:
 * Susan Dreher, <sdreher@gmail.com>
 * Nik Nyby, <nnyby@columbia.edu>
 * James Davis, <jedavis@columbia.edu>
+* Zarina Mustapha, <zarina@columbia.edu>
+* Nik Nyby, <nnyby@columbia.edu>
+* James Davis, <jedavis@columbia.edu>
+* Rachelle White, <leahrachelle.w@gmail.com>
+* Jonah Bossewitch <jonahb@columbia.edu>
+* Cassandra Dunlop, <cdunlop@columbia.edu>
 
