@@ -145,3 +145,10 @@ dd:hover .priority-select {
 .tablesorter tbody tr td:nth-child(1) {
 	max-width: 400px;
 }
+
+/* Add Action Item */
+.owner-form-group,
+.assignedto-form-group {
+    float: left;
+    width: 47%;
+}
