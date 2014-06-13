@@ -7,4 +7,7 @@ from the following:
 * Anders Pearson, <anders@columbia.edu>
 * Susan Dreher, <sdreher@gmail.com>
 * Nik Nyby, <nnyby@columbia.edu>
+* James Davis, <jedavis@columbia.edu>
+* Rachelle White, <leahrachelle.w@gmail.com>
 * Jonah Bossewitch <jonahb@columbia.edu>
+
