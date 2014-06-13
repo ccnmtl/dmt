@@ -547,7 +547,9 @@ class ProjectAddItemView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        title = request.POST.get('title', u"somebody forgot to enter a title")
+        title = request.POST.get('title', u"Untitled")
+        if len(title) == 0:
+            title = "Untitled"
         tags = clean_tags(request.POST.get('tags', u''))
         description = request.POST.get('description', u'')
         assigned_to = get_object_or_404(
