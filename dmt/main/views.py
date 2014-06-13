@@ -439,6 +439,13 @@ class ItemUpdateView(LoggedInMixin, UpdateView):
     form_class = ItemUpdateForm
 
 
+class ItemDeleteView(LoggedInMixin, DeleteView):
+    model = Item
+
+    def get_success_url(self):
+        return self.object.milestone.get_absolute_url()
+
+
 class TagListView(LoggedInMixin, ListView):
     model = Tag
     queryset = Tag.objects.all().order_by("name")
