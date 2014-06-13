@@ -391,7 +391,7 @@
 <div class="tab-content">
 	<div class="tab-pane fade in active" id="summary">
 
-  <img src="http://nanny.cul.columbia.edu/render/?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
+  <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
 		 width="800" height="50" />
 
 
@@ -505,7 +505,7 @@
 		Add New Milestone</a></p>
 
 {% if object.milestone_set.count %}
-<table class="table">
+<table class="table table-condensed table-striped tablesorter" id="milestone-table">
 	<thead>
 		<tr>
 			<th>Name</th>
@@ -523,7 +523,7 @@
 			<td>{{milestone.target_date}}</td>
 			<td class="{{milestone.status_class}}">{{milestone.status}}</td>
 			<td>{{milestone.num_open_items}}</td>
-			<td><img src="http://nanny.cul.columbia.edu/render/?target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_logged&target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_estimated&_salt=1369503684.466&height=10&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=100&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
+			<td><img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_logged&target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_estimated&_salt=1369503684.466&height=10&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=100&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
 		 width="100" height="10" /></td>
 		</tr>
 		{% endfor %}
@@ -581,9 +581,13 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 <script>
 $(document).ready(function() 
     { 
-{% if object.active_items %}
-        $("#project-items").tablesorter({sortList: [[2,1], [1,0]]}); 
-{% endif %}
+        {% if object.active_items %}
+            $("#project-items").tablesorter({sortList: [[2,1], [1,0]]});
+        {% endif %}
+        
+        {% if object.milestone_set.count %}
+            $("#milestone-table").tablesorter({sortList: [[1,1], [1,0]]});
+        {% endif %}
 
         $("#add-tracker-button").click(function(event) {
            var pid = $("#tracker-pid-input").val();
