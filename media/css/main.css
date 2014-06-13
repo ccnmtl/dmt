@@ -143,5 +143,5 @@ dd:hover .priority-select {
 
 /*Tablecloth.js edits*/
 .tablesorter tbody tr td:nth-child(1) {
-	max-width: 500px;
+	max-width: 400px;
 }
