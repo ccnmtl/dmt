@@ -1,7 +1,6 @@
-header#masthead
-{
-	 height: 41px;
-   background-color: #9af;
+header#masthead	{
+	height: 41px;
+	background-color: #9af;
 }
 
 header h1 {
@@ -139,4 +138,10 @@ dd:hover .priority-select {
 }
 .personnel:hover .remove-link {
 		visibility: visible;
+}
+
+
+/*Tablecloth.js edits*/
+.tablesorter tbody tr td:nth-child(1) {
+	max-width: 500px;
 }
