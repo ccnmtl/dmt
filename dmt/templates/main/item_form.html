@@ -2,6 +2,15 @@
 {% load bootstrap %}
 
 {% block content %}
+
+<p class="pull-right">
+	<a class="btn btn-xs btn-danger"
+		 href="{{object.get_absolute_url}}delete/"
+		 ><span class="glyphicon glyphicon-trash"></span>
+		delete</a>
+</p>
+
+
 <form action="." method="post">{% csrf_token %}
 <fieldset><legend>Edit Item</legend>
 {{form|bootstrap}}

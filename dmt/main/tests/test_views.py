@@ -210,6 +210,24 @@ class TestItemViews(TestCase):
         self.assertTrue(i.title in r.content)
         self.assertTrue(i.get_absolute_url() in r.content)
 
+    def test_delete_item_view(self):
+        i = ItemFactory()
+        iid = i.iid
+        milestone = i.milestone
+        r = self.c.post(i.get_absolute_url() + "delete/")
+        # should redirect us to the milestone
+        self.assertEquals(r.status_code, 302)
+        self.assertTrue(r['Location'].endswith(milestone.get_absolute_url()))
+        # make sure it's gone
+        q = Item.objects.filter(iid=iid)
+        self.assertEquals(q.count(), 0)
+
+    def test_delete_item_confirm(self):
+        i = ItemFactory()
+        r = self.c.get(i.get_absolute_url() + "delete/")
+        self.assertEquals(r.status_code, 200)
+        self.assertTrue("<form" in r.content)
+
 
 class TestItemTagViews(TestCase):
     def setUp(self):
