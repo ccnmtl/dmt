@@ -21,6 +21,7 @@ from dmt.main.views import (
     ProjectUpdateView, MilestoneUpdateView, ItemUpdateView,
     ProjectAddItemView, DashboardView, MilestoneListView,
     ProjectRemoveUserView, ProjectAddUserView, ProjectAddMilestoneView,
+    ItemDeleteView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed
 
@@ -87,6 +88,7 @@ urlpatterns = patterns(
      ItemPriorityView.as_view()),
     (r'^item/(?P<pk>\d+)/assigned_to/$', ReassignItemView.as_view()),
     (r'^item/(?P<pk>\d+)/owner/$', ChangeOwnerItemView.as_view()),
+    (r'^item/(?P<pk>\d+)/delete/$', ItemDeleteView.as_view()),
     (r'^milestone/$', MilestoneListView.as_view()),
     (r'^milestone/(?P<pk>\d+)/$', MilestoneDetailView.as_view()),
     (r'^milestone/(?P<pk>\d+)/edit/$', MilestoneUpdateView.as_view()),
