@@ -1,5 +1,6 @@
 from .factories import ProjectFactory, MilestoneFactory, ItemFactory, \
-    NodeFactory, EventFactory, CommentFactory, UserFactory, StatusUpdateFactory
+    NodeFactory, EventFactory, CommentFactory, UserFactory, \
+    StatusUpdateFactory, NotifyFactory
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
@@ -254,6 +255,25 @@ class TestItemViews(TestCase):
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue(i.title in r.content)
+
+    def test_item_view_notification_present(self):
+        i = ItemFactory(assigned_to=self.pu)
+        NotifyFactory(item=i, username=self.pu)
+        r = self.c.get(i.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue("input_notification" in r.content)
+        self.assertTrue(r.context['assigned_to_current_user'])
+        self.assertTrue(
+            r.context['notifications_enabled_for_current_user'])
+
+    def test_item_view_notification_not_present(self):
+        i = ItemFactory()
+        r = self.c.get(i.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue("input_notification" in r.content)
+        self.assertFalse(r.context['assigned_to_current_user'])
+        self.assertFalse(
+            r.context['notifications_enabled_for_current_user'])
 
     def test_milestone_view(self):
         i = ItemFactory()
