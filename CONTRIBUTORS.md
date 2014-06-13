@@ -6,3 +6,4 @@ from the following:
 
 * Anders Pearson, <anders@columbia.edu>
 * Susan Dreher, <sdreher@gmail.com>
+* Zarina Mustapha, <zarina@columbia.edu>
