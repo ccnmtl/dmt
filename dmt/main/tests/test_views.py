@@ -167,11 +167,28 @@ class TestProjectViews(TestCase):
                         "add_action_item/",
                         {"assigned_to": u.username,
                          "milestone": milestone.mid})
-        self.assertEquals(r.status_code, 302)
+        self.assertEqual(r.status_code, 302)
 
-        items = Item.objects.filter(milestone=milestone)
-        self.assertEquals(len(items), 1)
-        self.assertEquals(items[0].assigned_to, u)
+        items = Item.objects.filter(milestone=milestone, assigned_to=u)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].assigned_to, u)
+        self.assertEqual(items[0].title, "Untitled")
+
+    def test_add_action_item_empty_title(self):
+        u = UserFactory()
+        milestone = MilestoneFactory()
+
+        r = self.c.post(milestone.project.get_absolute_url() +
+                        "add_action_item/",
+                        {"assigned_to": u.username,
+                         "milestone": milestone.mid,
+                         "title": ""})
+        self.assertEqual(r.status_code, 302)
+
+        items = Item.objects.filter(milestone=milestone, assigned_to=u)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].assigned_to, u)
+        self.assertEqual(items[0].title, "Untitled")
 
 
 class TestMilestoneViews(TestCase):
