@@ -438,6 +438,13 @@ class ItemUpdateView(LoggedInMixin, UpdateView):
     model = Item
     form_class = ItemUpdateForm
 
+    def get_context_data(self, **kwargs):
+        context = super(ItemUpdateView, self).get_context_data(**kwargs)
+        milestone = Milestone.objects.get(item=context['item'].pk)
+        project = Project.objects.get(milestone=milestone)
+        context['item_milestones'] = Milestone.objects.filter(project=project)
+        return context
+
 
 class TagListView(LoggedInMixin, ListView):
     model = Tag

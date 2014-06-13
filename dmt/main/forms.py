@@ -40,3 +40,4 @@ class ItemUpdateForm(ModelForm):
         exclude = ['iid', 'milestone', 'owner',
                    'assigned_to', 'status', 'r_status', 'last_mod',
                    'tags', 'priority']
+
