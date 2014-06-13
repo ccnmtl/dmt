@@ -444,10 +444,6 @@ class TagListView(LoggedInMixin, ListView):
     queryset = Tag.objects.all().order_by("name")
 
 
-class GroupListView(LoggedInMixin, ListView):
-    model = Group
-
-
 class TagDetailView(LoggedInMixin, DetailView):
     model = Tag
 
