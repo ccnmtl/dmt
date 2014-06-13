@@ -546,7 +546,6 @@ class ProjectAddItemView(LoggedInMixin, View):
 
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
         title = request.POST.get('title', u"Untitled")
         if len(title) == 0:
             title = "Untitled"
@@ -554,6 +553,8 @@ class ProjectAddItemView(LoggedInMixin, View):
         description = request.POST.get('description', u'')
         assigned_to = get_object_or_404(
             User, username=request.POST.get('assigned_to'))
+        owner = get_object_or_404(
+            User, username=request.POST.get('owner'))
         milestone = get_object_or_404(
             Milestone, mid=request.POST.get('milestone'))
         priority = request.POST.get('priority', '1')
@@ -561,7 +562,7 @@ class ProjectAddItemView(LoggedInMixin, View):
             type=self.item_type,
             title=title,
             assigned_to=assigned_to,
-            owner=user,
+            owner=owner,
             milestone=milestone,
             priority=priority,
             description=description,
