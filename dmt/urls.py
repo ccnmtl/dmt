@@ -22,7 +22,7 @@ from dmt.main.views import (
     ProjectAddItemView, DashboardView, MilestoneListView,
     ProjectRemoveUserView, ProjectAddUserView, ProjectAddMilestoneView,
 )
-from dmt.main.feeds import ForumFeed, StatusUpdateFeed
+from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -118,6 +118,7 @@ urlpatterns = patterns(
     (r'^dashboard/$', DashboardView.as_view()),
     (r'^feeds/forum/rss/$', ForumFeed()),
     (r'^feeds/status/$', StatusUpdateFeed()),
+    (r'^feeds/project/(?P<pk>\d+)/$', ProjectFeed()),
     url(r'^_impersonate/', include('impersonate.urls')),
     (r'^stats/$', TemplateView.as_view(template_name="stats.html")),
     (r'^smoketest/', include('smoketest.urls')),
