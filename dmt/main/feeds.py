@@ -47,7 +47,7 @@ class StatusUpdateFeed(Feed):
 
 
 class ProjectFeed(Feed):
-    """Create a feed of all active items, per project (id)"""
+    """Create a feed of the active items, per project (id)"""
 
     # Looks up the project based on the pk id specified in the url
     def get_object(self, request, pk):
@@ -70,7 +70,7 @@ class ProjectFeed(Feed):
                                                status__in=['OPEN',
                                                            'RESOLVED',
                                                            'INPROGRESS']
-                                               ).order_by('last_mod')[:10]
+                                               ).order_by('last_mod')
         return active_pmt_items
 
     def item_title(self, item):
