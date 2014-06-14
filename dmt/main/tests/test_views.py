@@ -646,6 +646,12 @@ class TestFeeds(TestCase):
         r = self.c.get("/feeds/status/")
         self.assertEquals(r.status_code, 200)
 
+    def test_project_feed(self):
+        p = ProjectFactory()
+        ItemFactory()
+        r = self.c.get("/feeds/project/%s/" % p.pid)
+        self.assertEquals(r.status_code, 200)
+
 
 class TestDRFViews(TestCase):
     def setUp(self):
