@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load markup %}
+{% load markup claimtags %}
 
 {% block title %}Project: {{object.name}}{% endblock %}
 
@@ -228,9 +228,11 @@
                         <label for="action_item-owner">Owner</label>
                         <select name="owner" id="action_item-owner"
                                         class="form-control">
+                            
+                            {% pmtuser as pmt_user %}
                             {% for user in object.all_personnel_in_project %}
                             <option value="{{user.username}}"
-                                            {% ifequal user.username request.user.username %}
+                                            {% ifequal user.username pmt_user.username %}
                                             selected="selected"
                                             {% endifequal %}
                                             >{{user.fullname}}</option>
