@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.utils.timezone import utc
 from dmt.main.models import User, Project, Milestone, Item
 from dmt.main.models import Comment, Events, Node, ActualTime, StatusUpdate
-from dmt.main.models import Client, Attachment
+from dmt.main.models import Client, Attachment, Notify
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -42,6 +42,12 @@ class ItemFactory(factory.DjangoModelFactory):
     milestone = factory.SubFactory(MilestoneFactory)
     status = "OPEN"
     priority = 1
+
+
+class NotifyFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Notify
+    item = factory.SubFactory(ItemFactory)
+    username = factory.SubFactory(UserFactory)
 
 
 class EventFactory(factory.DjangoModelFactory):
