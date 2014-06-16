@@ -15,7 +15,7 @@ from taggit.utils import parse_tags
 import markdown
 from .models import (
     Project, Milestone, Item, Node, User, Client, StatusUpdate,
-    ActualTime)
+    ActualTime, Notify)
 from .models import interval_sum
 from .forms import (
     StatusUpdateForm, NodeUpdateForm, UserUpdateForm, ProjectUpdateForm,
@@ -344,6 +344,30 @@ class SplitItemView(LoggedInMixin, View):
 
 class ItemDetailView(LoggedInMixin, DetailView):
     model = Item
+
+    def get_context_data(self, **kwargs):
+        context = super(ItemDetailView, self).get_context_data(**kwargs)
+
+        context['assigned_to_current_user'] = False
+        context['notifications_enabled_for_current_user'] = False
+
+        current_user = \
+            get_object_or_404(Claim, django_user=self.request.user).pmt_user
+
+        if (current_user):
+            current_username = current_user.username
+
+            context['assigned_to_current_user'] = \
+                (context['item'].assigned_to.username == current_username)
+
+            notification = Notify.objects.filter(
+                item=context['item'].iid, username=current_username
+            ).first()
+
+            context['notifications_enabled_for_current_user'] = \
+                True if notification else False
+
+        return context
 
 
 class IndexView(LoggedInMixin, TemplateView):

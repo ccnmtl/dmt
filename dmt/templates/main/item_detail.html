@@ -420,8 +420,30 @@
 <input class="form-control" type="text" placeholder="add tags (comma seperated)" name="tags" />
 <span class="input-group-btn"><input type="submit" value="tag" class="btn btn-default" /></span>
 </div>
-</form>
 </dd>
+
+<dt>NOTIFICATIONS</dt>
+<dd>
+<div class="input-group">
+<label
+    class="disabled"
+    for="input_notification">
+
+    <input
+        disabled="disabled"
+        {% if notifications_enabled_for_current_user %}
+            checked="checked"
+        {% endif %}
+        class="form-control"
+        type="checkbox"
+        placeholder="add tags (comma seperated)"
+        name="input_notification"
+        id="input_notification" />
+    Notify me of changes to this action item
+</label>
+</div>
+</dd>
+</form>
 </dl>
 
 <hr />
