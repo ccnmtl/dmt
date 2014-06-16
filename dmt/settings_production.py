@@ -27,7 +27,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 STATICFILES_DIRS = ()
-STATIC_ROOT = "/var/www/dmt/dmt/media/"
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), "../media")
 
 STATSD_PATCHES.append('django_statsd.patches.db')
 
