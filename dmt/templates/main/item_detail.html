@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load markup %}
+{% load waffle_tags %}
 
 {% block title %}Item: {{object.title}}{% endblock %}
 
@@ -422,6 +423,7 @@
 </div>
 </dd>
 
+{% flag notification_ui %}
 <dt>NOTIFICATIONS</dt>
 <dd>
 <div class="input-group">
@@ -443,6 +445,7 @@
 </label>
 </div>
 </dd>
+{% endflag %}
 </form>
 </dl>
 

@@ -4,6 +4,7 @@ from .factories import ProjectFactory, MilestoneFactory, ItemFactory, \
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
+from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Item
 
@@ -257,6 +258,7 @@ class TestItemViews(TestCase):
         self.assertTrue(i.title in r.content)
 
     def test_item_view_notification_present(self):
+        Flag.objects.create(name='notification_ui', everyone=True)
         i = ItemFactory(assigned_to=self.pu)
         NotifyFactory(item=i, username=self.pu)
         r = self.c.get(i.get_absolute_url())
@@ -267,6 +269,7 @@ class TestItemViews(TestCase):
             r.context['notifications_enabled_for_current_user'])
 
     def test_item_view_notification_not_present(self):
+        Flag.objects.create(name='notification_ui', everyone=True)
         i = ItemFactory()
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
