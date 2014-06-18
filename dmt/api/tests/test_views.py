@@ -6,7 +6,7 @@ from rest_framework.test import APITestCase
 
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.tests.factories import MilestoneFactory, ClientFactory
-from dmt.main.tests.factories import ItemFactory
+from dmt.main.tests.factories import ItemFactory, NotifyFactory
 
 from ..serializers import ItemSerializer
 
@@ -184,3 +184,26 @@ class ItemTests(APITestCase):
                       r.data["owner"].lower())
         self.assertIn(self.item.assigned_to.username.lower(),
                       r.data["assigned_to"].lower())
+
+
+class ItemNotificationViewTest(APITestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.item = ItemFactory()
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+        self.client.force_authenticate(user=self.u)
+
+        # Create the notification
+        self.notification = NotifyFactory(item=self.item, username=self.pu)
+
+    def test_getting_an_item_returns_notification(self):
+        r = self.client.get(
+            "/drf/items/"+str(self.item.iid)+"/", format="json")
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.data['iid'], self.item.iid)
+
+        usernames = [n.lower() for n in r.data['notifies']]
+        self.assertIn(self.pu.username.lower(), usernames)

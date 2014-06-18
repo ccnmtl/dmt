@@ -1,7 +1,7 @@
 from django.conf.urls import patterns
 from .views import (
-    AllProjectsView, AutocompleteProjectView, AddTrackerView, ItemHoursView,
-    GitUpdateView)
+    AllProjectsView, AutocompleteProjectView, AddTrackerView,
+    ItemHoursView, GitUpdateView)
 
 
 urlpatterns = patterns(
