@@ -4,30 +4,17 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
-from .serializers import (
-    ClientSerializer, ItemSerializer, MilestoneSerializer, ProjectSerializer,
-    UserSerializer
-)
+from rest_framework import filters, generics, viewsets
+from rest_framework.views import APIView
+from simpleduration import Duration, InvalidDuration
 
 from dmt.claim.models import Claim
-from dmt.main.models import Client, Item, Milestone, Project, User
+from dmt.main.models import Client, Item, Milestone, Notify, Project, User
 
-from rest_framework import generics, viewsets
-from simpleduration import Duration, InvalidDuration
-from json import dumps
-
-
-class AllProjectsView(View):
-    def get(self, request):
-        d = [dict(pid=p.pid, value=p.name) for p in Project.objects.all()]
-        return HttpResponse(dumps(d))
-
-
-class AutocompleteProjectView(View):
-    def get(self, request):
-        d = [dict(pid=p.pid, value=p.name)
-             for p in Project.objects.filter(name__icontains=request.GET['q'])]
-        return HttpResponse(dumps(d))
+from .serializers import (
+    ClientSerializer, ItemSerializer, MilestoneSerializer, NotifySerializer,
+    ProjectSerializer, UserSerializer,
+)
 
 
 class ClientViewSet(viewsets.ModelViewSet):
@@ -123,6 +110,20 @@ class MilestoneViewSet(viewsets.ModelViewSet):
     paginate_by = 20
 
 
+class NotifyView(APIView):
+    """
+    View to update a user's notification status
+
+    This is a standalone resource not related to /item/ because
+    django-rest-framework doesn't support writable nested resources yet. See
+    the github issue here for the status of this:
+    https://github.com/tomchristie/django-rest-framework/issues/395
+    """
+    model = Notify
+    serializer_class = NotifySerializer
+    permission_classes = ()
+
+
 class ProjectMilestoneList(generics.ListCreateAPIView):
     model = Milestone
     serializer_class = MilestoneSerializer
@@ -175,6 +176,8 @@ class AddTrackerView(View):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
     paginate_by = 20
 
 

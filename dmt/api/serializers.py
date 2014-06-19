@@ -38,6 +38,11 @@ class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
                   'description', 'item_set')
 
 
+class NotifySerializer(serializers.Serializer):
+    item = serializers.RelatedField()
+    username = serializers.RelatedField()
+
+
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     milestone_set = serializers.HyperlinkedRelatedField(
         many=True,

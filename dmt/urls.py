@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
-from rest_framework import routers
+
 from dmt.main.views import (
     SearchView,
     AddCommentView, ResolveItemView,
@@ -22,20 +22,7 @@ from dmt.main.views import (
     ProjectRemoveUserView, ProjectAddUserView, ProjectAddMilestoneView,
     ItemDeleteView,
 )
-from dmt.api.views import (
-    UserViewSet, ProjectMilestoneList,
-    ClientViewSet, ProjectViewSet,
-    MilestoneViewSet, ItemViewSet,
-    MilestoneItemList,
-)
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
-
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'clients', ClientViewSet)
-router.register(r'projects', ProjectViewSet)
-router.register(r'milestones', MilestoneViewSet)
-router.register(r'items', ItemViewSet)
 
 admin.autodiscover()
 
@@ -58,14 +45,8 @@ urlpatterns = patterns(
     logout_page,
     (r'^$', IndexView.as_view()),
     (r'^admin/', include(admin.site.urls)),
+    (r'^drf/', include('dmt.api.urls')),
     (r'^api/1.0/', include('dmt.api.urls')),
-    url(r'^api-auth/',
-        include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^drf/projects/(?P<pk>\d+)/milestones/$',
-        ProjectMilestoneList.as_view(), name='project-milestones'),
-    url(r'^drf/milestones/(?P<pk>\d+)/items/$',
-        MilestoneItemList.as_view(), name='milestone-items'),
-    (r'^drf/', include(router.urls)),
     (r'^claim/', include('dmt.claim.urls')),
     (r'^search/$', SearchView.as_view()),
     (r'^client/$', ClientListView.as_view()),

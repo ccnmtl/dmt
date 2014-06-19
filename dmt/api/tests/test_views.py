@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
@@ -11,17 +12,19 @@ from dmt.main.tests.factories import ItemFactory, NotifyFactory
 from ..serializers import ItemSerializer
 
 
-class AllProjectsViewTest(TestCase):
+class ProjectsTest(APITestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.client.force_authenticate(user=self.u)
+
     def test_get(self):
-        self.c = Client()
-        r = self.c.get("/api/1.0/projects/all/")
+        r = self.client.get(reverse("project-list"))
         self.assertEqual(r.status_code, 200)
 
-
-class AutoCompleteProjectViewTest(TestCase):
-    def test_get(self):
-        self.c = Client()
-        r = self.c.get("/api/1.0/projects/autocomplete/?q=test")
+    def test_search(self):
+        url = reverse("project-list")
+        data = {'search': 'test'}
+        r = self.client.get(url, data)
         self.assertEqual(r.status_code, 200)
 
 
@@ -167,7 +170,7 @@ class ItemTests(APITestCase):
         self.item = ItemFactory()
         self.client.force_authenticate(user=self.u)
 
-    def test_getting_an_item_returns_correct_data(self):
+    def test_get(self):
         # TODO: figure out how to use reverse() with these resources so we
         # aren't manually building the url.
         r = self.client.get(
@@ -185,21 +188,14 @@ class ItemTests(APITestCase):
         self.assertIn(self.item.assigned_to.username.lower(),
                       r.data["assigned_to"].lower())
 
-
-class ItemNotificationViewTest(APITestCase):
-    def setUp(self):
-        self.u = User.objects.create(username="testuser")
-        self.item = ItemFactory()
+    def test_get_with_notification(self):
         self.pu = PMTUser.objects.create(username="testpmtuser",
                                          email="testemail@columbia.edu",
                                          status="active")
         Claim.objects.create(django_user=self.u, pmt_user=self.pu)
-        self.client.force_authenticate(user=self.u)
 
-        # Create the notification
         self.notification = NotifyFactory(item=self.item, username=self.pu)
 
-    def test_getting_an_item_returns_notification(self):
         r = self.client.get(
             "/drf/items/"+str(self.item.iid)+"/", format="json")
         self.assertEqual(r.status_code, 200)

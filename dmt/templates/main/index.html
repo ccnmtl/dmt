@@ -141,8 +141,8 @@ $(document).ready(function()
   {% endif %}
         $("#project-input").typeahead({
           name: 'projects',
-          prefetch: '/api/1.0/projects/all/',
-          remote: '/api/1.0/projects/autocomplete/?q=%QUERY'
+          prefetch: '/drf/projects/',
+          remote: '/drf/projects/?search=%QUERY'
         });
         $("#project-input").on("typeahead:selected", function (object, datum) {
              $("#tracker-pid-input").val(datum.pid);
