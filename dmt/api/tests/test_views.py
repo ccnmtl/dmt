@@ -1,9 +1,14 @@
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
+
+from rest_framework.test import APITestCase
+
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.tests.factories import MilestoneFactory, ClientFactory
 from dmt.main.tests.factories import ItemFactory
+
+from ..serializers import ItemSerializer
 
 
 class AllProjectsViewTest(TestCase):
@@ -154,3 +159,28 @@ class GitUpdateViewTest(TestCase):
             )
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.content, "ok")
+
+
+class ItemTests(APITestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.item = ItemFactory()
+        self.client.force_authenticate(user=self.u)
+
+    def test_getting_an_item_returns_correct_data(self):
+        # TODO: figure out how to use reverse() with these resources so we
+        # aren't manually building the url.
+        r = self.client.get(
+            "/drf/items/"+str(self.item.iid)+"/", format="json")
+        self.assertEqual(r.status_code, 200)
+
+        # Loop through the simple attributes of the item
+        for attr in ItemSerializer.Meta.fields:
+            if (hasattr(self.item.__dict__, attr)):
+                self.assertEqual(r.data[attr], self.item.__dict__[attr])
+
+        # Verify accuracy of relationships
+        self.assertIn(self.item.owner.username.lower(),
+                      r.data["owner"].lower())
+        self.assertIn(self.item.assigned_to.username.lower(),
+                      r.data["assigned_to"].lower())
