@@ -4,9 +4,15 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
-from dmt.claim.models import Claim
-from dmt.main.models import Project, Item, Client, User
+from .serializers import (
+    ClientSerializer, ItemSerializer, MilestoneSerializer, ProjectSerializer,
+    UserSerializer
+)
 
+from dmt.claim.models import Claim
+from dmt.main.models import Client, Item, Milestone, Project, User
+
+from rest_framework import generics, viewsets
 from simpleduration import Duration, InvalidDuration
 from json import dumps
 
@@ -22,6 +28,12 @@ class AutocompleteProjectView(View):
         d = [dict(pid=p.pid, value=p.name)
              for p in Project.objects.filter(name__icontains=request.GET['q'])]
         return HttpResponse(dumps(d))
+
+
+class ClientViewSet(viewsets.ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    paginate_by = 10
 
 
 class ItemHoursView(View):
@@ -40,6 +52,12 @@ class ItemHoursView(View):
         td = d.timedelta()
         item.add_resolve_time(user, td)
         return HttpResponse("ok")
+
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    paginate_by = 20
 
 
 def normalize_email(email):
@@ -87,6 +105,33 @@ class GitUpdateView(View):
         return HttpResponse("ok")
 
 
+class MilestoneItemList(generics.ListCreateAPIView):
+    model = Item
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk', None)
+        return Item.objects.filter(
+            milestone__pk=pk).prefetch_related(
+            'owner', 'assigned_to',
+            'milestone')
+
+
+class MilestoneViewSet(viewsets.ModelViewSet):
+    queryset = Milestone.objects.all()
+    serializer_class = MilestoneSerializer
+    paginate_by = 20
+
+
+class ProjectMilestoneList(generics.ListCreateAPIView):
+    model = Milestone
+    serializer_class = MilestoneSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk', None)
+        return Milestone.objects.filter(project__pk=pk)
+
+
 class AddTrackerView(View):
     @method_decorator(login_required)
     def post(self, request):
@@ -125,3 +170,14 @@ class AddTrackerView(View):
                 pass
         item.add_resolve_time(user, td)
         return HttpResponse("ok")
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    paginate_by = 20
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

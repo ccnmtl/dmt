@@ -9,7 +9,6 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
 from django_statsd.clients import statsd
-from rest_framework import viewsets
 from taggit.models import Tag
 from taggit.utils import parse_tags
 import markdown
@@ -21,10 +20,7 @@ from .forms import (
     StatusUpdateForm, NodeUpdateForm, UserUpdateForm, ProjectUpdateForm,
     MilestoneUpdateForm, ItemUpdateForm)
 from dmt.claim.models import Claim
-from .serializers import (
-    UserSerializer, ClientSerializer, ProjectSerializer,
-    MilestoneSerializer, ItemSerializer)
-from rest_framework import generics
+
 from datetime import datetime, timedelta
 from simpleduration import Duration, InvalidDuration
 
@@ -88,56 +84,6 @@ class SearchView(LoggedInMixin, TemplateView):
             tags=Tag.objects.filter(name__icontains=q),
             status_updates=StatusUpdate.objects.filter(body__icontains=q),
         )
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class ClientViewSet(viewsets.ModelViewSet):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
-    paginate_by = 10
-
-
-class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
-    paginate_by = 20
-
-
-class ProjectMilestoneList(generics.ListCreateAPIView):
-    model = Milestone
-    serializer_class = MilestoneSerializer
-
-    def get_queryset(self):
-        pk = self.kwargs.get('pk', None)
-        return Milestone.objects.filter(project__pk=pk)
-
-
-class MilestoneViewSet(viewsets.ModelViewSet):
-    queryset = Milestone.objects.all()
-    serializer_class = MilestoneSerializer
-    paginate_by = 20
-
-
-class MilestoneItemList(generics.ListCreateAPIView):
-    model = Item
-    serializer_class = ItemSerializer
-
-    def get_queryset(self):
-        pk = self.kwargs.get('pk', None)
-        return Item.objects.filter(
-            milestone__pk=pk).prefetch_related(
-            'owner', 'assigned_to',
-            'milestone')
-
-
-class ItemViewSet(viewsets.ModelViewSet):
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-    paginate_by = 20
 
 
 def log_time(item, user, request):
