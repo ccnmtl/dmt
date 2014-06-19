@@ -867,7 +867,10 @@ class HistoryComment(HistoryItem):
 
 
 class Notify(models.Model):
-    item = models.ForeignKey(Item, null=False, db_column='iid')
+    item = models.ForeignKey(Item,
+                             null=False,
+                             db_column='iid',
+                             related_name='notifies')
     username = models.ForeignKey(User, db_column='username')
 
     class Meta:

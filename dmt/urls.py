@@ -4,9 +4,8 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from rest_framework import routers
 from dmt.main.views import (
-    SearchView, UserViewSet, ClientViewSet, ProjectViewSet,
-    MilestoneViewSet, ItemViewSet, ProjectMilestoneList,
-    MilestoneItemList, AddCommentView, ResolveItemView,
+    SearchView,
+    AddCommentView, ResolveItemView,
     InProgressItemView, VerifyItemView, ReopenItemView,
     SplitItemView, ItemDetailView, IndexView, ClientListView,
     ClientDetailView, ForumView, NodeDetailView, MilestoneDetailView,
@@ -22,6 +21,12 @@ from dmt.main.views import (
     ProjectAddItemView, DashboardView, MilestoneListView,
     ProjectRemoveUserView, ProjectAddUserView, ProjectAddMilestoneView,
     ItemDeleteView,
+)
+from dmt.api.views import (
+    UserViewSet, ProjectMilestoneList,
+    ClientViewSet, ProjectViewSet,
+    MilestoneViewSet, ItemViewSet,
+    MilestoneItemList,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
