@@ -129,8 +129,8 @@
 {% endblock %}
 
 {% block js %}
-  <script src="{{STATIC_URL}}js/jquery.tablesorter.min.js"></script>
-	<script src="{{STATIC_URL}}js/typeahead.min.js"></script>
+<script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
+<script src="{{STATIC_URL}}js/libs/typeahead.jquery.min.js"></script>
 
 <script>
 $(document).ready(function() 
@@ -141,8 +141,8 @@ $(document).ready(function()
   {% endif %}
         $("#project-input").typeahead({
           name: 'projects',
-          prefetch: '/api/1.0/projects/all/',
-          remote: '/api/1.0/projects/autocomplete/?q=%QUERY'
+          prefetch: '/drf/projects/',
+          remote: '/drf/projects/?search=%QUERY'
         });
         $("#project-input").on("typeahead:selected", function (object, datum) {
              $("#tracker-pid-input").val(datum.pid);

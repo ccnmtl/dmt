@@ -1,5 +1,5 @@
 from dmt.main.models import (
-    Client, Item, Milestone, Project, User
+    Client, Item, Milestone, Notify, Project, User
 )
 
 from rest_framework import serializers
@@ -36,6 +36,15 @@ class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
         model = Milestone
         fields = ('mid', 'name', 'target_date', 'project', 'status',
                   'description', 'item_set')
+
+
+class NotifySerializer(serializers.Serializer):
+    item = serializers.RelatedField()
+    username = serializers.RelatedField()
+
+    class Meta:
+        model = Notify
+        fields = ('item', 'username')
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):

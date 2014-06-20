@@ -875,6 +875,10 @@ class Notify(models.Model):
 
     class Meta:
         db_table = u'notify'
+        unique_together = ('item', 'username')
+
+    def __unicode__(self):
+        return '%s' % (self.username.username)
 
 
 class Client(models.Model):
