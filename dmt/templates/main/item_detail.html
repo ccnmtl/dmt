@@ -543,8 +543,10 @@ by <a href="{{history_item.user.get_absolute_url}}">{{history_item.user.fullname
 
 
 {% block js %}
+{% flag notification_ui %}
 <script data-main="{{STATIC_URL}}js/item"
 				src="{{STATIC_URL}}js/libs/require/require.js"></script>
+{% endflag %}
 <script>
 $(document).ready(function() 
     { 
