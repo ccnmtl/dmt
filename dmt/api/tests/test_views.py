@@ -201,6 +201,19 @@ class NotifyTests(APITestCase):
         self.n = NotifyFactory(item=self.item, username=self.pu)
         self.url = reverse("notify", kwargs={'pk':self.n.item.iid})
 
+    def test_delete(self):
+        self.client.login(username=self.u.username, password="test")
+        r = self.client.delete(self.url)
+        self.assertEqual(r.status_code, 204)
+
+        user = Claim.objects.get(django_user=self.u).pmt_user
+        notify = Notify.objects.filter(item=self.item, username=user)
+        self.assertEqual(len(notify), 0)
+
+    def test_delete_not_logged_in(self):
+        r = self.client.delete(self.url)
+        self.assertEqual(r.status_code, 403)
+
     def test_get(self):
         self.client.login(username=self.u.username, password="test")
         r = self.client.get(self.url)
@@ -232,17 +245,17 @@ class NotifyTests(APITestCase):
         r = self.client.post(self.url)
         self.assertEqual(r.status_code, 403)
 
-    def test_delete(self):
+    def test_put(self):
         self.client.login(username=self.u.username, password="test")
-        r = self.client.delete(self.url)
-        self.assertEqual(r.status_code, 204)
+        r = self.client.put(self.url)
+        self.assertEqual(r.status_code, 201)
 
         user = Claim.objects.get(django_user=self.u).pmt_user
-        notify = Notify.objects.filter(item=self.item, username=user)
-        self.assertEqual(len(notify), 0)
+        notify = Notify.objects.get(item=self.item, username=user)
+        self.assertIsInstance(notify, Notify)
 
-    def test_delete_not_logged_in(self):
-        r = self.client.delete(self.url)
+    def test_put_not_logged_in(self):
+        r = self.client.put(self.url)
         self.assertEqual(r.status_code, 403)
 
 

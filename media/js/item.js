@@ -34,21 +34,21 @@ require([
     'jquery',
     'backbone',
     'models/item',
-    'views/item_notification_app'
+    'views/item_app'
 ], function($, Backbone, Item, AppView) {
-        var csrftoken = getCookie('csrftoken');
-        var oldSync = Backbone.sync;
+    var csrftoken = getCookie('csrftoken');
+    var oldSync = Backbone.sync;
 
-        Backbone.sync = function(method, model, options) {
-            options.beforeSend = function(xhr) {
-                xhr.setRequestHeader('X-CSRFToken', csrftoken);
-            };
-            return oldSync(method, model, options);
+    Backbone.sync = function(method, model, options) {
+        options.beforeSend = function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
         };
+        return oldSync(method, model, options);
+    };
 
-        var item_id = $("#item-id").html();
-        var item = new Item({item_id: item_id});
-        item.fetch();
-        var app = new AppView({model: item, el: $("#item-container")});
-        app.render();
+    var item_id = $("#item-id").html();
+    var item = new Item({item_id: item_id});
+    item.fetch();
+    var app = new AppView({model: item, el: $("#item-container")});
+    app.render();
 });

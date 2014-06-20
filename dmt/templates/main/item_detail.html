@@ -424,6 +424,10 @@
 </dd>
 
 {% flag notification_ui %}
+<span id="item-id" style="display: none;">{{object.iid}}</span>
+
+<div id="item-container"></div>
+
 <dt>NOTIFICATIONS</dt>
 <dd>
 <div class="input-group" id="item-notification-container">
@@ -432,7 +436,9 @@
     for="input_notification">
 
     <input
-        disabled="disabled"
+        {% if assigned_to_current_user %}
+            disabled="disabled"
+        {% endif %}
         {% if notifications_enabled_for_current_user %}
             checked="checked"
         {% endif %}
@@ -445,8 +451,6 @@
 </label>
 </div>
 </dd>
-
-<span id="item-id" style="display: none;">{{object.iid}}</span>
 
 <script type="text/template" id="item-template">
 </script>
@@ -539,7 +543,7 @@ by <a href="{{history_item.user.get_absolute_url}}">{{history_item.user.fullname
 
 
 {% block js %}
-<script data-main="{{STATIC_URL}}js/item_notification"
+<script data-main="{{STATIC_URL}}js/item"
 				src="{{STATIC_URL}}js/libs/require/require.js"></script>
 <script>
 $(document).ready(function() 

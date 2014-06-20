@@ -147,15 +147,26 @@ class NotifyView(APIView):
         else:
             return Response(status=404)
 
-    def post(self, request, pk, **kwargs):
-        if request.user.is_authenticated():
-            item = get_object_or_404(Item, iid=pk)
-            user = get_object_or_404(Claim,
-                                     django_user=request.user).pmt_user
-            n = Notify.objects.get_or_create(username=user, item=item)
-            return Response(status=201)
-        else:
+    def post(self, request, pk):
+        if not request.user.is_authenticated():
             return Response(status=403)
+
+        item = get_object_or_404(Item, iid=pk)
+        user = get_object_or_404(Claim,
+                                 django_user=request.user).pmt_user
+        n = Notify.objects.get_or_create(username=user, item=item)
+        return Response(status=201)
+
+    def put(self, request, pk):
+        if not request.user.is_authenticated():
+            return Response(status=403)
+
+        item = get_object_or_404(Item, iid=pk)
+        user = get_object_or_404(Claim,
+                                 django_user=request.user).pmt_user
+        n = Notify.objects.get_or_create(username=user, item=item)
+        return Response(status=201)
+
 
 class ProjectMilestoneList(generics.ListCreateAPIView):
     model = Milestone

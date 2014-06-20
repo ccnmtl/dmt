@@ -1,13 +1,14 @@
 define([
-  'jquery',
-  'underscore',
-  'backbone'
+    'jquery',
+    'underscore',
+    'backbone'
 ], function($, _, Backbone) {
 
     var Item = Backbone.Model.extend({
         idAttribute: "iid",
         defaults: function() {
             return {
+                iid: null,
                 title: null,
                 type: null,
                 owner: null,
@@ -21,7 +22,7 @@ define([
                 target_date: null,
                 estimated_time: null,
                 url: null,
-                notifications_enabled: null
+                notifies: []
             };
         },
 
@@ -31,12 +32,6 @@ define([
 
         initialize: function() {
         },
-
-        toFullJSON: function() {
-            var j = this.toJSON();
-            //j['active'] = j['status'] == 'active';
-            return j;
-        }
     });
 
   return Item;
