@@ -129,7 +129,7 @@ class NotifyView(APIView):
             item = get_object_or_404(Item, iid=pk)
             user = get_object_or_404(Claim,
                                      django_user=request.user).pmt_user
-            n = Notify.objects.get(username=user, item=item).delete()
+            Notify.objects.get(username=user, item=item).delete()
             return Response(status=204)
         else:
             return Response(status=403)
@@ -139,9 +139,9 @@ class NotifyView(APIView):
             user = get_object_or_404(Claim,
                                      django_user=request.user).pmt_user
             pmt_username = user.username
-            notify = get_object_or_404(Notify,
-                                       item_id=pk,
-                                       username=pmt_username)
+            get_object_or_404(Notify,
+                              item_id=pk,
+                              username=pmt_username)
             data = {'notify': pmt_username}
             return Response(data)
         else:
@@ -154,7 +154,7 @@ class NotifyView(APIView):
         item = get_object_or_404(Item, iid=pk)
         user = get_object_or_404(Claim,
                                  django_user=request.user).pmt_user
-        n = Notify.objects.get_or_create(username=user, item=item)
+        Notify.objects.get_or_create(username=user, item=item)
         return Response(status=201)
 
     def put(self, request, pk):
@@ -164,7 +164,7 @@ class NotifyView(APIView):
         item = get_object_or_404(Item, iid=pk)
         user = get_object_or_404(Claim,
                                  django_user=request.user).pmt_user
-        n = Notify.objects.get_or_create(username=user, item=item)
+        Notify.objects.get_or_create(username=user, item=item)
         return Response(status=201)
 
 

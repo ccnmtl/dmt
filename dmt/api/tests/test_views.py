@@ -157,7 +157,7 @@ class ItemTests(APITestCase):
 
     def test_get(self):
         r = self.client.get(
-            reverse('item-detail', kwargs={'pk':self.item.iid}))
+            reverse('item-detail', kwargs={'pk': self.item.iid}))
         self.assertEqual(r.status_code, 200)
 
         # Loop through the simple attributes of the item
@@ -180,7 +180,7 @@ class ItemTests(APITestCase):
         self.notification = NotifyFactory(item=self.item, username=self.pu)
 
         r = self.client.get(
-            reverse('item-detail', kwargs={'pk':self.item.iid}))
+            reverse('item-detail', kwargs={'pk': self.item.iid}))
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.data['iid'], self.item.iid)
 
@@ -194,12 +194,12 @@ class NotifyTests(APITestCase):
         self.u.set_password("test")
         self.u.save()
         self.pu = PMTUser.objects.create(username="testpmtuser",
-                                    email="testemail@columbia.edu",
-                                    status="active")
+                                         email="testemail@columbia.edu",
+                                         status="active")
         Claim.objects.create(django_user=self.u, pmt_user=self.pu)
         self.item = ItemFactory()
         self.n = NotifyFactory(item=self.item, username=self.pu)
-        self.url = reverse("notify", kwargs={'pk':self.n.item.iid})
+        self.url = reverse("notify", kwargs={'pk': self.n.item.iid})
 
     def test_delete(self):
         self.client.login(username=self.u.username, password="test")
