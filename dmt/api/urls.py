@@ -8,7 +8,7 @@ from .views import (
     UserViewSet, ProjectMilestoneList,
     ClientViewSet, ProjectViewSet,
     MilestoneViewSet, ItemViewSet,
-    MilestoneItemList,
+    MilestoneItemList, NotifyView
 )
 
 router = routers.DefaultRouter()
@@ -21,6 +21,7 @@ router.register(r'items', ItemViewSet)
 urlpatterns = patterns(
     '',
     (r'^', include(router.urls)),
+    url(r'^notify/(?P<pk>\d+)/$', NotifyView.as_view(), name='notify'),
     url(r'^api-auth/',
         include('rest_framework.urls', namespace='rest_framework')),
     url(r'^projects/(?P<pk>\d+)/milestones/$',

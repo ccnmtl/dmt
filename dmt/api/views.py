@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from rest_framework import filters, generics, viewsets
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from simpleduration import Duration, InvalidDuration
 
@@ -112,7 +113,7 @@ class MilestoneViewSet(viewsets.ModelViewSet):
 
 class NotifyView(APIView):
     """
-    View to update a user's notification status
+    View to update a user's notification status on an action item.
 
     This is a standalone resource not related to /item/ because
     django-rest-framework doesn't support writable nested resources yet. See
@@ -123,6 +124,38 @@ class NotifyView(APIView):
     serializer_class = NotifySerializer
     permission_classes = ()
 
+    def delete(self, request, pk, **kwargs):
+        if request.user.is_authenticated():
+            item = get_object_or_404(Item, iid=pk)
+            user = get_object_or_404(Claim,
+                                     django_user=request.user).pmt_user
+            n = Notify.objects.get(username=user, item=item).delete()
+            return Response(status=204)
+        else:
+            return Response(status=403)
+
+    def get(self, request, pk):
+        if request.user.is_authenticated():
+            user = get_object_or_404(Claim,
+                                     django_user=request.user).pmt_user
+            pmt_username = user.username
+            notify = get_object_or_404(Notify,
+                                       item_id=pk,
+                                       username=pmt_username)
+            data = {'notify': pmt_username}
+            return Response(data)
+        else:
+            return Response(status=404)
+
+    def post(self, request, pk, **kwargs):
+        if request.user.is_authenticated():
+            item = get_object_or_404(Item, iid=pk)
+            user = get_object_or_404(Claim,
+                                     django_user=request.user).pmt_user
+            n = Notify.objects.get_or_create(username=user, item=item)
+            return Response(status=201)
+        else:
+            return Response(status=403)
 
 class ProjectMilestoneList(generics.ListCreateAPIView):
     model = Milestone

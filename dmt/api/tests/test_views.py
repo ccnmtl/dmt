@@ -6,26 +6,11 @@ from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 
 from dmt.claim.models import Claim, PMTUser
+from dmt.main.models import Notify
 from dmt.main.tests.factories import MilestoneFactory, ClientFactory
 from dmt.main.tests.factories import ItemFactory, NotifyFactory
 
 from ..serializers import ItemSerializer
-
-
-class ProjectsTest(APITestCase):
-    def setUp(self):
-        self.u = User.objects.create(username="testuser")
-        self.client.force_authenticate(user=self.u)
-
-    def test_get(self):
-        r = self.client.get(reverse("project-list"))
-        self.assertEqual(r.status_code, 200)
-
-    def test_search(self):
-        url = reverse("project-list")
-        data = {'search': 'test'}
-        r = self.client.get(url, data)
-        self.assertEqual(r.status_code, 200)
 
 
 class AddTrackerViewTest(TestCase):
@@ -171,10 +156,8 @@ class ItemTests(APITestCase):
         self.client.force_authenticate(user=self.u)
 
     def test_get(self):
-        # TODO: figure out how to use reverse() with these resources so we
-        # aren't manually building the url.
         r = self.client.get(
-            "/drf/items/"+str(self.item.iid)+"/", format="json")
+            reverse('item-detail', kwargs={'pk':self.item.iid}))
         self.assertEqual(r.status_code, 200)
 
         # Loop through the simple attributes of the item
@@ -197,9 +180,83 @@ class ItemTests(APITestCase):
         self.notification = NotifyFactory(item=self.item, username=self.pu)
 
         r = self.client.get(
-            "/drf/items/"+str(self.item.iid)+"/", format="json")
+            reverse('item-detail', kwargs={'pk':self.item.iid}))
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.data['iid'], self.item.iid)
 
         usernames = [n.lower() for n in r.data['notifies']]
         self.assertIn(self.pu.username.lower(), usernames)
+
+
+class NotifyTests(APITestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                    email="testemail@columbia.edu",
+                                    status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+        self.item = ItemFactory()
+        self.n = NotifyFactory(item=self.item, username=self.pu)
+        self.url = reverse("notify", kwargs={'pk':self.n.item.iid})
+
+    def test_get(self):
+        self.client.login(username=self.u.username, password="test")
+        r = self.client.get(self.url)
+        self.assertEqual(r.status_code, 200)
+
+    def test_get_different_user(self):
+        user2 = User.objects.create(username="testuser2")
+        user2.set_password("test")
+        user2.save()
+        self.client.login(username=user2.username, password="test")
+
+        r = self.client.get(self.url)
+        self.assertEqual(r.status_code, 404)
+
+    def test_get_not_logged_in(self):
+        r = self.client.get(self.url)
+        self.assertEqual(r.status_code, 404)
+
+    def test_post(self):
+        self.client.login(username=self.u.username, password="test")
+        r = self.client.post(self.url)
+        self.assertEqual(r.status_code, 201)
+
+        user = Claim.objects.get(django_user=self.u).pmt_user
+        notify = Notify.objects.get(item=self.item, username=user)
+        self.assertIsInstance(notify, Notify)
+
+    def test_post_not_logged_in(self):
+        r = self.client.post(self.url)
+        self.assertEqual(r.status_code, 403)
+
+    def test_delete(self):
+        self.client.login(username=self.u.username, password="test")
+        r = self.client.delete(self.url)
+        self.assertEqual(r.status_code, 204)
+
+        user = Claim.objects.get(django_user=self.u).pmt_user
+        notify = Notify.objects.filter(item=self.item, username=user)
+        self.assertEqual(len(notify), 0)
+
+    def test_delete_not_logged_in(self):
+        r = self.client.delete(self.url)
+        self.assertEqual(r.status_code, 403)
+
+
+class ProjectsTest(APITestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.client.force_authenticate(user=self.u)
+
+    def test_get(self):
+        r = self.client.get(reverse("project-list"))
+        self.assertEqual(r.status_code, 200)
+
+    def test_search(self):
+        url = reverse("project-list")
+        data = {'search': 'test'}
+        r = self.client.get(url, data)
+        self.assertEqual(r.status_code, 200)
