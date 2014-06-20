@@ -157,3 +157,8 @@ dd:hover .priority-select {
     width: auto;
     height: auto;
 }
+
+form.navbar-form {
+    margin-top: 0;
+    margin-bottom: 0;
+}
