@@ -10,3 +10,4 @@ celerybeat-schedule
 .project
 .pydevproject
 .DS_Store
+node_modules
