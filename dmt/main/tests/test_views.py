@@ -488,7 +488,6 @@ class TestItemWorkflow(TestCase):
             project.get_absolute_url() + "add_bug/",
             dict(title='test bug', description='test',
                  priority='1', milestone=i.milestone.mid,
-                 owner=i.owner.username,
                  assigned_to=i.assigned_to.username,
                  tags="tagone, tagtwo"))
         r = self.c.get(project.get_absolute_url())
