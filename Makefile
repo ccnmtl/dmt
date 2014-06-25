@@ -7,7 +7,7 @@ jenkins: ./ve/bin/python validate test flake8
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
 
-test: ./ve/bin/python node_deps
+test: ./ve/bin/python node_modules/casperjs/bin/casperjs
 	$(MANAGE) jenkins
 
 flake8: ./ve/bin/python
@@ -33,7 +33,7 @@ clean:
 	rm .coverage
 	find . -name '*.pyc' -exec rm {} \;
 
-node_deps:
+node_modules/casperjs/bin/casperjs:
 	npm install casperjs phantomjs
 
 pull:
