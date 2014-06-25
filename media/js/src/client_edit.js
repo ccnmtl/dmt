@@ -1,13 +1,12 @@
 require.config({
   paths: {
     // Major libraries
-    jquery: 'libs/jquery/jquery-min',
-    underscore: 'libs/underscore/underscore-min',
-    backbone: 'libs/backbone/backbone-min',
+    jquery: '../libs/jquery/jquery-min',
+    underscore: '../libs/underscore/underscore-min',
+    backbone: '../libs/backbone/backbone-min',
 
     // Require.js plugins
-    text: 'libs/require/text',
-    order: 'libs/require/order'
+    text: '../libs/require/text'
   },
     urlArgs: "bust=" +  (new Date()).getTime()
 
@@ -34,7 +33,7 @@ require([
     'jquery',
     'backbone',
     'models/client',
-    'views/client_edit_app'
+    'views/client'
 ], function($, Backbone, Client, AppView) {
         var csrftoken = getCookie('csrftoken');
         var oldSync = Backbone.sync;

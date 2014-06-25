@@ -8,21 +8,21 @@ define([
         idAttribute: "client_id",
         defaults: function() {
             return {
-                lastname: "",
-                firstname: "",
+                lastname: null,
+                firstname: null,
                 status: "active",
                 title: "Instructor",
-                registration_date: "",
-                email: "",
-                department: "",
-                school: "",
-                add_affiliation: "",
-                phone: "",
-                comments: "",
-                email_secondary: "",
-                phone_mobile: "",
-                phone_other: "",
-                website_url: ""
+                registration_date: null,
+                email: null,
+                department: null,
+                school: null,
+                add_affiliation: null,
+                phone: null,
+                comments: null,
+                email_secondary: null,
+                phone_mobile: null,
+                phone_other: null,
+                website_url: null
             };
         },
 

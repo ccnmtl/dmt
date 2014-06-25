@@ -5,16 +5,16 @@ define([
 ], function($, _, Backbone) {
 
     var Notify = Backbone.Model.extend({
-        idAttribute: "item_id",
+        idAttribute: "iid",
         defaults: function() {
             return {
-                item_id: null,
+                iid: null,
                 username: null
             };
         },
 
         url: function() {
-            return "/drf/notify/" + this.get('item_id') + "/";
+            return "/drf/notify/" + this.get('iid') + "/";
         },
 
         initialize: function() {
