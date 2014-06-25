@@ -7,7 +7,7 @@ jenkins: ./ve/bin/python validate test flake8
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
 
-test: ./ve/bin/python
+test: ./ve/bin/python node_deps
 	$(MANAGE) jenkins
 
 flake8: ./ve/bin/python
@@ -32,6 +32,9 @@ clean:
 	rm celerybeat-schedule
 	rm .coverage
 	find . -name '*.pyc' -exec rm {} \;
+
+node_deps:
+	npm install casperjs phantomjs
 
 pull:
 	git pull
