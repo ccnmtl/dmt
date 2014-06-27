@@ -13,7 +13,7 @@ define([
             },
             initialize: function () {
                 this.notify = new Notify(
-                    {iid: this.model.attributes.iid});
+                    {iid: this.model.get('iid')});
 
                 $('#input_notification')
                     .on('change',

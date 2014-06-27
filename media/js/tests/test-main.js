@@ -24,11 +24,15 @@ require.config({
     // dynamically load all test files
     deps: allTestFiles,
     callback: window.__karma__.start,
+
+    // The path for including JS files in the app is slightly different during
+    // testing. We have to manually prepend the src/ directory here.
     map: {
         '*': {
             'models/notify': 'src/models/notify'
         }
     },
+
     paths: {
         jquery: 'libs/jquery/jquery-min',
         underscore: 'libs/underscore/underscore-min',
