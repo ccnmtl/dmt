@@ -9,7 +9,6 @@
     "casperjs": "~1.1.0-beta3",
     "karma": "~0.12.16",
     "karma-html2js-preprocessor": "~0.1.0",
-    "karma-junit-reporter": "alisaifee/karma-junit-reporter",
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-qunit": "~0.1.3",
     "karma-requirejs": "~0.2.2",

@@ -9,6 +9,7 @@ jenkins: ./ve/bin/python validate test flake8
 
 test: ./ve/bin/python
 	npm install
+	npm install ./vendor/karma-junit-reporter.tar.gz
 	$(MANAGE) jenkins
 	npm test
 
@@ -34,8 +35,7 @@ clean:
 	rm -f celerybeat-schedule
 	rm -f .coverage
 	find . -name '*.pyc' -exec rm {} \;
-	npm rm casperjs karma karma-junit-reporter karma-phantomjs-launcher \
-		karma-qunit karma-requirejs phantomjs qunitjs requirejs
+	for PACKAGE in `ls node_modules`; do npm rm $(PACKAGE); done
 
 pull:
 	git pull
