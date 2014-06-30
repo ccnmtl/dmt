@@ -27,7 +27,7 @@ define([
         },
 
         url: function() {
-            return "/drf/items/" + this.get('item_id') + "/";
+            return "/drf/items/" + this.get('iid') + "/";
         },
 
         initialize: function() {

@@ -1,12 +1,4 @@
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as anonymous module.
-        define(['jquery'], factory);
-    } else {
-        // Browser globals.
-        window.djdt = factory(jQuery);
-    }
-}(function ($) {
+(function ($) {
     var djdt = {
         handleDragged: false,
         events: {
@@ -284,4 +276,4 @@
     };
     $(document).ready(djdt.init);
     return djdt;
-}));
+})(jQuery);

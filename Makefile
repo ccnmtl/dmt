@@ -7,8 +7,11 @@ jenkins: ./ve/bin/python validate test flake8
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
 
-test: ./ve/bin/python node_modules/casperjs/bin/casperjs
+test: ./ve/bin/python
+	npm install
+	npm install ./vendor/karma-junit-reporter.tar.gz
 	$(MANAGE) jenkins
+	npm test
 
 flake8: ./ve/bin/python
 	$(FLAKE8) $(APP) --max-complexity=7
@@ -29,12 +32,10 @@ clean:
 	rm -rf ve
 	rm -rf media/CACHE
 	rm -rf reports
-	rm celerybeat-schedule
-	rm .coverage
+	rm -f celerybeat-schedule
+	rm -f .coverage
 	find . -name '*.pyc' -exec rm {} \;
-
-node_modules/casperjs/bin/casperjs:
-	npm install casperjs phantomjs
+	for PACKAGE in `ls node_modules`; do npm rm $(PACKAGE); done
 
 pull:
 	git pull

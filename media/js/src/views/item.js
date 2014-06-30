@@ -2,9 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'models/item',
     'models/notify'
-], function($, _, Backbone, Item, Notify){
+], function($, _, Backbone, Notify){
     var ItemView = Backbone.View.extend(
         {
             tagName: 'div',
@@ -14,7 +13,7 @@ define([
             },
             initialize: function () {
                 this.notify = new Notify(
-                    {item_id: this.model.attributes.item_id});
+                    {iid: this.model.get('iid')});
 
                 $('#input_notification')
                     .on('change',

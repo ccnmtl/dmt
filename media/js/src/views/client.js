@@ -1,9 +1,8 @@
 define([
     'jquery',
     'underscore',
-    'backbone',
-    'models/client'
-], function($, _, Backbone, Entry, EntryList){
+    'backbone'
+], function($, _, Backbone){
        var ClientView = Backbone.View.extend(
            {
            tagName: 'div',

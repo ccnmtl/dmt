@@ -1,13 +1,12 @@
 require.config({
   paths: {
     // Major libraries
-    jquery: 'libs/jquery/jquery-min',
-    underscore: 'libs/underscore/underscore-min',
-    backbone: 'libs/backbone/backbone-min',
+    jquery: '../libs/jquery/jquery-min',
+    underscore: '../libs/underscore/underscore-min',
+    backbone: '../libs/backbone/backbone-min',
 
     // Require.js plugins
-    text: 'libs/require/text',
-    order: 'libs/require/order'
+    text: '../libs/require/text'
   },
     urlArgs: "bust=" +  (new Date()).getTime()
 
@@ -34,7 +33,7 @@ require([
     'jquery',
     'backbone',
     'models/item',
-    'views/item_app'
+    'views/item'
 ], function($, Backbone, Item, AppView) {
     var csrftoken = getCookie('csrftoken');
     var oldSync = Backbone.sync;
@@ -47,7 +46,7 @@ require([
     };
 
     var item_id = $("#item-id").html();
-    var item = new Item({item_id: item_id});
+    var item = new Item({iid: item_id});
     item.fetch();
     var app = new AppView({model: item, el: $("#item-container")});
     app.render();
