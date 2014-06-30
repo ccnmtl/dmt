@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import os.path
 
 from dmt.claim.models import Claim, PMTUser
+from .factories import ProjectFactory
 
 
 class CasperIntegrationTestsAnonUser(CasperTestCase):
@@ -22,6 +23,7 @@ class CasperIntegrationTestsLoggedIn(CasperTestCase):
                                          email="testemail@columbia.edu",
                                          status="active")
         Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+        ProjectFactory()
 
     def test_integration_tests_logged_in(self):
         self.assertTrue(self.casper(

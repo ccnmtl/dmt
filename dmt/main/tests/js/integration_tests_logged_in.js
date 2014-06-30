@@ -16,6 +16,19 @@ helper.scenario('/',
         });
         this.test.assertEqual(clientsButton, 'clients',
                              'The homepage has a clients button');
+    },
+    function() {
+        // Test that typeahead works
+        this.click('a[data-target="#add-tracker"]');
+        this.fill('form#add-tracker-form', {
+            project: 'Test'
+        });
+        this.test.assertElementCount(
+                'form#add-tracker-form .tt-dataset-results div', 1,
+                'typeahead populates the results div');
+        this.test.assertSelectorHasText(
+                'form#add-tracker-form .tt-dataset-results', 'Test Project',
+                'typeahead gets the right project data');
     }
 );
 helper.scenario('/client/',
