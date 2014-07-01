@@ -5,7 +5,7 @@ define([
 ], function($, _, Backbone) {
 
     var Notify = Backbone.Model.extend({
-        idAttribute: "iid",
+        idAttribute: 'iid',
         defaults: function() {
             return {
                 iid: null,
@@ -14,12 +14,12 @@ define([
         },
 
         url: function() {
-            return "/drf/notify/" + this.get('iid') + "/";
+            return '/drf/notify/' + this.get('iid') + '/';
         },
 
         initialize: function() {
         },
     });
 
-  return Notify;
+    return Notify;
 });

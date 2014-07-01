@@ -1,0 +1,27 @@
+{
+    "indent": 4,
+		"white": true,
+		"trailing": true,
+		"undef": true,
+		"browser": true,
+		"predef": [
+		"setStyle",
+		"$",
+		"setNodeAttribute",	
+		"confirm",
+		"alert",
+		"toggle",
+		"forEach",
+		"log",
+		"getStyle",
+		"getElementsByTagAndClassName",
+		"queryString",
+		"doXHR",
+		"connect",
+		"getFirstElementByTagAndClassName",
+		"replaceChildNodes",
+		"addElementClass",
+		"removeElementClass",
+		"MochiKit"
+		]
+}

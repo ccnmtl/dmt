@@ -3,13 +3,13 @@ define([
     'underscore',
     'backbone',
     'models/notify'
-], function($, _, Backbone, Notify){
+], function($, _, Backbone, Notify) {
     var ItemView = Backbone.View.extend(
         {
             tagName: 'div',
             template: _.template($('#item-template').html()),
             events: {
-                "change #input_notification": "updateNotificationStatus",
+                'change #input_notification': 'updateNotificationStatus',
             },
             initialize: function () {
                 this.notify = new Notify(
