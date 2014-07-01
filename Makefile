@@ -8,10 +8,10 @@ jenkins: ./ve/bin/python validate jshint jscs flake8 test
 	./bootstrap.py
 
 jshint: node_modules/jshint/bin/jshint
-	./node_modules/jshint/bin/jshint media/js/src/
+	./node_modules/jshint/bin/jshint media/js/src/ media/js/tests
 
 jscs: node_modules/jscs/bin/jscs
-	./node_modules/jscs/bin/jscs media/js/src/
+	./node_modules/jscs/bin/jscs media/js/src/ media/js/tests
 
 
 node_modules/jshint/bin/jshint:

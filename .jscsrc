@@ -1,5 +1,5 @@
 {
     "preset": "google",
     "validateIndentation": 4,
-		"disallowTrailingWhitespace": true
+    "disallowTrailingWhitespace": true
 }

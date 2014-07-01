@@ -35,7 +35,7 @@ define([
 
         toFullJSON: function() {
             var j = this.toJSON();
-            j['active'] = j['status'] == 'active';
+            j.active = j.status == 'active';
             return j;
         }
     });

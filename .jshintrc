@@ -5,23 +5,20 @@
 		"undef": true,
 		"browser": true,
 		"predef": [
-		"setStyle",
 		"$",
-		"setNodeAttribute",	
+		"define",
+		"jQuery",
+		"require",
+		"test",
+		"expect",
+		"ok",
+		"equal",
+		"sinon",
 		"confirm",
 		"alert",
 		"toggle",
 		"forEach",
 		"log",
-		"getStyle",
-		"getElementsByTagAndClassName",
-		"queryString",
-		"doXHR",
-		"connect",
-		"getFirstElementByTagAndClassName",
-		"replaceChildNodes",
-		"addElementClass",
-		"removeElementClass",
-		"MochiKit"
+		"connect"
 		]
 }
