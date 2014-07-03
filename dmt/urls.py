@@ -20,7 +20,7 @@ from dmt.main.views import (
     ProjectUpdateView, MilestoneUpdateView, ItemUpdateView,
     ProjectAddItemView, DashboardView, MilestoneListView,
     ProjectRemoveUserView, ProjectAddUserView, ProjectAddMilestoneView,
-    ItemDeleteView,
+    ItemDeleteView, SignS3View, ItemAddAttachmentView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
@@ -51,6 +51,7 @@ urlpatterns = patterns(
     (r'^search/$', SearchView.as_view()),
     (r'^client/$', ClientListView.as_view()),
     (r'^client/(?P<pk>\d+)/$', ClientDetailView.as_view()),
+    (r'^sign_s3/$', SignS3View.as_view()),
     (r'^forum/$', ForumView.as_view()),
     (r'^forum/(?P<pk>\d+)/$', NodeDetailView.as_view()),
     (r'^forum/(?P<pk>\d+)/reply/$', NodeReplyView.as_view()),
@@ -75,6 +76,7 @@ urlpatterns = patterns(
     (r'^item/(?P<pk>\d+)/assigned_to/$', ReassignItemView.as_view()),
     (r'^item/(?P<pk>\d+)/owner/$', ChangeOwnerItemView.as_view()),
     (r'^item/(?P<pk>\d+)/delete/$', ItemDeleteView.as_view()),
+    (r'^item/(?P<pk>\d+)/add_attachment/$', ItemAddAttachmentView.as_view()),
     (r'^milestone/$', MilestoneListView.as_view()),
     (r'^milestone/(?P<pk>\d+)/$', MilestoneDetailView.as_view()),
     (r'^milestone/(?P<pk>\d+)/edit/$', MilestoneUpdateView.as_view()),

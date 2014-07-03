@@ -1,6 +1,8 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
@@ -14,7 +16,7 @@ from taggit.utils import parse_tags
 import markdown
 from .models import (
     Project, Milestone, Item, Node, User, Client, StatusUpdate,
-    ActualTime, Notify)
+    ActualTime, Notify, Attachment)
 from .models import interval_sum
 from .forms import (
     StatusUpdateForm, NodeUpdateForm, UserUpdateForm, ProjectUpdateForm,
@@ -23,6 +25,13 @@ from dmt.claim.models import Claim
 
 from datetime import datetime, timedelta
 from simpleduration import Duration, InvalidDuration
+from hashlib import sha1
+import time
+import json
+import base64
+import hmac
+import urllib
+import uuid
 
 
 def has_claim(user):
@@ -705,3 +714,74 @@ class DashboardView(LoggedInMixin, TemplateView):
         context['status_updates'] = StatusUpdate.objects.filter(
             added__gte=two_weeks_ago)
         return context
+
+
+class SignS3View(LoggedInMixin, View):
+    def get(self, request):
+        AWS_ACCESS_KEY = settings.AWS_ACCESS_KEY
+        AWS_SECRET_KEY = settings.AWS_SECRET_KEY
+        S3_BUCKET = settings.AWS_S3_UPLOAD_BUCKET
+
+        object_name = request.GET.get('s3_object_name')
+        mime_type = request.GET.get('s3_object_type')
+        extension = ".obj"
+        if 'jpeg' in mime_type:
+            extension = ".jpg"
+        elif 'png' in mime_type:
+            extension = ".png"
+        elif 'gif' in mime_type:
+            extension = ".gif"
+
+        now = datetime.now()
+        uid = str(uuid.uuid4())
+        object_name = "%04d/%02d/%02d/%02d/%s%s" % (
+            now.year, now.month, now.day,
+            now.hour, uid, extension)
+
+        expires = int(time.time()+10)
+        amz_headers = "x-amz-acl:public-read"
+
+        put_request = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (
+            mime_type, expires, amz_headers, S3_BUCKET, object_name)
+
+        signature = base64.encodestring(
+            hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+        signature = urllib.quote_plus(signature.strip())
+
+        url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
+        signed_request = '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (
+            url, AWS_ACCESS_KEY, expires, signature)
+
+        return HttpResponse(
+            json.dumps({
+                'signed_request': signed_request,
+                'url': url
+            }), content_type="application/json")
+
+
+class ItemAddAttachmentView(LoggedInMixin, View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, pk=pk)
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        title = request.POST.get('title', 'no title')
+        description = request.POST.get('description', '')
+        url = request.POST.get('s3_url')
+        filename = url.split('/')[-1]
+        atype = 'obj'
+        if url.endswith('png'):
+            atype = 'png'
+        if url.endswith('jpg'):
+            atype = 'jpg'
+        if url.endswith('gif'):
+            atype = 'gif'
+        Attachment.objects.create(
+            item=item,
+            author=user,
+            url=url,
+            title=title,
+            description=description,
+            filename=filename,
+            type=atype,
+            last_mod=datetime.now(),
+        )
+        return HttpResponseRedirect(item.get_absolute_url())
