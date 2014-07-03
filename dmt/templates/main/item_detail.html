@@ -219,6 +219,44 @@
 </div><!-- /.modal -->
 </form>
 
+{% flag s3_upload %}
+<form action="add_attachment/" method="post" role="form">
+<div class="modal fade" id="add-attachment" tabindex="-1" role="dialog" aria-labelledby="add-attachment-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="add-attachment-label">Add Attachment</h4>
+      </div>
+			<p id="status">Please select a file</p>
+      <div class="modal-body">
+          <div class="form-group">
+						<input type="file" id="file" onchange="s3_upload();"/>
+          </div>
+      </div>
+			<input type="hidden" name="s3_url" id="uploaded-url" />
+          <div class="form-group">
+              <label>Title</label>
+              <input type="text" name="title" placeholder="title"
+              class="form-control" />
+          </div>
+
+          <div class="form-group">
+						<label>Description</label>
+            <textarea name="description" class="form-control" rows="5"></textarea>
+          </div>
+			
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="Add
+        Attachment" id="add-attachment-submit" disabled />
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+{% endflag %}
+
 <form action="split/" method="post" role="form">
 <div class="modal fade" id="split" tabindex="-1" role="dialog" aria-labelledby="split-label" aria-hidden="true">
   <div class="modal-dialog">
@@ -491,6 +529,11 @@
 	<a class="btn btn-primary" href="#" data-toggle="modal"
 	data-target="#add-comment"><span class="glyphicon
 		 glyphicon-comment"> Add Comment</a>
+{% flag s3_upload %}
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+		 data-target="#add-attachment"><span class="glyphicon
+		 glyphicon-upload"> Add Attachment</a>
+{% endflag %}
 	<a class="btn btn-primary" href="#" data-toggle="modal"
 	data-target="#add-hours"><span class="glyphicon
 		 glyphicon-time"> Log Time</a>
@@ -507,15 +550,33 @@
 	{% for attachment in item.attachment_set.all %}
 	<tr>
 		<td>
-			<a href="{{attachment.get_absolute_url}}">{{attachment.title|default:attachment.filename}}</a>
+			{{attachment.title|default:attachment.filename}}
 		</td>
 		<td><i>[{{attachment.last_mod}}]</i></td>
 		<td>{{attachment.author.fullname}}</td>
 	</tr>
 	{% if attachment.image %}
-	<tr><td colspan="3"><img src="{{attachment.src}}" /></td></tr>
+	<tr><td colspan="3">
+			{% if attachment.url %}
+			<img src="{{attachment.url}}" />
+			{% else %}
+			<img src="{{attachment.src}}" />
+			{% endif %}
+			{{attachment.description|markdown}}
+	</td></tr>
 	{% else %}
-	<tr><td colspan="3">{{attachment.description|markdown}}</td></tr>
+	<tr>
+		<td colspan="3">
+			{{attachment.description|markdown}}
+			{% if attachment.url %}
+			<p><a href="{{attachment.url}}">Download</a></p>
+			{% else %}
+			<div class="alert alert-warning">sorry, DMT does not yet support the old PMT
+				attachments. For now, to view/download this one, 
+				you will need to <a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">go back to the PMT</a></div>
+			{% endif %}
+	</td>
+	</tr>
 	{% endif %}
 {% endfor %}
 </table>
@@ -543,6 +604,33 @@ by <a href="{{history_item.user.get_absolute_url}}">{{history_item.user.fullname
 
 
 {% block js %}
+{% flag s3_upload %}
+<script src="{{STATIC_URL}}js/libs/lodash.min.js"></script>
+<script src="{{STATIC_URL}}js/libs/s3upload.js"></script>
+
+<script>
+function s3_upload() {
+    var s3upload = new S3Upload({
+        file_dom_selector: 'file',
+        s3_sign_put_url: '/sign_s3/',
+
+        onProgress: function(percent, message) {
+            $('#status').html('Upload progress: ' + percent + '%' + message);
+        },
+        onFinishS3Put: function(url) {
+            $('#status').html('Upload completed.');
+            $('#uploaded-url').val(url);
+            $('#add-attachment-submit').removeAttr("disabled");
+        },
+        onError: function(status) {
+            $('#status').html('Upload error: ' + status);
+        }
+    });
+}
+</script>
+
+{% endflag %}
+
 {% flag notification_ui %}
 <script data-main="{{STATIC_URL}}js/src/item"
 				src="{{STATIC_URL}}js/libs/require/require.js"></script>
