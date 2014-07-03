@@ -7,7 +7,7 @@ from .factories import (
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
 from dmt.main.models import (
-    HistoryItem, ProjectUser, truncate_string,
+    HistoryItem, Notify, ProjectUser, truncate_string,
     HistoryEvent
 )
 
@@ -169,10 +169,19 @@ class ItemModelTest(TestCase):
         i = ItemFactory()
         i.add_project_notification()
 
+    def test_add_cc_active_user(self):
+        i = ItemFactory()
+        u = UserFactory()
+        i.add_cc(u)
+        self.assertEqual(
+            Notify.objects.filter(item=i.iid, username=u.username).count(), 1)
+
     def test_add_cc_inactive_user(self):
         i = ItemFactory()
         u = UserFactory(status='inactive')
         i.add_cc(u)
+        with self.assertRaises(Notify.DoesNotExist):
+            Notify.objects.get(item=i.iid, username=u.username)
 
     def test_add_clients(self):
         i = ItemFactory()
