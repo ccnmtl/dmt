@@ -32,6 +32,8 @@ import base64
 import hmac
 import urllib
 import uuid
+import ntpath
+import re
 
 
 def has_claim(user):
@@ -716,15 +718,30 @@ class DashboardView(LoggedInMixin, TemplateView):
         return context
 
 
+def safe_basename(s):
+    """ take whatever crap the browser gives us,
+    often something like "C:\fakepath\foo bar.png"
+    and turn it into something suitable for our
+    purposes"""
+    # ntpath does the best at cross-platform basename extraction
+    b = ntpath.basename(s)
+    b = b.lower()
+    # only allow alphanumerics, '-' and '.'
+    b = re.sub(r'[^\w\-\.]', '', b)
+    return b
+
+
 class SignS3View(LoggedInMixin, View):
     def get(self, request):
         AWS_ACCESS_KEY = settings.AWS_ACCESS_KEY
         AWS_SECRET_KEY = settings.AWS_SECRET_KEY
         S3_BUCKET = settings.AWS_S3_UPLOAD_BUCKET
 
-        object_name = request.GET.get('s3_object_name')
+        object_name = safe_basename(
+            request.GET.get('s3_object_name', 'unknown.obj'))
         mime_type = request.GET.get('s3_object_type')
-        extension = ".obj"
+        (basename, extension) = ntpath.splitext(object_name)
+        # force the extension for some known cases
         if 'jpeg' in mime_type:
             extension = ".jpg"
         elif 'png' in mime_type:
@@ -734,9 +751,9 @@ class SignS3View(LoggedInMixin, View):
 
         now = datetime.now()
         uid = str(uuid.uuid4())
-        object_name = "%04d/%02d/%02d/%02d/%s%s" % (
+        object_name = "%04d/%02d/%02d/%02d/%s-%s%s" % (
             now.year, now.month, now.day,
-            now.hour, uid, extension)
+            now.hour, basename, uid, extension)
 
         expires = int(time.time()+10)
         amz_headers = "x-amz-acl:public-read"
