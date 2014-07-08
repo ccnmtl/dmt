@@ -228,24 +228,22 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="add-attachment-label">Add Attachment</h4>
       </div>
-			<p id="status">Please select a file</p>
       <div class="modal-body">
+          <p id="status">Please select a file</p>
           <div class="form-group">
-						<input type="file" id="file" onchange="s3_upload();"/>
+              <input type="file" id="file" onchange="s3_upload();"/>
           </div>
-      </div>
-			<input type="hidden" name="s3_url" id="uploaded-url" />
+          <input type="hidden" name="s3_url" id="uploaded-url" />
           <div class="form-group">
               <label>Title</label>
               <input type="text" name="title" placeholder="title"
               class="form-control" />
           </div>
-
           <div class="form-group">
-						<label>Description</label>
-            <textarea name="description" class="form-control" rows="5"></textarea>
+              <label>Description</label>
+              <textarea name="description" class="form-control" rows="5"></textarea>
           </div>
-			
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <input type="submit" class="btn btn-primary" value="Add
