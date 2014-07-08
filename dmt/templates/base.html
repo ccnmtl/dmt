@@ -1,5 +1,7 @@
+{% load bootstrap3 %}
 {% load compress %}
 {% load claimtags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,9 +12,7 @@
   <meta name="author" content="CCNMTL">
 
 {% compress css %}
-    <link href="{{STATIC_URL}}bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="{{STATIC_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-		<link href="{{STATIC_URL}}bootstrap/css/bootstrap-glyphicons.css" rel="stylesheet">
+<link href="{% bootstrap_css_url %}" rel="stylesheet">
     <link href="{{STATIC_URL}}css/main.css?dmt" rel="stylesheet">
 {% endcompress %}
 	<link rel="shortcut icon" href="{{STATIC_URL}}img/favicon.ico" type="image/x-icon" />
@@ -138,7 +138,7 @@ Projects <span class="caret"></span>
 <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 
 {% compress js %}
-<script src="{{STATIC_URL}}bootstrap/js/bootstrap.js"></script>
+<script src="{% bootstrap_javascript_url %}"></script>
 {% endcompress %}
 
 

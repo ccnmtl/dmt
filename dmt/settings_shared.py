@@ -129,15 +129,16 @@ INSTALLED_APPS = [
     'django_extensions',
     'impersonate',
     'interval',
-    'dmt.main',
-    'dmt.claim',
-    'dmt.report',
-    'dmt.api',
     'rest_framework',
     'taggit',
     'taggit_templatetags',
     'djcelery',
     'django_markwhat',
+    'bootstrap3',
+    'dmt.main',
+    'dmt.claim',
+    'dmt.report',
+    'dmt.api',
 ]
 
 if 'jenkins' in sys.argv:
