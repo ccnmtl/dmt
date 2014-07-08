@@ -21,6 +21,7 @@ from .models import interval_sum
 from .forms import (
     StatusUpdateForm, NodeUpdateForm, UserUpdateForm, ProjectUpdateForm,
     MilestoneUpdateForm, ItemUpdateForm)
+from .utils import safe_basename
 from dmt.claim.models import Claim
 
 from datetime import datetime, timedelta
@@ -33,7 +34,6 @@ import hmac
 import urllib
 import uuid
 import ntpath
-import re
 
 
 def has_claim(user):
@@ -716,19 +716,6 @@ class DashboardView(LoggedInMixin, TemplateView):
         context['status_updates'] = StatusUpdate.objects.filter(
             added__gte=two_weeks_ago)
         return context
-
-
-def safe_basename(s):
-    """ take whatever crap the browser gives us,
-    often something like "C:\fakepath\foo bar.png"
-    and turn it into something suitable for our
-    purposes"""
-    # ntpath does the best at cross-platform basename extraction
-    b = ntpath.basename(s)
-    b = b.lower()
-    # only allow alphanumerics, '-' and '.'
-    b = re.sub(r'[^\w\-\.]', '', b)
-    return b
 
 
 class SignS3View(LoggedInMixin, View):
