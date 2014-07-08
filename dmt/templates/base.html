@@ -11,8 +11,8 @@
   <meta name="description" content="dmt">
   <meta name="author" content="CCNMTL">
 
-{% compress css %}
 <link href="{% bootstrap_css_url %}" rel="stylesheet">
+{% compress css %}
     <link href="{{STATIC_URL}}css/main.css?dmt" rel="stylesheet">
 {% endcompress %}
 	<link rel="shortcut icon" href="{{STATIC_URL}}img/favicon.ico" type="image/x-icon" />
@@ -136,11 +136,7 @@ Projects <span class="caret"></span>
 
 
 <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-
-{% compress js %}
 <script src="{% bootstrap_javascript_url %}"></script>
-{% endcompress %}
-
 
 <script src="//cdn.ravenjs.com/1.1.9/jquery,native,require/raven.min.js"></script>
 <script>
