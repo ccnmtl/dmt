@@ -42,13 +42,9 @@ shell: ./ve/bin/python
 	$(MANAGE) shell_plus
 
 clean:
-	rm -rf ve
-	rm -rf media/CACHE
-	rm -rf reports
-	rm -f celerybeat-schedule
-	rm -f .coverage
+	rm -rf ve media/CACHE reports node_modules
+	rm -f celerybeat-schedule .coverage
 	find . -name '*.pyc' -exec rm {} \;
-	for PACKAGE in `ls node_modules`; do npm rm $(PACKAGE); done
 
 pull:
 	git pull
