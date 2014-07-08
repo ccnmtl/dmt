@@ -6,7 +6,8 @@ from django.test import TestCase
 from django.test.client import Client
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
-from dmt.main.models import Item
+from dmt.main.models import Item, Attachment
+import json
 
 
 class BasicTest(TestCase):
@@ -302,6 +303,30 @@ class TestItemViews(TestCase):
         r = self.c.get(i.get_absolute_url() + "delete/")
         self.assertEquals(r.status_code, 200)
         self.assertTrue("<form" in r.content)
+
+    def test_add_attachment(self):
+        i = ItemFactory()
+        r = self.c.post(
+            i.get_absolute_url() + "add_attachment/",
+            dict(
+                title="foo",
+                description="blah",
+                s3_url="https://s3/foo.jpg",
+            ))
+        self.assertEquals(r.status_code, 302)
+        self.assertTrue(Attachment.objects.filter(
+            item=i, url="https://s3/foo.jpg").exists())
+
+    def test_sign_s3_view(self):
+        with self.settings(
+                AWS_ACCESS_KEY='',
+                AWS_SECRET_KEY='',
+                AWS_S3_UPLOAD_BUCKET=''):
+            r = self.c.get(
+                "/sign_s3/?s3_object_name=default_name&s3_object_type=foo")
+            self.assertEqual(r.status_code, 200)
+            j = json.loads(r.content)
+            self.assertTrue('signed_request' in j)
 
 
 class TestItemTagViews(TestCase):
