@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block title %}Group: {{object.readable_group_name}}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
+{% endblock %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+
+{% block content %}
+<ul class="breadcrumb">
+  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+  <li><a href="{% url 'group_list' %}">Groups</a></li>
+  <li class="active">{{ group_name }}</li>
+</ul>
+
+<h1>Group: {{ group_name }}</h1>
+
+<h3>Members</h3>
+<table class="table table-striped table-condensed">
+{% for user in object_list %}
+<tr>
+    <td>
+        <a href="{% url 'user_detail' user.username %}">
+            {{ user.username }}
+        </a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

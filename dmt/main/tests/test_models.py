@@ -7,9 +7,16 @@ from .factories import (
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
 from dmt.main.models import (
-    HistoryItem, Notify, ProjectUser, truncate_string,
+    InGroup, HistoryItem, Notify, ProjectUser, truncate_string,
     HistoryEvent
 )
+
+
+class InGroupTest(TestCase):
+    def test_verbose_name(self):
+        self.assertEqual(
+            InGroup.verbose_name('Test group abc (group)'),
+            'Test group abc')
 
 
 class UserModelTest(TestCase):
