@@ -359,6 +359,15 @@ class StatusUpdateDeleteView(LoggedInMixin, DeleteView):
 class ClientDetailView(LoggedInMixin, DetailView):
     model = Client
 
+    def get_context_data(self, **kwargs):
+        context = super(ClientDetailView, self).get_context_data(**kwargs)
+
+        items = Item.objects.select_related() \
+            .filter(itemclient__client_id__exact=context['object'].client_id) \
+            .order_by('-last_mod')
+        context['recent_items'] = items
+        return context
+
 
 class ForumView(LoggedInMixin, ListView):
     model = Node

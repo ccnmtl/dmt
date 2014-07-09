@@ -33,29 +33,57 @@
 
 <% if (!active) { %>
 <div class="alert alert-danger">
-<p><b>{{object.firstname}} {{object.lastname}}</b> is inactive.
-<button id="activate" class="btn btn-success">ACTIVATE</button>
-</p>
+    <p>
+        <b>{{object.firstname}} {{object.lastname}}</b> is inactive.
+        <button id="activate" class="btn btn-success">ACTIVATE</button>
+    </p>
 </div>
 <% } %>
 
 <h1>CLIENT: <%= firstname %> <%= lastname %></h1>
 
 <dl>
-<dt>TITLE</dt><dd><%= title %></dd>
-<dt>DEPARTMENT</dt><dd><%= department %></dd>
-<dt>SCHOOL</dt><dd><%= school %></dd>
+    <dt>TITLE</dt><dd><%= title %></dd>
+    <dt>DEPARTMENT</dt><dd><%= department %></dd>
+    <dt>SCHOOL</dt><dd><%= school %></dd>
 
-<dt>CLIENT SINCE</dt><dd><%= registration_date %></dd>
+    <dt>CLIENT SINCE</dt><dd><%= registration_date %></dd>
 
-<dt>PHONE</dt><dd><%= phone %></dd>
-<dt>PHONE (MOBILE)</dt><dd><%= phone_mobile %></dd>
-<dt>PHONE (OTHER)</dt><dd><%= phone_other %></dd>
-<dt>EMAIL</dt><dd><%= email %></dd>
-<dt>SECONDARY EMAIL</dt><dd><%= email_secondary %></dd>
-<dt>WEBSITE</dt><dd><%= website_url %></dd>
+    <dt>PHONE</dt><dd><%= phone %></dd>
+    <dt>PHONE (MOBILE)</dt><dd><%= phone_mobile %></dd>
+    <dt>PHONE (OTHER)</dt><dd><%= phone_other %></dd>
+    <dt>EMAIL</dt><dd><%= email %></dd>
+    <dt>SECONDARY EMAIL</dt><dd><%= email_secondary %></dd>
+    <dt>WEBSITE</dt><dd><%= website_url %></dd>
 </dl>
-</div>
+
+{% if recent_items %}
+<h4>Recent Items</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Status</th>
+            <th>Last Modified</th>
+        <tr>
+    </thead>
+    <tbody>
+    {% for item in recent_items %}
+        <tr>
+            <td>
+                <a href="{% url 'item_detail' item.iid %}">
+                    {{ item.title }}
+                </a>
+            </td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.last_mod }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+</div><!-- end #view -->
 
 <div id="edit">
 
@@ -63,34 +91,45 @@
 <button id="activate" class="btn btn-danger">DEACTIVATE</button>
 <% } %>
 <dl>
-<dt>LASTNAME</dt><dd>
-<input class="lastname-input" type="text"
- value="<%= lastname %>" name="lastname"/></dd>
-<dt>FIRSTNAME</dt><dd>
-<input class="firstname-input" type="text"
- value="<%= firstname %>" name="firstname"/></dd>
-<dt>TITLE</dt><dd><input class="title-input" type="text"
- value="<%= title %>" name="title"/></dd>
-<dt>DEPARTMENT</dt><dd><input class="department-input"
- type="text" value="<%= department %>" name="department"/></dd>
-<dt>SCHOOL</dt><dd><input class="school-input" type="text"
- value="<%= school %>" name="school"/></dd>
+    <dt>LASTNAME</dt><dd>
+        <input class="lastname-input" type="text"
+               value="<%= lastname %>" name="lastname"/></dd>
+    <dt>FIRSTNAME</dt><dd>
+        <input class="firstname-input" type="text"
+               value="<%= firstname %>" name="firstname"/></dd>
+    <dt>TITLE</dt><dd><input class="title-input" type="text"
+                             value="<%= title %>" name="title"/></dd>
+    <dt>DEPARTMENT</dt><dd><input class="department-input"
+                                  type="text"
+                                  value="<%= department %>"
+                                  name="department"/></dd>
+    <dt>SCHOOL</dt><dd><input class="school-input" type="text"
+                              value="<%= school %>" name="school"/></dd>
 
-<dt>CLIENT SINCE</dt><dd><input class="registration_date-input"
- type="text" value="<%= registration_date %>" name="registration_date"/></dd>
+    <dt>CLIENT SINCE</dt><dd><input class="registration_date-input"
+                                    type="text"
+                                    value="<%= registration_date %>"
+                                    name="registration_date"/></dd>
 
-<dt>PHONE</dt><dd><input class="phone-input" type="text"
- value="<%= phone %>" name="phone"/></dd>
-<dt>PHONE (MOBILE)</dt><dd><input class="phone_mobile-input"
- type="text" value="<%= phone_mobile %>" name="status"/></dd>
-<dt>PHONE (OTHER)</dt><dd><input class="phone_other-input" type="text"
- value="<%= phone_other %>" name="phone_other"/></dd>
-<dt>EMAIL</dt><dd><input class="email-input" type="text"
- value="<%= email %>" name="email"/></dd>
-<dt>SECONDARY EMAIL</dt><dd><input class="email_secondary-input"
- type="text" value="<%= email_secondary %>" name="email_secondary"/></dd>
-<dt>WEBSITE</dt><dd><input class="website_url-input"
- type="text" value="<%= website_url %>" name="website_url"/></dd>
+    <dt>PHONE</dt><dd><input class="phone-input" type="text"
+                             value="<%= phone %>" name="phone"/></dd>
+    <dt>PHONE (MOBILE)</dt><dd><input class="phone_mobile-input"
+                                      type="text"
+                                      value="<%= phone_mobile %>"
+                                      name="status"/></dd>
+    <dt>PHONE (OTHER)</dt><dd><input class="phone_other-input" type="text"
+                                     value="<%= phone_other %>"
+                                     name="phone_other"/></dd>
+    <dt>EMAIL</dt><dd><input class="email-input" type="text"
+                             value="<%= email %>" name="email"/></dd>
+    <dt>SECONDARY EMAIL</dt><dd><input class="email_secondary-input"
+                                       type="text"
+                                       value="<%= email_secondary %>"
+                                       name="email_secondary"/></dd>
+    <dt>WEBSITE</dt><dd><input class="website_url-input"
+                               type="text"
+                               value="<%= website_url %>"
+                               name="website_url"/></dd>
 </dl>
 <button id="save" class="btn btn-primary">save</button>
 </div>
@@ -104,6 +143,6 @@
 
 {% block js %}
 <script data-main="{{STATIC_URL}}js/src/client_edit"
-				src="{{STATIC_URL}}js/libs/require/require.js"></script>
+		src="{{STATIC_URL}}js/libs/require/require.js"></script>
 
 {% endblock %}
