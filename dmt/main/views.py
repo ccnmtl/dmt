@@ -364,7 +364,7 @@ class ClientDetailView(LoggedInMixin, DetailView):
 
         items = Item.objects.select_related() \
             .filter(itemclient__client_id__exact=context['object'].client_id) \
-            .order_by('-last_mod')
+            .order_by('-last_mod')[:15]
         context['recent_items'] = items
         return context
 
