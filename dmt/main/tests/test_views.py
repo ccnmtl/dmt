@@ -1,12 +1,13 @@
-from .factories import ProjectFactory, MilestoneFactory, ItemFactory, \
-    NodeFactory, EventFactory, CommentFactory, UserFactory, \
+from .factories import ClientFactory, ProjectFactory, MilestoneFactory, \
+    ItemFactory, NodeFactory, EventFactory, CommentFactory, UserFactory, \
     StatusUpdateFactory, NotifyFactory
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
-from dmt.main.models import Item, Attachment
+from dmt.main.models import Attachment, Item, ItemClient
 import json
 
 
@@ -43,6 +44,34 @@ class BasicTest(TestCase):
     def test_dashboard(self):
         response = self.c.get("/dashboard/")
         self.assertEqual(response.status_code, 200)
+
+
+class TestClientViews(TestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.client.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+        self.client_mock = ClientFactory()
+
+    def test_client_detail_page(self):
+        response = self.client.get(
+            reverse('client_detail', args=(self.client_mock.client_id,)))
+        self.assertEqual(response.status_code, 200)
+
+    def test_client_items(self):
+        item = ItemFactory()
+        ItemClient.objects.create(item=item,
+                                  client=self.client_mock)
+        response = self.client.get(
+            reverse('client_detail', args=(self.client_mock.client_id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['recent_items'].first(), item)
 
 
 class TestProjectViews(TestCase):
