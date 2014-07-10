@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.utils.timezone import utc
 from dmt.main.models import User, Project, Milestone, Item
 from dmt.main.models import Comment, Events, Node, ActualTime, StatusUpdate
-from dmt.main.models import Client, Attachment, Notify
+from dmt.main.models import Client, Attachment, Notify, InGroup
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -112,3 +112,9 @@ class AttachmentFactory(factory.DjangoModelFactory):
     title = "an attachment"
     type = "jpg"
     author = factory.SubFactory(UserFactory)
+
+
+class GroupFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = InGroup
+    grp = factory.SubFactory(UserFactory, grp=True)
+    username = factory.SubFactory(UserFactory)

@@ -15,7 +15,7 @@ from taggit.models import Tag
 from taggit.utils import parse_tags
 import markdown
 from .models import (
-    Project, Milestone, Item, Node, User, Client, StatusUpdate,
+    Project, Milestone, Item, InGroup, Node, User, Client, StatusUpdate,
     ActualTime, Notify, Attachment)
 from .models import interval_sum
 from .forms import (
@@ -409,6 +409,10 @@ class ProjectUpdateView(LoggedInMixin, UpdateView):
 class UserListView(LoggedInMixin, FilterView):
     model = User
 
+    def get_queryset(self):
+        user_list = User.objects.filter(grp__exact=False)
+        return user_list
+
 
 class UserDetailView(LoggedInMixin, DetailView):
     model = User
@@ -798,3 +802,38 @@ class ItemAddAttachmentView(LoggedInMixin, View):
             last_mod=datetime.now(),
         )
         return HttpResponseRedirect(item.get_absolute_url())
+
+
+class GroupDetailView(LoggedInMixin, ListView):
+    template_name = "main/group_detail.html"
+    model = InGroup
+
+    def get_context_data(self, **kwargs):
+        ctx = super(GroupDetailView, self).get_context_data(**kwargs)
+
+        group_name = self.kwargs['pk']
+        group = User.objects.get(username=group_name)
+        ctx['group_name'] = InGroup.verbose_name(group.fullname)
+
+        return ctx
+
+    def get_queryset(self):
+        group_name = self.kwargs['pk']
+        group_memberships = InGroup.objects.filter(grp__username=group_name)
+
+        members = [x.username for x in group_memberships]
+
+        return members
+
+
+class GroupListView(LoggedInMixin, ListView):
+    template_name = "main/group_list.html"
+    model = User
+
+    def get_queryset(self):
+        groups = User.objects.filter(grp=True)
+
+        group_list = [(group.username, InGroup.verbose_name(group.fullname))
+                      for group in groups]
+
+        return group_list

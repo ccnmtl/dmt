@@ -1,6 +1,6 @@
 from .factories import ClientFactory, ProjectFactory, MilestoneFactory, \
     ItemFactory, NodeFactory, EventFactory, CommentFactory, UserFactory, \
-    StatusUpdateFactory, NotifyFactory
+    StatusUpdateFactory, NotifyFactory, GroupFactory
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -766,3 +766,29 @@ class TestDRFViews(TestCase):
         m = MilestoneFactory()
         r = self.c.get("/drf/milestones/%d/items/" % m.mid)
         self.assertEqual(r.status_code, 200)
+
+
+class GroupTest(TestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.client.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+        self.group = GroupFactory()
+
+    def test_group_list(self):
+        response = self.client.get(reverse('group_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(str(self.group) in response.content)
+
+    def test_group_detail(self):
+        response = self.client.get(
+            reverse('group_detail', args=(self.group.grp.username,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(str(self.group) in response.content)
+        self.assertTrue(self.group.username.username in response.content)

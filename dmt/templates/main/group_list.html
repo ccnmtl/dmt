@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+{% block title %}Groups List{% endblock %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+{% block content %}
+<ul class="breadcrumb">
+  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+	<li class="active">Groups</li>
+</ul>
+
+<div class="tab-content">
+
+<table class="table table-striped table-condensed">
+{% for group in object_list %}
+<tr>
+    <td>
+        <a href="{% url 'group_detail' group.0 %}">
+            {{ group.1 }}
+        </a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+{% endblock %}

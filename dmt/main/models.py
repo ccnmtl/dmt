@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 from django.core.mail import send_mail
 from django_statsd.clients import statsd
 from simpleduration import Duration, InvalidDuration
+import re
 import textwrap
 
 
@@ -1016,6 +1017,14 @@ class InGroup(models.Model):
                             related_name='group_members')
     username = models.ForeignKey(User, null=True,
                                  db_column='username', blank=True)
+
+    @staticmethod
+    def verbose_name(name):
+        p = re.compile(r' \(group\)$')
+        return p.sub('', name)
+
+    def __unicode__(self):
+        return InGroup.verbose_name(self.grp.fullname)
 
     class Meta:
         db_table = u'in_group'
