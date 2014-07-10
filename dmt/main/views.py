@@ -828,8 +828,12 @@ class GroupDetailView(LoggedInMixin, ListView):
 
 class GroupListView(LoggedInMixin, ListView):
     template_name = "main/group_list.html"
-    model = InGroup
+    model = User
 
     def get_queryset(self):
-        group_list = InGroup.objects.distinct('grp')
+        groups = User.objects.filter(grp=True)
+
+        group_list = [(group.username, InGroup.verbose_name(group.fullname))
+                      for group in groups]
+
         return group_list

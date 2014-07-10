@@ -20,8 +20,8 @@
 {% for group in object_list %}
 <tr>
     <td>
-        <a href="{% url 'group_detail' group.grp.username %}">
-            {{ group }}
+        <a href="{% url 'group_detail' group.0 %}">
+            {{ group.1 }}
         </a>
     </td>
 </tr>

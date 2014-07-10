@@ -116,5 +116,5 @@ class AttachmentFactory(factory.DjangoModelFactory):
 
 class GroupFactory(factory.DjangoModelFactory):
     FACTORY_FOR = InGroup
-    grp = factory.SubFactory(UserFactory)
+    grp = factory.SubFactory(UserFactory, grp=True)
     username = factory.SubFactory(UserFactory)
