@@ -539,7 +539,7 @@
 		{% for milestone in object.milestone_set.all %}
 		<tr>
 			<td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
-			<td>{{milestone.target_date}}</td>
+			<td>{{milestone.target_date|date:"Y-m-d"}}</td>
 			<td class="{{milestone.status_class}}">{{milestone.status}}</td>
 			<td>{{milestone.num_open_items}}</td>
 			<td><img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_logged&target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_estimated&_salt=1369503684.466&height=10&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=100&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
