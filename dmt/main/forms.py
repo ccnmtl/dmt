@@ -1,5 +1,4 @@
 from django.forms import ModelForm
-from django import forms
 from .models import StatusUpdate, Node, User, Project, Milestone, Item
 
 
@@ -50,4 +49,3 @@ class ItemUpdateForm(ModelForm):
         exclude = ['iid', 'owner',
                    'assigned_to', 'status', 'r_status', 'last_mod',
                    'tags', 'priority']
-
