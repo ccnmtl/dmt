@@ -1,6 +1,5 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from django.test.client import Client
 from django.contrib.auth.models import User
 
 from rest_framework.test import APITestCase
@@ -15,7 +14,7 @@ from ..serializers import ItemSerializer
 
 class AddTrackerViewTest(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -84,7 +83,7 @@ class AddTrackerViewTest(TestCase):
 
 class ItemHoursViewTest(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -107,7 +106,7 @@ class ItemHoursViewTest(TestCase):
 
 class GitUpdateViewTest(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
 
     def test_post_fixed(self):
         i = ItemFactory()

@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.test.client import Client
 from django.contrib.auth.models import User
 from dmt.main.models import User as PMTUser
 from dmt.claim.models import Claim
@@ -8,7 +7,7 @@ from dmt.main.models import InGroup
 
 class UserWeeklyTest(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -28,7 +27,7 @@ class UserWeeklyTest(TestCase):
 
 class UserYearlyTest(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -48,7 +47,7 @@ class UserYearlyTest(TestCase):
 
 class StaffReportTest(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()

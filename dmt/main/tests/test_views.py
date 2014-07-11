@@ -4,7 +4,6 @@ from .factories import ClientFactory, ProjectFactory, MilestoneFactory, \
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
-from django.test.client import Client
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Attachment, Item, ItemClient
@@ -13,7 +12,7 @@ import json
 
 class BasicTest(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -76,7 +75,7 @@ class TestClientViews(TestCase):
 
 class TestProjectViews(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -241,7 +240,7 @@ class TestProjectViews(TestCase):
 
 class TestMilestoneViews(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -271,7 +270,7 @@ class TestMilestoneViews(TestCase):
 
 class TestItemViews(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -360,7 +359,7 @@ class TestItemViews(TestCase):
 
 class TestItemTagViews(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -396,7 +395,7 @@ class TestItemTagViews(TestCase):
 
 class TestItemWorkflow(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -588,7 +587,7 @@ class TestItemWorkflow(TestCase):
 
 class TestHistory(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -612,7 +611,7 @@ class TestHistory(TestCase):
 
 class TestForum(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -674,7 +673,7 @@ class TestForum(TestCase):
 
 class TestForumTagViews(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
@@ -710,7 +709,7 @@ class TestForumTagViews(TestCase):
 
 class TestFeeds(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
 
     def test_forum_feed(self):
         NodeFactory()
@@ -731,7 +730,7 @@ class TestFeeds(TestCase):
 
 class TestDRFViews(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
