@@ -466,6 +466,17 @@ class Milestone(models.Model):
             [i.estimated_time for i in self.item_set.filter(status='OPEN')]
         ).total_seconds() / 3600.
 
+    def total_estimated_hours(self):
+        return interval_sum(
+            [i.estimated_time for i in self.item_set.all()]
+        ).total_seconds() / 3600.
+
+    def hours_completed(self):
+        return interval_sum(
+            [a.actual_time
+             for a in ActualTime.objects.filter(item__milestone=self)]
+        ).total_seconds() / 3600.
+
     def update_milestone(self):
         if self.should_be_closed():
             self.close_milestone()
