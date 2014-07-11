@@ -4,10 +4,11 @@
 {% block content %}
 <form action="." method="post">{% csrf_token %}
 <fieldset>
-<legend>Create New Project</legend>
+<legend>Edit Project</legend>
 
 {{form|bootstrap}}
 
+<a href="{% url 'project_detail' object.pid %}" class="btn btn-default">Cancel</a>
 <input type="submit" value="Save" class="btn btn-primary" />
 </fieldset>
 </form>

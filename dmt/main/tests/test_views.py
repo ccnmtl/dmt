@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
-from dmt.main.models import Attachment, Item, ItemClient, Project
+from dmt.main.models import Attachment, Item, ItemClient, Milestone, Project
 import json
 
 
@@ -236,6 +236,99 @@ class TestProjectViews(TestCase):
 
         items = Item.objects.filter(milestone=milestone, owner=u)
         self.assertEqual(len(items), 1)
+
+    def test_create_project_get(self):
+        r = self.c.get(reverse('project_create'))
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue('Create New Project' in r.content)
+
+    def test_create_project_post(self):
+        test_name = 'Test project'
+        test_desc = 'Description for the test project'
+        test_pub_view = 'public'
+        test_target_date = '2020-04-28'
+        test_wiki_category = ''
+        r = self.c.post(reverse('project_create'),
+                        {'name': test_name,
+                         'description': test_desc,
+                         'pub_view': test_pub_view,
+                         'target_date': test_target_date,
+                         'test_wiki_category': test_wiki_category})
+        self.assertEqual(r.status_code, 302)
+        url = r.url
+        r = self.c.get(url)
+        self.assertTrue(test_name in r.content)
+        self.assertTrue(test_desc in r.content)
+
+    def test_create_project_post_requires_project_name(self):
+        r = self.c.post(reverse('project_create'),
+                        {'description': 'description',
+                         'pub_view': 'public',
+                         'target_date': '2020-04-28',
+                         'test_wiki_category': ''})
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue('This field is required.' in r.content)
+
+    def test_create_project_post_requires_target_date(self):
+        r = self.c.post(reverse('project_create'),
+                        {'name': 'Test project name',
+                         'description': 'description',
+                         'pub_view': 'public',
+                         'test_wiki_category': ''})
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue('This field is required.' in r.content)
+
+    def test_create_project_post_requires_valid_target_date(self):
+        r = self.c.post(reverse('project_create'),
+                        {'name': 'Test project name',
+                         'description': 'description',
+                         'pub_view': 'public',
+                         'target_date': '2309ur03j30',
+                         'test_wiki_category': ''})
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue('Invalid target date' in r.content)
+
+    def test_create_project_post_private(self):
+        self.c.post(reverse('project_create'),
+                    {'name': 'Test project name',
+                     'description': 'description',
+                     'pub_view': 'private',
+                     'target_date': '2020-04-28',
+                     'test_wiki_category': ''})
+
+    def test_create_project_post_adds_final_release_milestone(self):
+        self.c.post(reverse('project_create'),
+                    {'name': 'Test project name',
+                     'description': 'description',
+                     'pub_view': 'public',
+                     'target_date': '2020-04-28',
+                     'test_wiki_category': ''})
+        p = Project.objects.get(name='Test project name')
+        self.assertEqual(
+            Milestone.objects.filter(project=p, name='Final Release').count(),
+            1)
+
+    def test_create_project_post_adds_someday_milestone(self):
+        self.c.post(reverse('project_create'),
+                    {'name': 'Test project name',
+                     'description': 'description',
+                     'pub_view': 'public',
+                     'target_date': '2020-04-28',
+                     'test_wiki_category': ''})
+        p = Project.objects.get(name='Test project name')
+        self.assertEqual(
+            Milestone.objects.filter(project=p, name='Someday/Maybe').count(),
+            1)
+
+    def test_create_project_post_adds_current_user_to_personnel(self):
+        self.c.post(reverse('project_create'),
+                    {'name': 'Test project name',
+                     'description': 'description',
+                     'pub_view': 'public',
+                     'target_date': '2020-04-28',
+                     'test_wiki_category': ''})
+        p = Project.objects.get(name='Test project name')
+        self.assertTrue(self.pu in p.personnel_in_project())
 
 
 class TestMilestoneViews(TestCase):

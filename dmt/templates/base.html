@@ -1,6 +1,7 @@
 {% load bootstrap3 %}
 {% load compress %}
 {% load claimtags %}
+{% load waffle_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,23 +44,32 @@
 
         <ul class="nav navbar-nav">
 					<li><a class="brand" href="/"><span class="glyphicon glyphicon-home"></span></a></li>
-					<li class="dropdown">
-<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-Projects <span class="caret"></span>
-<ul  class="dropdown-menu">
-<li><a href="/project/">All Projects</a></li>
-{% if not request.user.is_anonymous %}
-{% pmtuser as pmt_user %}
-{% if pmt_user.has_recent_active_projects %}
-<li><p class="navbar-text">Your Recent Projects</p></li>
-{% for project in pmt_user.recent_active_projects %}
-<li><a href="{{project.get_absolute_url}}">{{project.name|truncatechars:60}}</a></li>
-{% endfor %}
-{% endif %}
-{% endif %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Projects <span class="caret"></span>
+                        </a>
 
-</ul>
-</li>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'project_list' %}">All Projects</a></li>
+                            {% if not request.user.is_anonymous %}
+                            {% pmtuser as pmt_user %}
+
+                            {% flag create_project %}
+                            <li><a href="{% url 'project_create' %}">Create New Project</a></li>
+                            {% endflag %}
+
+                            {% if pmt_user.has_recent_active_projects %}
+                            <li class="divider"></li>
+                            <li><p class="navbar-text small">Your Recent Projects</p></li>
+                            {% for project in pmt_user.recent_active_projects %}
+                                <li><a href="{% url 'project_detail' project.pid %}">
+                                        {{project.name|truncatechars:60}}
+                                </a></li>
+                            {% endfor %}
+                            {% endif %}
+                            {% endif %}
+                        </ul>
+                    </li>
 					<li><a href="/client/">Clients</a></li>
 					<li><a href="/user/?status=active">Users</a></li>
 					<li><a href="/group/">Groups</a></li>

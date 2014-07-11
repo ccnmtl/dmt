@@ -162,3 +162,16 @@ form.navbar-form {
     margin-top: 0;
     margin-bottom: 0;
 }
+
+form .control-group {
+    margin-bottom: 15px;
+}
+
+form .control-group.error .help-inline {
+    color: #f00;
+}
+
+.dropdown-menu .navbar-text {
+    margin-top: 0;
+    margin-bottom: 0;
+}
