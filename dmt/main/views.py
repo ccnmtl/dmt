@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
@@ -47,6 +49,12 @@ class LoggedInMixin(object):
         if not has_claim(self.request.user):
             return HttpResponseRedirect("/claim/")
         return super(LoggedInMixin, self).dispatch(*args, **kwargs)
+
+
+class SuperUserOnlyMixin(object):
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, *args, **kwargs):
+        return super(SuperUserOnlyMixin, self).dispatch(*args, **kwargs)
 
 
 class SearchView(LoggedInMixin, TemplateView):
@@ -425,6 +433,46 @@ class UserDetailView(LoggedInMixin, DetailView):
 class UserUpdateView(LoggedInMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
+
+
+class DeactivateUserView(SuperUserOnlyMixin, View):
+    template_name = "main/user_deactivate.html"
+
+    def get(self, request, pk):
+        u = get_object_or_404(User, username=pk)
+        return render(request, self.template_name,
+                      dict(user=u))
+
+    def post(self, request, pk):
+        u = get_object_or_404(User, username=pk)
+        u.status = 'inactive'
+        u.save()
+        for k in request.POST.keys():
+            if k.startswith('project_'):
+                pid = k[len('project_'):]
+                project = get_object_or_404(Project, pid=pid)
+                c = get_object_or_404(User, username=request.POST[k])
+                project.caretaker = c
+                project.save()
+            if k.startswith('item_assigned_'):
+                iid = k[len('item_assigned_'):]
+                item = get_object_or_404(Item, iid=iid)
+                assigned_to = get_object_or_404(
+                    User,
+                    username=request.POST[k])
+                item.reassign(u, assigned_to, 'deactivating ' + u.username)
+                item.touch()
+            if k.startswith('item_owner_'):
+                iid = k[len('item_owner_'):]
+                item = get_object_or_404(Item, iid=iid)
+                owner = get_object_or_404(
+                    User,
+                    username=request.POST[k])
+                item.change_owner(u, owner, 'deactivating ' + u.username)
+                item.touch()
+        u.remove_from_all_groups()
+        return HttpResponseRedirect(
+            reverse('user_detail', args=(u.username,)))
 
 
 class MilestoneUpdateView(LoggedInMixin, UpdateView):

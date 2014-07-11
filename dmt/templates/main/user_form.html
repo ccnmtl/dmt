@@ -2,6 +2,12 @@
 {% load bootstrap %}
 
 {% block content %}
+{% if object.active %}
+{% if request.user.is_superuser %}
+<a class="btn btn-danger pull-right" href="{% url 'user_deactivate' object.username %}">Deactivate</a>
+{% endif %}
+{% endif %}
+
 <form action="." method="post">{% csrf_token %}
 <fieldset><legend>Edit User</legend>
 {{form|bootstrap}}

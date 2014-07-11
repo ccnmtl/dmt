@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
-from dmt.main.models import Attachment, Item, ItemClient
+from dmt.main.models import Attachment, Item, ItemClient, Project
 import json
 
 
@@ -791,3 +791,58 @@ class GroupTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(str(self.group) in response.content)
         self.assertTrue(self.group.username.username in response.content)
+
+
+class UserTest(TestCase):
+    def setUp(self):
+        self.u = User.objects.create(
+            username="testuser",
+            is_superuser=True)
+        self.u.set_password("test")
+        self.u.save()
+        self.client.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+    def test_deactivate_user_form(self):
+        u = UserFactory(status='active')
+        r = self.client.get(u.get_absolute_url() + "deactivate/")
+        self.assertEqual(r.status_code, 200)
+
+    def test_deactivate_simple(self):
+        u = UserFactory(status='active')
+        r = self.client.post(u.get_absolute_url() + "deactivate/",
+                             dict())
+        self.assertEqual(r.status_code, 302)
+        u = PMTUser.objects.get(username=u.username)
+        self.assertFalse(u.active())
+
+    def test_deactivate_populated(self):
+        u = UserFactory(status='active')
+        # this user actually has some stuff
+        p = ProjectFactory(caretaker=u)
+        assigned = ItemFactory(assigned_to=u)
+        owned = ItemFactory(owner=u)
+        # reassign it to the request user
+        params = dict()
+        params["project_%d" % p.pid] = self.pu.username
+        params["item_assigned_%d" % assigned.iid] = self.pu.username
+        params["item_owner_%d" % owned.iid] = self.pu.username
+        r = self.client.post(
+            u.get_absolute_url() + "deactivate/",
+            params)
+        self.assertEqual(r.status_code, 302)
+        u = PMTUser.objects.get(username=u.username)
+        self.assertFalse(u.active())
+
+        # refetch and check
+        p = Project.objects.get(pid=p.pid)
+        self.assertEqual(p.caretaker, self.pu)
+
+        assigned = Item.objects.get(iid=assigned.iid)
+        self.assertEqual(assigned.assigned_to, self.pu)
+
+        owned = Item.objects.get(iid=owned.iid)
+        self.assertEqual(owned.owner, self.pu)
