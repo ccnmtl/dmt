@@ -488,6 +488,17 @@
 </div>
 </dd>
 
+{% if clients %}
+<dt>CLIENTS</dt>
+{% for client in clients %}
+<dd>
+    <a href="{% url 'client_detail' client.client_id %}">
+        {{client.firstname}} {{client.lastname}}
+    </a>
+</dd>
+{% endfor %}
+{% endif %}
+
 <script type="text/template" id="item-template">
 </script>
 {% endflag %}

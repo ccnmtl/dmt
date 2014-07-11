@@ -324,6 +324,10 @@ class ItemDetailView(LoggedInMixin, DetailView):
             context['notifications_enabled_for_current_user'] = \
                 True if notification else False
 
+        iid = context['object'].iid
+        context['clients'] = Client.objects.filter(
+            itemclient__item=iid).order_by('lastname')
+
         return context
 
 
