@@ -496,6 +496,9 @@ class Milestone(models.Model):
         return self.item_set.filter(
             status__in=['OPEN', 'INPROGRESS', 'RESOLVED']).count()
 
+    def __unicode__(self):
+        return self.name
+
 
 def priority_label_f(priority):
     labels = ['ICING', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
