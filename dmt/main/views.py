@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
@@ -466,7 +467,8 @@ class DeactivateUserView(SuperUserOnlyMixin, View):
                 item.change_owner(u, owner, 'deactivating ' + u.username)
                 item.touch()
         u.remove_from_all_groups()
-        return HttpResponseRedirect(u.get_absolute_url())
+        return HttpResponseRedirect(
+            reverse('user_detail', args=(u.username,)))
 
 
 class MilestoneUpdateView(LoggedInMixin, UpdateView):
