@@ -126,6 +126,14 @@ class User(models.Model):
             ).select_related(
             'milestone', 'milestone__project')
 
+    def non_verified_owned_items(self):
+        """ all items that this user owns that
+        are OPEN, INPROGRESS, or RESOLVED"""
+        return Item.objects.filter(
+            owner=self,
+            ).exclude(status='VERIFIED').select_related(
+            'milestone', 'milestone__project')
+
     def items(self):
         assigned = set(self.open_assigned_items())
         owned = set(self.resolved_owned_items())
@@ -183,6 +191,9 @@ class User(models.Model):
     def group_fullname(self):
         f = self.fullname
         return f.replace(" (group)", "")
+
+    def remove_from_all_groups(self):
+        self.ingroup_set.all().delete()
 
 
 class ProjectUser(object):
