@@ -1,12 +1,11 @@
 from django.test import TestCase
-from django.test.client import Client
 from django.contrib.auth.models import User
 from dmt.claim.models import Claim, PMTUser
 
 
 class IndexViewTest(TestCase):
     def setUp(self):
-        self.c = Client()
+        self.c = self.client
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
