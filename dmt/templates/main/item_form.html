@@ -3,12 +3,14 @@
 
 {% block content %}
 
-<p class="pull-right">
+<div class="form-group pull-right">
 	<a class="btn btn-xs btn-danger"
 		 href="{{object.get_absolute_url}}delete/"
 		 ><span class="glyphicon glyphicon-trash"></span>
 		delete</a>
-</p>
+	<a class="btn btn-xs btn-primary"
+		 href="{% url 'item-move-project' object.iid %}">move to another project</a>
+</div>
 
 
 <form action="." method="post">{% csrf_token %}
@@ -17,6 +19,6 @@
 <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
 <input type="submit" value="Save" class="btn btn-primary" />
 </fieldset>
-
 </form>
+
 {% endblock %}

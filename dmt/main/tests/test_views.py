@@ -449,6 +449,18 @@ class TestItemViews(TestCase):
             j = json.loads(r.content)
             self.assertTrue('signed_request' in j)
 
+    def test_item_move_project(self):
+        i = ItemFactory()
+        m = MilestoneFactory()
+        p = m.project
+        r = self.c.get(reverse('item-move-project', args=(i.iid,)))
+        self.assertEqual(r.status_code, 200)
+        r = self.c.post(reverse('item-move-project', args=(i.iid,)),
+                        dict(project=p.pid))
+        self.assertEqual(r.status_code, 302)
+        i = Item.objects.get(iid=i.iid)
+        self.assertEqual(i.milestone.project.pid, p.pid)
+
 
 class TestItemTagViews(TestCase):
     def setUp(self):
