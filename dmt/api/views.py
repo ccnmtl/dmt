@@ -8,6 +8,7 @@ from rest_framework import filters, generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from simpleduration import Duration, InvalidDuration
+from datetime import datetime
 
 from dmt.claim.models import Claim
 from dmt.main.models import Client, Item, Milestone, Notify, Project, User
@@ -205,6 +206,7 @@ class AddTrackerView(View):
             owner=user, assigned_to=user,
             title=task, status='VERIFIED',
             priority=1, target_date=milestone.target_date,
+            last_mod=datetime.now(),
             estimated_time=td)
         if client_uni != '':
             r = Client.objects.filter(
