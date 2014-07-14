@@ -48,7 +48,9 @@
 {% with object.user_groups as groups %}
 {% if groups %}
 <dt>Groups</dt><dd>
-{% for g in groups %}<a href="{{g.get_absolute_url}}">{{g.group_fullname}}</a>{% if not forloop.last %}, {% endif %}
+{% for g in groups %}
+<a href="{% url 'group_detail' g.username %}">
+    {{g.group_fullname}}</a>{% if not forloop.last %}, {% endif %}
 {% endfor %}
 </dd>
 {% endif %}
