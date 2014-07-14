@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm
 from .models import StatusUpdate, Node, User, Project, Milestone, Item
 
@@ -20,6 +21,20 @@ class UserUpdateForm(ModelForm):
         fields = ["fullname", "email", "type", "title", "phone",
                   "bio", "photo_url", "photo_width", "photo_height",
                   "campus", "building", "room"]
+
+
+class ProjectCreateForm(ModelForm):
+    target_date = forms.CharField(label='Target Date (e.g. 2020-4-27)')
+
+    class Meta:
+        model = Project
+        fields = ['name', 'description', 'pub_view', 'target_date',
+                  'wiki_category']
+        widgets = {
+            'pub_view': forms.RadioSelect(
+                choices=(('true', 'Public'),
+                         ('false', 'Private')))
+        }
 
 
 class ProjectUpdateForm(ModelForm):

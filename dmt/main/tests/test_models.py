@@ -7,7 +7,7 @@ from .factories import (
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
 from dmt.main.models import (
-    InGroup, HistoryItem, Notify, ProjectUser, truncate_string,
+    InGroup, HistoryItem, Milestone, Notify, ProjectUser, truncate_string,
     HistoryEvent
 )
 
@@ -267,6 +267,18 @@ class NodeTest(TestCase):
 
 
 class ProjectTest(TestCase):
+    def test_add_milestone_invalid_target_date(self):
+        p = ProjectFactory()
+        with self.assertRaises(ValueError):
+            p.add_milestone('name', 'not a date', 'desc')
+
+    def test_add_milestone_valid_target_date(self):
+        p = ProjectFactory()
+        p.add_milestone('name', '2020-04-04', 'desc')
+        p.add_milestone('name', '2020-04-4', 'desc')
+        p.add_milestone('name', '2020-4-04', 'desc')
+        self.assertEqual(Milestone.objects.filter(project=p).count(), 3)
+
     def test_managers_empty(self):
         p = ProjectFactory()
         self.assertEqual(p.managers(), [])

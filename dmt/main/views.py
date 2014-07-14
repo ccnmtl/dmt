@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
 from django_statsd.clients import statsd
@@ -21,8 +21,8 @@ from .models import (
     ActualTime, Notify, Attachment)
 from .models import interval_sum
 from .forms import (
-    StatusUpdateForm, NodeUpdateForm, UserUpdateForm, ProjectUpdateForm,
-    MilestoneUpdateForm, ItemUpdateForm)
+    ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
+    ProjectUpdateForm, MilestoneUpdateForm, ItemUpdateForm)
 from .utils import safe_basename
 from dmt.claim.models import Claim
 
@@ -405,6 +405,39 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
     model = Milestone
 
 
+class ProjectCreateView(LoggedInMixin, CreateView):
+    model = Project
+    form_class = ProjectCreateForm
+
+    def form_valid(self, form):
+        current_user = \
+            get_object_or_404(Claim, django_user=self.request.user).pmt_user
+        form.instance.caretaker = current_user
+        form.instance.save()
+
+        try:
+            # Add Final Release milestone
+            form.instance.add_milestone('Final Release',
+                                        form.data['target_date'],
+                                        'project completion')
+
+            # Add Someday/Maybe milestone
+            form.instance.add_milestone('Someday/Maybe',
+                                        '2015-01-01',
+                                        'A milestone for items that will ' +
+                                        'not be immediately worked on. ' +
+                                        'Items in this milestone will not ' +
+                                        'appear on a homepage or in time ' +
+                                        'estimates.')
+
+            # Add project creator to the project personnel list
+            form.instance.add_personnel(current_user, auth='manager')
+            return super(ProjectCreateView, self).form_valid(form)
+        except ValueError, e:
+            form.errors['target_date'] = [e.message]
+            return super(ProjectCreateView, self).form_invalid(form)
+
+
 class ProjectListView(LoggedInMixin, FilterView):
     model = Project
 
@@ -416,6 +449,7 @@ class ProjectDetailView(LoggedInMixin, DetailView):
 class ProjectUpdateView(LoggedInMixin, UpdateView):
     model = Project
     form_class = ProjectUpdateForm
+    template_name_suffix = '_update_form'
 
 
 class UserListView(LoggedInMixin, FilterView):
