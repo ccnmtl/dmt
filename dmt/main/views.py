@@ -922,7 +922,7 @@ class GroupDetailView(LoggedInMixin, ListView):
         group_name = self.kwargs['pk']
         group = User.objects.get(username=group_name)
         ctx['group_name'] = InGroup.verbose_name(group.fullname)
-
+        ctx['group'] = group
         return ctx
 
     def get_queryset(self):
@@ -932,6 +932,14 @@ class GroupDetailView(LoggedInMixin, ListView):
         members = [x.username for x in group_memberships]
 
         return members
+
+
+class RemoveUserFromGroupView(LoggedInMixin, View):
+    def post(self, request, pk):
+        InGroup.objects.filter(
+            grp__username=pk,
+            username__username=request.POST.get('username')).delete()
+        return HttpResponseRedirect(reverse('group_detail', args=(pk,)))
 
 
 class GroupListView(LoggedInMixin, ListView):
