@@ -897,6 +897,17 @@ class GroupTest(TestCase):
         self.assertTrue(str(self.group) in response.content)
         self.assertTrue(self.group.username.username in response.content)
 
+    def test_remove_user_from_group(self):
+        grp_username = self.group.grp.username
+        user_username = self.group.username.username
+        r = self.client.post(
+            reverse('remove_user_from_group', args=(grp_username,)),
+            dict(username=user_username))
+        self.assertEqual(r.status_code, 302)
+        r = self.client.get(
+            reverse('group_detail', args=(grp_username,)))
+        self.assertFalse(user_username in r.content)
+
 
 class UserTest(TestCase):
     def setUp(self):
