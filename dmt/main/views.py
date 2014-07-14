@@ -873,7 +873,7 @@ class SignS3View(LoggedInMixin, View):
             hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
         signature = urllib.quote_plus(signature.strip())
 
-        url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
+        url = 'https://s3.amazonaws.com/%s/%s' % (S3_BUCKET, object_name)
         signed_request = '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (
             url, AWS_ACCESS_KEY, expires, signature)
 
