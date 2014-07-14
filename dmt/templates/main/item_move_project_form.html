@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load claimtags %}
+
+{% block content %}
+{% pmtuser as pmt_user %}
+
+<form action="." method="post">
+	<fieldset><legend>Move To a Different Project</legend>
+	<div class="form-group">
+		<label for="resolve-status">Select New Project</label>
+
+		<select name="project" class="form-control">
+			{% for project in pmt_user.personnel_on %}
+			<option value="{{project.pid}}">{{project.name}}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<input type="submit" value="move item to project" class="btn btn-primary"/>
+	</fieldset>
+</form>
+
+{% endblock %}

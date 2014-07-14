@@ -492,6 +492,28 @@ class ItemDeleteView(LoggedInMixin, DeleteView):
         return self.object.milestone.get_absolute_url()
 
 
+class ItemMoveProjectView(LoggedInMixin, View):
+    template_name = "main/item_move_project_form.html"
+
+    def get(self, request, pk):
+        item = get_object_or_404(Item, iid=pk)
+        return render(request, self.template_name, dict(item=item))
+
+    def post(self, request, pk):
+        item = get_object_or_404(Item, iid=pk)
+        old_milestone = item.milestone
+        project = get_object_or_404(Project, pid=request.POST.get('project'))
+        milestone = project.upcoming_milestone()
+        item.milestone = milestone
+        item.add_project_notification()
+        item.save()
+        # possibly re-open a milestone
+        milestone.update_milestone()
+        # possibly close out the old one
+        old_milestone.update_milestone()
+        return HttpResponseRedirect(item.get_absolute_url())
+
+
 class TagListView(LoggedInMixin, ListView):
     model = Tag
     queryset = Tag.objects.all().order_by("name")

@@ -154,6 +154,11 @@ class User(models.Model):
         return [w.project for w in self.workson_set.filter(
                 auth='guest').select_related('project')]
 
+    def personnel_on(self):
+        return [w.project for w
+                in self.workson_set.all(
+                ).select_related('project').order_by('project__name')]
+
     def total_group_time(self, start, end):
         return interval_sum(
             [u.interval_time(start, end) for u in self.users_in_group()])
