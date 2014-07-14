@@ -24,7 +24,7 @@ class UserUpdateForm(ModelForm):
 
 
 class ProjectCreateForm(ModelForm):
-    target_date = forms.CharField(label='Target Date (e.g. 2020-4-27)')
+    target_date = forms.CharField()
 
     class Meta:
         model = Project

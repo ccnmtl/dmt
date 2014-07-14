@@ -2,6 +2,9 @@
 {% load bootstrap %}
 
 {% block content %}
+<link rel="stylesheet" href="{{STATIC_URL}}bootstrap-datepicker/css/datepicker.css">
+<script src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
 <form action="." method="post">{% csrf_token %}
 <fieldset>
 <legend>Create New Project</legend>
@@ -11,4 +14,14 @@
 <input type="submit" value="Save" class="btn btn-primary" />
 </fieldset>
 </form>
+
+<script>
+$(document).ready(function() {
+    $('#id_target_date').datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+        todayHighlight: true
+    });
+});
+</script>
 {% endblock %}
