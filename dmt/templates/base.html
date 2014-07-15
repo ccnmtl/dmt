@@ -70,11 +70,38 @@
                             {% endif %}
                         </ul>
                     </li>
-					<li><a href="/client/">Clients</a></li>
-					<li><a href="/user/?status=active">Users</a></li>
-					<li><a href="/group/">Groups</a></li>
-					<li><a href="/forum/">Forum</a></li>
-					<li><a href="/tag/">Tags</a></li>
+					<li>
+                        <a href="/client/">Clients</a>
+                    </li>
+					<li class="dropdown">
+                        <a class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           href="{% url 'user_list' %}?status=active">
+                            Users/Groups <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{% url 'user_list' %}?status=active">
+                                    All Users
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'group_list' %}">
+                                    All Groups
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/forum/">Forum</a>
+                    </li>
+                    <li>
+                        <a href="/tag/">Tags</a>
+                    </li>
+                    <li>
+                        <a href="/report/">Reports</a>
+                    </li>
 
           {% block topnavbarleftitems %}{% endblock %}
         </ul>
