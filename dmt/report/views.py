@@ -5,6 +5,7 @@ from dmt.claim.models import Claim
 from dmt.main.models import User
 from dmt.main.views import LoggedInMixin
 from datetime import datetime, timedelta
+from .models import StaffReportCalculator
 
 
 class YearlyReviewView(LoggedInMixin, View):
@@ -76,7 +77,10 @@ class StaffReportView(LoggedInMixin, TemplateView):
         week_end = week_start + timedelta(days=6)
         prev_week = week_start - timedelta(weeks=1)
         next_week = week_start + timedelta(weeks=1)
-        data = staff_report_data(week_start, week_end)
+        report = StaffReportCalculator(['programmers', 'video', 'webmasters',
+                                        'educationaltechnologists',
+                                        'management'])
+        data = report.calc(week_start, week_end)
         data.update(dict(now=now,
                          week_start=week_start.date,
                          week_end=week_end.date,
@@ -84,27 +88,3 @@ class StaffReportView(LoggedInMixin, TemplateView):
                          next_week=next_week.date,
                          ))
         return data
-
-
-def staff_report_data(start, end):
-    groups = ['programmers', 'video', 'webmasters', 'educationaltechnologists',
-              'management']
-    group_reports = []
-
-    for grp in groups:
-        try:
-            group_user = User.objects.get(username="grp_" + grp)
-        except User.DoesNotExist:
-            continue
-        group_total_time = group_user.total_group_time(start, end)
-        data = dict(group=group_user, total_time=group_total_time)
-        user_data = []
-        for user in group_user.users_in_group():
-            user_time = user.interval_time(start, end)
-            user_data.append(dict(user=user, user_time=user_time))
-        data['user_data'] = user_data
-        data['max_time'] = max(u['user_time'] for u in user_data)
-        group_reports.append(data)
-
-    group_max_time = max([g['total_time'] for g in group_reports])
-    return dict(groups=group_reports, group_max_time=group_max_time)
