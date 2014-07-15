@@ -94,13 +94,13 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="/forum/">Forum</a>
+                        <a href="{% url 'forum_list' %}">Forum</a>
                     </li>
                     <li>
-                        <a href="/tag/">Tags</a>
+                        <a href="{% url 'tag_list' %}">Tags</a>
                     </li>
                     <li>
-                        <a href="/report/">Reports</a>
+                        <a href="{% url 'report_list' %}">Reports</a>
                     </li>
 
           {% block topnavbarleftitems %}{% endblock %}

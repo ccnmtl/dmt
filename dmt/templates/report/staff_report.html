@@ -25,11 +25,18 @@
 
 <div class="row">
 <div class="col-md-2">
-<ul>
+<table class="table">
 {% for user in group.user_data %}
-<li>{{user.user.fullname}}: {{user.user_time|hours}}</li>
+<tr>
+    <td>
+        <a href="{% url 'user_detail' user.user.username %}">
+            {{user.user.fullname}}
+        </a>
+    </td>
+    <td>{{user.user_time|hours}}</td>
+</tr>
 {% endfor %}
-</ul>
+</table>
 </div>
 <div class="col-md-10">
 {% if group.total_time %}
