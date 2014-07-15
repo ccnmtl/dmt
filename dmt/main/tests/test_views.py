@@ -908,6 +908,19 @@ class GroupTest(TestCase):
             reverse('group_detail', args=(grp_username,)))
         self.assertFalse(user_username in r.content)
 
+    def test_add_user_to_group(self):
+        grp_username = self.group.grp.username
+
+        u = UserFactory()
+
+        r = self.client.post(
+            reverse('add_user_to_group', args=(grp_username,)),
+            dict(username=u.username))
+        self.assertEqual(r.status_code, 302)
+        r = self.client.get(
+            reverse('group_detail', args=(grp_username,)))
+        self.assertTrue(u.username in r.content)
+
 
 class UserTest(TestCase):
     def setUp(self):

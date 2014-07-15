@@ -923,15 +923,21 @@ class GroupDetailView(LoggedInMixin, ListView):
         group = User.objects.get(username=group_name)
         ctx['group_name'] = InGroup.verbose_name(group.fullname)
         ctx['group'] = group
+        ctx['eligible_users'] = self.eligible_users(group_name)
         return ctx
 
     def get_queryset(self):
         group_name = self.kwargs['pk']
+        return self.members(group_name)
+
+    def members(self, group_name):
         group_memberships = InGroup.objects.filter(grp__username=group_name)
+        return [x.username for x in group_memberships]
 
-        members = [x.username for x in group_memberships]
-
-        return members
+    def eligible_users(self, group_name):
+        active_users = set(User.objects.filter(status='active'))
+        members = set(self.members(group_name))
+        return sorted(active_users - members, key=lambda x: x.fullname.lower())
 
 
 class RemoveUserFromGroupView(LoggedInMixin, View):
@@ -939,6 +945,14 @@ class RemoveUserFromGroupView(LoggedInMixin, View):
         InGroup.objects.filter(
             grp__username=pk,
             username__username=request.POST.get('username')).delete()
+        return HttpResponseRedirect(reverse('group_detail', args=(pk,)))
+
+
+class AddUserToGroupView(LoggedInMixin, View):
+    def post(self, request, pk):
+        g = get_object_or_404(User, username=pk)
+        u = get_object_or_404(User, username=request.POST.get('username'))
+        ig, _created = InGroup.objects.get_or_create(grp=g, username=u)
         return HttpResponseRedirect(reverse('group_detail', args=(pk,)))
 
 
