@@ -175,3 +175,8 @@ form .control-group.error .help-inline {
     margin-top: 0;
     margin-bottom: 0;
 }
+
+.navbar-default .navbar-nav>li>a {
+    padding-left: 12px;
+    padding-right: 12px;
+}

@@ -112,7 +112,7 @@ urlpatterns = patterns(
     (r'^status/(?P<pk>\d+)/$', StatusUpdateUpdateView.as_view()),
     (r'^status/(?P<pk>\d+)/delete/$', StatusUpdateDeleteView.as_view()),
     (r'^report/', include('dmt.report.urls')),
-    (r'^user/$', UserListView.as_view()),
+    url(r'^user/$', UserListView.as_view(), name='user_list'),
     url(r'^user/(?P<pk>\w+)/$', UserDetailView.as_view(), name='user_detail'),
     url(r'^user/(?P<pk>\w+)/deactivate/$', DeactivateUserView.as_view(),
         name='user_deactivate'),
