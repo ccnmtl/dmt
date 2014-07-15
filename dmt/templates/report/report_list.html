@@ -5,7 +5,10 @@
 {% block content %}
 
 <ul>
-	<li><a href="/report/staff/">Staff Report</a></li>
-	<li><a href="/report/yearly_review/">Your Yearly Review</a></li>
+    <li><a href="{% url 'staff_report' %}">Staff Report</a></li>
+    <li>
+        <a href="{% url 'weekly_summary_report' %}">Weekly Summary</a>
+    </li>
+    <li><a href="{% url 'yearly_review_report' %}">Your Yearly Review</a></li>
 </ul>
 {% endblock %}

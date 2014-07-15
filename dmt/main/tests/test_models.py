@@ -16,7 +16,7 @@ class InGroupTest(TestCase):
     def test_verbose_name(self):
         self.assertEqual(
             InGroup.verbose_name('Test group abc (group)'),
-            'Test group abc')
+            'Test Group Abc')
 
 
 class UserModelTest(TestCase):

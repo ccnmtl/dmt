@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import connection, models
 from django.conf import settings
 from datetime import timedelta, datetime
 from interval.fields import IntervalField
@@ -447,6 +447,58 @@ to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
         """ very simple helper that makes it easier to set the
         default date on add-* forms"""
         return datetime.now().date()
+
+    def group_hours(self, group, start, end):
+        cursor = connection.cursor()
+        cursor.execute("""
+SELECT SUM(a.actual_time) AS hours
+FROM actual_times a, in_group g, milestones m, items i
+WHERE a.iid = i.iid
+    AND i.mid = m.mid
+    AND m.pid = %s
+    AND a.resolver = g.username
+    AND g.grp  = %s
+    AND a.completed > %s
+    AND a.completed <= %s
+        """, [self.pid, group, start, end])
+        row = cursor.fetchone()
+        time = row[0]
+        return time if time else timedelta(0)
+
+    def interval_total(self, start, end):
+        cursor = connection.cursor()
+        cursor.execute("""
+SELECT SUM(a.actual_time) AS total_time
+FROM actual_times a, items i, milestones m, in_group g
+WHERE a.iid = i.iid
+    AND i.mid = m.mid
+    AND m.pid = %s
+    AND a.resolver = g.username
+    AND g.grp IN ('grp_programmers','grp_webmasters','grp_video',
+        'grp_educationaltechnologists','grp_management')
+    AND a.completed > %s
+    AND a.completed <= %s
+        """, [self.pid, start, end])
+        row = cursor.fetchone()
+        time = row[0]
+        return time if time else timedelta(0)
+
+    @staticmethod
+    def projects_active_during(start, end, groups):
+        groups_string = ','.join([x.username for x in groups])
+        projects = Project.objects.raw("""
+SELECT DISTINCT p.pid, p.name, p.projnum
+FROM projects p, milestones m, items i, actual_times a, in_group g
+WHERE p.pid = m.pid
+    AND m.mid = i.mid
+    AND i.iid = a.iid
+    AND a.resolver = g.username
+    AND g.grp = ANY (string_to_array(%s, ',')::text[])
+    AND a.completed > %s
+    AND a.completed <= %s
+ORDER BY p.projnum
+        """, [groups_string, start, end])
+        return projects
 
 
 class Document(models.Model):
@@ -1062,8 +1114,7 @@ class InGroup(models.Model):
 
     @staticmethod
     def verbose_name(name):
-        p = re.compile(r' \(group\)$')
-        return p.sub('', name)
+        return re.sub(r' \(group\)$', '', name).title()
 
     def __unicode__(self):
         return InGroup.verbose_name(self.grp.fullname)
@@ -1089,6 +1140,22 @@ class ActualTime(models.Model):
 
     class Meta:
         db_table = u'actual_times'
+
+    @staticmethod
+    def interval_total_time(start, end):
+        cursor = connection.cursor()
+        cursor.execute("""
+SELECT SUM(a.actual_time) AS total
+FROM actual_times a, in_group g
+WHERE a.resolver = g.username
+    AND g.grp IN ('grp_programmers','grp_webmasters','grp_video',
+'grp_educationaltechnologists','grp_management')
+    AND a.completed > %s
+    AND a.completed <= %s
+        """, [start, end])
+        row = cursor.fetchone()
+        time = row[0]
+        return time if time else timedelta(0)
 
 
 class Attachment(models.Model):

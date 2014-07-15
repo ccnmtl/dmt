@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% load dmttags %}
+
+{% block content %}
+
+<h2>
+    Weekly Summary Report
+</h2>
+<h4>
+    for the week from {{week_start}} to {{week_end}}
+</h4>
+
+<ul class="pager">
+  <li>
+      <a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">
+          previous week
+      </a>
+  </li>
+  <li>
+      <a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">
+          next week
+      </a>
+  </li>
+</ul>
+
+<table class="table table-bordered">
+    <thead>
+        <th>Project</th>
+        {% for groupname in groupnames %}
+        <th>{{groupname}}</th>
+        {% endfor %}
+        <th>Project Total</th>
+    </thead>
+    <tbody>
+        {% for project in project_times %}
+        <tr>
+            <td>
+                <a href="{% url 'project_detail' project.pid %}">
+                    {% if project.projnum %}
+                    {{project.projnum}} -
+                    {% endif %}
+                    {{project.name}}
+                </a>
+            </td>
+            {% for grouptime in project.group_times %}
+            <td>{{grouptime|interval_to_hours}}</td>
+            {% endfor %}
+            <td>{{project.total_time|interval_to_hours}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <th>Group Total</th>
+            {% for time in group_totals %}
+            <td>{{time|interval_to_hours}}</td>
+            {% endfor %}
+            <td>{{grand_total|interval_to_hours}}</td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}
