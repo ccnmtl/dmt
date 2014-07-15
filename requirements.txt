@@ -47,7 +47,7 @@ mechanize==0.2.5
 recordtype==1.1
 urlparse2==1.0
 sqlparse==0.1.11
-
+whitelistaffilmapper==0.1.0
 
 djangowind==0.12.1
 django-staticmedia==0.2.2
