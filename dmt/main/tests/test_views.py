@@ -1,6 +1,8 @@
-from .factories import ClientFactory, ProjectFactory, MilestoneFactory, \
-    ItemFactory, NodeFactory, EventFactory, CommentFactory, UserFactory, \
-    StatusUpdateFactory, NotifyFactory, GroupFactory
+from .factories import (
+    ClientFactory, ProjectFactory, MilestoneFactory,
+    ItemFactory, NodeFactory, EventFactory, CommentFactory, UserFactory,
+    StatusUpdateFactory, NotifyFactory, GroupFactory,
+    AttachmentFactory)
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -437,6 +439,18 @@ class TestItemViews(TestCase):
         self.assertEquals(r.status_code, 302)
         self.assertTrue(Attachment.objects.filter(
             item=i, url="https://s3/foo.jpg").exists())
+
+    def test_delete_attachment_form(self):
+        a = AttachmentFactory()
+        r = self.c.get(reverse('delete_attachment', args=(a.id,)))
+        self.assertEqual(r.status_code, 200)
+
+    def test_delete_attachment(self):
+        a = AttachmentFactory()
+        r = self.c.post(reverse('delete_attachment', args=(a.id,)),
+                        dict())
+        self.assertEqual(r.status_code, 302)
+        self.assertFalse(Attachment.objects.filter(id=a.id).exists())
 
     def test_sign_s3_view(self):
         with self.settings(

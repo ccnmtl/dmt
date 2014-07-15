@@ -912,6 +912,13 @@ class ItemAddAttachmentView(LoggedInMixin, View):
         return HttpResponseRedirect(item.get_absolute_url())
 
 
+class DeleteAttachmentView(LoggedInMixin, DeleteView):
+    model = Attachment
+
+    def get_success_url(self):
+        return self.object.item.get_absolute_url()
+
+
 class GroupDetailView(LoggedInMixin, ListView):
     template_name = "main/group_detail.html"
     model = InGroup
