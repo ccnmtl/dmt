@@ -14,9 +14,10 @@
 
 {% block content %}
 
-<h2>Weekly report
-	for <a href="{{u.get_absolute_url}}">{{u.fullname}}</a> for the week
-	from {{week_start}} to {{week_end}}</h2>
+<h2>Weekly report for <a href="{{u.get_absolute_url}}">{{u.fullname}}</a></h2>
+<h4>
+    for the week from {{week_start}} to {{week_end}}
+</h4>
 <ul class="pager">
   <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">previous week</a></li>
   <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>

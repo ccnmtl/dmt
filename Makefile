@@ -4,6 +4,8 @@ FLAKE8=./ve/bin/flake8
 
 jenkins: ./ve/bin/python validate jshint jscs flake8 test
 
+travis: ./ve/bin/python validate jshint jscs flake8 integration
+
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
 
@@ -24,6 +26,12 @@ test: ./ve/bin/python
 	npm install
 	npm install ./vendor/karma-junit-reporter.tar.gz
 	$(MANAGE) jenkins
+	npm test
+
+integration: ./ve/bin/python
+	npm install
+	npm install ./vendor/karma-junit-reporter.tar.gz
+	$(MANAGE) jenkins --settings=dmt.settings_integration
 	npm test
 
 flake8: ./ve/bin/python

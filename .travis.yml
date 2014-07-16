@@ -1,7 +1,11 @@
 language: python
+addons:
+  postgresql: "9.3"
 python:
   - "2.7"
 install:
   - ./bootstrap.py
+before_script:
+  - psql -c 'create database ci_test;' -U postgres
 script:
-  - make
+  - make travis

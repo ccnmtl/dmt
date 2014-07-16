@@ -1,4 +1,4 @@
-from dmt.main.models import InGroup, User
+from dmt.main.models import ActualTime, InGroup, Project, User
 
 
 class StaffReportCalculator(object):
@@ -26,3 +26,32 @@ class StaffReportCalculator(object):
         group_times = [g['total_time'] for g in self.group_reports]
         group_max_time = max(group_times) if group_times else 0
         return dict(groups=self.group_reports, group_max_time=group_max_time)
+
+
+class WeeklySummaryReportCalculator(object):
+    def __init__(self, groups):
+        groupnames = ['grp_' + x for x in groups]
+        self.groups = User.objects.filter(username__in=groupnames)
+        self.groupnames = [InGroup.verbose_name(x.fullname)
+                           for x in self.groups]
+
+    def calc(self, start, end):
+        projects = Project.projects_active_during(start, end, self.groups)
+        my_projects = []
+        for p in projects:
+            d = dict(
+                pid=p.pid,
+                name=p.name,
+                projnum=p.projnum)
+            d['group_times'] = [p.group_hours(g.username, start, end)
+                                for g in self.groups]
+            d['total_time'] = p.interval_total(start, end)
+            my_projects.append(d)
+
+        group_totals = [x.total_group_time(start, end) for x in self.groups]
+        grand_total = ActualTime.interval_total_time(start, end)
+
+        return dict(groupnames=self.groupnames,
+                    project_times=my_projects,
+                    group_totals=group_totals,
+                    grand_total=grand_total)
