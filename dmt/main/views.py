@@ -938,7 +938,8 @@ class GroupDetailView(LoggedInMixin, ListView):
         return self.members(group_name)
 
     def members(self, group_name):
-        group_memberships = InGroup.objects.filter(grp__username=group_name)
+        group_memberships = InGroup.objects.filter(
+            grp__username=group_name).order_by('username__fullname')
         return [x.username for x in group_memberships]
 
     def eligible_users(self, group_name):
