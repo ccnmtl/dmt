@@ -502,6 +502,35 @@ ORDER BY p.projnum
         """, [groups_string, start, end])
         return projects
 
+    @staticmethod
+    def projects_active_between(start, end):
+        projects = Project.objects.raw("""
+SELECT
+    p.pid,
+    p.name,
+    p.projnum,
+    date(tempalias.max) AS last_worked_on,
+    p.status AS project_status,
+    u.fullname AS caretaker_fullname,
+    u.username AS caretaker_username,
+    tempalias.sum AS hours_logged
+FROM
+    (
+    SELECT p.pid, max(completed), sum(a.actual_time)
+    FROM projects p, milestones m, items i, actual_times a
+    WHERE p.pid = m.pid
+        AND m.mid = i.mid
+        AND i.iid = a.iid
+        AND a.completed >= %s
+        AND a.completed <= %s
+    GROUP BY p.pid
+    ) AS tempalias, projects p, users u
+WHERE tempalias.pid = p.pid
+    AND p.caretaker = u.username
+ORDER BY hours_logged DESC;
+        """, [start, end])
+        return projects
+
 
 class Document(models.Model):
     did = models.AutoField(primary_key=True)

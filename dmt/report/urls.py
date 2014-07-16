@@ -7,6 +7,8 @@ urlpatterns = patterns(
     '',
     url(r'^$', TemplateView.as_view(template_name="report/report_list.html"),
         name='report_list'),
+    url(r'^active_projects/$', views.ActiveProjectsView.as_view(),
+        name='active_projects_report'),
     url(r'^user/(?P<pk>\w+)/weekly/$', views.UserWeeklyView.as_view(),
         name='user_weekly_report'),
     url(r'^user/(?P<pk>\w+)/yearly/$', views.UserYearlyView.as_view(),
