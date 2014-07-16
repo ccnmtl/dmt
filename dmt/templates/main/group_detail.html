@@ -44,5 +44,14 @@
 {% endfor %}
 </table>
 
+<form action="add_user/" method="post">
+<fieldset><legend>Add User to this Group</legend>
+<select name="username" class="form-control">
+{% for user in eligible_users %}
+<option value="{{user.username}}">{{user.fullname}}</option>
+{% endfor %}
+</select><input type="submit" class="btn btn-primary" value="add user" />
+<fieldset>
+</form>
 
 {% endblock %}
