@@ -563,9 +563,12 @@
 		</td>
 		<td><i>[{{attachment.last_mod}}]</i></td>
 		<td>{{attachment.author.fullname}}</td>
+		<td><a href="{% url 'delete_attachment' attachment.id %}" class="btn btn-xs
+		btn-danger" title="delete attachment"><span class="glyphicon glyphicon-trash"></a>
+		</td>
 	</tr>
 	{% if attachment.image %}
-	<tr><td colspan="3">
+	<tr><td colspan="4">
 			{% if attachment.url %}
 			<img src="{{attachment.url}}" />
 			{% else %}
@@ -575,7 +578,7 @@
 	</td></tr>
 	{% else %}
 	<tr>
-		<td colspan="3">
+		<td colspan="4">
 			{{attachment.description|markdown}}
 			{% if attachment.url %}
 			<p><a href="{{attachment.url}}">Download</a></p>
