@@ -502,6 +502,19 @@ ORDER BY p.projnum
         """, [groups_string, start, end])
         return projects
 
+    @staticmethod
+    def all_projects_by_last_mod():
+        projects = Project.objects.raw("""
+SELECT
+    m.pid,
+    date_trunc('minute',max(i.last_mod)) AS last_mod
+FROM milestones m
+LEFT OUTER JOIN items i
+    ON m.mid = i.mid
+GROUP BY m.pid
+        """)
+        return projects
+
 
 class Document(models.Model):
     did = models.AutoField(primary_key=True)

@@ -22,8 +22,9 @@ from .models import (
     ActualTime, Notify, Attachment)
 from .models import interval_sum
 from .forms import (
+    ItemUpdateForm,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
-    ProjectUpdateForm, MilestoneUpdateForm, ItemUpdateForm)
+    ProjectUpdateForm, MilestoneUpdateForm)
 from .utils import safe_basename
 from dmt.claim.models import Claim
 
@@ -457,6 +458,24 @@ class ProjectCreateView(LoggedInMixin, CreateView):
 
 class ProjectListView(LoggedInMixin, FilterView):
     model = Project
+
+
+class MyProjectListView(LoggedInMixin, ListView):
+    model = Project
+    template_name = 'main/my_projects.html'
+
+    def get_queryset(self):
+        current_user = \
+            get_object_or_404(Claim, django_user=self.request.user).pmt_user
+        project_last_mod_list = Project.all_projects_by_last_mod()
+        project_list = current_user.personnel_on()
+        for p in project_list:
+            last_mod = [x.last_mod
+                        for x in project_last_mod_list if x.pid == p.pid]
+            if last_mod:
+                p.last_mod = last_mod[0]
+
+        return project_list
 
 
 class ProjectDetailView(LoggedInMixin, DetailView):
