@@ -48,6 +48,7 @@ recordtype==1.1
 urlparse2==1.0
 sqlparse==0.1.11
 whitelistaffilmapper==0.1.0
+boto==2.31.1
 
 djangowind==0.13.1
 django-staticmedia==0.2.2
