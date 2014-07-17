@@ -53,11 +53,7 @@
                             <li><a href="{% url 'project_list' %}">All Projects</a></li>
                             {% if not request.user.is_anonymous %}
                             {% pmtuser as pmt_user %}
-
-                            {% flag create_project %}
                             <li><a href="{% url 'project_create' %}">Create New Project</a></li>
-                            {% endflag %}
-
                             {% if pmt_user.has_recent_active_projects %}
                             <li class="divider"></li>
                             <li><p class="navbar-text small">Your Recent Projects</p></li>
