@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
 from dmt.claim.models import Claim
-from dmt.main.models import User
+from dmt.main.models import User, Item
 from dmt.main.views import LoggedInMixin
 from .models import StaffReportCalculator, WeeklySummaryReportCalculator
 from .mixins import PrevNextWeekMixin
@@ -95,4 +95,13 @@ class WeeklySummaryView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
                             week_end=self.week_end.date,
                             prev_week=self.prev_week.date,
                             next_week=self.next_week.date))
+        return context
+
+
+class ResolvedView(LoggedInMixin, TemplateView):
+    template_name = "report/resolved.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ResolvedView, self).get_context_data(**kwargs)
+        context['items'] = Item.objects.filter(status='RESOLVED')
         return context
