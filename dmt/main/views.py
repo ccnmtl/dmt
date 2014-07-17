@@ -1,3 +1,4 @@
+from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -433,7 +434,7 @@ class ProjectCreateView(LoggedInMixin, CreateView):
             # Add project creator to the project personnel list
             form.instance.add_personnel(current_user, auth='manager')
             return super(ProjectCreateView, self).form_valid(form)
-        except ValueError, e:
+        except forms.ValidationError, e:
             form.errors['target_date'] = [e.message]
             return super(ProjectCreateView, self).form_invalid(form)
 

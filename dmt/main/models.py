@@ -1,3 +1,4 @@
+from django import forms
 from django.db import connection, models
 from django.conf import settings
 from datetime import timedelta, datetime
@@ -286,7 +287,8 @@ class Project(models.Model):
 
     def add_milestone(self, name, target_date, description):
         if not re.match(r'\d{4}-\d{1,2}-\d{1,2}', target_date):
-            raise ValueError('Invalid target date')
+            raise forms.ValidationError(
+                'Invalid target date: %s' % target_date)
 
         milestone = Milestone.objects.create(
             name=name,

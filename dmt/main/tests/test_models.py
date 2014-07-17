@@ -1,3 +1,4 @@
+from django import forms
 from django.test import TestCase
 from django.core import mail
 import unittest
@@ -269,7 +270,7 @@ class NodeTest(TestCase):
 class ProjectTest(TestCase):
     def test_add_milestone_invalid_target_date(self):
         p = ProjectFactory()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(forms.ValidationError):
             p.add_milestone('name', 'not a date', 'desc')
 
     def test_add_milestone_valid_target_date(self):
