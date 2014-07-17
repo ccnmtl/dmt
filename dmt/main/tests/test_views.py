@@ -938,9 +938,7 @@ class GroupTest(TestCase):
 
     def test_add_user_to_group(self):
         grp_username = self.group.grp.username
-
         u = UserFactory()
-
         r = self.client.post(
             reverse('add_user_to_group', args=(grp_username,)),
             dict(username=u.username))
@@ -948,6 +946,12 @@ class GroupTest(TestCase):
         r = self.client.get(
             reverse('group_detail', args=(grp_username,)))
         self.assertTrue(u.username in r.content)
+
+    def test_create_group(self):
+        r = self.client.post(reverse('group_create'), dict(group='foo'))
+        self.assertEqual(r.status_code, 302)
+        r = self.client.get(reverse('group_list'))
+        self.assertTrue('grp_foo' in r.content)
 
 
 class UserTest(TestCase):

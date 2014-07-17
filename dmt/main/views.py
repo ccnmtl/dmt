@@ -36,6 +36,7 @@ import hmac
 import urllib
 import uuid
 import ntpath
+import re
 
 
 def has_claim(user):
@@ -403,6 +404,19 @@ class NodeDeleteView(LoggedInMixin, DeleteView):
 
 class MilestoneDetailView(LoggedInMixin, DetailView):
     model = Milestone
+
+
+class GroupCreateView(LoggedInMixin, View):
+    def post(self, request):
+        group_name = request.POST.get('group')
+        username = "grp_" + re.sub(r'\W', '', group_name)
+        group_name = group_name + " (group)"
+        User.objects.create(
+            fullname=group_name, username=username,
+            email='nobody@localhost', password='nopassword',
+            grp=True)
+        return HttpResponseRedirect(
+            reverse('group_detail', args=(username,)))
 
 
 class ProjectCreateView(LoggedInMixin, CreateView):
