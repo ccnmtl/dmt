@@ -410,6 +410,8 @@ class GroupCreateView(LoggedInMixin, View):
     def post(self, request):
         group_name = request.POST.get('group')
         username = "grp_" + re.sub(r'\W', '', group_name)
+        if not group_name or User.objects.filter(username=username).exists():
+            return HttpResponseRedirect(reverse('group_list'))
         group_name = group_name + " (group)"
         User.objects.create(
             fullname=group_name, username=username,
