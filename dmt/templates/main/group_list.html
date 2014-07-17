@@ -30,4 +30,12 @@
 
 </div>
 
+<form action="{% url 'group_create' %}" method="post" class="form-inline" >
+	<fieldset><legend>Add Group</legend>
+		<input type="text" placeholder="group name" name="group"
+		class="form-control" />
+		<input type="submit" value="add" class="btn btn-primary" />
+	</fieldset>
+</form>
+
 {% endblock %}
