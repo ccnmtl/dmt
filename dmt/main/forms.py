@@ -1,3 +1,4 @@
+import re
 from django import forms
 from django.forms import ModelForm
 from .models import StatusUpdate, Node, User, Project, Milestone, Item
@@ -35,6 +36,15 @@ class ProjectCreateForm(ModelForm):
                 choices=(('true', 'Public'),
                          ('false', 'Private')))
         }
+
+    def clean_name(self):
+        return self.cleaned_data.get('name', '').strip()
+
+    def clean_target_date(self):
+        target_date = self.cleaned_data.get('target_date')
+        if not re.match(r'\d{4}-\d{1,2}-\d{1,2}', target_date):
+            raise forms.ValidationError(
+                'Invalid target date: %s' % target_date)
 
 
 class ProjectUpdateForm(ModelForm):
