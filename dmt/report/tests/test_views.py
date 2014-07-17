@@ -1,8 +1,10 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from dmt.main.models import User as PMTUser
 from dmt.claim.models import Claim
 from dmt.main.models import InGroup
+from dmt.main.tests.factories import ItemFactory
 
 
 class UserWeeklyTest(TestCase):
@@ -70,3 +72,21 @@ class StaffReportTest(TestCase):
     def test_staff_report_previous(self):
         r = self.c.get("/report/staff/previous/")
         self.assertEqual(r.status_code, 302)
+
+
+class ResolvedItemsTest(TestCase):
+    def setUp(self):
+        self.c = self.client
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username='testuser',
+                                         fullname='test user')
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+    def test_view(self):
+        i = ItemFactory(status='RESOLVED')
+        r = self.c.get(reverse('resolved_items_report'))
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(i.title in r.content)

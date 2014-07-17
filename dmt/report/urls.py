@@ -18,4 +18,6 @@ urlpatterns = patterns(
     (r'^staff/previous/$', views.StaffReportPreviousWeekView.as_view()),
     url(r'^weekly_summary/$', views.WeeklySummaryView.as_view(),
         name='weekly_summary_report'),
+    url(r'^resolved/$', views.ResolvedView.as_view(),
+        name='resolved_items_report'),
 )

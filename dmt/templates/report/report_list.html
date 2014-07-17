@@ -3,6 +3,10 @@
 {% block title %}Reports{% endblock %}
 
 {% block content %}
+<ul class="breadcrumb">
+  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+  <li class="active">Reports</li>
+</ul>
 
 <ul>
     <li><a href="{% url 'staff_report' %}">Staff Report</a></li>
@@ -10,5 +14,6 @@
         <a href="{% url 'weekly_summary_report' %}">Weekly Summary</a>
     </li>
     <li><a href="{% url 'yearly_review_report' %}">Your Yearly Review</a></li>
+    <li><a href="{% url 'resolved_items_report' %}">Resolved Items</a></li>
 </ul>
 {% endblock %}
