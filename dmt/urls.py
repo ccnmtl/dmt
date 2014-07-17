@@ -21,7 +21,7 @@ from dmt.main.views import (
     ProjectAddItemView, DashboardView, MilestoneListView,
     ProjectRemoveUserView, ProjectAddUserView, ProjectAddMilestoneView,
     ItemDeleteView, SignS3View, ItemAddAttachmentView,
-    DeleteAttachmentView,
+    DeleteAttachmentView, GroupCreateView,
     DeactivateUserView, ItemMoveProjectView, RemoveUserFromGroupView,
     AddUserToGroupView,
 )
@@ -64,6 +64,7 @@ urlpatterns = patterns(
      RemoveTagFromNodeView.as_view()),
     (r'^forum/(?P<pk>\d+)/edit/$', NodeUpdateView.as_view()),
     (r'^forum/(?P<pk>\d+)/delete/$', NodeDeleteView.as_view()),
+    url(r'^group/create/$', GroupCreateView.as_view(), name='group_create'),
     url(r'^group/$', GroupListView.as_view(), name='group_list'),
     url(r'^group/(?P<pk>\w+)/$', GroupDetailView.as_view(),
         name='group_detail'),
