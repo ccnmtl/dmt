@@ -538,6 +538,9 @@ class Milestone(models.Model):
     def is_open(self):
         return self.status == 'OPEN'
 
+    def is_empty(self):
+        return self.item_set.count() == 0
+
     def num_open_items(self):
         return self.item_set.filter(status='OPEN').count()
 

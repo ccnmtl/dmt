@@ -362,6 +362,20 @@ class TestMilestoneViews(TestCase):
         r = self.c.get("/milestone/")
         self.assertEqual(r.status_code, 200)
 
+    def test_milestone_delete_form(self):
+        m = MilestoneFactory()
+        r = self.c.get(reverse('delete_milestone', args=(m.mid,)))
+        self.assertEqual(r.status_code, 200)
+
+    def test_milestone_delete(self):
+        m = MilestoneFactory()
+        p = m.project
+        r = self.c.post(reverse('delete_milestone', args=(m.mid,)),
+                        dict())
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(p.get_absolute_url())
+        self.assertFalse(m.name in r.content)
+
 
 class TestItemViews(TestCase):
     def setUp(self):

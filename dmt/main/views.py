@@ -526,6 +526,13 @@ class ItemDeleteView(LoggedInMixin, DeleteView):
         return self.object.milestone.get_absolute_url()
 
 
+class MilestoneDeleteView(LoggedInMixin, DeleteView):
+    model = Milestone
+
+    def get_success_url(self):
+        return self.object.project.get_absolute_url()
+
+
 class ItemMoveProjectView(LoggedInMixin, View):
     template_name = "main/item_move_project_form.html"
 
