@@ -2,6 +2,16 @@
 {% load bootstrap %}
 
 {% block content %}
+
+<div class="form-group pull-right">
+{% if object.is_empty %}
+	<a class="btn btn-xs btn-danger"
+		 href="{% url 'delete_milestone' object.mid %}"
+		 ><span class="glyphicon glyphicon-trash"></span>
+		delete</a>
+{% endif %}
+</div>
+
 <form action="." method="post">{% csrf_token %}
 <fieldset><legend>Edit Milestone</legend>
 {{form|bootstrap}}
