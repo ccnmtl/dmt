@@ -465,16 +465,9 @@ class MyProjectListView(LoggedInMixin, ListView):
     template_name = 'main/my_projects.html'
 
     def get_queryset(self):
-        current_user = \
-            get_object_or_404(Claim, django_user=self.request.user).pmt_user
-        project_last_mod_list = Project.all_projects_by_last_mod()
+        current_user = get_object_or_404(
+            Claim, django_user=self.request.user).pmt_user
         project_list = current_user.personnel_on()
-        for p in project_list:
-            last_mod = [x.last_mod
-                        for x in project_last_mod_list if x.pid == p.pid]
-            if last_mod:
-                p.last_mod = last_mod[0]
-
         return project_list
 
 
