@@ -23,7 +23,8 @@ class CasperIntegrationTestsLoggedIn(CasperTestCase):
                                          email="testemail@columbia.edu",
                                          status="active")
         Claim.objects.create(django_user=self.u, pmt_user=self.pu)
-        ProjectFactory()
+        self.p = ProjectFactory()
+        self.p.add_personnel(self.pu)
 
     def test_integration_tests_logged_in(self):
         self.assertTrue(self.casper(

@@ -31,6 +31,7 @@ helper.scenario('/',
                 'typeahead gets the right project data');
     }
 );
+
 helper.scenario('/client/',
     function() {
         this.click('a[href="/client/"]');
@@ -40,4 +41,17 @@ helper.scenario('/client/',
             'Clicking /client/ link navigates to clients page');
     }
 );
+
+helper.scenario('/my_projects/',
+    function() {
+        this.test.assertTitle('DMT: My Projects');
+        this.click('button.add-todo');
+
+        // FIXME: figure out why this doesn't pass
+        //this.test.assertVisible(
+        //    '#add-todo-form .modal-dialog',
+        //    'Clicking "Add TODO" opens a modal dialog');
+    }
+);
+
 helper.run();

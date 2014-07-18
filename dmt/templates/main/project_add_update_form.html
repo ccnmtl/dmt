@@ -1,0 +1,23 @@
+<form id="add-update-form" action="add_update/" method="post" role="form">
+    <div class="modal fade" id="add-update" tabindex="-1" role="dialog" aria-labelledby="add-update-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="add-update-label">Status Update</h4>
+                </div>
+                <div class="modal-body">
+				    <div class="form-group">
+					    <textarea name="body" class="form-control" rows="3"></textarea>
+					    <span class="help-block">Keep it short and succinct. More
+					        like a tweet than a blog post.</span>
+				    </div>
+			    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" id="add-update-button" value="Post"/>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>

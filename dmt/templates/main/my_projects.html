@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
 
-{% block title %}Projects{% endblock %}
+{% block title %}My Projects{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
@@ -17,15 +17,14 @@
 {% block content %}
 <div class="tab-content">
     <div class="tab-pane fade in active" id="list">
-
         <table class="table table-condensed table-striped tablesorter" id="projects-table">
             <thead>
                 <tr>
                     <th>Project</th>
                     <th>Latest Activity</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for p in object_list %}
                 <tr>
@@ -35,20 +34,55 @@
                     <td>
                         {{p.last_mod|date:"Y-m-d"}}
                     </td>
+                    <td>
+                        <button type="button"
+                                class="btn btn-primary btn-xs add-todo"
+                                data-toggle="modal" data-target="#add-todo"
+                                data-pid="{{p.pid}}">
+                            <span class="glyphicon glyphicon-plus"></span> TODO
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary btn-xs add-node"
+                                data-toggle="modal" data-target="#add-node"
+                                data-pid="{{p.pid}}">
+                            <span class="glyphicon glyphicon-plus"></span> Forum Post
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary btn-xs add-update"
+                                data-toggle="modal" data-target="#add-update"
+                                data-pid="{{p.pid}}">
+                            <span class="glyphicon glyphicon-plus"></span> Status Update
+                        </button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
-
         </table>
     </div>
 </div>
+
+{% include 'main/project_add_todo_form.html' %}
+{% include 'main/project_add_node_form.html' %}
+{% include 'main/project_add_update_form.html' %}
+
 {% endblock %}
 
 {% block js %}
 <script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
 <script>
-$(document).ready(function() {
-    $("#projects-table").tablesorter({sortList: [[1, 1]]});
-});
+    $(document).ready(function() {
+        $("#projects-table").tablesorter({
+            sortList: [[1, 0]],
+            headers: { 2: { sorter: false}}
+        });
+
+        var buttons = ['todo', 'node', 'update'];
+        $.each(buttons, function(k, v) {
+            $(document).on('click', 'button.add-'+v, function () {
+                var pid = $(this).data('pid');
+                $('#add-'+v+'-form').attr('action', '/project/'+pid+'/add_todo/');
+            });
+        });
+    });
 </script>
 {% endblock %}
