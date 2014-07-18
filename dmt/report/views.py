@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
 from dmt.claim.models import Claim
-from dmt.main.models import User, Item
+from dmt.main.models import User, Item, Milestone
 from dmt.main.views import LoggedInMixin
 from .models import (
     ActiveProjectsCalculator, StaffReportCalculator,
@@ -122,4 +122,20 @@ class ResolvedView(LoggedInMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ResolvedView, self).get_context_data(**kwargs)
         context['items'] = Item.objects.filter(status='RESOLVED')
+        return context
+
+
+class PassedMilestonesView(LoggedInMixin, TemplateView):
+    template_name = "report/passed_milestones.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(PassedMilestonesView, self).get_context_data(**kwargs)
+        context['items'] = Item.objects.filter(status='RESOLVED')
+
+        now = datetime.now()
+        context['milestones'] = Milestone.objects.filter(
+            status='OPEN',
+            target_date__lt=now,
+            ).order_by("target_date").select_related('project')
+
         return context

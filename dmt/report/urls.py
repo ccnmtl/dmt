@@ -22,4 +22,6 @@ urlpatterns = patterns(
         name='weekly_summary_report'),
     url(r'^resolved/$', views.ResolvedView.as_view(),
         name='resolved_items_report'),
+    url(r'^passed_milestones/$', views.PassedMilestonesView.as_view(),
+        name='passed_milestones_report'),
 )
