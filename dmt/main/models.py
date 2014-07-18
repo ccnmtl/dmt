@@ -531,18 +531,13 @@ ORDER BY hours_logged DESC;
         """, [start, end])
         return projects
 
-    @staticmethod
-    def all_projects_by_last_mod():
-        projects = Project.objects.raw("""
-SELECT
-    m.pid,
-    date_trunc('minute',max(i.last_mod)) AS last_mod
-FROM milestones m
-LEFT OUTER JOIN items i
-    ON m.mid = i.mid
-GROUP BY m.pid
-        """)
-        return projects
+    def last_mod(self):
+        r = Item.objects.filter(
+            milestone__project=self).order_by("-last_mod")
+        try:
+            return r[0].last_mod
+        except IndexError:
+            return None
 
 
 class Document(models.Model):
