@@ -26,11 +26,13 @@
 
 <table class="table table-bordered">
     <thead>
-        <th>Project</th>
-        {% for groupname in groupnames %}
-        <th>{{groupname}}</th>
-        {% endfor %}
-        <th>Project Total</th>
+        <tr>
+            <th>Project</th>
+            {% for groupname in groupnames %}
+            <th>{{groupname}}</th>
+            {% endfor %}
+            <th>Project Total</th>
+        </tr>
     </thead>
     <tbody>
         {% for project in project_times %}

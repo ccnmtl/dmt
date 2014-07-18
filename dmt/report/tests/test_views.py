@@ -7,6 +7,21 @@ from dmt.main.models import InGroup
 from dmt.main.tests.factories import ItemFactory
 
 
+class ActiveProjectTests(TestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.client.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username='testuser',
+                                         fullname='test user')
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+    def test_active_project_view(self):
+        r = self.client.get(reverse('active_projects_report'))
+        self.assertEqual(r.status_code, 200)
+
+
 class UserWeeklyTest(TestCase):
     def setUp(self):
         self.c = self.client
@@ -90,3 +105,18 @@ class ResolvedItemsTest(TestCase):
         r = self.c.get(reverse('resolved_items_report'))
         self.assertEqual(r.status_code, 200)
         self.assertTrue(i.title in r.content)
+
+
+class WeeklySummaryTests(TestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.client.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username='testuser',
+                                         fullname='test user')
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+    def test_weekly_summary_view(self):
+        r = self.client.get(reverse('weekly_summary_report'))
+        self.assertEqual(r.status_code, 200)
