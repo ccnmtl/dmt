@@ -3,6 +3,7 @@ from .factories import (
     ItemFactory, NodeFactory, EventFactory, CommentFactory, UserFactory,
     StatusUpdateFactory, NotifyFactory, GroupFactory,
     AttachmentFactory)
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -10,6 +11,7 @@ from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Attachment, Item, ItemClient, Milestone, Project
 import json
+import unittest
 
 
 class BasicTest(TestCase):
@@ -353,6 +355,10 @@ class MyProjectViewTests(TestCase):
                                          status="active")
         Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
     def test_my_projects_page_in_project(self):
         p = ProjectFactory()
         p.add_personnel(self.pu)
