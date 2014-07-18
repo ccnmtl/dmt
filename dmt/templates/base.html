@@ -51,6 +51,7 @@
                     </a>
 
                     <ul class="dropdown-menu">
+                        <li><a href="{% url 'my_project_list' %}">My Projects</a></li>
                         <li><a href="{% url 'project_list' %}">All Projects</a></li>
                         {% if not request.user.is_anonymous %}
                         {% pmtuser as pmt_user %}

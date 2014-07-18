@@ -3,6 +3,7 @@ from .factories import (
     ItemFactory, NodeFactory, EventFactory, CommentFactory, UserFactory,
     StatusUpdateFactory, NotifyFactory, GroupFactory,
     AttachmentFactory)
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -10,6 +11,7 @@ from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Attachment, Item, ItemClient, Milestone, Project
 import json
+import unittest
 
 
 class BasicTest(TestCase):
@@ -340,6 +342,36 @@ class TestProjectViews(TestCase):
                      'test_wiki_category': ''})
         p = Project.objects.get(name='Test project name')
         self.assertTrue(self.pu in p.personnel_in_project())
+
+
+class MyProjectViewTests(TestCase):
+    def setUp(self):
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.client.login(username="testuser", password="test")
+        self.pu = PMTUser.objects.create(username="testpmtuser",
+                                         email="testemail@columbia.edu",
+                                         status="active")
+        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_my_projects_page_in_project(self):
+        p = ProjectFactory()
+        p.add_personnel(self.pu)
+        r = self.client.get(reverse('my_project_list'))
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(p.name in r.content)
+        self.assertTrue(reverse('project_detail', args=(p.pid,)) in r.content)
+
+    def test_my_projects_page_not_in_project(self):
+        p = ProjectFactory()
+        r = self.client.get(reverse('my_project_list'))
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse(p.name in r.content)
 
 
 class TestMilestoneViews(TestCase):
