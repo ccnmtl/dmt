@@ -4,28 +4,33 @@ from dmt.main.models import ActualTime, InGroup, Project, User
 class StaffReportCalculator(object):
     def __init__(self, groups):
         self.groups = groups
-        self.group_reports = []
+        self.user_reports = []
 
     def calc(self, start, end):
+        user_data = []
         for grp in self.groups:
             try:
                 group_user = User.objects.get(username="grp_" + grp)
             except User.DoesNotExist:
                 continue
-            group_total_time = group_user.total_group_time(start, end)
-            data = dict(group=InGroup.verbose_name(group_user.fullname),
-                        total_time=group_total_time)
-            user_data = []
-            for user in group_user.users_in_group():
-                user_time = user.interval_time(start, end)
-                user_data.append(dict(user=user, user_time=user_time))
-            data['user_data'] = user_data
-            data['max_time'] = max(u['user_time'] for u in user_data)
-            self.group_reports.append(data)
 
-        group_times = [g['total_time'] for g in self.group_reports]
-        group_max_time = max(group_times) if group_times else 0
-        return dict(groups=self.group_reports, group_max_time=group_max_time)
+            for user in group_user.users_in_group():
+                existing_user = \
+                    [x for x in user_data
+                     if x['user'].username == user.username]
+                if existing_user:
+                    # This user is already in our user_data list. This means
+                    # they belong to more than one group that we're reporting
+                    # on. In this case, it's safe to just skip this duplicate
+                    # entry.
+                    continue
+
+                user_time = user.interval_time(start, end)
+                group_name = InGroup.verbose_name(group_user.fullname)
+                user_data.append(dict(user=user, user_time=user_time,
+                                      group_name=group_name))
+
+        return dict(users=user_data)
 
 
 class WeeklySummaryReportCalculator(object):
