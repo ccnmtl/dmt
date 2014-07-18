@@ -33,7 +33,7 @@
                         <a href="{% url 'project_detail' p.pid %}">{{p.name}}</a>
                     </td>
                     <td>
-                        {{p.last_mod}}
+                        {{p.last_mod|date:"Y-m-d"}}
                     </td>
                 </tr>
                 {% endfor %}
