@@ -158,9 +158,13 @@ dd:hover .priority-select {
     height: auto;
 }
 
-form.navbar-form {
+form.navbar-form button[type=submit] {
     margin-top: 0;
     margin-bottom: 0;
+}
+
+form.navbar-form input[type=search] {
+    max-width: 125px
 }
 
 form .control-group {

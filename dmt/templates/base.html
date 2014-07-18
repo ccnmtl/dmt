@@ -33,121 +33,124 @@
   <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
 
-<div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-  </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
 
-        <ul class="nav navbar-nav">
-					<li><a class="brand" href="/"><span class="glyphicon glyphicon-home"></span></a></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Projects <span class="caret"></span>
-                        </a>
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a class="brand" href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Projects <span class="caret"></span>
+                    </a>
 
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'project_list' %}">All Projects</a></li>
-                            {% if not request.user.is_anonymous %}
-                            {% pmtuser as pmt_user %}
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'project_list' %}">All Projects</a></li>
+                        {% if not request.user.is_anonymous %}
+                        {% pmtuser as pmt_user %}
 
-                            {% flag create_project %}
-                            <li><a href="{% url 'project_create' %}">Create New Project</a></li>
-                            {% endflag %}
+                        {% flag create_project %}
+                        <li><a href="{% url 'project_create' %}">Create New Project</a></li>
+                        {% endflag %}
 
-                            {% if pmt_user.has_recent_active_projects %}
-                            <li class="divider"></li>
-                            <li><p class="navbar-text small">Your Recent Projects</p></li>
-                            {% for project in pmt_user.recent_active_projects %}
-                                <li><a href="{% url 'project_detail' project.pid %}">
-                                        {{project.name|truncatechars:60}}
-                                </a></li>
-                            {% endfor %}
+                        {% if pmt_user.has_recent_active_projects %}
+                        <li class="divider"></li>
+                        <li><p class="navbar-text small">Your Recent Projects</p></li>
+                        {% for project in pmt_user.recent_active_projects %}
+                        <li><a href="{% url 'project_detail' project.pid %}">
+                                {{project.name|truncatechars:60}}
+                        </a></li>
+                        {% endfor %}
+                        {% endif %}
+                        {% endif %}
+                    </ul>
+                </li>
+                <li>
+                    <a href="/client/">Clients</a>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle"
+                       data-toggle="dropdown"
+                       href="{% url 'user_list' %}?status=active">
+                        Users/Groups <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{% url 'user_list' %}?status=active">
+                                All Users
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'group_list' %}">
+                                All Groups
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{% url 'forum_list' %}">Forum</a>
+                </li>
+                <li>
+                    <a href="{% url 'tag_list' %}">Tags</a>
+                </li>
+                <li>
+                    <a href="{% url 'report_list' %}">Reports</a>
+                </li>
+
+                {% block topnavbarleftitems %}{% endblock %}
+            </ul>
+
+            <ul class="nav navbar-nav">
+                <form class="navbar-form" role="search" action="/search/">
+                    <div class="form-group">
+                        <input type="search" name="q" class="form-control input-sm" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default navbar-btn hidden-xs hidden-sm">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </form>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% block topnavbarrightitems %}{% endblock %}
+                {% block usernav %}
+                {% if request.user.is_anonymous %}
+                <li><a href="/accounts/login/?next=/" class="btn btn-xs "><span class="glyphicon
+                                                                                       glyphicon-log-in"></span> login</a></li>
+                {% else %}
+                {% pmtuser as pmt_user %}
+                <li class="navbar-text">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-xs hidden-xs hidden-sm"
+                           href="{{pmt_user.get_absolute_url}}">
+                            <span class="glyphicon glyphicon-user"></span>
+                            {{request.user.first_name}} {{request.user.last_name}}</a>
+                        <button type="button" class="btn btn-default btn-xs
+                                                     dropdown-toggle"
+                                data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            {% if request.user.is_superuser %}
+                            <li><a href="{% url 'impersonate-list' %}">Impersonate</a></li>
                             {% endif %}
-                            {% endif %}
+                            <li><a href="/accounts/logout/"><span class="glyphicon
+                                                                         glyphicon-log-out"></span> logout</a></li>
                         </ul>
-                    </li>
-					<li>
-                        <a href="/client/">Clients</a>
-                    </li>
-					<li class="dropdown">
-                        <a class="dropdown-toggle"
-                           data-toggle="dropdown"
-                           href="{% url 'user_list' %}?status=active">
-                            Users/Groups <span class="caret"></span>
-                        </a>
-
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="{% url 'user_list' %}?status=active">
-                                    All Users
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'group_list' %}">
-                                    All Groups
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="{% url 'forum_list' %}">Forum</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'tag_list' %}">Tags</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'report_list' %}">Reports</a>
-                    </li>
-
-          {% block topnavbarleftitems %}{% endblock %}
-        </ul>
-
-				<ul class="nav navbar-nav">
-				<form class="navbar-form" role="search" action="/search/">
-					<div class="form-group">
-					<input type="text" name="q" class="form-control input-sm" placeholder="Search">
-					</div>
-					<button type="submit" class="btn btn-default navbar-btn">
-						<span class="glyphicon glyphicon-search"></span></button>
-
-        </form>
-				</ul>
-
-
-				<ul class="nav navbar-nav navbar-right">
-          {% block topnavbarrightitems %}{% endblock %}
-{% block usernav %}
-          {% if request.user.is_anonymous %}
-          <li><a href="/accounts/login/?next=/" class="btn btn-xs "><span class="glyphicon
-								glyphicon-log-in"></span> login</a></li>
-          {% else %}
-{% pmtuser as pmt_user %}
-          <li class="navbar-text">
-						<div class="btn-group">
-							<a class="btn btn-default btn-xs" href="{{pmt_user.get_absolute_url}}"><span class="glyphicon
-								glyphicon-user"></span> {{request.user.first_name}} {{request.user.last_name}}</a>
-							<button type="button" class="btn btn-default btn-xs
-																					 dropdown-toggle"
-											data-toggle="dropdown">
-								<span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-              </button>
-							<ul class="dropdown-menu" role="menu">
-								{% if request.user.is_superuser %}
-								<li><a href="{% url 'impersonate-list' %}">Impersonate</a></li>
-								{% endif %}
-								<li><a href="/accounts/logout/"><span class="glyphicon
-								glyphicon-log-out"></span> logout</a></li>
-							</ul>
-						</div>
-					</li>
-          {% endif %}
-{% endblock %}
-				</ul>
+                    </div>
+                </li>
+                {% endif %}
+                {% endblock %}
+            </ul>
+        </div><!-- end #bs-navbar-collapse-1 -->
 
        </div>
   </nav>
