@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block content %}
+<ul class="breadcrumb">
+  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+  <li><a href="{% url 'report_list' %}">Reports</a></li>
+        <li class="active">Passed Milestones</li>
+</ul>
+
+<h2>Passed Milestones</h2>
+
+<p>All Milestones that have passed their target date but are still open.</p>
+
+{% if milestones.count %}
+<table class="table table-condensed">
+<tr>
+	<th>Target Date</th>
+	<th>Estimated Time (# items)</th>
+	<th>Project</th>
+	<th>Milestone</th>
+</tr>
+{% for milestone in milestones %}
+<tr>
+	<td>{{milestone.target_date}}</td>
+	<td>{{milestone.estimated_time_remaining|floatformat}} hours
+	({{milestone.num_open_items}} items)</td>
+	<td><a href="{{milestone.project.get_absolute_url}}">{{milestone.project.name|truncatechars:40}}</a></td>
+	<td><a href="{{milestone.get_absolute_url}}">{{milestone.name|truncatechars:40}}</a></td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No Passed Milestones</p>
+{% endif %}
+
+
+
+{% endblock %}
