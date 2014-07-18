@@ -271,6 +271,15 @@ class TestProjectViews(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue('This field is required.' in r.content)
 
+        r = self.c.post(reverse('project_create'),
+                        {'name': '      ',
+                         'description': 'description',
+                         'pub_view': 'public',
+                         'target_date': '2020-04-28',
+                         'test_wiki_category': ''})
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue('This field cannot be blank.' in r.content)
+
     def test_create_project_post_requires_target_date(self):
         r = self.c.post(reverse('project_create'),
                         {'name': 'Test project name',
