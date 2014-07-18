@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load durations %}
+{% load dmttags %}
 
 {% block title %}User Weekly
  Report: <a href="{{u.get_absolute_url}}">{{u.fullname}}</a>
@@ -23,7 +23,7 @@
   <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>
 </ul>
 
-<p><b>Total time for this week:</b> {{ total_time|hours }} hours.
+<p><b>Total time for this week:</b> {{ total_time|interval_to_hours }} hours.
 
 {% if active_projects %}
 <h3>Breakdown</h3>
@@ -71,7 +71,7 @@
 
 <h3>Piegraph</h3>
 
-<img src="http://chart.apis.google.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;chs=800x300&amp;chds=0,{{max_time|hours}}&amp;chd=t:{% for project in active_projects %}{{project.time|hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for project in active_projects %}{{project.name|urlencode}}|{% endfor %}"
+<img src="http://chart.apis.google.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;chs=800x300&amp;chds=0,{{max_time|interval_to_hours}}&amp;chd=t:{% for project in active_projects %}{{project.time|interval_to_hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for project in active_projects %}{{project.name|urlencode}}|{% endfor %}"
    width="800" height="300" alt="" />
 
 {% endblock %}
