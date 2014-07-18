@@ -503,16 +503,32 @@ ORDER BY p.projnum
         return projects
 
     @staticmethod
-    def all_projects_by_last_mod():
+    def projects_active_between(start, end):
         projects = Project.objects.raw("""
 SELECT
-    m.pid,
-    date_trunc('minute',max(i.last_mod)) AS last_mod
-FROM milestones m
-LEFT OUTER JOIN items i
-    ON m.mid = i.mid
-GROUP BY m.pid
-        """)
+    p.pid,
+    p.name,
+    p.projnum,
+    date(tempalias.max) AS last_worked_on,
+    p.status AS project_status,
+    u.fullname AS caretaker_fullname,
+    u.username AS caretaker_username,
+    tempalias.sum AS hours_logged
+FROM
+    (
+    SELECT p.pid, max(completed), sum(a.actual_time)
+    FROM projects p, milestones m, items i, actual_times a
+    WHERE p.pid = m.pid
+        AND m.mid = i.mid
+        AND i.iid = a.iid
+        AND a.completed >= %s
+        AND a.completed <= %s
+    GROUP BY p.pid
+    ) AS tempalias, projects p, users u
+WHERE tempalias.pid = p.pid
+    AND p.caretaker = u.username
+ORDER BY hours_logged DESC;
+        """, [start, end])
         return projects
 
 

@@ -367,6 +367,10 @@ class MyProjectViewTests(TestCase):
         self.assertTrue(p.name in r.content)
         self.assertTrue(reverse('project_detail', args=(p.pid,)) in r.content)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
     def test_my_projects_page_not_in_project(self):
         p = ProjectFactory()
         r = self.client.get(reverse('my_project_list'))

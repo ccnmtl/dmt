@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load dmttags %}
+
+{% block css %}
+<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
+{% endblock %}
+
+{% block content %}
+
+<h2>
+    Active Projects for the last {{days}} days
+</h2>
+
+<form>
+    <div class="control-group">
+        Number of days to display:
+        <input type="number" min="1" max="365" name="days" value="{{days}}" />
+        <input type="submit" />
+    </div>
+</form>
+
+<table id="active-projects-report" class="table table-bordered tablesorter">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Project Number</th>
+            <th>Last worked on</th>
+            <th>Project Status</th>
+            <th>Caretaker</th>
+            <th>Hours logged</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in projects %}
+        <tr>
+            <td>
+                <a href="{% url 'project_detail' p.pid %}">
+                    {{p.pid}}
+                </a>
+            </td>
+            <td>
+                <a href="{% url 'project_detail' p.pid %}">
+                    {{p.name}}
+                </a>
+            </td>
+            <td>
+                {% if p.projnum %}
+                {{p.projnum}}
+                {% else %}
+                -
+                {% endif %}
+            </td>
+            <td>{{p.last_worked_on}}</td>
+            <td>{{p.status}}</td>
+            <td>
+                <a href="{% url 'user_detail' p.caretaker_username %}">
+                    {{p.caretaker}}
+                </a>
+            </td>
+            <td>{{p.hours_logged|interval_to_hours}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>
+    Total number of hours worked (at any date) on the projects in this report:
+    <strong>{{total_hours}}</strong>
+</p>
+
+{% endblock %}
+
+{% block js %}
+<script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#active-projects-report').tablesorter();
+});
+</script>
+{% endblock %}

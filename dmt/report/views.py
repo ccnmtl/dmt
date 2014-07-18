@@ -5,8 +5,26 @@ from django.views.generic import TemplateView, View
 from dmt.claim.models import Claim
 from dmt.main.models import User, Item
 from dmt.main.views import LoggedInMixin
-from .models import StaffReportCalculator, WeeklySummaryReportCalculator
+from .models import (
+    ActiveProjectsCalculator, StaffReportCalculator,
+    WeeklySummaryReportCalculator)
 from .mixins import PrevNextWeekMixin
+
+
+class ActiveProjectsView(LoggedInMixin, TemplateView):
+    template_name = "report/active_projects.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ActiveProjectsView, self).get_context_data(**kwargs)
+
+        days = 31
+        if self.request.GET.get('days', None):
+            days = int(self.request.GET['days'])
+
+        calc = ActiveProjectsCalculator()
+        data = calc.calc(days)
+        context.update(data)
+        return context
 
 
 class YearlyReviewView(LoggedInMixin, View):
