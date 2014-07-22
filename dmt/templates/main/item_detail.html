@@ -630,10 +630,12 @@ function s3_upload() {
             $('#status').html('Upload progress: ' + percent + '%' + message);
         },
         onFinishS3Put: function(url) {
-            $('#status').html(
-                '<img src="' +
-                url +
-                '" style="max-width:100%; max-height:200px;" />');
+            if (/(jpg|gif|png)$/.test(url)) {
+                $('#status').html(
+                    '<img src="' +
+                    url +
+                    '" style="max-width:100%; max-height:200px;" />');
+            }
             $('#uploaded-url').val(url);
             $('#add-attachment-submit').removeAttr("disabled");
         },
