@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
 
-{% block content %}
+{% block css %}
+<link rel="stylesheet" href="{{STATIC_URL}}bootstrap-datepicker/css/datepicker.css">
+{% endblock %}
 
+{% block content %}
 <div class="form-group pull-right">
 	<a class="btn btn-xs btn-danger"
 		 href="{{object.get_absolute_url}}delete/"
@@ -21,4 +24,17 @@
 </fieldset>
 </form>
 
+{% endblock %}
+
+{% block js %}
+<script src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#id_target_date').datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+        todayHighlight: true
+    });
+});
+</script>
 {% endblock %}
