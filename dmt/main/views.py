@@ -411,7 +411,7 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
 class GroupCreateView(LoggedInMixin, View):
     def post(self, request):
         group_name = request.POST.get('group')
-        username = "grp_" + re.sub(r'\W', '', group_name)
+        username = "grp_" + re.sub(r'\W', '', group_name).lower()
         if not group_name or User.objects.filter(username=username).exists():
             return HttpResponseRedirect(reverse('group_list'))
         group_name = group_name + " (group)"
