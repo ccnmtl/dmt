@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
 
+{% block title %}Weekly Summary{% endblock %}
+
 {% load dmttags %}
 
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+    <li><a href="{% url 'report_list' %}">Reports</a></li>
+    <li class="active">Weekly Summary</li>
+</ul>
 
 <h2>
     Weekly Summary Report

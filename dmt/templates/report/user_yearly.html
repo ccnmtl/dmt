@@ -13,6 +13,11 @@
 {% endblock %}
 
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+    <li><a href="{% url 'report_list' %}">Reports</a></li>
+    <li class="active">Your Yearly Review</li>
+</ul>
 
 <h2>Yearly report
 	for <a href="{{u.get_absolute_url}}">{{u.fullname}}</a> 
