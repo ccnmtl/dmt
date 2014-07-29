@@ -162,7 +162,7 @@ class StaffReportView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StaffReportView, self).get_context_data(**kwargs)
-        report = StaffReportCalculator(['programmers', 'video', 'webmasters',
+        report = StaffReportCalculator(['programmers', 'video', 'designers',
                                         'educationaltechnologists',
                                         'management'])
         data = report.calc(self.week_start, self.week_end)
@@ -182,7 +182,7 @@ class WeeklySummaryView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(WeeklySummaryView, self).get_context_data(**kwargs)
 
-        report = WeeklySummaryReportCalculator(['programmers', 'webmasters',
+        report = WeeklySummaryReportCalculator(['programmers', 'designers',
                                                 'educationaltechnologists',
                                                 'video', 'management'])
         data = report.calc(self.week_start, self.week_end)
