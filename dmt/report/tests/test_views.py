@@ -18,6 +18,26 @@ class ActiveProjectTests(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
 
 
+class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_active_project_export_csv_view(self):
+        r = self.client.get(reverse('active_projects_report_export',
+                                    args=(31, 'csv')))
+        self.assertEqual(r.status_code, 200)
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_active_project_export_excel_view(self):
+        r = self.client.get(reverse('active_projects_report_export',
+                                    args=(31, 'xlsx')))
+        self.assertEqual(r.status_code, 200)
+
+
 class UserWeeklyTest(LoggedInTestMixin, TestCase):
     def test_user_weekly(self):
         r = self.client.get("/report/user/testuser/weekly/")

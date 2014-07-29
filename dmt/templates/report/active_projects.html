@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block title %}Active Projects{% endblock %}
+
 {% load dmttags %}
 
 {% block css %}
@@ -7,6 +9,11 @@
 {% endblock %}
 
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+    <li><a href="{% url 'report_list' %}">Reports</a></li>
+    <li class="active">Active Projects</li>
+</ul>
 
 <h2>
     Active Projects for the last {{days}} days
@@ -19,6 +26,12 @@
         <input type="submit" />
     </div>
 </form>
+
+<div>
+    Export as:
+    <a href="{% url 'active_projects_report_export' format='csv' days=days %}">.csv</a>,
+    <a href="{% url 'active_projects_report_export' format='xlsx' days=days %}">.xlsx</a>
+</div>
 
 <table id="active-projects-report" class="table table-bordered tablesorter">
     <thead>
