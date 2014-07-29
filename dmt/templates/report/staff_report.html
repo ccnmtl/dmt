@@ -40,7 +40,11 @@
                     {{user.user.fullname}}
                 </a>
             </td>
-            <td>{{user.group_name}}</td>
+            <td>
+                <a href="{% url 'group_detail' user.group_username %}">
+                    {{user.group_name}}
+                </a>
+            </td>
             <td>{{user.user_time|interval_to_hours}}</td>
         </tr>
         {% endfor %}
