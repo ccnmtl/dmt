@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
 
-{% block content %}
+{% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}bootstrap-datepicker/css/datepicker.css">
-<script src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+{% endblock %}
 
+{% block content %}
 <form action="." method="post">{% csrf_token %}
 <fieldset>
 <legend>Create New Project</legend>
@@ -14,7 +15,10 @@
 <input type="submit" value="Save" class="btn btn-primary" />
 </fieldset>
 </form>
+{% endblock %}
 
+{% block js %}
+<script src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#id_target_date').datepicker({
