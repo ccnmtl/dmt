@@ -598,18 +598,20 @@
 <h2>HISTORY</h2>
 
 <table class="table">
-{% for history_item in object.history %}
-<tr>
-<td class="{{history_item.status_class}}">{{history_item.status}}</td>
-<td>
-by <a href="{{history_item.user.get_absolute_url}}">{{history_item.user.fullname}}</a><br />
-<nobr>at {{history_item.timestamp}}</nobr>
-</td>
-<td>
-{{history_item.comment|safe}}
-</td>
-</tr>
-{% endfor %}
+    {% for history_item in object.history %}
+    <tr>
+        <td class="{{history_item.status_class}}">{{history_item.status}}</td>
+        <td>
+            by <a href="{{history_item.user.get_absolute_url}}">
+                {{history_item.user.fullname}}</a>
+            <br />
+            <nobr>at {{history_item.timestamp}}</nobr>
+        </td>
+        <td>
+            {{history_item.comment|safe}}
+        </td>
+    </tr>
+    {% endfor %}
 </table>
 
 {% endblock %}
