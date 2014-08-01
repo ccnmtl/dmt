@@ -126,7 +126,7 @@ class AddCommentView(LoggedInMixin, View):
         body = request.POST.get('comment', u'')
         if body == '':
             return HttpResponseRedirect(item.get_absolute_url())
-        item.add_comment(user, markdown.markdown(body))
+        item.add_comment(user, markdown.markdown(body, extensions=['linkify']))
         item.touch()
         item.update_email(body, user)
         log_time(item, user, request)
@@ -139,7 +139,8 @@ class ResolveItemView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
         r_status = request.POST.get('r_status', u'FIXED')
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         if (item.assigned_to.username == item.owner.username and
                 item.owner.username == user.username):
             # streamline self-assigned item verification
@@ -159,7 +160,8 @@ class InProgressItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.mark_in_progress(user, comment)
         item.touch()
         item.update_email("marked as in progress\n----\n"
@@ -174,7 +176,8 @@ class VerifyItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.verify(user, comment)
         item.touch()
         item.update_email("verified\n-----\n"
@@ -189,7 +192,8 @@ class ReopenItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.reopen(user, comment)
         item.touch()
         item.update_email("reopened\n-----\n"
@@ -207,7 +211,8 @@ class ReassignItemView(LoggedInMixin, View):
         assigned_to = get_object_or_404(
             User,
             username=request.POST.get('assigned_to', ''))
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.reassign(user, assigned_to, comment)
         item.touch()
         item.update_email("reassigned\n----\n"
@@ -224,7 +229,8 @@ class ChangeOwnerItemView(LoggedInMixin, View):
         owner = get_object_or_404(
             User,
             username=request.POST.get('owner', ''))
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.change_owner(user, owner, comment)
         item.touch()
         item.update_email("owner changed\n-----\n"
