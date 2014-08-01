@@ -26,6 +26,12 @@ class ActiveProjectsView(LoggedInMixin, TemplateView):
         calc = ActiveProjectsCalculator()
         data = calc.calc(days)
         context.update(data)
+
+        # Find dates for displaying to the user
+        now = datetime.now()
+        context['interval_start'] = now + timedelta(days=-days)
+        context['interval_end'] = now
+
         return context
 
 

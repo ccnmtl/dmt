@@ -16,22 +16,29 @@
 </ul>
 
 <h2>
-    Active Projects for the last {{days}} days
+    Most Active Projects for the last {{days}} days
+    <br />
+    <small>
+        {{interval_start|format_date}} &ndash; {{interval_end|format_date}}
+    </small>
 </h2>
 
 <form>
+    <div class="control-group">
+        Total hours reported:
+        <strong>{{total_hours}}</strong>
+    </div>
     <div class="control-group">
         Number of days to display:
         <input type="number" min="1" max="365" name="days" value="{{days}}" />
         <input type="submit" />
     </div>
+    <div class="control-group">
+        Export as:
+        <a href="{% url 'active_projects_report_export' format='csv' days=days %}">.csv</a>,
+        <a href="{% url 'active_projects_report_export' format='xlsx' days=days %}">.xlsx</a>
+    </div>
 </form>
-
-<div>
-    Export as:
-    <a href="{% url 'active_projects_report_export' format='csv' days=days %}">.csv</a>,
-    <a href="{% url 'active_projects_report_export' format='xlsx' days=days %}">.xlsx</a>
-</div>
 
 <table id="active-projects-report" class="table table-bordered table-striped tablesorter">
     <thead>
@@ -77,11 +84,6 @@
         {% endfor %}
     </tbody>
 </table>
-
-<p>
-    Total number of hours worked (at any date) on the projects in this report:
-    <strong>{{total_hours}}</strong>
-</p>
 
 {% endblock %}
 
