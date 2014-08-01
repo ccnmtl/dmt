@@ -184,3 +184,10 @@ form .control-group.error .help-inline {
     padding-left: 12px;
     padding-right: 12px;
 }
+
+footer.page-footer {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 60px;
+    text-align: center;
+}
