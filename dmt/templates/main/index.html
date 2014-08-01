@@ -23,13 +23,17 @@
 {% else %}
   {% pmtuser as pmt_user %}
 
-<ul class="nav nav-pills">
-	<li><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></li>
-	<li><a href="#" data-toggle="modal"
-	data-target="#add-tracker"><span class="glyphicon
-								glyphicon-time"></span> Add Tracker</a></li>
-	<li><a href="/report/user/{{pmt_user.username}}/weekly/">Weekly Report</a></li>
-</ul>
+<p>
+    <ul class="nav nav-pills">
+        <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></li>
+        <li><a href="#" data-toggle="modal"
+               data-target="#add-tracker">
+                <span class="glyphicon glyphicon-time"></span>
+                Add Tracker
+        </a></li>
+        <li><a href="/report/user/{{pmt_user.username}}/weekly/">Weekly Report</a></li>
+    </ul>
+</p>
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
   <div class="modal-dialog">
