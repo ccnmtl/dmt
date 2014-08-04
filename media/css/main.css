@@ -57,22 +57,22 @@ body > .container {
   color: blue;
 }
 
-td.open, td.new, td.reopened, span.open {
+td.open, span.open, div.open, td.new, div.new, td.reopened, div.reopened {
 	font-weight: bold;
 	color: #f00;
 }
 
-td.closed, span.closed {
+td.closed, span.closed, div.closed {
 		font-weight: bold;
 		color: #009900;
 }
 
-td.resolved, span.resolved {
+td.resolved, span.resolved, div.resolved {
 		font-weight: bold;
 		color: #069;
 }
 
-td.verified, span.verified {
+td.verified, span.verified, div.verified {
 		font-weight: bold;
 		color: #009900;
 }
@@ -102,19 +102,19 @@ td.verified, span.verified {
   color: #f00;
 }
 
-td.ok {
+td.ok, div.ok {
 		color: #9999cc;
 }
-td.upcoming {
+td.upcoming, div.upcoming {
 		color: #069;
 }
-td.due {
+td.due, div.due {
 		color: #009900;
 }
-td.overdue {
+td.overdue, div.overdue {
 		color: #f60;
 }
-td.late {
+td.late, div.late {
 		color: #f00;
 }
 
@@ -194,4 +194,13 @@ footer.page-footer {
     padding-bottom: 40px;
     margin-top: 60px;
     text-align: center;
+}
+
+.item-history hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.item-history .item-comment {
+    word-wrap: break-word;
 }
