@@ -597,22 +597,25 @@
 
 <h2>HISTORY</h2>
 
-<table class="table">
+<div class="item-history">
     {% for history_item in object.history %}
-    <tr>
-        <td class="{{history_item.status_class}}">{{history_item.status}}</td>
-        <td>
+    <hr />
+    <div class="row">
+        <div class="col-md-1 {{history_item.status_class}}">
+            {{history_item.status}}
+        </div>
+        <div class="col-md-3">
             by <a href="{{history_item.user.get_absolute_url}}">
                 {{history_item.user.fullname}}</a>
             <br />
             <nobr>at {{history_item.timestamp}}</nobr>
-        </td>
-        <td>
+        </div>
+        <div class="col-md-8 item-comment">
             {{history_item.comment|safe}}
-        </td>
-    </tr>
+        </div>
+    </div>
     {% endfor %}
-</table>
+</div>
 
 {% endblock %}
 
