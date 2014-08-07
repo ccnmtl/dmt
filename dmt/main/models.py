@@ -572,7 +572,10 @@ class Milestone(models.Model):
         return "/milestone/%d/" % self.mid
 
     def status_class(self):
-        return self.status.lower()
+        s = self.status.lower()
+        if (s == 'open'):
+            s = 'dmt-' + s
+        return s
 
     def is_open(self):
         return self.status == 'OPEN'
@@ -677,7 +680,10 @@ class Item(models.Model):
         return "/item/%d/" % self.iid
 
     def status_class(self):
-        return self.status.lower()
+        s = self.status.lower()
+        if (s == 'open'):
+            s = 'dmt-' + s
+        return s
 
     def priority_label(self):
         return priority_label_f(self.priority)
@@ -1137,7 +1143,10 @@ class Events(models.Model):
         ordering = ['event_date_time', ]
 
     def status_class(self):
-        return self.status.lower()
+        s = self.status.lower()
+        if (s == 'open'):
+            s = 'dmt-' + s
+        return s
 
 
 class NotifyProject(models.Model):

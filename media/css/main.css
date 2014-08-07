@@ -57,7 +57,7 @@ body > .container {
   color: blue;
 }
 
-td.open, span.open, div.open, td.new, div.new, td.reopened, div.reopened {
+td.dmt-open, span.dmt-open, div.dmt-open, td.new, div.new, td.reopened, div.reopened {
 	font-weight: bold;
 	color: #f00;
 }
