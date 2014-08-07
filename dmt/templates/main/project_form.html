@@ -1,9 +1,5 @@
-{% extends 'base.html' %}
+n{% extends 'base.html' %}
 {% load bootstrap %}
-
-{% block css %}
-<link rel="stylesheet" href="{{STATIC_URL}}bootstrap-datepicker/css/datepicker.css">
-{% endblock %}
 
 {% block content %}
 <form action="." method="post">{% csrf_token %}
@@ -15,17 +11,4 @@
 <input type="submit" value="Save" class="btn btn-primary" />
 </fieldset>
 </form>
-{% endblock %}
-
-{% block js %}
-<script src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#id_target_date').datepicker({
-        autoclose: true,
-        format: 'yyyy-mm-dd',
-        todayHighlight: true
-    });
-});
-</script>
 {% endblock %}

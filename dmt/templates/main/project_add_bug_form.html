@@ -7,64 +7,71 @@
                     <h4 class="modal-title" id="add-bug-label">Add Bug</h4>
                 </div>
                 <div class="modal-body">
-				    <div class="form-group">
-					    <label for="bug-title">Title</label>
-					    <input type="text" name="title" placeholder="bug title" id="bug-title" class="form-control"/>
-				    </div>
+                    <div class="form-group">
+                        <label for="bug-title">Title</label>
+                        <input type="text" name="title" placeholder="bug title" id="bug-title" class="form-control"/>
+                    </div>
 
-				    <div class="form-group">
-					    <label for="bug-assigned_to">Assigned To</label>
-					    <select name="assigned_to" id="bug-assigned_to"
-								class="form-control">
-						    {% for user in object.all_personnel_in_project %}
-						    <option value="{{user.username}}"
-									{% ifequal user.username object.caretaker.username %}
-									selected="selected"
-									{% endifequal %}
-									>{{user.fullname}}</option>
-						    {% endfor %}
-					    </select>
-				    </div>
+                    <div class="form-group">
+                        <label for="bug-assigned_to">Assigned To</label>
+                        <select name="assigned_to" id="bug-assigned_to"
+                                class="form-control">
+                            {% for user in object.all_personnel_in_project %}
+                            <option value="{{user.username}}"
+                                    {% ifequal user.username object.caretaker.username %}
+                                    selected="selected"
+                                    {% endifequal %}
+                                    >{{user.fullname}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-				    <div class="form-group">
-					    <label for="bug-milestones">Milestone</label>
-					    <select name="milestone" id="bug-milestone"
-								class="form-control">
-						    {% for milestone in object.milestone_set.all %}
-						    <option 
-							     value="{{milestone.mid}}"
-							     {% ifequal milestone.mid object.upcoming_milestone.mid %}
-							     selected="selected"
-							     {% endifequal %}
-							     >
-							    {{milestone.name}}
-							    {% if not milestone.is_open %}[CLOSED]{% endif %}
-						    </option>
-						    {% endfor %}
-					    </select>
-				    </div>
+                    <div class="form-group">
+                        <label for="bug-milestones">Milestone</label>
+                        <select name="milestone" id="bug-milestone"
+                                class="form-control">
+                            {% for milestone in object.milestone_set.all %}
+                            <option
+                                 value="{{milestone.mid}}"
+                                 {% ifequal milestone.mid object.upcoming_milestone.mid %}
+                                 selected="selected"
+                                 {% endifequal %}
+                                 >
+                                {{milestone.name}}
+                                {% if not milestone.is_open %}[CLOSED]{% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-				    <div class="form-group">
-					    <label for="bug-priority">Priority</label>
-					    <select name="priority" id="bug-priority" class="form-control">
-						    <option value="0">ICING</option>
-						    <option value="1" selected="selected">LOW</option>
-						    <option value="2">MEDIUM</option>
-						    <option value="3">HIGH</option>
-						    <option value="4">CRITICAL</option>
-					    </select>
-				    </div>
+                    <div class="form-group">
+                        <label for="bug-priority">Priority</label>
+                        <select name="priority" id="bug-priority" class="form-control">
+                            <option value="0">ICING</option>
+                            <option value="1" selected="selected">LOW</option>
+                            <option value="2">MEDIUM</option>
+                            <option value="3">HIGH</option>
+                            <option value="4">CRITICAL</option>
+                        </select>
+                    </div>
 
-				    <div class="form-group">
-					    <textarea name="description" class="form-control" rows="5" placeholder="description"></textarea>
-				    </div>
+                    <div class="form-group">
+                        <label for="target_date">Target Date</label>
+                        <small>If left blank, this will be the milestone's target date</small>
+                        <input type="text" name="target_date" id="id_target_date"
+                               class="form-control" />
+                    </div>
 
-				    <div class="form-group">
-					    <label for="bug-tags">Tags</label>
-					    <input type="text" name="tags" id="bug-tags" placeholder="tags" class="form-control" />
-				    </div>
+                    <div class="form-group">
+                        <textarea name="description" class="form-control" rows="5" placeholder="description"></textarea>
+                    </div>
 
-			    </div>
+                    <div class="form-group">
+                        <label for="bug-tags">Tags</label>
+                        <input type="text" name="tags" id="bug-tags" placeholder="tags" class="form-control" />
+                    </div>
+
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <input type="submit" class="btn btn-primary" id="add-bug-button" value="Add"/>

@@ -704,6 +704,7 @@ class ProjectAddItemView(LoggedInMixin, View):
         milestone = get_object_or_404(
             Milestone, mid=request.POST.get('milestone'))
         priority = request.POST.get('priority', '1')
+        target_date = request.POST.get('target_date') or milestone.target_date
         project.add_item(
             type=self.item_type,
             title=title,
@@ -715,7 +716,8 @@ class ProjectAddItemView(LoggedInMixin, View):
             estimated_time=request.POST.get('estimated_time', '1 hour'),
             status='OPEN',
             r_status='',
-            tags=tags)
+            tags=tags,
+            target_date=target_date)
         statsd.incr('main.%s_added' % (self.item_type.replace(' ', '_')))
         return HttpResponseRedirect(project.get_absolute_url())
 
