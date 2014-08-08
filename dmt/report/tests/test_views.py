@@ -24,8 +24,9 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
         'django.db.backends.postgresql_psycopg2',
         "This test requires PostgreSQL")
     def test_active_project_export_csv_view(self):
-        r = self.client.get(reverse('active_projects_report_export',
-                                    args=(31, 'csv')))
+        r = self.client.get(
+            reverse('active_projects_report_export') +
+            '?format=csv&days=31')
         self.assertEqual(r.status_code, 200)
 
     @unittest.skipUnless(
@@ -33,8 +34,9 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
         'django.db.backends.postgresql_psycopg2',
         "This test requires PostgreSQL")
     def test_active_project_export_excel_view(self):
-        r = self.client.get(reverse('active_projects_report_export',
-                                    args=(31, 'xlsx')))
+        r = self.client.get(
+            reverse('active_projects_report_export') +
+            '?format=xlsx&days=31')
         self.assertEqual(r.status_code, 200)
 
 

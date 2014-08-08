@@ -10,7 +10,7 @@ urlpatterns = patterns(
 
     url(r'^active_projects/$', views.ActiveProjectsView.as_view(),
         name='active_projects_report'),
-    url(r'^active_projects/(?P<days>\d+)/export/(?P<format>\w+)$',
+    url(r'^active_projects/export\w{0,50}$',
         views.ActiveProjectsExportView.as_view(),
         name='active_projects_report_export'),
 

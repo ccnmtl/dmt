@@ -36,17 +36,24 @@ class ActiveProjectsView(LoggedInMixin, TemplateView):
 
 
 class ActiveProjectsExportView(LoggedInMixin, View):
-    def get(self, request, **kwargs):
-        now = datetime.now()
-        filename = "active-projects-%s-%s-%s" % (now.year, now.month, now.day)
-        column_names = ['ID', 'Name', 'Project Number', 'Last worked on',
-                        'Project Status', 'Caretaker', 'Hours logged']
-
+    def get(self, request, *args, **kwargs):
         days = 31
-        if kwargs['days']:
-            days = int(kwargs['days'])
+        if self.request.GET.get('days', None):
+            days = int(self.request.GET['days'])
+
         calc = ActiveProjectsCalculator()
         data = calc.calc(days)
+
+        # Find dates for displaying to the user
+        now = datetime.now()
+        interval_start = now + timedelta(days=-days)
+        interval_end = now
+        filename = "active-projects-%s%s%s-%s%s%s" % (
+            interval_start.year, interval_start.month, interval_start.day,
+            interval_end.year, interval_end.month, interval_end.day)
+
+        column_names = ['ID', 'Name', 'Project Number', 'Last worked on',
+                        'Project Status', 'Caretaker', 'Hours logged']
 
         rows = [[x.pid, x.name, x.projnum, x.last_worked_on, x.status,
                  x.caretaker, interval_to_hours(x.hours_logged)]
@@ -54,7 +61,7 @@ class ActiveProjectsExportView(LoggedInMixin, View):
 
         generator = ReportFileGenerator()
         return generator.generate(
-            column_names, rows, filename, kwargs['format'])
+            column_names, rows, filename, self.request.GET.get('format'))
 
 
 class YearlyReviewView(LoggedInMixin, View):
