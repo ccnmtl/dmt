@@ -37,7 +37,7 @@
 </dl>
 
 {% if object.description %}
-{{object.description|markdown}}
+{{object.description|markdown:"linkify"}}
 {% endif %}
 
 {% if object.item_set.count %}

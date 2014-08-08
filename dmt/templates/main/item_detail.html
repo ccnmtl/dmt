@@ -506,7 +506,11 @@
 </dl>
 
 <hr />
-{{object.description|markdown}}
+
+<div class="item-description">
+    {{object.description|markdown:"linkify"}}
+</div>
+
 <hr />
 
 <div class="btn-toolbar">
@@ -574,12 +578,12 @@
 			{% else %}
 			<img src="{{attachment.src}}" />
 			{% endif %}
-			{{attachment.description|markdown}}
+			{{attachment.description|markdown:"linkify"}}
 	</td></tr>
 	{% else %}
 	<tr>
 		<td colspan="4">
-			{{attachment.description|markdown}}
+			{{attachment.description|markdown:"linkify"}}
 			{% if attachment.url %}
 			<p><a href="{{attachment.url}}">Download</a></p>
 			{% else %}
