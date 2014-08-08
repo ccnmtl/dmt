@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
-from django.views.generic import View
 
 
-class PrevNextWeekMixin(View):
+class PrevNextWeekMixin(object):
     def __init__(self):
         self.calc_weeks(datetime.today())
 
