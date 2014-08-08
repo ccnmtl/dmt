@@ -365,7 +365,7 @@ class Project(models.Model):
                  assigned_to=None, owner=None, milestone=None,
                  priority=1, description="", estimated_time="1 hour",
                  status='OPEN', r_status='',
-                 tags=None):
+                 tags=None, target_date=None):
         try:
             d = Duration(estimated_time)
         except InvalidDuration:
@@ -381,7 +381,7 @@ class Project(models.Model):
             status=status,
             r_status=r_status,
             estimated_time=td,
-            target_date=milestone.target_date,
+            target_date=target_date,
             last_mod=datetime.now(),
             description=description)
         item.add_event('OPEN', owner, "<b>%s added</b>" % type)
