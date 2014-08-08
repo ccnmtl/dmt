@@ -20,16 +20,26 @@
 
 <ul class="pager">
   <li>
-      <a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">
+      <a href="?date={{prev_week_str}}">
           previous week
       </a>
   </li>
   <li>
-      <a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">
+      <a href="?date={{next_week_str}}">
           next week
       </a>
   </li>
 </ul>
+
+<div>
+    Export as:
+    <a href="{% url 'weekly_summary_report_export' %}?format=csv&date={{now_str}}">
+        .csv
+    </a>,
+    <a href="{% url 'weekly_summary_report_export' %}?format=xlsx&date={{now_str}}">
+        .xlsx
+    </a>
+</div>
 
 <table class="table table-bordered table-striped">
     <thead>

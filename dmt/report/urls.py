@@ -20,11 +20,20 @@ urlpatterns = patterns(
         name='user_yearly_report'),
     url(r'^yearly_review/$', views.YearlyReviewView.as_view(),
         name='yearly_review_report'),
+
     url(r'^staff/$', views.StaffReportView.as_view(),
         name='staff_report'),
+    url(r'^staff/export\w{0,50}$', views.StaffReportExportView.as_view(),
+        name='staff_report_export'),
+
     (r'^staff/previous/$', views.StaffReportPreviousWeekView.as_view()),
+
     url(r'^weekly_summary/$', views.WeeklySummaryView.as_view(),
         name='weekly_summary_report'),
+    url(r'^weekly_summary/export\w{0,50}$',
+        views.WeeklySummaryExportView.as_view(),
+        name='weekly_summary_report_export'),
+
     url(r'^resolved/$', views.ResolvedView.as_view(),
         name='resolved_items_report'),
     url(r'^passed_milestones/$', views.PassedMilestonesView.as_view(),
