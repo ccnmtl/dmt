@@ -43,7 +43,7 @@
 {% if object.phone %}<dt>Phone<dt><dd>{{object.phone}}</dd>{% endif %}
 {% if object.office %}<dt>Office<dt><dd>{{object.office}}</dd>{% endif %}
 {% if object.bio %}
-<dt>Bio</dt><dd>{{object.bio|markdown}}</dd>
+<dt>Bio</dt><dd>{{object.bio|markdown:"linkify"}}</dd>
 {% endif %}
 {% with object.user_groups as groups %}
 {% if groups %}
@@ -171,7 +171,7 @@
 <a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
 </span>
 {% endfor %}</p>{% endif %}
-{{n.body|markdown}}
+{{n.body|markdown:"linkify"}}
 
 		{% endfor %}
 	</div>
