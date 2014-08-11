@@ -126,7 +126,7 @@ class AddCommentView(LoggedInMixin, View):
         body = request.POST.get('comment', u'')
         if body == '':
             return HttpResponseRedirect(item.get_absolute_url())
-        item.add_comment(user, markdown.markdown(body))
+        item.add_comment(user, markdown.markdown(body, extensions=['linkify']))
         item.touch()
         item.update_email(body, user)
         log_time(item, user, request)
@@ -139,7 +139,8 @@ class ResolveItemView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
         r_status = request.POST.get('r_status', u'FIXED')
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         if (item.assigned_to.username == item.owner.username and
                 item.owner.username == user.username):
             # streamline self-assigned item verification
@@ -159,7 +160,8 @@ class InProgressItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.mark_in_progress(user, comment)
         item.touch()
         item.update_email("marked as in progress\n----\n"
@@ -174,7 +176,8 @@ class VerifyItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.verify(user, comment)
         item.touch()
         item.update_email("verified\n-----\n"
@@ -189,7 +192,8 @@ class ReopenItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.reopen(user, comment)
         item.touch()
         item.update_email("reopened\n-----\n"
@@ -207,7 +211,8 @@ class ReassignItemView(LoggedInMixin, View):
         assigned_to = get_object_or_404(
             User,
             username=request.POST.get('assigned_to', ''))
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.reassign(user, assigned_to, comment)
         item.touch()
         item.update_email("reassigned\n----\n"
@@ -224,7 +229,8 @@ class ChangeOwnerItemView(LoggedInMixin, View):
         owner = get_object_or_404(
             User,
             username=request.POST.get('owner', ''))
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = markdown.markdown(request.POST.get('comment', u''),
+                                    extensions=['linkify'])
         item.change_owner(user, owner, comment)
         item.touch()
         item.update_email("owner changed\n-----\n"
@@ -411,7 +417,7 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
 class GroupCreateView(LoggedInMixin, View):
     def post(self, request):
         group_name = request.POST.get('group')
-        username = "grp_" + re.sub(r'\W', '', group_name)
+        username = "grp_" + re.sub(r'\W', '', group_name).lower()
         if not group_name or User.objects.filter(username=username).exists():
             return HttpResponseRedirect(reverse('group_list'))
         group_name = group_name + " (group)"
@@ -698,6 +704,7 @@ class ProjectAddItemView(LoggedInMixin, View):
         milestone = get_object_or_404(
             Milestone, mid=request.POST.get('milestone'))
         priority = request.POST.get('priority', '1')
+        target_date = request.POST.get('target_date') or milestone.target_date
         project.add_item(
             type=self.item_type,
             title=title,
@@ -709,7 +716,8 @@ class ProjectAddItemView(LoggedInMixin, View):
             estimated_time=request.POST.get('estimated_time', '1 hour'),
             status='OPEN',
             r_status='',
-            tags=tags)
+            tags=tags,
+            target_date=target_date)
         statsd.incr('main.%s_added' % (self.item_type.replace(' ', '_')))
         return HttpResponseRedirect(project.get_absolute_url())
 

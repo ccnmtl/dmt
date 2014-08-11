@@ -15,9 +15,9 @@
 
 {% block content %}
 <ul class="breadcrumb">
-  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
-  <li><a href="{% url 'report_list' %}">Reports</a></li>
-        <li class="active">Staff Report</li>
+    <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+    <li><a href="{% url 'report_list' %}">Reports</a></li>
+    <li class="active">Staff Report</li>
 </ul>
 
 <h2>Staff Report for the week from {{week_start}} to {{week_end}}</h2>
@@ -25,6 +25,16 @@
     <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">previous week</a></li>
     <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>
 </ul>
+
+<div>
+    Export as:
+    <a href="{% url 'staff_report_export' %}?format=csv&date={{now_str}}">
+        .csv
+    </a>,
+    <a href="{% url 'staff_report_export' %}?format=xlsx&date={{now_str}}">
+        .xlsx
+    </a>
+</div>
 
 <table class="table table-striped table-condensed tablesorter" id="staff-report">
     <thead>
@@ -40,7 +50,11 @@
                     {{user.user.fullname}}
                 </a>
             </td>
-            <td>{{user.group_name}}</td>
+            <td>
+                <a href="{% url 'group_detail' user.group_username %}">
+                    {{user.group_name}}
+                </a>
+            </td>
             <td>{{user.user_time|interval_to_hours}}</td>
         </tr>
         {% endfor %}

@@ -41,8 +41,10 @@ class StaffReportCalculator(object):
 
                 user_time = user.interval_time(start, end)
                 group_name = InGroup.verbose_name(group_user.fullname)
+                group_username = group_user.username
                 user_data.append(dict(user=user, user_time=user_time,
-                                      group_name=group_name))
+                                      group_name=group_name,
+                                      group_username=group_username))
 
         return dict(users=user_data)
 

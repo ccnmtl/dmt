@@ -506,7 +506,11 @@
 </dl>
 
 <hr />
-{{object.description|markdown}}
+
+<div class="item-description">
+    {{object.description|markdown:"linkify"}}
+</div>
+
 <hr />
 
 <div class="btn-toolbar">
@@ -574,12 +578,12 @@
 			{% else %}
 			<img src="{{attachment.src}}" />
 			{% endif %}
-			{{attachment.description|markdown}}
+			{{attachment.description|markdown:"linkify"}}
 	</td></tr>
 	{% else %}
 	<tr>
 		<td colspan="4">
-			{{attachment.description|markdown}}
+			{{attachment.description|markdown:"linkify"}}
 			{% if attachment.url %}
 			<p><a href="{{attachment.url}}">Download</a></p>
 			{% else %}
@@ -597,20 +601,25 @@
 
 <h2>HISTORY</h2>
 
-<table class="table">
-{% for history_item in object.history %}
-<tr>
-<td class="{{history_item.status_class}}">{{history_item.status}}</td>
-<td>
-by <a href="{{history_item.user.get_absolute_url}}">{{history_item.user.fullname}}</a><br />
-<nobr>at {{history_item.timestamp}}</nobr>
-</td>
-<td>
-{{history_item.comment|safe}}
-</td>
-</tr>
-{% endfor %}
-</table>
+<div class="item-history">
+    {% for history_item in object.history %}
+    <hr />
+    <div class="row">
+        <div class="col-md-1 {{history_item.status_class}}">
+            {{history_item.status}}
+        </div>
+        <div class="col-md-3">
+            by <a href="{{history_item.user.get_absolute_url}}">
+                {{history_item.user.fullname}}</a>
+            <br />
+            <nobr>at {{history_item.timestamp}}</nobr>
+        </div>
+        <div class="col-md-8 item-comment">
+            {{history_item.comment|safe}}
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
 
@@ -630,10 +639,12 @@ function s3_upload() {
             $('#status').html('Upload progress: ' + percent + '%' + message);
         },
         onFinishS3Put: function(url) {
-            $('#status').html(
-                '<img src="' +
-                url +
-                '" style="max-width:100%; max-height:200px;" />');
+            if (/(jpg|gif|png)$/.test(url)) {
+                $('#status').html(
+                    '<img src="' +
+                    url +
+                    '" style="max-width:100%; max-height:200px;" />');
+            }
             $('#uploaded-url').val(url);
             $('#add-attachment-submit').removeAttr("disabled");
         },

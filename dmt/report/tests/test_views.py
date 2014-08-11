@@ -18,6 +18,28 @@ class ActiveProjectTests(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
 
 
+class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_active_project_export_csv_view(self):
+        r = self.client.get(
+            reverse('active_projects_report_export') +
+            '?format=csv&days=31')
+        self.assertEqual(r.status_code, 200)
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_active_project_export_excel_view(self):
+        r = self.client.get(
+            reverse('active_projects_report_export') +
+            '?format=xlsx&days=31')
+        self.assertEqual(r.status_code, 200)
+
+
 class UserWeeklyTest(LoggedInTestMixin, TestCase):
     def test_user_weekly(self):
         r = self.client.get("/report/user/testuser/weekly/")
@@ -58,6 +80,16 @@ class StaffReportTest(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 302)
 
 
+class StaffReportExportTests(LoggedInTestMixin, TestCase):
+    def test_active_project_export_csv_view(self):
+        r = self.client.get(reverse('staff_report_export') + '?format=csv')
+        self.assertEqual(r.status_code, 200)
+
+    def test_active_project_export_excel_view(self):
+        r = self.client.get(reverse('staff_report_export') + '?format=xlsx')
+        self.assertEqual(r.status_code, 200)
+
+
 class ResolvedItemsTest(LoggedInTestMixin, TestCase):
     def test_view(self):
         i = ItemFactory(status='RESOLVED')
@@ -73,6 +105,26 @@ class WeeklySummaryTests(LoggedInTestMixin, TestCase):
         "This test requires PostgreSQL")
     def test_weekly_summary_view(self):
         r = self.client.get(reverse('weekly_summary_report'))
+        self.assertEqual(r.status_code, 200)
+
+
+class WeeklySummaryExportTests(LoggedInTestMixin, TestCase):
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_weekly_summary_export_csv_view(self):
+        r = self.client.get(reverse('weekly_summary_report_export') +
+                            '?format=csv')
+        self.assertEqual(r.status_code, 200)
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_weekly_summar_export_excel_view(self):
+        r = self.client.get(reverse('weekly_summary_report_export') +
+                            '?format=xlsx')
         self.assertEqual(r.status_code, 200)
 
 

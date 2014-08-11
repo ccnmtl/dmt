@@ -5,10 +5,12 @@ from django.views.generic import TemplateView, View
 from dmt.claim.models import Claim
 from dmt.main.models import User, Item, Milestone
 from dmt.main.views import LoggedInMixin
+from dmt.main.utils import interval_to_hours
 from .models import (
     ActiveProjectsCalculator, StaffReportCalculator,
     WeeklySummaryReportCalculator)
 from .mixins import PrevNextWeekMixin
+from .utils import ReportFileGenerator
 
 
 class ActiveProjectsView(LoggedInMixin, TemplateView):
@@ -24,7 +26,42 @@ class ActiveProjectsView(LoggedInMixin, TemplateView):
         calc = ActiveProjectsCalculator()
         data = calc.calc(days)
         context.update(data)
+
+        # Find dates for displaying to the user
+        now = datetime.now()
+        context['interval_start'] = now + timedelta(days=-days)
+        context['interval_end'] = now
+
         return context
+
+
+class ActiveProjectsExportView(LoggedInMixin, View):
+    def get(self, request, *args, **kwargs):
+        days = 31
+        if self.request.GET.get('days', None):
+            days = int(self.request.GET['days'])
+
+        calc = ActiveProjectsCalculator()
+        data = calc.calc(days)
+
+        # Find dates for displaying to the user
+        now = datetime.now()
+        interval_start = now + timedelta(days=-days)
+        interval_end = now
+        start_str = interval_start.strftime('%Y%m%d')
+        end_str = interval_end.strftime('%Y%m%d')
+        filename = "active-projects-%s-%s" % (start_str, end_str)
+
+        column_names = ['ID', 'Name', 'Project Number', 'Last worked on',
+                        'Project Status', 'Caretaker', 'Hours logged']
+
+        rows = [[x.pid, x.name, x.projnum, x.last_worked_on, x.status,
+                 x.caretaker, interval_to_hours(x.hours_logged)]
+                for x in data['projects']]
+
+        generator = ReportFileGenerator()
+        return generator.generate(
+            column_names, rows, filename, self.request.GET.get('format'))
 
 
 class YearlyReviewView(LoggedInMixin, View):
@@ -82,18 +119,43 @@ class StaffReportView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StaffReportView, self).get_context_data(**kwargs)
-        report = StaffReportCalculator(['programmers', 'video', 'webmasters',
-                                        'educationaltechnologists',
-                                        'management'])
-        data = report.calc(self.week_start, self.week_end)
-        data.update(dict(now=self.now,
-                         week_start=self.week_start.date,
-                         week_end=self.week_end.date,
-                         prev_week=self.prev_week.date,
-                         next_week=self.next_week.date,
-                         ))
+        calc = StaffReportCalculator(['designers', 'programmers', 'video',
+                                      'educationaltechnologists',
+                                      'management'])
+        data = calc.calc(self.week_start, self.week_end)
+        context.update(dict(now=self.now, now_str=self.now_str,
+                            week_start=self.week_start.date,
+                            week_end=self.week_end.date,
+                            prev_week=self.prev_week.date,
+                            prev_week_str=self.prev_week_str,
+                            next_week=self.next_week.date,
+                            next_week_str=self.next_week_str))
         context.update(data)
         return context
+
+
+class StaffReportExportView(LoggedInMixin, PrevNextWeekMixin, View):
+    def get(self, request, *args, **kwargs):
+        self.get_params()
+
+        calc = StaffReportCalculator(['designers', 'programmers', 'video',
+                                      'educationaltechnologists',
+                                      'management'])
+        data = calc.calc(self.week_start, self.week_end)
+
+        start_str = self.week_start.strftime('%Y%m%d')
+        end_str = self.week_end.strftime('%Y%m%d')
+        filename = "staff-report-%s-%s" % (start_str, end_str)
+
+        column_names = ['Staff Member', 'Group', 'Hours Logged']
+
+        rows = [[x['user'].fullname, x['group_name'],
+                 interval_to_hours(x['user_time'])]
+                for x in data['users']]
+
+        generator = ReportFileGenerator()
+        return generator.generate(
+            column_names, rows, filename, self.request.GET.get('format'))
 
 
 class WeeklySummaryView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
@@ -102,18 +164,51 @@ class WeeklySummaryView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(WeeklySummaryView, self).get_context_data(**kwargs)
 
-        report = WeeklySummaryReportCalculator(['programmers', 'webmasters',
-                                                'educationaltechnologists',
-                                                'video', 'management'])
-        data = report.calc(self.week_start, self.week_end)
+        calc = WeeklySummaryReportCalculator(['designers', 'programmers',
+                                              'educationaltechnologists',
+                                              'video', 'management'])
+        data = calc.calc(self.week_start, self.week_end)
         context.update(data)
 
-        context.update(dict(now=self.now,
+        context.update(dict(now=self.now, now_str=self.now_str,
                             week_start=self.week_start.date,
                             week_end=self.week_end.date,
                             prev_week=self.prev_week.date,
-                            next_week=self.next_week.date))
+                            prev_week_str=self.prev_week_str,
+                            next_week=self.next_week.date,
+                            next_week_str=self.next_week_str))
         return context
+
+
+class WeeklySummaryExportView(LoggedInMixin, PrevNextWeekMixin, View):
+    def get(self, request, **kwargs):
+        self.get_params()
+
+        groups = ['designers', 'programmers', 'educationaltechnologists',
+                  'video', 'management']
+        report = WeeklySummaryReportCalculator(groups)
+        data = report.calc(self.week_start, self.week_end)
+
+        start_str = self.week_start.strftime('%Y%m%d')
+        end_str = self.week_end.strftime('%Y%m%d')
+        filename = "weekly-summary-report-%s-%s" % (start_str, end_str)
+
+        column_names = ['Project'] + [x.capitalize() for x in groups] + \
+                       ['Project Total']
+
+        rows = []
+        for project in data['project_times']:
+            row = [project['name']]
+
+            for grouptime in project['group_times']:
+                row.append(interval_to_hours(grouptime))
+
+            row.append(interval_to_hours(project['total_time']))
+            rows.append(row)
+
+        generator = ReportFileGenerator()
+        return generator.generate(
+            column_names, rows, filename, self.request.GET.get('format'))
 
 
 class ResolvedView(LoggedInMixin, TemplateView):

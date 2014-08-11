@@ -23,59 +23,64 @@
 {% else %}
   {% pmtuser as pmt_user %}
 
-<ul class="nav nav-pills">
-	<li><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></li>
-	<li><a href="#" data-toggle="modal"
-	data-target="#add-tracker"><span class="glyphicon
-								glyphicon-time"></span> Add Tracker</a></li>
-	<li><a href="/report/user/{{pmt_user.username}}/weekly/">Weekly Report</a></li>
-</ul>
+<p>
+    <ul class="nav nav-pills">
+        <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></li>
+        <li><a href="#" data-toggle="modal"
+               data-target="#add-tracker">
+                <span class="glyphicon glyphicon-time"></span>
+                Add Tracker
+        </a></li>
+        <li><a href="/report/user/{{pmt_user.username}}/weekly/">Weekly Report</a></li>
+    </ul>
+</p>
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="add-tracker-label">Add Tracker(s)</h4>
-      </div>
-      <div class="modal-body">
-				<form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">
-					<input type="hidden" name="pid" value="0" id="tracker-pid-input" />
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="add-tracker-label">Add Tracker(s)</h4>
+            </div>
+            <div class="modal-body">
+                <form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">
+                    <input type="hidden" name="pid" value="0" id="tracker-pid-input" />
 
-					<div class="row">
-						<div class="col-sm-12">
-							<input type="text" name="project" placeholder="project"
-										 class="form-control" id="project-input" />
-						</div>
-					</div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="text" name="project" placeholder="project"
+                                   class="form-control" id="project-input" />
+                        </div>
+                    </div>
 
-					<div class="row">
-						<div class="col-sm-7">
-							<input type="text" name="title" placeholder="task" 
-										 id="tracker-task-input"
-										 class="form-control"/>
-						</div>
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <input type="text" name="title" placeholder="task"
+                                   id="tracker-task-input"
+                                   class="form-control"/>
+                        </div>
 
-						<div class="col-sm-3">
-							<input type="text" name="time" placeholder="time"
-										 id="tracker-time-input"
-										 class="form-control" />
-						</div>
+                        <div class="col-sm-3">
+                            <input type="text" name="time" placeholder="time"
+                                   id="tracker-time-input"
+                                   class="form-control" />
+                        </div>
 
-						<div class="col-sm-2">
-							<input type="text" name="client" placeholder="client"
-										 id="tracker-client-input"
-										 class="form-control" />
-						</div>
-					</div>
-				</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="add-tracker-button">Add</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+                        <div class="col-sm-2">
+                            <input type="text" name="client" placeholder="client"
+                                   id="tracker-client-input"
+                                   class="form-control" />
+                        </div>
+                    </div>
+                    <div class="tracker-ajax-response"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-tracker-button">Add</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 	{% with pmt_user.progress_report as progress %}
@@ -185,11 +190,22 @@ $(document).ready(function()
            $.ajax({
              type: "POST",
              url: "/api/1.0/trackers/add/",
-             data: {pid: pid, task: task, time: time, client: client}
-           }).done(function (msg) {
-              $("#tracker-task-input").val("");
-              $("#tracker-time-input").val("");
-              $("#tracker-client-input").val("");
+             data: {pid: pid, task: task, time: time, client: client},
+             success: function(data, status) {
+               $("#tracker-task-input").val("");
+               $("#tracker-time-input").val("");
+               $("#tracker-client-input").val("");
+
+               $("#add-tracker").find(".tracker-ajax-response").html(
+                 '<div class="text-success">' + status + '</div>'
+               );
+             },
+             error: function(xhr, status, error) {
+                $("#add-tracker").find(".tracker-ajax-response").html(
+                  '<div class="text-danger">An error occurred: ' +
+                    error + '</div>'
+                );
+             }
            });
            event.preventDefault();
         });

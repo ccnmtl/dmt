@@ -397,6 +397,19 @@ class ProjectTest(TestCase):
         i = m.item_set.all()[0]
         self.assertEqual(i.estimated_time.seconds, 0)
 
+    def test_add_item_valid_duration(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserFactory()
+        p.add_item(type='action item', title="new item",
+                   assigned_to=u, owner=u, milestone=m,
+                   priority=1, description="",
+                   estimated_time="2 hours",
+                   status='OPEN', r_status='')
+        self.assertTrue(m.item_set.all().count() > 0)
+        i = m.item_set.all()[0]
+        self.assertEqual(i.estimated_time.seconds, 7200)
+
 
 class TestAttachment(TestCase):
     def test_image(self):
