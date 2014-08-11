@@ -135,7 +135,7 @@ class ItemModelTest(TestCase):
 
     def test_status_class(self):
         i = ItemFactory()
-        self.assertEqual(i.status_class(), "open")
+        self.assertEqual(i.status_class(), "dmt-open")
 
     def test_is_bug(self):
         i = ItemFactory()
