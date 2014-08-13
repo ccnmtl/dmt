@@ -21,9 +21,10 @@ body {
 }
 
 body > .container {
-  background-color: #fff;
-  min-height: 100%;
-	padding-top: 75px;
+    background-color: #fff;
+    min-height: 100%;
+    padding-top: 75px;
+    padding-bottom: 30px;
 }
 
 #content {
