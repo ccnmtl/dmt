@@ -5,7 +5,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/typeahead.js-bootstrap.css">
-<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap-table.css">
+<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap-table.min.css">
 {% endblock %}
 
 
@@ -184,35 +184,14 @@
 {% block js %}
 <script src="{{STATIC_URL}}js/libs/typeahead/bloodhound.min.js"></script>
 <script src="{{STATIC_URL}}js/libs/typeahead/typeahead.jquery.min.js"></script>
-<script src="{{STATIC_URL}}js/libs/bootstrap-table/bootstrap-table.js"></script>
+<script src="{{STATIC_URL}}js/libs/bootstrap-table/bootstrap-table.min.js"></script>
 
 <script>
 $(document).ready(function()
     {
   {% pmtuser as pmt_user %}
   {% if pmt_user.items %}
-        // Annoying temp workaround hack
-        // see https://github.com/wenzhixin/bootstrap-table/issues/57
-        var rows = [];
-        $('table#user-items tbody tr').each(function() {
-            var row = {};
-            var $row = $(this);
-            $('#user-items thead th').each(function() {
-                var k = $(this).data('field');
-                var v = $row.find('td[data-field='+k+']').html();
-                var classes = $row.find('td[data-field='+k+']').attr('class');
-
-                var $container = $('<div />');
-                $container.addClass(classes);
-                $container.append(v);
-
-                row[k] = $container.clone().wrap('<div>').parent().html();
-            });
-            rows.push(row);
-        });
-        $('table#user-items').bootstrapTable({
-            data: rows
-        });
+        $('table#user-items').bootstrapTable()
   {% endif %}
         var projects = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
