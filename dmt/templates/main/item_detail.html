@@ -27,32 +27,33 @@
 	<li><a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">Return to the old PMT</a></li>
 </ul>
 
-<div class="modal fade" id="add-hours" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="add-tracker-label">Log Time</h4>
-      </div>
-      <div class="modal-body">
-				<form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">
-					<input type="hidden" name="pid" value="{{object.pid}}" id="tracker-pid-input" />
+<div class="modal fade" id="add-hours" tabindex="-1" role="dialog" aria-labelledby="add-time-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="add-time-label">Log Time</h4>
+            </div>
+            <div class="modal-body">
+                <form id="add-time-form" role="form">
+                    <input type="hidden" name="iid" value="{{object.iid}}" id="item-iid-input" />
 
-					<div class="row">
-						<div class="col-sm-3">
-							<input type="text" name="time" placeholder="time"
-										 id="tracker-time-input"
-										 class="form-control" />
-						</div>
-					</div>
-				</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="add-tracker-button">Add</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input type="text" name="time" placeholder="time"
+                                   id="tracker-time-input"
+                                   class="form-control" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" form="add-time-form"
+                        class="btn btn-primary" id="add-time-button">Add</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 
@@ -661,22 +662,4 @@ function s3_upload() {
 <script data-main="{{STATIC_URL}}js/src/item"
 				src="{{STATIC_URL}}js/libs/require/require.js"></script>
 {% endflag %}
-<script>
-$(document).ready(function() 
-    { 
-        $("#add-tracker-button").click(function(event) {
-           var time = $("#tracker-time-input").val();
-
-           $.ajax({
-             type: "POST",
-             url: "/api/1.0/items/{{object.iid}}/hours/",
-             data: {time: time}
-           }).done(function (msg) {
-              window.location.reload();
-           });
-           event.preventDefault();
-        });
-    } 
-);
-</script>
 {% endblock %}
