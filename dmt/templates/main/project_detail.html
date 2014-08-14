@@ -113,7 +113,12 @@
 			</dd>
 		</dl>
 
-{% if object.active_items %}
+{% for milestone in object.milestones %}
+<h3>
+    Milestone:
+    <a href="{% url 'milestone_detail' milestone.mid %}">{{ milestone.name }}</a>
+</h3>
+{% if milestone.active_items %}
 <table class="table table-condensed table-striped tablesorter" id="project-items">
 	<thead>
 		<tr>
@@ -129,7 +134,7 @@
 
 	<tbody>
 
-		{% for item in object.active_items %}
+		{% for item in milestone.active_items %}
 		<tr>
 			<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
 	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></td>
@@ -146,6 +151,7 @@
 {% else %}
 <p>no active items</p>
 {% endif %}
+{% endfor %}
 
 	</div>
 
