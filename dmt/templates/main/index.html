@@ -191,7 +191,7 @@ $(document).ready(function()
     {
   {% pmtuser as pmt_user %}
   {% if pmt_user.items %}
-        $('table#user-items').bootstrapTable()
+        $('table#user-items').bootstrapTable();
   {% endif %}
         var projects = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
