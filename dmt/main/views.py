@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -1018,3 +1019,76 @@ class GroupListView(LoggedInMixin, ListView):
                       for group in groups]
 
         return group_list
+
+
+class AddTrackersView(LoggedInMixin, TemplateView):
+    template_name = "main/add_trackers.html"
+    success_message = 'Tracker added for project: ' + \
+                      '<strong>' + \
+                      '<a href="%(project_link)s">%(project_name)s</a>' + \
+                      '</strong>'
+    error_message = 'Error adding tracker: ' + \
+                    '<strong>%(error_text)s</strong>'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AddTrackersView, self).get_context_data(**kwargs)
+        current_user = \
+            get_object_or_404(Claim, django_user=self.request.user).pmt_user
+        ctx['trackers'] = range(10)
+        ctx['projects'] = current_user.recent_active_projects()
+        return ctx
+
+    def post(self, request):
+        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+
+        for i in range(10):
+            project_key = 'project-' + str(i)
+
+            # Find out which trackers the user actually entered
+            if (project_key not in request.POST) or \
+               (not request.POST[project_key]):
+                print 'skipping ' + project_key
+                continue
+
+            print 'proceeding ' + project_key
+            task_key = 'task-' + str(i)
+            time_key = 'time-' + str(i)
+
+            pid = request.POST[project_key]
+            task = request.POST[task_key]
+
+            try:
+                time = request.POST.get(time_key, '1 hour') or '0h'
+                d = Duration(time)
+                td = d.timedelta()
+            except InvalidDuration:
+                # eventually, this needs to get back to the user
+                # via form validation, but for now
+                # we just deal with it...
+                d = Duration('0 minutes')
+                td = d.timedelta()
+
+            try:
+                project = get_object_or_404(Project, pid=pid)
+                milestone = project.upcoming_milestone()
+                Item.objects.create(
+                    milestone=milestone,
+                    type='action item',
+                    owner=user, assigned_to=user,
+                    title=task, status='VERIFIED',
+                    priority=1, target_date=milestone.target_date,
+                    last_mod=datetime.now(),
+                    estimated_time=td)
+
+                messages.success(
+                    request,
+                    self.success_message % dict(
+                        project_link=reverse('project_detail', args=(pid,)),
+                        project_name=project.name)
+                )
+            except Exception, e:
+                messages.error(
+                    request,
+                    self.error_message % dict(error_text=e))
+
+        return HttpResponseRedirect(reverse('add_trackers'))

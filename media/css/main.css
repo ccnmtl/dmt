@@ -205,3 +205,10 @@ footer.page-footer {
 .item-history .item-comment {
     word-wrap: break-word;
 }
+
+.dmt-messages p {
+    padding: 15px;
+    max-width: 768px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}

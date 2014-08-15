@@ -4,7 +4,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 
 from dmt.main.views import (
-    SearchView,
+    AddTrackersView, SearchView,
     AddCommentView, ResolveItemView,
     InProgressItemView, VerifyItemView, ReopenItemView,
     SplitItemView, ItemDetailView,
@@ -50,6 +50,7 @@ urlpatterns = patterns(
     logout_page,
     (r'^$', IndexView.as_view()),
     (r'^admin/', include(admin.site.urls)),
+    url(r'^add_trackers/$', AddTrackersView.as_view(), name='add_trackers'),
     (r'^api/1.0/', include('dmt.api.urls')),
     (r'^drf/', include('dmt.api.urls')),
     (r'^claim/', include('dmt.claim.urls')),

@@ -9,6 +9,7 @@ from django.test import TestCase
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Attachment, Item, ItemClient, Milestone, Project
+from dmt.main.tests.support.mixins import LoggedInTestMixin
 import json
 
 
@@ -1042,3 +1043,33 @@ class UserTest(TestCase):
 
         owned = Item.objects.get(iid=owned.iid)
         self.assertEqual(owned.owner, self.pu)
+
+
+class TestAddTrackersView(LoggedInTestMixin, TestCase):
+    def test_add_trackers_view(self):
+        r = self.client.get(reverse('add_trackers'))
+        self.assertEqual(r.status_code, 200)
+
+    def test_add_trackers_post_empty(self):
+        r = self.client.post(reverse('add_trackers'), {})
+        self.assertEqual(r.status_code, 302)
+
+    def test_add_trackers_post_tracker(self):
+        p = ProjectFactory(caretaker=self.pu)
+        MilestoneFactory(project=p)
+        r = self.client.post(
+            reverse('add_trackers'),
+            {
+                'project-0': p.pid,
+                'task-0': 'test',
+                'time-0': '1hr',
+                'client-uni': ''
+            }
+        )
+        self.assertEqual(r.status_code, 302)
+
+        r = self.client.get(r.url)
+        self.assertTrue('Tracker added' in r.content)
+        self.assertTrue(p.name in r.content)
+
+        # TODO: test that tracker is created
