@@ -17,10 +17,10 @@ jscs: node_modules/jscs/bin/jscs
 
 
 node_modules/jshint/bin/jshint:
-	npm install jshint
+	npm install jshint --prefix .
 
 node_modules/jscs/bin/jscs:
-	npm install jscs
+	npm install jscs --prefix .
 
 test: ./ve/bin/python
 	npm install
