@@ -31,6 +31,12 @@
                 <span class="glyphicon glyphicon-time"></span>
                 Add Tracker
         </a></li>
+        <li>
+            <a href="{% url 'add_trackers' %}">
+                <span class="glyphicon glyphicon-time"></span>
+                Add Trackers
+            </a>
+        </li>
         <li><a href="/report/user/{{pmt_user.username}}/weekly/">Weekly Report</a></li>
     </ul>
 </p>
@@ -40,7 +46,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="add-tracker-label">Add Tracker(s)</h4>
+                <h4 class="modal-title" id="add-tracker-label">Add Tracker</h4>
             </div>
             <div class="modal-body">
                 <form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">

@@ -158,13 +158,26 @@
 {% endblock %}
 
   <div class="container" id="outer-container">
+
 {% block masthead %}
 {% block primarynav %}
 {% endblock %}
-
 {% endblock %}
 
     <div id="content">
+        {% if messages %}
+        <div class="dmt-messages">
+            {% for message in messages %}
+            <p
+                 {% if message.tags %}
+                 class="bg-{{message.tags}}"
+                 {% endif %}
+                 >
+                {{ message|safe }}
+            </p>
+            {% endfor %}
+        </div>
+        {% endif %}
       <div class="row-fluid">
         <div class="span12" id="right-content">
             {% block pagetitle %}{% endblock %}

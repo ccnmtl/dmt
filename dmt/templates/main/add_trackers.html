@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+{% block title %}Add Trackers{% endblock %}
+
+{% block content %}
+
+<h1>Add Trackers</h1>
+
+<form role="form" id="add-trackers-form" method="post">
+
+    <table class="table table-striped">
+        <thead>
+            <th>Project</th>
+            <th>Task</th>
+            <th>Time</th>
+            <th>Client UNI</th>
+        </thead>
+        <tbody>
+            {% for tracker in trackers %}
+            <tr>
+                <td>
+                    <select name="project-{{tracker}}"
+                            class="form-control input-sm">
+                        <option></option>
+                        {% for project in projects %}
+                        <option value="{{ project.pid }}">{{ project }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <input name="task-{{tracker}}"
+                           type="text"
+                           class="form-control input-sm" />
+                </td>
+                <td>
+                    <input name="time-{{tracker}}"
+                           type="text"
+                           class="form-control input-sm" />
+                </td>
+                <td>
+                    <input name="client-uni-{{tracker}}"
+                           type="text"
+                           class="form-control input-sm" />
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Add Trackers</button>
+</form>
+
+{% endblock %}
