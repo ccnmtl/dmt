@@ -34,11 +34,6 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
     CELERY_ALWAYS_EAGER = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-SOUTH_TESTS_MIGRATE = False
-
-SOUTH_MIGRATION_MODULES = {
-    'taggit': 'taggit.south_migrations',
-}
 
 NOSE_ARGS = [
     '--with-coverage',
@@ -118,7 +113,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'south',
     'compressor',
     'django_nose',
     'django_statsd',

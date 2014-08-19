@@ -226,7 +226,7 @@ class ProjectUser(object):
 # more testing is done
 def interval_sum(intervals):
     total = timedelta()
-    for a in intervals:
+    for a in filter(None, intervals):
         total += a
     return total
 
@@ -694,7 +694,9 @@ class Item(models.Model):
         return self.status
 
     def target_date_status(self):
-        overdue = (datetime.now().date() - self.target_date).days
+        overdue = 0
+        if self.target_date:
+            overdue = (datetime.now().date() - self.target_date).days
         return overdue_days_to_string(overdue)
 
     def is_bug(self):

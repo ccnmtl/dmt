@@ -7,19 +7,11 @@ helper.scenario('/',
         this.test.assertTitle('DMT:', 'The title is correct');
     },
     function() {
-        var loginButton = this.evaluate(function() {
-            var button = $('input[type="submit"]');
-            return button[0].value.toLowerCase();
-        });
-        this.test.assertEqual(loginButton, 'log in',
-                             'The homepage has a login button');
+        this.test.assertElementCount('a[href="/accounts/login/?next=/"]', 1,
+                                     'The homepage has a login button');
 
-        var clientsButton = this.evaluate(function() {
-            var button = $('a[href="/client/"]');
-            return button[0].text.toLowerCase();
-        });
-        this.test.assertEqual(clientsButton, 'clients',
-                             'The homepage has a clients button');
+        this.test.assertElementCount('a[href="/client/"]', 1,
+                                     'The homepage has a clients button');
     }
 );
 helper.scenario('/client/',
