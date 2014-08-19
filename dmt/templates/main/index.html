@@ -72,12 +72,12 @@
                                    class="form-control" />
                         </div>
                     </div>
-                    <div class="tracker-ajax-response"></div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="add-tracker-button">Add</button>
+                <button type="submit" form="add-tracker-form"
+                        class="btn btn-primary" id="add-tracker-button">Add</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -227,35 +227,6 @@ $(document).ready(function()
         });
         $("#project-input").on("typeahead:selected", function (object, datum) {
             $("#tracker-pid-input").val(datum.pid);
-        });
-
-        $("#add-tracker-button").click(function(event) {
-           var pid = $("#tracker-pid-input").val();
-           var task = $("#tracker-task-input").val();
-           var time = $("#tracker-time-input").val();
-           var client = $("#tracker-client-input").val();
-
-           $.ajax({
-             type: "POST",
-             url: "/api/1.0/trackers/add/",
-             data: {pid: pid, task: task, time: time, client: client},
-             success: function(data, status) {
-               $("#tracker-task-input").val("");
-               $("#tracker-time-input").val("");
-               $("#tracker-client-input").val("");
-
-               $("#add-tracker").find(".tracker-ajax-response").html(
-                 '<div class="text-success">' + status + '</div>'
-               );
-             },
-             error: function(xhr, status, error) {
-                $("#add-tracker").find(".tracker-ajax-response").html(
-                  '<div class="text-danger">An error occurred: ' +
-                    error + '</div>'
-                );
-             }
-           });
-           event.preventDefault();
         });
     }
 );

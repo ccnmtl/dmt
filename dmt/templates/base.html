@@ -210,6 +210,9 @@ $(document).ready(function() {
 });
 </script>
 
+<script data-main="{{STATIC_URL}}js/src/main.js"
+        src="{{STATIC_URL}}js/libs/require/require.js"></script>
+
 {% block js %}{% endblock %}
 
 {% if STAGING_ENV %}
