@@ -268,7 +268,7 @@ class Project(models.Model):
             status__in=['OPEN', 'RESOLVED', 'INPROGRESS'])
 
     def milestones(self):
-        return Milestone.objects.filter(project=self).order_by('name')
+        return Milestone.objects.filter(project=self).order_by('target_date')
 
     def managers(self):
         return [w.username for w in self.workson_set.filter(auth='manager')]
