@@ -5,7 +5,6 @@ import urlparse
 from dmt import settings_lettuce as settings
 import wsgi_intercept
 from django.core.handlers.wsgi import WSGIHandler
-from south.management.commands import patch_for_test_db_setup
 from BeautifulSoup import BeautifulSoup
 from lxml import html
 
@@ -16,8 +15,6 @@ def before_all(context):
     # of setting up and tearing down the test environment, including
     # test databases.
     context.runner = DjangoTestSuiteRunner()
-
-    patch_for_test_db_setup()
 
     host = context.host = 'localhost'
     port = context.port = getattr(settings,

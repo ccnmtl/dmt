@@ -526,17 +526,10 @@ class TestItemViews(TestCase):
         self.assertEqual(i.milestone.project.pid, p.pid)
 
 
-class TestItemTagViews(TestCase):
+class TestItemTagViews(LoggedInTestMixin, TestCase):
     def setUp(self):
+        super(TestItemTagViews, self).setUp()
         self.c = self.client
-        self.u = User.objects.create(username="testuser")
-        self.u.set_password("test")
-        self.u.save()
-        self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_add_tag(self):
         i = ItemFactory()
