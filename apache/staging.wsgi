@@ -9,5 +9,6 @@ sys.path.append('/var/www/dmt/dmt/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'dmt.settings_staging'
 
 import django.core.handlers.wsgi
-
+import django
+django.setup()
 application = django.core.handlers.wsgi.WSGIHandler()
