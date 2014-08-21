@@ -267,6 +267,9 @@ class Project(models.Model):
             milestone__project=self,
             status__in=['OPEN', 'RESOLVED', 'INPROGRESS'])
 
+    def milestones(self):
+        return Milestone.objects.filter(project=self).order_by('target_date')
+
     def managers(self):
         return [w.username for w in self.workson_set.filter(auth='manager')]
 
@@ -567,6 +570,11 @@ class Milestone(models.Model):
     class Meta:
         db_table = u'milestones'
         ordering = ['target_date', 'name', ]
+
+    def active_items(self):
+        return Item.objects.filter(
+            milestone=self,
+            status__in=['OPEN', 'RESOLVED', 'INPROGRESS'])
 
     def get_absolute_url(self):
         return "/milestone/%d/" % self.mid
