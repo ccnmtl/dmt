@@ -16,6 +16,8 @@
     {% compress css %}
     <link href="{{STATIC_URL}}css/main.css?dmt" rel="stylesheet">
     <link rel="stylesheet" href="{{STATIC_URL}}bootstrap-datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/dataTables.colVis.min.css">
     {% endcompress %}
     {% block css %}{% endblock %}
 
@@ -23,6 +25,17 @@
 
 
     <script src="{{STATIC_URL}}js/libs/jquery/jquery-min.js"></script>
+
+    <!-- jquery.dataTables -->
+    <script src="{{STATIC_URL}}js/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{STATIC_URL}}js/libs/datatables/dataTables.colVis.min.js"></script>
+    <script src="{{STATIC_URL}}js/libs/datatables/fnVisibleToColumnIndex.js"></script>
+    <script>
+        $.extend($.fn.dataTable.defaults, {
+            'paging': false,
+            'searching': false
+        });
+    </script>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
