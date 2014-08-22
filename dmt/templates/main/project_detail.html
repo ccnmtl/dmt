@@ -113,7 +113,7 @@
 			</dd>
 		</dl>
 
-{% for milestone in object.milestones %}
+{% for milestone in milestones %}
 <h3>
     Milestone:
     <a href="{% url 'milestone_detail' milestone.mid %}">{{ milestone.name }}</a>
