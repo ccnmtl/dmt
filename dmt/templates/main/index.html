@@ -5,7 +5,6 @@
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/typeahead.js-bootstrap.css">
-<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap-table.min.css">
 {% endblock %}
 
 
@@ -190,51 +189,60 @@
 {% block js %}
 <script src="{{STATIC_URL}}js/libs/typeahead/bloodhound.min.js"></script>
 <script src="{{STATIC_URL}}js/libs/typeahead/typeahead.jquery.min.js"></script>
-<script src="{{STATIC_URL}}js/libs/bootstrap-table/bootstrap-table.min.js"></script>
 
 <script>
-$(document).ready(function()
-    {
-  {% pmtuser as pmt_user %}
-  {% if pmt_user.items %}
-        $('table#user-items').bootstrapTable();
-  {% endif %}
-        var projects = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: {
-                url: '/drf/projects/',
-                filter: function (projects) {
-                    return $.map(projects.results, function (data) {
-                        return {
-                            name: data.name,
-                            pid: data.pid
-                        };
-                    });
-                }
-            },
-            remote: {
-                url: '/drf/projects/?search=%QUERY',
-                filter: function (projects) {
-                    return $.map(projects.results, function (data) {
-                        return {
-                            name: data.name,
-                            pid: data.pid
-                        };
-                    });
-                }
+$(document).ready(function() {
+    {% pmtuser as pmt_user %}
+    {% if pmt_user.items %}
+        var table = $('table#user-items').DataTable({
+            aoColumnDefs: [
+                { bVisible: false, aTargets: [4, 5] }
+            ],
+            dom: 'C<"clear">lfrtip',
+            colVis: {
+                iOverlayFade: 0,
             }
         });
-        projects.initialize();
-        $("#project-input").typeahead(null, {
-            name: 'results',
-            displayKey: 'name',
-            source: projects.ttAdapter()
-        });
-        $("#project-input").on("typeahead:selected", function (object, datum) {
-            $("#tracker-pid-input").val(datum.pid);
-        });
-    }
-);
+        table
+            .order([1, 'desc'], [3, 'asc'])
+            .draw();
+    {% endif %}
+
+    var projects = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch: {
+            url: '/drf/projects/',
+            filter: function (projects) {
+                return $.map(projects.results, function (data) {
+                    return {
+                        name: data.name,
+                        pid: data.pid
+                    };
+                });
+            }
+        },
+        remote: {
+        url: '/drf/projects/?search=%QUERY',
+            filter: function (projects) {
+                return $.map(projects.results, function (data) {
+                    return {
+                        name: data.name,
+                        pid: data.pid
+                    };
+                });
+            }
+        }
+    });
+    projects.initialize();
+    $("#project-input").typeahead(null, {
+        name: 'results',
+        displayKey: 'name',
+        source: projects.ttAdapter()
+    });
+    $("#project-input").on("typeahead:selected", function (object, datum) {
+        $("#tracker-pid-input").val(datum.pid);
+    });
+});
 </script>
 {% endblock %}

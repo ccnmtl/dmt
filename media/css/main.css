@@ -212,3 +212,7 @@ footer.page-footer {
     margin: 0 auto;
     margin-bottom: 15px;
 }
+
+.dataTables_info {
+    display: none;
+}
