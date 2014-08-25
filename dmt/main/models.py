@@ -828,6 +828,7 @@ class Item(models.Model):
             comment="<b>reassigned to %s</b><br />\n%s" % (
                 assigned_to.fullname, comment),
             add_date_time=datetime.now())
+        self.add_cc(assigned_to)
 
     def change_owner(self, user, owner, comment):
         self.owner = owner

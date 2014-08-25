@@ -129,7 +129,7 @@ class MilestoneTest(TestCase):
         self.assertEqual(m.estimated_time_remaining(), 0.)
 
 
-class ItemModelTest(TestCase):
+class ItemTest(TestCase):
     def test_gau(self):
         i = ItemFactory()
         self.assertEqual(i.get_absolute_url(), "/item/%d/" % i.iid)
@@ -220,6 +220,15 @@ class ItemModelTest(TestCase):
         i.add_resolve_time(u, td)
         resolve_time = i.get_resolve_time()
         self.assertEqual(resolve_time, timedelta(0, 3600))
+
+    def test_reassign(self):
+        i = ItemFactory()
+        u = UserFactory()
+        assignee = UserFactory()
+        i.reassign(u, assignee, '')
+        self.assertEqual(
+            Notify.objects.filter(
+                item=i.iid, username=assignee.username).count(), 1)
 
 
 class HistoryItemTest(TestCase):
