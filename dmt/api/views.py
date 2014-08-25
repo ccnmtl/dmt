@@ -12,6 +12,7 @@ from datetime import datetime
 
 from dmt.claim.models import Claim
 from dmt.main.models import Client, Item, Milestone, Notify, Project, User
+from dmt.main.utils import new_duration
 
 from .serializers import (
     ClientSerializer, ItemSerializer, MilestoneSerializer, NotifySerializer,
@@ -30,14 +31,7 @@ class ItemHoursView(View):
     def post(self, request, pk):
         item = get_object_or_404(Item, iid=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
-        try:
-            d = Duration(request.POST.get('time', "1 hour"))
-        except InvalidDuration:
-            # eventually, this needs to get back to the user
-            # via form validation, but for now
-            # we just deal with it...
-            d = Duration("0 minutes")
-
+        d = new_duration(request.POST.get('time', '1 hour'))
         td = d.timedelta()
         item.add_resolve_time(user, td)
         return HttpResponse("ok")
@@ -183,13 +177,7 @@ class AddTrackerView(View):
     def post(self, request):
         pid = request.POST.get('pid', None)
         task = request.POST.get('task', None)
-        try:
-            d = Duration(request.POST.get('time', "1 hour"))
-        except InvalidDuration:
-            # eventually, this needs to get back to the user
-            # via form validation, but for now
-            # we just deal with it...
-            d = Duration("0 minutes")
+        d = new_duration(request.POST.get('time', '1 hour'))
         client_uni = request.POST.get('client', '')
 
         td = d.timedelta()

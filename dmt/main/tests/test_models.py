@@ -7,9 +7,10 @@ from .factories import (
     AttachmentFactory, ClientFactory,
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
+from simpleduration import Duration
 from dmt.main.models import (
-    InGroup, HistoryItem, Milestone, Notify, ProjectUser, truncate_string,
-    HistoryEvent
+    ActualTime, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
+    truncate_string, HistoryEvent
 )
 
 
@@ -204,6 +205,21 @@ class ItemModelTest(TestCase):
         i2 = ItemFactory()
         i.copy_clients_to_new_item(i2)
         self.assertTrue(c in [ic.client for ic in i2.itemclient_set.all()])
+
+    def test_add_resolve_time(self):
+        i = ItemFactory()
+        u = UserFactory()
+        td = Duration('1 hour').timedelta()
+        i.add_resolve_time(u, td)
+        self.assertEqual(ActualTime.objects.count(), 1)
+
+    def test_get_resolve_time(self):
+        i = ItemFactory()
+        u = UserFactory()
+        td = Duration('1 hour').timedelta()
+        i.add_resolve_time(u, td)
+        resolve_time = i.get_resolve_time()
+        self.assertEqual(resolve_time, timedelta(0, 3600))
 
 
 class HistoryItemTest(TestCase):

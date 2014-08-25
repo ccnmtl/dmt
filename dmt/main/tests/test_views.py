@@ -10,6 +10,7 @@ from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import Attachment, Item, ItemClient, Milestone, Project
 from dmt.main.tests.support.mixins import LoggedInTestMixin
+from datetime import timedelta
 import json
 
 
@@ -1065,4 +1066,6 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         self.assertTrue('Tracker added' in r.content)
         self.assertTrue(p.name in r.content)
 
-        # TODO: test that tracker is created
+        i = Item.objects.last()
+        resolve_time = i.get_resolve_time()
+        self.assertEqual(resolve_time, timedelta(0, 3600))
