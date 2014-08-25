@@ -3,6 +3,7 @@ from .factories import (
     ItemFactory, NodeFactory, EventFactory, CommentFactory, UserFactory,
     StatusUpdateFactory, NotifyFactory, GroupFactory,
     AttachmentFactory)
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -12,6 +13,7 @@ from dmt.main.models import Attachment, Item, ItemClient, Milestone, Project
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 from datetime import timedelta
 import json
+import unittest
 
 
 class BasicTest(TestCase):
@@ -1048,6 +1050,10 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         r = self.client.post(reverse('add_trackers'), {})
         self.assertEqual(r.status_code, 302)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
     def test_add_trackers_post_tracker(self):
         p = ProjectFactory(caretaker=self.pu)
         MilestoneFactory(project=p)
