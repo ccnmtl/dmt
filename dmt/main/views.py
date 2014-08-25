@@ -26,7 +26,7 @@ from .forms import (
     ItemUpdateForm,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm)
-from .utils import safe_basename
+from .utils import new_duration, safe_basename
 from dmt.claim.models import Claim
 
 from datetime import datetime, timedelta
@@ -1052,53 +1052,56 @@ class AddTrackersView(LoggedInMixin, TemplateView):
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
 
         for i in range(10):
-            project_key = 'project-' + str(i)
-
-            # Find out which trackers the user actually entered
-            if (project_key not in request.POST) or \
-               (not request.POST[project_key]):
-                print 'skipping ' + project_key
-                continue
-
-            print 'proceeding ' + project_key
-            task_key = 'task-' + str(i)
-            time_key = 'time-' + str(i)
-
-            pid = request.POST[project_key]
-            task = request.POST[task_key]
-
-            try:
-                time = request.POST.get(time_key, '1 hour') or '0h'
-                d = Duration(time)
-                td = d.timedelta()
-            except InvalidDuration:
-                # eventually, this needs to get back to the user
-                # via form validation, but for now
-                # we just deal with it...
-                d = Duration('0 minutes')
-                td = d.timedelta()
-
-            try:
-                project = get_object_or_404(Project, pid=pid)
-                milestone = project.upcoming_milestone()
-                Item.objects.create(
-                    milestone=milestone,
-                    type='action item',
-                    owner=user, assigned_to=user,
-                    title=task, status='VERIFIED',
-                    priority=1, target_date=milestone.target_date,
-                    last_mod=datetime.now(),
-                    estimated_time=td)
-
-                messages.success(
-                    request,
-                    self.success_message % dict(
-                        project_link=reverse('project_detail', args=(pid,)),
-                        project_name=project.name)
-                )
-            except Exception, e:
-                messages.error(
-                    request,
-                    self.error_message % dict(error_text=e))
+            self.handle_form_row(i, request, user)
 
         return HttpResponseRedirect(reverse('add_trackers'))
+
+    def handle_form_row(self, i, request, user):
+        str_i = str(i)
+        project_key = 'project-' + str_i
+        task_key = 'task-' + str_i
+        time_key = 'time-' + str_i
+        client_uni_key = 'client-uni-' + str_i
+
+        pid = request.POST.get(project_key, None)
+        task = request.POST.get(task_key, None)
+        timestr = request.POST.get(time_key, '1 hour') or '0h'
+        client_uni = request.POST.get(client_uni_key, None)
+
+        # Find out which trackers the user actually entered
+        if (not pid) or (not task):
+            return
+
+        d = new_duration(timestr)
+        td = d.timedelta()
+
+        try:
+            project = get_object_or_404(Project, pid=pid)
+            milestone = project.upcoming_milestone()
+            item = Item.objects.create(
+                milestone=milestone,
+                type='action item',
+                owner=user, assigned_to=user,
+                title=task, status='VERIFIED',
+                priority=1, target_date=milestone.target_date,
+                last_mod=datetime.now(),
+                estimated_time=td)
+
+            if client_uni:
+                r = Client.objects.filter(
+                    email=client_uni + "@columbia.edu")
+                if r.count() > 0:
+                    item.add_clients([r[0]])
+
+            item.add_resolve_time(user, td)
+
+            messages.success(
+                request,
+                self.success_message % dict(
+                    project_link=reverse('project_detail', args=(pid,)),
+                    project_name=project.name)
+            )
+        except Exception, e:
+            messages.error(
+                request,
+                self.error_message % dict(error_text=e))

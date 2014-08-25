@@ -1,5 +1,18 @@
 import ntpath
 import re
+from simpleduration import Duration, InvalidDuration
+
+
+def new_duration(timestr):
+    try:
+        d = Duration(timestr)
+    except InvalidDuration:
+        # eventually, this needs to get back to the user
+        # via form validation, but for now
+        # we just deal with it...
+        d = Duration('0 minutes')
+
+    return d
 
 
 def interval_to_hours(duration):

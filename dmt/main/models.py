@@ -1,5 +1,6 @@
 from django import forms
 from django.db import connection, models
+from django.db.models.aggregates import Sum
 from django.conf import settings
 from datetime import timedelta, datetime
 from interval.fields import IntervalField
@@ -717,6 +718,11 @@ class Item(models.Model):
         merged = comments + events
         merged.sort()
         return merged
+
+    def get_resolve_time(self):
+        total = ActualTime.objects.filter(item=self).aggregate(
+            Sum('actual_time'))
+        return total['actual_time__sum']
 
     def add_resolve_time(self, user, time):
         completed = datetime.now()
