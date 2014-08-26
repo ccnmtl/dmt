@@ -3,6 +3,10 @@ define([
     'underscore',
     'backbone'
 ], function($, _, Backbone) {
+    if ($('#client-template').length === 0) {
+        return;
+    }
+
     var ClientView = Backbone.View.extend(
         {
             tagName: 'div',

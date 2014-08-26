@@ -35,6 +35,10 @@ require([
     'models/item',
     'views/item'
 ], function($, Backbone, Item, AppView) {
+    if ($('#item-id').length === 0) {
+        return;
+    }
+
     var csrftoken = getCookie('csrftoken');
     var oldSync = Backbone.sync;
 

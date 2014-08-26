@@ -469,16 +469,19 @@
 <dd>
 <div class="input-group" id="item-notification-container">
 <label
-    class="disabled"
-    for="input_notification">
+     {% if assigned_to_current_user and notifications_enabled_for_current_user %}
+     class="disabled"
+     {% endif %}
 
+     for="input_notification">
     <input
-        {% if assigned_to_current_user %}
+        {% if assigned_to_current_user and notifications_enabled_for_current_user %}
             disabled="disabled"
-        {% endif %}
-        {% if notifications_enabled_for_current_user %}
+            checked="checked"
+        {% elif notifications_enabled_for_current_user %}
             checked="checked"
         {% endif %}
+
         class="form-control"
         type="checkbox"
         placeholder="add tags (comma separated)"
@@ -656,10 +659,5 @@ function s3_upload() {
 }
 </script>
 
-{% endflag %}
-
-{% flag notification_ui %}
-<script data-main="{{STATIC_URL}}js/src/item"
-				src="{{STATIC_URL}}js/libs/require/require.js"></script>
 {% endflag %}
 {% endblock %}

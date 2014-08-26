@@ -4,6 +4,10 @@ define([
     'backbone',
     'models/notify'
 ], function($, _, Backbone, Notify) {
+    if ($('#item-template').length === 0) {
+        return;
+    }
+
     var ItemView = Backbone.View.extend(
         {
             tagName: 'div',
