@@ -1,5 +1,6 @@
 from django import forms
 from django.test import TestCase
+from django.conf import settings
 from django.core import mail
 import unittest
 from .factories import (
@@ -212,8 +213,29 @@ class ItemTest(TestCase):
         td = Duration('1 hour').timedelta()
         i.add_resolve_time(u, td)
         self.assertEqual(ActualTime.objects.count(), 1)
+        actualtime = ActualTime.objects.first()
+        self.assertEqual(actualtime.actual_time, timedelta(0, 3600))
 
-    def test_get_resolve_time(self):
+    # SQLite can't handle aggregate functions on datetime fields
+    # https://docs.djangoproject.com/en/dev/ref/models/querysets/
+    # #aggregation-functions
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_get_resolve_zero(self):
+        i = ItemFactory()
+        u = UserFactory()
+        td = Duration('0h').timedelta()
+        i.add_resolve_time(u, td)
+        resolve_time = i.get_resolve_time()
+        self.assertEqual(resolve_time, timedelta(0, 0))
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_get_resolve_time_1h(self):
         i = ItemFactory()
         u = UserFactory()
         td = Duration('1 hour').timedelta()
@@ -229,6 +251,24 @@ class ItemTest(TestCase):
         self.assertEqual(
             Notify.objects.filter(
                 item=i.iid, username=assignee.username).count(), 1)
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_get_resolve_time_multiple_times(self):
+        i = ItemFactory()
+
+        u = UserFactory()
+        td = Duration('1 hour').timedelta()
+        i.add_resolve_time(u, td)
+
+        u = UserFactory()
+        td = Duration('1 hour').timedelta()
+        i.add_resolve_time(u, td)
+
+        resolve_time = i.get_resolve_time()
+        self.assertEqual(resolve_time, timedelta(0, 7200))
 
 
 class HistoryItemTest(TestCase):
