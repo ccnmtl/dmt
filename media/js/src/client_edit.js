@@ -35,6 +35,10 @@ require([
     'models/client',
     'views/client'
 ], function($, Backbone, Client, AppView) {
+    if ($('#client-id').length === 0) {
+        return;
+    }
+
     var csrftoken = getCookie('csrftoken');
     var oldSync = Backbone.sync;
 
