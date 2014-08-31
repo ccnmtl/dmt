@@ -805,6 +805,19 @@ class TestForum(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue("this is a comment" in r.content)
 
+    def test_node_reply_with_no_project(self):
+        n = NodeFactory(replies=0)
+        n.project = None
+        n.project_id = 0
+        n.save()
+        r = self.c.post(
+            n.get_absolute_url() + "reply/",
+            dict(body="this is a comment"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(n.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue("this is a comment" in r.content)
+
     def test_node_reply_empty_body(self):
         n = NodeFactory()
         r = self.c.post(

@@ -1103,6 +1103,9 @@ class Node(models.Model):
         return Node.objects.filter(reply_to=self.nid).order_by("modified")
 
     def add_reply(self, user, body):
+        project = None
+        if self.project_id != 0:
+            project = self.project
         n = Node.objects.create(
             subject='Re: ' + self.subject,
             body=body,
@@ -1112,7 +1115,7 @@ class Node(models.Model):
             type='comment',
             added=datetime.now(),
             modified=datetime.now(),
-            project=self.project)
+            project=project)
         self.replies = Node.objects.filter(reply_to=self.nid).count()
         self.save()
         self.email_reply(body, user, n)
@@ -1123,7 +1126,7 @@ class Node(models.Model):
             return
         body = textwrap.fill(body, replace_whitespace=False)
         subject = "[PMT Forum] %s" % reply.subject
-        if self.project:
+        if self.project_id != 0 and self.project:
             subject = "[PMT Forum: %s] %s" % (self.project.name, reply.subject)
             body = "project: %s\nauthor: %s\n\n--\n%s" % (
                 self.project.name, user.fullname, body)
