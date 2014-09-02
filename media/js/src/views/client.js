@@ -16,14 +16,14 @@ define([
                 'click #activate' : 'toggleActive',
                 'click #edit-link': 'toggleEditForm'
             },
-            initialize: function () {
+            initialize: function() {
                 this.model.bind('change', this.render, this);
                 this.model.bind('remove', this.remove, this);
             },
             remove: function() {
                 $(this.el).remove();
             },
-            render: function () {
+            render: function() {
                 this.$el.html(this.template(this.model.toFullJSON()));
                 this.$('#edit').hide();
                 return this;
