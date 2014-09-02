@@ -15,7 +15,7 @@ define([
             events: {
                 'change #input_notification': 'updateNotificationStatus',
             },
-            initialize: function () {
+            initialize: function() {
                 this.notify = new Notify(
                     {iid: this.model.get('iid')});
 
@@ -24,7 +24,7 @@ define([
                         {notify: this.notify},
                         this.updateNotificationStatus);
             },
-            render: function () {
+            render: function() {
                 this.$el.html(this.template(this.model.attributes));
                 return this;
             },
