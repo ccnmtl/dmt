@@ -65,7 +65,7 @@ django-bootstrap-form==3.1.0
 django-debug-toolbar==1.1
 django-waffle==0.9.0
 django-jenkins==0.16.3
-django-smoketest==0.2.2
+django-smoketest==0.3.0
 django-extensions==1.1.1
 django-stagingcontext==0.1.0
 django-ga-context==0.1.0
