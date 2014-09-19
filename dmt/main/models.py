@@ -393,7 +393,7 @@ class Project(models.Model):
             item.tags.add(*tags)
         item.setup_default_notification()
         item.add_project_notification()
-        item.update_email("%s added" % type, owner)
+        item.update_email("%s added\n\n%s" % (type, description), owner)
         milestone.update_milestone()
 
     def recent_forum_posts(self, count=10):
