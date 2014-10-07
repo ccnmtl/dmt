@@ -16,7 +16,16 @@ html {
 }
 
 body {
-  background-color: #eee;
+  /* background-color: #eee;*/
+background-color: #e9eaed;
+    background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom;
+background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom), -webkit-gradient(linear, left top, left bottom, from(#B2CBEA), to(#fff)); /* Saf4+, Chrome */
+background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom, -webkit-linear-gradient(top, #B2CBEA, #fff); /* Chrome 10+, Saf5.1+ */
+background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom),    -moz-linear-gradient(top, #B2CBEA, #fff); /* FF3.6+ */
+background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom,     -ms-linear-gradient(top, #B2CBEA, #fff); /* IE10 */
+background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom,      -o-linear-gradient(top, #B2CBEA, #fff); /* Opera 11.10+ */
+background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom,         linear-gradient(to bottom, #B2CBEA, #fff); /* W3C */
+background-attachment: fixed;
   height: 100%;
 }
 
@@ -25,6 +34,14 @@ body > .container {
     min-height: 100%;
     padding-top: 75px;
     padding-bottom: 30px;
+}
+
+#outer-container {
+  border: 1px solid #ccc;
+    box-shadow: 0px 0px 6px #999;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
 }
 
 .login-box {
