@@ -27,6 +27,36 @@ body > .container {
     padding-bottom: 30px;
 }
 
+.login-box {
+  display: block;
+  width: 360px;
+  margin: 50px auto;
+}
+
+.login-header {
+  display: block;
+  width: 360px;
+  height: 45px;
+  background: transparent url('/media/img/logo-login.png') center center no-repeat;
+}
+
+.login-form {
+  display: block;
+  width: 360px;
+  height: 200px;
+  background: transparent url('/media/img/bg-login.png') center center no-repeat;
+}
+
+.login {
+  margin: 50px auto;
+}
+
+.login label
+{
+	color: #428bca;
+	font-size: 18px;
+}
+
 #content {
     min-height: 100%;
     padding-right: 15px;

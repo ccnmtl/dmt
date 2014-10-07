@@ -1,10 +1,18 @@
 {% extends "base.html" %}
+{% block title %}Welcome! Please log in{% endblock %}
+
 {% block content %}
-Please log in:
-<form method="get" action="{{ cas_base }}cas/login" class="well">
-<input type="hidden" name="destination" value="https://{{ request.get_host }}/accounts/caslogin/?next={{ next }}" />
-<input type="submit" value="LOG IN" class="btn btn-primary"/></p>
-</form>
+
+<div class="login-box">
+  <div class="login-header"></div>
+  <div class="login-form well">
+    <form method="get" action="{{ cas_base }}cas/login" class="login">
+      <label>To begin...</label>
+      <input type="hidden" name="destination" value="https://{{ request.get_host }}/accounts/caslogin/?next={{ next }}" />
+      <input type="submit" value="Log in with your UNI" class="btn btn-lg btn-primary"/>
+    </form>
+  </div>
+</div>
 
 {% endblock %}
 
