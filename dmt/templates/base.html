@@ -128,7 +128,15 @@
               </ul>
             </li>
             <li><a class="dmt-global-nav" href="{% url 'tag_list' %}"><span class="nav-icon nav-icon-tags"></span> <span class="hidden-sm">Tags</span></a></li>
-            <li><a class="dmt-global-nav" href="/client/"><span class="nav-icon nav-icon-clients"></span> <span class="hidden-sm">Clients</span></a></li>
+            <li><a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-clients"></span> <span class="hidden-sm">Clients</span> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#" class="disabled">My active clients</a></li>
+              <li><a href="/client/">All clients</a></li>
+              <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=new_clients" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> New clients</a></li>
+              <li><a href="#" class="disabled"><span class="glyphicon glyphicon-plus-sign"></span> Add a client</a></li>
+            </ul>
+            </li>
             <li class="dropdown">
               <a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="{% url 'user_list' %}?status=active"><span class="nav-icon nav-icon-groups"></span>
               <span class="hidden-sm">Users/Groups</span> <span class="caret"></span>
@@ -144,8 +152,12 @@
               <span class="hidden-sm">Reports</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li>Owned items</li>
-                <li>watched</li>
+                <li><p class="navbar-text"><b>My reports:</b></p></li>
+                <li><a href="/report/user/{{pmt_user.username}}/weekly/">Weekly report</a></li>
+                <li><a href="{% url 'yearly_review_report' %}">Yearly review</a></li>
+                <li class="divider"></li>
+                <li><p class="navbar-text"><b>Global reports:</b></p></li>
+                <li><a href="{% url 'report_list' %}">All reports</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -175,7 +187,7 @@
                     
                 </li>
                 <li>
-                    <a href="{% url 'report_list' %}">Reports</a>
+                    
                 </li>
 
                 {% block topnavbarleftitems %}{% endblock %}
