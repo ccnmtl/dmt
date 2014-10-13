@@ -42,7 +42,7 @@ body > .container {
     -webkit-border-radius: 6px;
        -moz-border-radius: 6px;
             border-radius: 6px;
-  padding-top: 85px;
+  padding-top: 100px;
 }
 
 .login-box {
@@ -269,18 +269,18 @@ footer.page-footer {
 
 .navbar-dmt {
   background: transparent;
-  height: 86px;
+  height: 95px;
   border: 0;
 }
 
 .container-theme {
   position: relative;
-  height: 86px;
+  height: 95px;
 }
 
 .theme-brand {
   width: 126px;
-  height: 86px;
+  height: 95px;
   margin-left: 0 !important;
   background: transparent url('/media/img/bg-honeycomb-brand.png') left top no-repeat;
 }
@@ -372,8 +372,7 @@ footer.page-footer {
 
 .dmt-global-nav {
   line-height: 40px !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
+  padding: 0 15px !important;
   color: #036 !important;
   font-weight: bold;
   font-size: bold;
@@ -381,6 +380,12 @@ footer.page-footer {
 
 .dmt-global-nav:hover {
   background-color: #ffc !important;
+}
+
+.navbar-dmt .navbar-nav>.open>a, 
+.navbar-dmt .navbar-nav>.open>a:hover, 
+.navbar-dmt .navbar-nav>.open>a:focus {
+  background-color: #ffcc66 !important;
 }
 
 .nav-icon {
@@ -414,4 +419,20 @@ footer.page-footer {
 
 .grey {
   color: #999;
+}
+
+.disabled {
+  color: #999 !important;
+  cursor: not-allowed;
+}
+
+/* Global nav icons responsive */
+@media (max-width: 991px) and (min-width: 768px) {
+  .nav-icon-items { background: url('/media/img/icon-items-l.png') center center no-repeat;}
+  .nav-icon-projects { background: url('/media/img/icon-projects-l.png') center center no-repeat;}
+  .nav-icon-tags { background: url('/media/img/icon-tags-l.png') center center no-repeat;}
+  .nav-icon-clients { background: url('/media/img/icon-clients-l.png') center center no-repeat;}
+  .nav-icon-groups { background: url('/media/img/icon-groups-l.png') center center no-repeat;}
+  .nav-icon-reports { background: url('/media/img/icon-reports-l.png') center center no-repeat;}
+  .nav-icon-talk { background: url('/media/img/icon-talk-l.png') center center no-repeat;}
 }

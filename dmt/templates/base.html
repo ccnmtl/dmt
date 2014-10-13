@@ -50,28 +50,40 @@
   <nav class="navbar navbar-default navbar-inverse navbar-dmt navbar-fixed-top" role="navigation">
     <div class="container container-theme">
       <div class="navbar-brand theme-brand">
+      <a href="/"><img src="/media/img/shim.gif" style="width:100px; height: 50px; border: 0;" /></a>
       </div>
       <div class="navbar-top-level">
         <ul class="user-menu navbar-right">
+        {% block topnavbarrightitems %}{% endblock %}
+        {% block usernav %}
+        {% if request.user.is_anonymous %}
+        <li>You’re not logged in</li>
+        {% else %}
+          {% pmtuser as pmt_user %}
           <li class="dropdown">
             <a class="dropdown-toggle username" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>
-            &nbsp;Zarina
+            &nbsp;{{request.user.first_name}}
             <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a><span class="grey"><span class="glyphicon glyphicon-log-out"></span></span> Log out</a></li>
-              <li><a><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a></li>
+              <li><a href="/accounts/logout/"><span class="grey"><span class="glyphicon glyphicon-log-out"></span></span> Log out</a></li>
+              <li><a href="{{pmt_user.get_absolute_url}}"><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a></li>
             </ul>
           </li>
+        {% endif %}
+        {% endblock %}
         </ul>
+        {% if not request.user.is_anonymous %}
         <div class="search-wrapper">
           <form>
             <input type="text" name="focus" required class="search-box" placeholder="I'm searching for..." />
             <button class="close-icon" type="reset"></button>
           </form>
         </div><!-- /.search-wrapper -->
+        {% endif %}
       </div><!-- /.navbar-top-level -->
       <div class="navbar-lower-level">
+      {% if not request.user.is_anonymous %}
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
@@ -85,36 +97,51 @@
           <ul class="nav navbar-nav">
             <li class="dropdown">
               <a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-items"></span>
-              Items <span class="caret"></span>
+              <span class="hidden-sm">Items</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li>Owned items</li>
-                <li>watched</li>
+                <li><a href="#" class="disabled">Owned items</a></li>
+                <li><a href="#" class="disabled">Watched items</a></li>
+                <li><a href="#" class="disabled">Someday/Maybe</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-projects"></span>
-              Projects <span class="caret"></span>
+              <span class="hidden-sm">Projects</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li>Owned items</li>
-                <li>watched</li>
+                <li><a href="{% url 'my_project_list' %}">My Projects</a></li>
+                <li><a href="{% url 'project_list' %}">All Projects</a></li>
+                {% if not request.user.is_anonymous %}
+                {% pmtuser as pmt_user %}
+                <li><a href="{% url 'project_create' %}">Create New Project</a></li>
+                {% if pmt_user.has_recent_active_projects %}
+                <li class="divider"></li>
+                <li><p class="navbar-text"><b>Your Recent Projects</b></p></li>
+                {% for project in pmt_user.recent_active_projects %}
+                <li><a href="{% url 'project_detail' project.pid %}">
+                {{project.name|truncatechars:40}}
+                </a></li>
+                {% endfor %}
+                {% endif %}
+                {% endif %}
               </ul>
             </li>
-            <li><a class="dmt-global-nav" href=""><span class="nav-icon nav-icon-tags"></span> Tags</a></li>
-            <li><a class="dmt-global-nav" href=""><span class="nav-icon nav-icon-clients"></span> Clients</a></li>
+            <li><a class="dmt-global-nav" href="{% url 'tag_list' %}"><span class="nav-icon nav-icon-tags"></span> <span class="hidden-sm">Tags</span></a></li>
+            <li><a class="dmt-global-nav" href="/client/"><span class="nav-icon nav-icon-clients"></span> <span class="hidden-sm">Clients</span></a></li>
             <li class="dropdown">
-              <a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-groups"></span>
-              Users/Groups <span class="caret"></span>
+              <a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="{% url 'user_list' %}?status=active"><span class="nav-icon nav-icon-groups"></span>
+              <span class="hidden-sm">Users/Groups</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li>Owned items</li>
-                <li>watched</li>
+                <li><a href="#" class="disabled">My groups</a></li>
+                <li><a href="{% url 'group_list' %}">All groups</a></li>
+                <li><a href="{% url 'user_list' %}?status=active">All users</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-reports"></span>
-              Reports <span class="caret"></span>
+              <span class="hidden-sm">Reports</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
                 <li>Owned items</li>
@@ -123,15 +150,16 @@
             </li>
             <li class="dropdown">
               <a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-talk"></span>
-              Talk <span class="caret"></span>
+              <span class="hidden-sm">Talk</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li>Owned items</li>
-                <li>watched</li>
+                <li><a href="{% url 'forum_list' %}">Forums</a></li>
+                <li><a href="http://wiki.ccnmtl.columbia.edu/" target="_blank">Wiki</a></li>
               </ul>
             </li>
           </ul><!-- /.navbar-nav -->
         </div><!-- end #bs-navbar-collapse-1 -->
+      {% endif %}
       </div><!-- /.navbar-lower-level -->
     </div><!-- /.container -->
   </nav>
@@ -143,75 +171,8 @@
         <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a class="brand" href="/"><img src="/media/img/bg-test.png" alt="" width="93" height="30" /></a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Items <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>Owned items</li>
-                        <li>watched</li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Projects <span class="caret"></span>
-                    </a>
-
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'my_project_list' %}">My Projects</a></li>
-                        <li><a href="{% url 'project_list' %}">All Projects</a></li>
-                        {% if not request.user.is_anonymous %}
-                        {% pmtuser as pmt_user %}
-                        <li><a href="{% url 'project_create' %}">Create New Project</a></li>
-                        {% if pmt_user.has_recent_active_projects %}
-                        <li class="divider"></li>
-                        <li><p class="navbar-text small">Your Recent Projects</p></li>
-                        {% for project in pmt_user.recent_active_projects %}
-                        <li><a href="{% url 'project_detail' project.pid %}">
-                                {{project.name|truncatechars:60}}
-                        </a></li>
-                        {% endfor %}
-                        {% endif %}
-                        {% endif %}
-                    </ul>
-                </li>
-                <li>
-                    <a href="/client/">Clients</a>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle"
-                       data-toggle="dropdown"
-                       href="{% url 'user_list' %}?status=active">
-                        Users/Groups <span class="caret"></span>
-                    </a>
-
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="{% url 'user_list' %}?status=active">
-                                All Users
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'group_list' %}">
-                                All Groups
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Talk<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'forum_list' %}">Forum</a>
-                        <li><a href="http://wiki.ccnmtl.columbia.edu/" target="_blank">Wiki</a></li>
-                    </ul>
-                </li>
                 <li>
                     
-                </li>
-                <li>
-                    <a href="{% url 'tag_list' %}">Tags</a>
                 </li>
                 <li>
                     <a href="{% url 'report_list' %}">Reports</a>
@@ -231,36 +192,6 @@
                 </form>
             </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-                {% block topnavbarrightitems %}{% endblock %}
-                {% block usernav %}
-                {% if request.user.is_anonymous %}
-                <li><a href="/accounts/login/?next=/" class="btn btn-xs "><span class="glyphicon glyphicon-log-in"></span> login</a></li>
-                {% else %}
-                {% pmtuser as pmt_user %}
-                <li class="navbar-text">
-                    <div class="btn-group">
-                        <a class="btn btn-default btn-xs hidden-xs hidden-sm"
-                           href="{{pmt_user.get_absolute_url}}">
-                            <span class="glyphicon glyphicon-user"></span>
-                            {{request.user.first_name}}</a>
-                        <button type="button" class="btn btn-default btn-xs
-                                                     dropdown-toggle"
-                                data-toggle="dropdown">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            {% if request.user.is_superuser %}
-                            <li><a href="{% url 'impersonate-list' %}">Impersonate</a></li>
-                            {% endif %}
-                            <li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> logout</a></li>
-                        </ul>
-                    </div>
-                </li>
-                {% endif %}
-                {% endblock %}
-            </ul>
         </div><!-- end #bs-navbar-collapse-1 -->
 
        </div>
