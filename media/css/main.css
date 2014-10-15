@@ -496,12 +496,6 @@ background: #f00;
 background: #f93;
 }
 
-.dmt-navbar-header button {
-  border: 0;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
 /* Global nav icons responsive */
 @media (max-width: 991px) and (min-width: 768px) {
   .nav-icon-items { background: url('/media/img/icon-items-l.png') center center no-repeat;}
@@ -536,6 +530,8 @@ background: #f93;
   .navbar-dmt .navbar-collapse {
     background-color: #e2ebf5;
     border: 0;
+    max-height: 400px;
+    box-shadow: 0px 6px 6px #999;
   }
   .navbar-dmt .search-wrapper {
     width: 220px; /* Responsive definition required */
@@ -548,5 +544,16 @@ background: #f93;
   }
   .navbar-dmt .icon-bar {
     background-color: #036 !important;
+    height: 3px;
+  }
+  .dmt-navbar-toggle {
+    border: 0;
+    padding: 8px;
+    margin-top: 3px;
+    margin-bottom: auto;
+  }
+  .dmt-navbar-toggle:hover,
+  .dmt-navbar-toggle:focus {
+    background-color: #c0d8f2 !important;
   }
 }
