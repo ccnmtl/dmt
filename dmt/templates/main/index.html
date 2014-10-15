@@ -36,7 +36,6 @@
                 Add Trackers
             </a>
         </li>
-        <li><a href="/report/user/{{pmt_user.username}}/weekly/">Weekly Report</a></li>
     </ul>
 </p>
 
@@ -101,7 +100,7 @@
 
 {% if pmt_user.username %}
 {% if pmt_user.items %}
-<table class="table table-striped table-condensed"
+<table class="table table-striped table-condensed table-responsive"
        id="user-items"
        data-show-columns="true"
        data-sort-name="priority"
@@ -111,25 +110,30 @@
             <th data-field="item"
                 data-sortable="true">Item</th>
             <th data-field="priority"
-                data-sortable="true">Priority</th>
+                data-sortable="true" class="hidden-xs">Priority</th>
             <th data-field="project"
-                data-sortable="true">Project</th>
+                data-sortable="true" class="hidden-xs">Project</th>
             <th data-field="target-date"
-                data-sortable="true">Target Date</th>
+                data-sortable="true" class="hidden-xs">Target Date</th>
             <th data-field="milestone"
                 data-visible="false"
-                data-sortable="true">Milestone</th>
+                data-sortable="true" class="hidden-xs">Milestone</th>
             <th data-field="owner"
                 data-visible="false"
-                data-sortable="true">Owner</th>
+                data-sortable="true" class="hidden-xs">Owner</th>
             <th data-field="modified"
-                data-sortable="true">Modified</th>
+                data-sortable="true" class="hidden-xs">Modified</th>
         </tr>
     </thead>
     <tbody>
         {% for item in pmt_user.items %}
         <tr>
             <td data-field="item">
+                <div class="status-indicator {{item.target_date_status}} {{item.status_class}}"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{% ifequal item.status 'INPROGRESS' %}{{item.status_class}}{% else %}{{item.target_date_status}}{% endifequal %}"></div>
+                
                 {% if item.is_bug %}
                 <img src="{{STATIC_URL}}img/tinybug.gif"
                      width="14" height="14"/>
@@ -137,36 +141,30 @@
                 <a href="{{item.get_absolute_url}}">
                     {{item.title|truncatechars:70}}
                 </a>
-                {% ifequal item.status "OPEN" %}
-                {% else %}
-                <span class="{{item.status_class}} badge pull-right">
-                    {{item.status_display}}
-                </span>
-                {% endifequal %}
             </td>
-            <td data-field="priority" class="pr{{item.priority}}">
+            <td data-field="priority" class="pr{{item.priority}} hidden-xs">
                 <span class="invisible">{{item.priority}}</span>
                 {{item.priority_label}}
             </td>
-            <td data-field="project">
+            <td data-field="project" class="hidden-xs">
                 <a href="{{item.milestone.project.get_absolute_url}}">
                     {{item.milestone.project.name|truncatechars:40}}
                 </a>
             </td>
-            <td data-field="target-date" class="{{item.target_date_status}}">
+            <td data-field="target-date" class="{{item.target_date_status}} hidden-xs">
                 {{item.target_date|date:"Y-m-d"}}
             </td>
-            <td data-field="milestone">
+            <td data-field="milestone" class="hidden-xs">
                 <a href="{% url 'milestone_detail' item.milestone.mid %}">
                     {{item.milestone|truncatechars:40}}
                 </a>
             </td>
-            <td data-field="owner">
+            <td data-field="owner" class="hidden-xs">
                 <a href="{% url 'user_detail' item.owner.username %}">
                     {{item.owner|truncatechars:40}}
                 </a>
             </td>
-            <td data-field="modified">
+            <td data-field="modified" class="hidden-xs">
                 {{item.last_mod|date:"Y-m-d"}}
             </td>
         </tr>
@@ -243,6 +241,7 @@ $(document).ready(function() {
     $("#project-input").on("typeahead:selected", function (object, datum) {
         $("#tracker-pid-input").val(datum.pid);
     });
+    $('.status-indicator').tooltip()
 });
 </script>
 {% endblock %}

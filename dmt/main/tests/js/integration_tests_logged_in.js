@@ -4,11 +4,8 @@ var helper = require('./support/djangocasper.js');
 
 helper.scenario('/',
     function() {
-        this.test.assertTitle('DMT: Home', 'The title is correct');
-    },
-    function() {
-        this.test.assertDoesntExist('input[type="submit"]',
-                                    'There is no login button');
+        this.test.assertDoesntExist('.login-box',
+                                    'There is no login box');
 
         this.test.assertElementCount('a[href="/client/"]', 1,
                                      'The homepage has a clients button');
@@ -38,8 +35,6 @@ helper.scenario('/',
 helper.scenario('/client/',
     function() {
         this.click('a[href="/client/"]');
-        this.test.assertTitle('DMT: Clients List',
-            'Title changes to Clients List on navigation');
         helper.assertAbsUrl('/client/',
             'Clicking /client/ link navigates to clients page');
     }
@@ -47,7 +42,6 @@ helper.scenario('/client/',
 
 helper.scenario('/my_projects/',
     function() {
-        this.test.assertTitle('DMT: My Projects');
         this.click('button.add-todo');
 
         // FIXME: figure out why this doesn't pass
