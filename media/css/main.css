@@ -295,12 +295,14 @@ footer.page-footer {
   height: 40px;
   background: #91b3d9;
   margin: 0 1px 0 120px;
+  white-space: nowrap !important;
 }
 
 .navbar-lower-level {
   height: 40px;
   background: #e2ebf5;/
   margin: 0 1px 0 120px;
+  white-space: nowrap !important;
 }
 
 /* Search widget */
@@ -421,50 +423,6 @@ footer.page-footer {
   padding-right: 0;
  }
 
-/* Color spans */
-
-.grey {
-  color: #999;
-}
-
-.disabled {
-  color: #999 !important;
-  cursor: not-allowed;
-}
-
-.old-pmt {
-  color: #c5b083 !important;
-}
-
-.construction-alert {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1100 !important;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  background-color: #000;
-  opacity: 0.7;
-  filter: alpha(opacity=70); /* For IE8 and earlier */
-}
-
-.construction-alert h1 {
-  margin: auto;
-  margin-top: 50px;
-  color: #efefef;
-  text-align: center;
-  font-size: 100px;
-}
-
-.construction-alert h2 {
-  margin: auto;
-  margin-top: 40px;
-  color: #efefef;
-  text-align: center;
-  font-size: 30px;
-}
-
 .table-responsive {
   width: 100% !important;
 }
@@ -508,15 +466,19 @@ background: #f93;
 }
 
 @media (max-width: 767px) {
+  #outer-container {
+    padding-top: 80px;
+  }
+
   .ColVis { display: none; }
   .theme-brand {
-    width: 50px;
+    width: 80px;
     height: 40px;
-    background: transparent url('/media/img/bg-honeycomb-brand.png') left top no-repeat;
+    background: transparent url('/media/img/bg-honeycomb-sm-brand.png') left top no-repeat;
     padding: 0;
   }
   .theme-brand img {
-    width:50px;
+    width:80px;
     height: 40px;
     border: 0;
   }
@@ -526,6 +488,13 @@ background: #f93;
   
   .navbar-lower-level {
     margin-left: 0px;
+    height: 34px;
+  }
+  .navbar-dmt {
+    height: 75px;
+  }
+  .container-theme {
+    height: 75px;
   }
   .navbar-dmt .navbar-collapse {
     background-color: #e2ebf5;
@@ -544,16 +513,50 @@ background: #f93;
   }
   .navbar-dmt .icon-bar {
     background-color: #036 !important;
-    height: 3px;
   }
   .dmt-navbar-toggle {
     border: 0;
     padding: 8px;
-    margin-top: 3px;
+    margin-top: 2px;
     margin-bottom: auto;
   }
   .dmt-navbar-toggle:hover,
   .dmt-navbar-toggle:focus {
     background-color: #c0d8f2 !important;
   }
+  .user-menu-list {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    left: auto;
+  }
+  .navbar-lower-level .open .dropdown-menu {
+    background-color: #ffefd0;
+    box-shadow: 0px 3px 3px #ccc;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  .navbar-dmt .navbar-nav .open .dropdown-menu>li>a{
+    color: #333;
+  }
+  #content {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
+
+/* Color spans */
+
+.grey {
+  color: #999;
+}
+
+.disabled {
+  color: #999 !important;
+  cursor: not-allowed;
+}
+
+.old-pmt {
+  color: #c5b083 !important;
+}
+

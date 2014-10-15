@@ -8,7 +8,7 @@
 <head>
   <title>DMT: {% block title %}{% endblock %}</title>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="description" content="dmt">
   <meta name="author" content="CCNMTL">
   
@@ -65,7 +65,7 @@
             <span class="hidden-xs">&nbsp;{{request.user.first_name}}</span>
             <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu user-menu-list">
               <li><a href="/accounts/logout/"><span class="grey"><span class="glyphicon glyphicon-log-out"></span></span> Log out</a></li>
               <li><a href="{{pmt_user.get_absolute_url}}"><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a></li>
             </ul>
@@ -114,7 +114,7 @@
                 <li><a href="{% url 'project_list' %}">All Projects</a></li>
                 {% if not request.user.is_anonymous %}
                 {% pmtuser as pmt_user %}
-                <li><a href="{% url 'project_create' %}">Create New Project</a></li>
+                <li><a href="{% url 'project_create' %}"><span class="glyphicon glyphicon-plus-sign"></span> Create New Project</a></li>
                 {% if pmt_user.has_recent_active_projects %}
                 <li class="divider"></li>
                 <li><p class="navbar-text"><b>Your Recent Projects</b></p></li>
