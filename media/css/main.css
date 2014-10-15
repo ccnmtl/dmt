@@ -285,15 +285,21 @@ footer.page-footer {
   background: transparent url('/media/img/bg-honeycomb-brand.png') left top no-repeat;
 }
 
+.theme-brand img {
+  width:100px;
+  height: 50px;
+  border: 0;
+}
+
 .navbar-top-level {
   height: 40px;
-  background: #91b3d9; /* Old browsers */
+  background: #91b3d9;
   margin: 0 1px 0 120px;
 }
 
 .navbar-lower-level {
   height: 40px;
-  background: #e2ebf5; /* Old browsers */
+  background: #e2ebf5;/
   margin: 0 1px 0 120px;
 }
 
@@ -430,6 +436,72 @@ footer.page-footer {
   color: #c5b083 !important;
 }
 
+.construction-alert {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1100 !important;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: #000;
+  opacity: 0.7;
+  filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.construction-alert h1 {
+  margin: auto;
+  margin-top: 50px;
+  color: #efefef;
+  text-align: center;
+  font-size: 100px;
+}
+
+.construction-alert h2 {
+  margin: auto;
+  margin-top: 40px;
+  color: #efefef;
+  text-align: center;
+  font-size: 30px;
+}
+
+.table-responsive {
+  width: 100% !important;
+}
+
+.status-indicator {
+  margin-right: 5px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border: 0;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+#user-items div.inprogress {
+  background: #fff url('/media/img/icon-inprogress.png') center center no-repeat !important;
+}
+
+#user-items div.ok {
+background: #093;
+}
+
+#user-items div.late {
+background: #f00;
+}
+
+#user-items div.upcoming {
+background: #f93;
+}
+
+.dmt-navbar-header button {
+  border: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 /* Global nav icons responsive */
 @media (max-width: 991px) and (min-width: 768px) {
   .nav-icon-items { background: url('/media/img/icon-items-l.png') center center no-repeat;}
@@ -439,4 +511,42 @@ footer.page-footer {
   .nav-icon-groups { background: url('/media/img/icon-groups-l.png') center center no-repeat;}
   .nav-icon-reports { background: url('/media/img/icon-reports-l.png') center center no-repeat;}
   .nav-icon-talk { background: url('/media/img/icon-talk-l.png') center center no-repeat;}
+}
+
+@media (max-width: 767px) {
+  .ColVis { display: none; }
+  .theme-brand {
+    width: 50px;
+    height: 40px;
+    background: transparent url('/media/img/bg-honeycomb-brand.png') left top no-repeat;
+    padding: 0;
+  }
+  .theme-brand img {
+    width:50px;
+    height: 40px;
+    border: 0;
+  }
+  .navbar-top-level {
+    margin-left: 0px;
+  }
+  
+  .navbar-lower-level {
+    margin-left: 0px;
+  }
+  .navbar-dmt .navbar-collapse {
+    background-color: #e2ebf5;
+    border: 0;
+  }
+  .navbar-dmt .search-wrapper {
+    width: 220px; /* Responsive definition required */
+  }
+  .navbar-dmt .search-box {
+    width: 200px; /* Responsive definition required */
+  }
+  .navbar-dmt .close-icon {
+   left: 178px;
+  }
+  .navbar-dmt .icon-bar {
+    background-color: #036 !important;
+  }
 }
