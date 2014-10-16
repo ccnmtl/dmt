@@ -982,7 +982,7 @@ class GroupDetailView(LoggedInMixin, ListView):
         ctx = super(GroupDetailView, self).get_context_data(**kwargs)
 
         group_name = self.kwargs['pk']
-        group = User.objects.get(username=group_name)
+        group = get_object_or_404(User, username=group_name)
         ctx['group_name'] = InGroup.verbose_name(group.fullname)
         ctx['group'] = group
         ctx['eligible_users'] = self.eligible_users(group_name)
