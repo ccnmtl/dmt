@@ -152,21 +152,20 @@ td.verified, span.verified, div.verified {
 }
 
 td.ok, div.ok {
-		color: #9999cc;
+		color: #093;
 }
 td.upcoming, div.upcoming {
-		color: #069;
+		color: #06c;
 }
 td.due, div.due {
-		color: #009900;
-}
-td.overdue, div.overdue {
-		color: #f60;
+		color: #f93;
 }
 td.late, div.late {
 		color: #f00;
 }
-
+td.overdue, div.overdue {
+		color: #000;
+}
 
 .modal-body { max-height:100%; height:85%; }
 .twitter-typeahead {width: 100%; }
@@ -446,12 +445,20 @@ footer.page-footer {
 background: #093;
 }
 
+#user-items div.upcoming {
+background: #06c;
+}
+
+#user-items div.due {
+background: #f93;
+}
+
 #user-items div.late {
 background: #f00;
 }
 
-#user-items div.upcoming {
-background: #f93;
+#user-items div.overdue {
+background: #000;
 }
 
 /* Global nav icons responsive */
