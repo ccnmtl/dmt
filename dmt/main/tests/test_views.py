@@ -998,6 +998,10 @@ class GroupTest(TestCase):
         r = self.client.get(reverse('group_list'))
         self.assertTrue('grp_foo' in r.content)
 
+    def test_nonexistent_group(self):
+        r = self.client.get(reverse('group_detail', args=('not_real',)))
+        self.assertTrue(r.status_code, 404)
+
 
 class UserTest(TestCase):
     def setUp(self):
