@@ -84,6 +84,7 @@
       </div><!-- /.navbar-top-level -->
       <div class="navbar-lower-level">
       {% if not request.user.is_anonymous %}
+      {% pmtuser as pmt_user %}
         <div class="navbar-header dmt-navbar-header">
           <button type="button" class="navbar-toggle dmt-navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
@@ -100,7 +101,8 @@
               <span class="hidden-sm">Items</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="#" class="disabled">Owned items</a></li>
+              <li><a href="/">My Dashboard</a></li>
+                <li><a href="http://pmt.ccnmtl.columbia.edu/search.pl?type=%25&pid=%25&owner={{pmt_user.username}}&assigned_to=%25&status=OPEN&status=UNASSIGNED&status=INPROGRESS&status=RESOLVED_%25&limit=100&sortby=priority&order=DESC&show=title&show=priority&show=target_date&show=assigned&show=project&show=status&results_title=Owned+Items" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> Owned items</a></li>
                 <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=watched_items" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> Watched items</a></li>
                 <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=someday_maybe" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> Someday/Maybe</a></li>
               </ul>
@@ -112,8 +114,6 @@
               <ul class="dropdown-menu">
                 <li><a href="{% url 'my_project_list' %}">My Projects</a></li>
                 <li><a href="{% url 'project_list' %}">All Projects</a></li>
-                {% if not request.user.is_anonymous %}
-                {% pmtuser as pmt_user %}
                 <li><a href="{% url 'project_create' %}"><span class="glyphicon glyphicon-plus-sign"></span> Create New Project</a></li>
                 {% if pmt_user.has_recent_active_projects %}
                 <li class="divider"></li>
@@ -124,14 +124,13 @@
                 </a></li>
                 {% endfor %}
                 {% endif %}
-                {% endif %}
               </ul>
             </li>
             <li><a class="dmt-global-nav" href="{% url 'tag_list' %}"><span class="nav-icon nav-icon-tags"></span> <span class="hidden-sm">Tags</span></a></li>
             <li><a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-clients"></span> <span class="hidden-sm">Clients</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="#" class="disabled">My active clients</a></li>
+              <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=active_clients_report&employee={{pmt_user.username}}" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> My active clients</a></li>
               <li><a href="/client/">All clients</a></li>
               <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=new_clients" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> New clients</a></li>
               <li><a href="#" class="disabled"><span class="glyphicon glyphicon-plus-sign"></span> Add a client</a></li>
