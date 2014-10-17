@@ -205,6 +205,7 @@ dd:hover .priority-select {
     width: 47%;
 }
 
+
 .dl-horizontal dd input[type=checkbox] {
     width: auto;
     height: auto;
@@ -567,3 +568,9 @@ background: #000;
   color: #c5b083 !important;
 }
 
+.instructions {
+  font-size: 85%;
+  color: #666;
+  margin: 0;
+  padding: 0;
+}

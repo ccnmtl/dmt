@@ -22,7 +22,7 @@
                                  selected="selected"
                                  {% endifequal %}
                                  >
-                                {{milestone.name}}
+                                {{milestone.name}} ({{milestone.target_date}})
                                 {% if not milestone.is_open %}[CLOSED]{% endif %}
                             </option>
                             {% endfor %}
@@ -76,7 +76,7 @@
 
                     <div class="form-group">
                         <label for="target_date">Target Date</label>
-                        <small>If left blank, this will be the milestone's target date</small>
+                        <div class="instructions">If left blank, this will be the milestone's target date</div>
                         <input type="text" name="target_date" id="id_target_date"
                                class="form-control" />
                     </div>
@@ -88,7 +88,9 @@
                     </div>
 
                     <div class="form-group">
-                        <textarea name="description" class="form-control" rows="5" placeholder="description"></textarea>
+                        <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+                        <textarea name="description" class="form-control" rows="5" placeholder="Description"></textarea>
                     </div>
 
                     <div class="form-group">

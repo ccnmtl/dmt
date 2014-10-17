@@ -80,7 +80,9 @@
 				</div>
 
 				<div class="form-group">
-					<textarea name="comment" class="form-control" rows="5"></textarea>
+					<div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+          For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
 				</div>
 
 				<div class="form-group">
@@ -112,7 +114,9 @@
       </div>
       <div class="modal-body">
           <div class="form-group">
-              <textarea name="comment" class="form-control" rows="5"></textarea>
+            <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+              <textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
           </div>
           <div class="form-group">
               <label for="progress-time-input">Time</label>
@@ -142,7 +146,9 @@
       </div>
       <div class="modal-body">
 				<div class="form-group">
-					<textarea name="comment" class="form-control" rows="5"></textarea>
+				<div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
 				</div>
       </div>
 				<div class="form-group">
@@ -173,7 +179,9 @@
       </div>
       <div class="modal-body">
           <div class="form-group">
-              <textarea name="comment" class="form-control" rows="5"></textarea>
+          <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+              <textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
           </div>
           <div class="form-group">
               <label for="reopen-time-input">Time</label>
@@ -202,7 +210,9 @@
       </div>
       <div class="modal-body">
           <div class="form-group">
-              <textarea name="comment" class="form-control" rows="5"></textarea>
+          <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+              <textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
           </div>
           <div class="form-group">
               <label for="comment-time-input">Time</label>
@@ -241,8 +251,10 @@
               class="form-control" />
           </div>
           <div class="form-group">
-              <label>Description</label>
-              <textarea name="description" class="form-control" rows="5"></textarea>
+              <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+              
+              <textarea name="description" class="form-control" rows="5" placeholder="Description"></textarea>
           </div>
       </div>
       <div class="modal-footer">
@@ -336,7 +348,7 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<textarea name="comment" class="form-control" rows="5" placeholder="comment"></textarea>
+					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
 				</div>
 
 				<div class="form-group">
@@ -376,7 +388,7 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<textarea name="comment" class="form-control" rows="5" placeholder="comment"></textarea>
+					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
 				</div>
 				<div class="form-group">
 					<label for="owner-time-input">Time</label>
@@ -401,13 +413,13 @@
 		<dd>
 			<a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a>
 			<a class="btn btn-default btn-xs" href="#" data-toggle="modal"
-				 data-target="#change-owner" title="change-owner"><span class="glyphicon glyphicon-edit"></a>
+				 data-target="#change-owner" title="change-owner"><span class="glyphicon glyphicon-edit"></span></a>
 		</dd>
 <dt>ASSIGNED<dt>
 		<dd>
 			<a href="{{object.assigned_to.get_absolute_url}}">{{object.assigned_to}}</a>
 			<a class="btn btn-default btn-xs" href="#" data-toggle="modal"
-				 data-target="#reassign" title="reassign item"><span class="glyphicon glyphicon-edit"></a>
+				 data-target="#reassign" title="reassign item"><span class="glyphicon glyphicon-edit"></span></a>
 
 </dd>
 <dt>PRIORITY<dt>
@@ -545,15 +557,15 @@
 <div class="btn-group pull-right">
 	<a class="btn btn-primary" href="#" data-toggle="modal"
 	data-target="#add-comment"><span class="glyphicon
-		 glyphicon-comment"> Add Comment</a>
+		 glyphicon-comment"></span> Add Comment</a>
 {% flag s3_upload %}
 	<a class="btn btn-primary" href="#" data-toggle="modal"
 		 data-target="#add-attachment"><span class="glyphicon
-		 glyphicon-upload"> Add Attachment</a>
+		 glyphicon-upload"></span> Add Attachment</a>
 {% endflag %}
 	<a class="btn btn-primary" href="#" data-toggle="modal"
 	data-target="#add-hours"><span class="glyphicon
-		 glyphicon-time"> Log Time</a>
+		 glyphicon-time"></span> Log Time</a>
 	<a class="btn btn-primary" href="#" data-toggle="modal"
 		 data-target="#split">Split Item</a>
 </div>
@@ -572,7 +584,7 @@
 		<td><i>[{{attachment.last_mod}}]</i></td>
 		<td>{{attachment.author.fullname}}</td>
 		<td><a href="{% url 'delete_attachment' attachment.id %}" class="btn btn-xs
-		btn-danger" title="delete attachment"><span class="glyphicon glyphicon-trash"></a>
+		btn-danger" title="delete attachment"><span class="glyphicon glyphicon-trash"></span></a>
 		</td>
 	</tr>
 	{% if attachment.image %}
