@@ -147,6 +147,12 @@
                 <a href="{{item.get_absolute_url}}">
                     {{item.title|truncatechars:70}}
                 </a>
+                {% ifequal item.status "OPEN" %}
+                {% else %}
+                <span class="{{item.status_class}} badge pull-right">
+                    {{item.status_display}}
+                </span>
+                {% endifequal %}
             </td>
             <td data-field="priority" class="pr{{item.priority}} hidden-xs">
                 <span class="invisible">{{item.priority}}</span>
