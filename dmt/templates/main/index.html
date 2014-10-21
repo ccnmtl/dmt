@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load claimtags %}
 
-{% block title %}Home{% endblock %}
+{% block title %}My Dashboard{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/typeahead.js-bootstrap.css">
@@ -16,6 +16,8 @@
 
 
 {% block content %}
+
+<h1>My Dashboard</h1>
 
 {% if request.user.is_anonymous %}
   <p>Please Login</p>
