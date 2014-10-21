@@ -181,7 +181,8 @@
 
 		<dl>
 			<dt>Caretaker</dt>
-			<dd><a href="{{object.caretaker.get_absolute_url}}">{{object.caretaker.first_name}} {{object.caretaker.last_name}}</a></dd>
+            <dd><a href="{% url 'user_detail' object.caretaker.username %}"
+                >{{object.caretaker.fullname}}</a></dd>
 			<dt>type</dt>
 			<dd>{{object.type}}</dd>
 			<dt>area</dt>
