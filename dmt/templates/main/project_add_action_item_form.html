@@ -1,3 +1,9 @@
+{% load claimtags %}
+{% if request.user.is_anonymous %}
+  <p>Please Login</p>
+{% else %}
+  {% pmtuser as pmt_user %}
+
 <form id="add-action-item-form" action="add_action_item/" method="post" role="form">
     <div class="modal fade" id="add-action-item" tabindex="-1" role="dialog" aria-labelledby="add-action_item-label" aria-hidden="true">
         <div class="modal-dialog">
@@ -36,10 +42,8 @@
                                     class="form-control">
 
                                 {% for user in object.all_personnel_in_project %}
-                                <option value="{{user.username}}"
-                                        {% ifequal user.username pmtuser.username %}
-                                        selected="selected"
-                                        {% endifequal %}
+                                {# the formatting for this option is important for a unit test. keep it on one line. #}
+                                <option value="{{user.username}}" {% ifequal user.username pmt_user.username %}selected="selected"{% endifequal %}
                                         >{{user.fullname}}</option>
                                 {% endfor %}
                             </select>
@@ -107,3 +111,4 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </form>
+{% endif %}
