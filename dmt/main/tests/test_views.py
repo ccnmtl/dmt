@@ -196,6 +196,14 @@ class TestProjectViews(TestCase):
                         dict())
         self.assertEquals(r.status_code, 404)
 
+    def test_add_action_item_form_owner(self):
+        milestone = MilestoneFactory()
+        milestone.project.add_personnel(self.pu, auth='manager')
+        r = self.c.get(milestone.project.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(
+            "value=\"testpmtuser\" selected=\"selected\"" in r.content)
+
     def test_add_action_item(self):
         u = UserFactory()
         milestone = MilestoneFactory()
