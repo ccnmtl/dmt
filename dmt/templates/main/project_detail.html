@@ -15,13 +15,12 @@
 
 
 {% block content %}
-<ul class="breadcrumb">
-  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
-  <li class="active">{{object.name}}</li>
-</ul>
+
+<h1 class="page-title">Project: {{object.name}}</h1>
+
 
 <div class="btn-group">
-	<a class="btn btn-default" href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=project;pid={{object.pid}}">Return to the old PMT</a>
+	<a class="btn btn-default" href="">Return to the old PMT</a>
 	<a class="btn btn-primary" href="#" data-toggle="modal"
 	data-target="#add-bug"><span class="glyphicon glyphicon-plus"></span> Bug</a>
 	<a class="btn btn-primary" href="#" data-toggle="modal"
@@ -36,9 +35,6 @@
 
 <p class="pull-right"><a href="edit/" class="btn btn-primary btn-xs"
 												 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
-
-<h1>Project: {{object.name}}</h1>
-
 
 <form id="add-milestone-form" action="add_milestone/" method="post" role="form">
 <div class="modal fade" id="add-milestone" tabindex="-1" role="dialog" aria-labelledby="add-milestone-label" aria-hidden="true">
