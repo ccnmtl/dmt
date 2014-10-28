@@ -17,7 +17,7 @@
 
 {% block content %}
 
-<h1>My Dashboard</h1>
+<h1 class="page-title">My Dashboard</h1>
 
 {% if request.user.is_anonymous %}
   <p>Please Login</p>
@@ -143,7 +143,7 @@
                 title="{% ifequal item.status 'INPROGRESS' %}{{item.status_class}}{% else %}{{item.target_date_status}}{% endifequal %}"></div>
                 
                 {% if item.is_bug %}
-                <img src="{{STATIC_URL}}img/tinybug.gif"
+                <img src="{{STATIC_URL}}img/icon-bug.png"
                      width="14" height="14"/>
                 {% endif %}
                 <a href="{{item.get_absolute_url}}">
@@ -255,7 +255,7 @@ $(document).ready(function() {
     $("#project-input").on("typeahead:selected", function (object, datum) {
         $("#tracker-pid-input").val(datum.pid);
     });
-    $('.status-indicator').tooltip()
+    $('.status-indicator').tooltip();
 });
 </script>
 {% endblock %}
