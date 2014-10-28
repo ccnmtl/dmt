@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>DMT: {% block title %}{% endblock %}</title>
+  <title>DMT &#8226; {% block title %}{% endblock %}</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="description" content="dmt">
@@ -61,7 +61,11 @@
         {% else %}
           {% pmtuser as pmt_user %}
           <li class="dropdown">
-            <a class="dropdown-toggle username" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>
+            <a class="dropdown-toggle username" data-toggle="dropdown" href="#">{% if pmt_user.photo_url %}
+            <img src="{{pmt_user.photo_url}}" class="img-circle user-avatar" />
+            {% else %}
+            <span class="glyphicon glyphicon-user"></span>
+            {% endif %}
             <span class="hidden-xs">&nbsp;{{request.user.first_name}}</span>
             <span class="caret"></span>
             </a>
@@ -102,9 +106,9 @@
               </a>
               <ul class="dropdown-menu">
               <li><a href="/">My Dashboard</a></li>
-                <li><a href="http://pmt.ccnmtl.columbia.edu/search.pl?type=%25&pid=%25&owner={{pmt_user.username}}&assigned_to=%25&status=OPEN&status=UNASSIGNED&status=INPROGRESS&status=RESOLVED_%25&limit=100&sortby=priority&order=DESC&show=title&show=priority&show=target_date&show=assigned&show=project&show=status&results_title=Owned+Items" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> Owned items</a></li>
-                <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=watched_items" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> Watched items</a></li>
-                <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=someday_maybe" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> Someday/Maybe</a></li>
+                <li><a href="http://pmt.ccnmtl.columbia.edu/search.pl?type=%25&pid=%25&owner={{pmt_user.username}}&assigned_to=%25&status=OPEN&status=UNASSIGNED&status=INPROGRESS&status=RESOLVED_%25&limit=100&sortby=priority&order=DESC&show=title&show=priority&show=target_date&show=assigned&show=project&show=status&results_title=Owned+Items" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> Owned items</a></li>
+                <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=watched_items" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> Watched items</a></li>
+                <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=someday_maybe" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> Someday/Maybe</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -130,9 +134,9 @@
             <li><a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-clients"></span> <span class="hidden-sm">Clients</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=active_clients_report&employee={{pmt_user.username}}" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> My active clients</a></li>
+              <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=active_clients_report&employee={{pmt_user.username}}" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> My active clients</a></li>
               <li><a href="/client/">All clients</a></li>
-              <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=new_clients" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> New clients</a></li>
+              <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=new_clients" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> New clients</a></li>
               <li><a href="#" class="disabled"><span class="glyphicon glyphicon-plus-sign"></span> Add a client</a></li>
             </ul>
             </li>
@@ -141,7 +145,7 @@
               <span class="hidden-sm">Users/Groups</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=my_groups" class="old-pmt"><span class="glyphicon glyphicon-transfer"></span> My groups</a></li>
+                <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=my_groups" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> My groups</a></li>
                 <li><a href="{% url 'group_list' %}">All groups</a></li>
                 <li><a href="{% url 'user_list' %}?status=active">All users</a></li>
               </ul>
