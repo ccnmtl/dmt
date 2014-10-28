@@ -107,6 +107,8 @@
 			<dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}">{{object.wiki_category}}</a></dd>
 {% endif %}
 			</dd>
+      <dt>Feed</dt>
+      <dd><a href="{% url 'project_feed' object.pk %}"><img src="{{STATIC_URL}}img/rss.png" width="14" height="14" alt="RSS" /></a></dd>
 		</dl>
 
 {% for milestone in milestones %}
