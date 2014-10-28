@@ -770,7 +770,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>resolved %s</b><br />\n%s" % (r_status, comment),
+            comment="<b>Resolved %s</b><br />\n%s" % (r_status, comment),
             add_date_time=datetime.now())
 
     def verify(self, user, comment):
@@ -784,7 +784,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>verified</b><br />\n%s" % comment,
+            comment="<b>Verified</b><br />\n%s" % comment,
             add_date_time=datetime.now())
 
     def mark_in_progress(self, user, comment):
@@ -798,7 +798,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>marked as in progress</b><br />\n%s" % comment,
+            comment="<b>Marked as In-progress</b><br />\n%s" % comment,
             add_date_time=datetime.now())
 
     def reopen(self, user, comment):
@@ -812,7 +812,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>reopened</b><br />\n%s" % comment,
+            comment="<b>Reopened</b><br />\n%s" % comment,
             add_date_time=datetime.now())
 
     def reassign(self, user, assigned_to, comment):
@@ -825,7 +825,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>reassigned to %s</b><br />\n%s" % (
+            comment="<b>Reassigned to %s</b><br />\n%s" % (
                 assigned_to.fullname, comment),
             add_date_time=datetime.now())
         self.add_cc(assigned_to)
@@ -840,7 +840,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>ownership changed to %s</b><br />\n%s" % (
+            comment="<b>Ownership changed to %s</b><br />\n%s" % (
                 owner.fullname, comment),
             add_date_time=datetime.now())
 
@@ -851,7 +851,7 @@ class Item(models.Model):
         self.add_event(
             self.status,
             user,
-            "<b>changed priority from %s to %s</b>" % (
+            "<b>Priority changed from %s to %s</b>" % (
                 priority_label_f(old_priority),
                 priority_label_f(priority)))
 
