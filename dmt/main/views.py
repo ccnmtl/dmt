@@ -483,12 +483,11 @@ class ProjectDetailView(LoggedInMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectDetailView, self).get_context_data(**kwargs)
-        ctx['milestones'] = [m for m in self.object.milestones()
-                             if Item.objects.filter(
-                                 milestone=m
-                             ).filter(
-                                 ~Q(status='VERIFIED')
-                             ).count() > 0]
+        ctx['milestones'] = [
+            m for m in self.object.milestones()
+            if Item.objects.filter(milestone=m).filter(
+                ~Q(status='VERIFIED')
+            ).count() > 0]
         return ctx
 
 
