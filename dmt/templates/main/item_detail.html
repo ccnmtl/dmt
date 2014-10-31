@@ -2,7 +2,7 @@
 {% load markup %}
 {% load waffle_tags %}
 
-{% block title %}No. {{object.iid}}&ndash;{{object.title}}{% endblock %}
+{% block title %}#{{object.iid}}&ndash;{{object.title}}{% endblock %}
 
 {% block primarynavtabs %}
 {% endblock %}
@@ -17,7 +17,7 @@
 &nbsp;|&nbsp;
 <a href="{{object.milestone.get_absolute_url }}" class="milestone breadcrumb-item" data-toggle="tooltip" data-placement="bottom" title="View this milestone">{{object.milestone.name}}</a></p>
 
-<h1 class="page-title no-margin no-padding">No. {{object.iid}} &#8226; {% if object.is_bug %}BUG:{% endif %} {{object.title}}</h1>
+<h1 class="page-title no-margin no-padding">#{{object.iid}} &#8226; {% if object.is_bug %}BUG:{% endif %} {{object.title}}</h1>
     <p class="item-status">
     <span class="item-last-modified">Last modified on {{object.last_mod}}</span><br />
     <b>Status:</b> <span class="{{object.status_class}}">{{ object.status }} {{object.r_status|default:""}}</span></p>
