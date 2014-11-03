@@ -25,7 +25,7 @@ from dmt.main.views import (
     ItemDeleteView, SignS3View, ItemAddAttachmentView,
     DeleteAttachmentView, GroupCreateView,
     DeactivateUserView, ItemMoveProjectView, RemoveUserFromGroupView,
-    AddUserToGroupView, MilestoneDeleteView
+    AddUserToGroupView, MilestoneDeleteView, OwnedItemsView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
@@ -134,6 +134,8 @@ urlpatterns = patterns(
     url(r'^user/(?P<pk>\w+)/deactivate/$', DeactivateUserView.as_view(),
         name='user_deactivate'),
     (r'^user/(?P<pk>\w+)/edit/$', UserUpdateView.as_view()),
+    url(r'^user/(?P<pk>\w+)/owned/$', OwnedItemsView.as_view(),
+        name='owned_items'),
     url(r'^tag/$', TagListView.as_view(), name='tag_list'),
     (r'^tag/(?P<slug>[^/]+)/$', TagDetailView.as_view()),
     (r'^dashboard/$', DashboardView.as_view()),

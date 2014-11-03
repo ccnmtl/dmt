@@ -106,7 +106,9 @@
               </a>
               <ul class="dropdown-menu">
               <li><a href="/">My Dashboard</a></li>
-                <li><a href="http://pmt.ccnmtl.columbia.edu/search.pl?type=%25&pid=%25&owner={{pmt_user.username}}&assigned_to=%25&status=OPEN&status=UNASSIGNED&status=INPROGRESS&status=RESOLVED_%25&limit=100&sortby=priority&order=DESC&show=title&show=priority&show=target_date&show=assigned&show=project&show=status&results_title=Owned+Items" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> Owned items</a></li>
+{% if pmt_user.username %}
+                <li><a href="{% url 'owned_items' pmt_user.username %}">Owned items</a></li>
+{% endif %}
                 <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=watched_items" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> Watched items</a></li>
                 <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=someday_maybe" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> Someday/Maybe</a></li>
               </ul>
