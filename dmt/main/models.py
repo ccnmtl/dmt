@@ -121,6 +121,14 @@ class User(models.Model):
             milestone__name='Someday/Maybe').select_related(
             'milestone', 'milestone__project')
 
+    def open_owned_items(self):
+        """ for the 'owned items' page. """
+        return Item.objects.filter(
+            owner=self,
+            status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS', 'RESOLVED']
+        ).order_by('-priority', '-target_date').select_related(
+            'milestone', 'milestone__project')
+
     def resolved_owned_items(self):
         return Item.objects.filter(
             owner=self,

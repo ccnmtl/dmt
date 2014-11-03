@@ -510,6 +510,11 @@ class UserDetailView(LoggedInMixin, DetailView):
     model = User
 
 
+class OwnedItemsView(LoggedInMixin, DetailView):
+    model = User
+    template_name = "main/owned_items.html"
+
+
 class UserUpdateView(LoggedInMixin, UpdateView):
     model = User
     form_class = UserUpdateForm

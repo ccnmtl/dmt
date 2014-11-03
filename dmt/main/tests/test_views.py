@@ -50,6 +50,11 @@ class BasicTest(TestCase):
         response = self.c.get("/dashboard/")
         self.assertEqual(response.status_code, 200)
 
+    def test_owned_items(self):
+        response = self.c.get(reverse('owned_items', args=[self.pu.username]))
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue("Owned Items" in response.content)
+
 
 class TestClientViews(TestCase):
     def setUp(self):
