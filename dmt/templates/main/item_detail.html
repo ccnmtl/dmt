@@ -64,7 +64,7 @@
     {% comment %}<p class="no-margin no-padding">(<a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">Return to the old PMT</a>)</p>{% endcomment %}
 
     <div class="item-description">
-      {{object.description|markdown:"linkify"}}
+      {{object.description|safe}}
     </div>
 
 <b></b>
@@ -665,7 +665,7 @@
       <div class="alert alert-warning">sorry, DMT does not yet support the old PMT attachments. For now, to view/download this one, you will need to <a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">go back to the PMT</a></div>
       {% endif %}
       <div class="attachment-description">
-      {{attachment.description|markdown:"linkify"}}
+      {{attachment.description|safe}}
       </div>
     </td>
 	</tr>
