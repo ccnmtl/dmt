@@ -89,6 +89,24 @@ class UserModelTest(TestCase):
         u = UserFactory(fullname="foo (group)")
         self.assertEqual(u.group_fullname(), "foo")
 
+    def test_weekly_report_email_body(self):
+        u = UserFactory()
+        r = u.weekly_report_email_body(1.0, True)
+        self.assertEqual(
+            r,
+            """This week you have only logged 1.0 hours.\n\n"""
+            """Now is a good time to take care of that.\n""")
+        r = u.weekly_report_email_body(1.0, False)
+        self.assertEqual(
+            r,
+            """You've logged 1.0 hours this week. Good job!\n""")
+
+    def test_send_weekly_report(self):
+        u = UserFactory()
+        u.send_weekly_report()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, "PMT Weekly Report")
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):

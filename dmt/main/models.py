@@ -203,6 +203,25 @@ class User(models.Model):
                     target_percentage=target_percentage,
                     behind=week_percentage < (target_percentage - 20))
 
+    def send_weekly_report(self):
+        r = self.progress_report()
+        body = self.weekly_report_email_body(r['hours_logged'], r['behind'])
+        send_mail(
+            "PMT Weekly Report",
+            body, settings.SERVER_EMAIL,
+            [self.email], fail_silently=settings.DEBUG)
+
+    def weekly_report_email_body(self, hours_logged, behind):
+        if behind:
+            return (
+                """This week you have only logged %.1f hours.\n\n"""
+                """Now is a good time to take care of that.\n"""
+                % hours_logged)
+        else:
+            return (
+                """You've logged %.1f hours this week. Good job!\n"""
+                % hours_logged)
+
     def group_fullname(self):
         f = self.fullname
         return f.replace(" (group)", "")
