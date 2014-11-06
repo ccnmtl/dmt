@@ -1,4 +1,4 @@
-from celery.decorators import periodic_task
+from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
 from django.db import connection
 from django_statsd.clients import statsd
@@ -171,3 +171,15 @@ def close_passed_milestones():
     for milestone in Milestone.objects.filter(
             status='OPEN', target_date__lt=now):
         milestone.update_milestone()
+
+
+@periodic_task(run_every=crontab(hour=12, minute=0, day_of_week='fri'))
+def weekly_report_emails():
+    for user in User.objects.filter(status='active', grp=False):
+        user_weekly_report_email.delay(username=user.username)
+
+
+@task
+def user_weekly_report_email(username):
+    u = User.objects.get(username=username)
+    u.send_weekly_report()
