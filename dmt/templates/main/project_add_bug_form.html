@@ -27,6 +27,13 @@
                     </div>
 
                     <div class="form-group">
+                        <script>
+                            var milestoneBugTargets = [];
+                            {% for milestone in object.milestone_set.all %}
+                                milestoneBugTargets.push(
+                                    new Date('{{milestone.target_date}}'));
+                            {% endfor %}
+                        </script>
                         <label for="bug-milestones">Milestone</label>
                         <select name="milestone" id="bug-milestone"
                                 class="form-control">
@@ -57,7 +64,6 @@
 
                     <div class="form-group">
                         <label for="target_date">Target Date</label>
-                        <small>If left blank, this will be the milestone's target date</small>
                         <input type="text" name="target_date" id="id_target_date"
                                class="form-control" />
                     </div>
