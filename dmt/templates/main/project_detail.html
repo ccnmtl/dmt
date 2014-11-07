@@ -99,7 +99,7 @@
 			<dt>Status</dt>
 			<dd>{{object.status}}</dd>
 			<dt>Description</dt>
-			<dd>{{object.description|markdown:"linkify"}}</dd>
+			<dd>{{object.description}}</dd>
 			<dt>URL</dt>
 			<dd>{{object.url}}</dd>
 {% if object.wiki_category %}
@@ -269,7 +269,7 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 <a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
 </span>
 {% endfor %}</p>{% endif %}
-{{n.body|markdown:"linkify"}}
+{{n.body}}
 
 		{% endfor %}
 	</div>
