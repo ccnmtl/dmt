@@ -37,7 +37,7 @@
 </dl>
 
 {% if object.description %}
-{{object.description}}
+{{object.description|safe}}
 {% endif %}
 
 {% if object.item_set.count %}
