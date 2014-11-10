@@ -26,32 +26,48 @@
 
 <div class="item-action-set clearfix">
   <ul>
-    <li class="item-action">
-      <a href="edit/" class="item-action-link"><span class="glyphicon glyphicon-pencil"></span> <span class="item-action-text hidden-xs hidden-sm">Edit item</span></a>
+    <li class="item-action" title="Edit item">
+        <a href="edit/" class="item-action-link"
+           ><span class="glyphicon glyphicon-pencil"></span>
+            <span class="item-action-text hidden-xs hidden-sm">Edit item</span></a>
     </li>
-    <li class="item-action">
+    <li class="item-action" title="Write comment">
       <a href="#" class="item-action-link" data-toggle="modal"
-	data-target="#add-comment"><span class="glyphicon glyphicon-comment"></span> <span class="item-action-text hidden-xs hidden-sm">Write comment</span></a>
+	     data-target="#add-comment"
+         ><span class="glyphicon glyphicon-comment"></span>
+          <span class="item-action-text hidden-xs hidden-sm">Write comment</span></a>
     </li>
     {% flag s3_upload %}
-    <li class="item-action">
+    <li class="item-action" title="Add attachment">
      <a href="#" class="item-action-link" data-toggle="modal"
-		 data-target="#add-attachment"><span class="glyphicon glyphicon-paperclip"></span> <span class="item-action-text hidden-xs hidden-sm">Add attachment</span></a>
+		data-target="#add-attachment">
+         <span class="glyphicon glyphicon-paperclip"></span>
+         <span class="item-action-text hidden-xs hidden-sm">Add attachment</span>
+     </a>
     </li>
     {% endflag %}
-    <li class="item-action">
+    <li class="item-action" title="Log time">
      <a href="#" class="item-action-link" data-toggle="modal"
-	data-target="#add-hours"><span class="glyphicon glyphicon-time"></span> <span class="item-action-text hidden-xs hidden-sm">Log time</span></a>
+	    data-target="#add-hours">
+         <span class="glyphicon glyphicon-time"></span>
+         <span class="item-action-text hidden-xs hidden-sm">Log time</span>
+     </a>
     </li>
-    <li class="item-action">
+    <li class="item-action" title="Split item">
      <a href="#" class="item-action-link" data-toggle="modal"
-		 data-target="#split"><span class="glyphicon glyphicon-tasks"></span> <span class="item-action-text hidden-xs hidden-sm">Split item</span></a>
+		data-target="#split"
+        ><span class="glyphicon glyphicon-tasks"></span>
+         <span class="item-action-text hidden-xs hidden-sm">Split item</span></a>
     </li>
-    <li class="item-action">
-     <a href="{% url 'item-move-project' object.iid %}" class="item-action-link"><span class="glyphicon glyphicon-transfer"></span> <span class="item-action-text hidden-xs hidden-sm">Move to another project</span></a>
+    <li class="item-action" title="Move to another project">
+        <a href="{% url 'item-move-project' object.iid %}" class="item-action-link"
+           ><span class="glyphicon glyphicon-transfer"></span>
+            <span class="item-action-text hidden-xs hidden-sm">Move to another project</span></a>
     </li>
-    <li class="item-action">
-     <a href="{{object.get_absolute_url}}delete/" class="item-action-link"><span class="glyphicon glyphicon-trash"></span> <span class="item-action-text hidden-xs hidden-sm">Delete item</span></a>
+    <li class="item-action" title="Delete item">
+        <a href="{{object.get_absolute_url}}delete/" class="item-action-link"
+           ><span class="glyphicon glyphicon-trash"></span>
+            <span class="item-action-text hidden-xs hidden-sm">Delete item</span></a>
     </li>
   </ul>
 </div>
@@ -64,7 +80,7 @@
     {% comment %}<p class="no-margin no-padding">(<a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">Return to the old PMT</a>)</p>{% endcomment %}
 
     <div class="item-description">
-      {{object.description|markdown:"linkify"}}
+      {{object.description}}
     </div>
 
 <b></b>
@@ -665,7 +681,7 @@
       <div class="alert alert-warning">sorry, DMT does not yet support the old PMT attachments. For now, to view/download this one, you will need to <a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">go back to the PMT</a></div>
       {% endif %}
       <div class="attachment-description">
-      {{attachment.description|markdown:"linkify"}}
+      {{attachment.description}}
       </div>
     </td>
 	</tr>

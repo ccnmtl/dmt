@@ -18,6 +18,13 @@
                         <input type="text" name="title" placeholder="action item title" id="action_item-title" class="form-control"/>
                     </div>
                     <div class="form-group">
+                        <script>
+                            var milestoneActionItemTargets = [];
+                            {% for milestone in object.milestone_set.all %}
+                                milestoneActionItemTargets.push(
+                                    new Date('{{milestone.target_date}}'));
+                            {% endfor %}
+                        </script>
                         <label for="action_item-milestones">Milestone</label>
                         <select name="milestone" id="action_item-milestone"
                                 class="form-control">
@@ -80,7 +87,6 @@
 
                     <div class="form-group">
                         <label for="target_date">Target Date</label>
-                        <div class="instructions">If left blank, this will be the milestone's target date</div>
                         <input type="text" name="target_date" id="id_target_date"
                                class="form-control" />
                     </div>

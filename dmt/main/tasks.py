@@ -7,6 +7,7 @@ import time
 from .models import Item, ActualTime, interval_sum
 from .models import User, Milestone
 from dmt.claim.models import Claim
+from pytz import AmbiguousTimeError
 
 
 def get_item_counts_by_status():
@@ -75,14 +76,22 @@ def hours_logged(weeks=1):
     now = datetime.now()
     one_week_ago = now - timedelta(weeks=weeks)
     # active projects
-    times_logged = ActualTime.objects.filter(
-        completed__gt=one_week_ago).select_related(
-        'item', 'resolver', 'item__milestone',
-        'item__milestone__project')
-    return int(
-        interval_sum(
-            [a.actual_time for a in times_logged]
-        ).total_seconds() / 3600.)
+    try:
+        times_logged = ActualTime.objects.filter(
+            completed__gt=one_week_ago).select_related(
+            'item', 'resolver', 'item__milestone',
+            'item__milestone__project')
+        return int(
+            interval_sum(
+                [a.actual_time for a in times_logged]
+            ).total_seconds() / 3600.)
+    except AmbiguousTimeError:
+        # once a year, for an hour, exactly one week after DST changes,
+        # the one_week_ago time refers to the period of time
+        # that "existed" twice. We *could* fudge things by an hour,
+        # but for the sake of making hourly log graphs, it's simpler
+        # to just punt and log '0' for a bit.
+        return 0
 
 
 @periodic_task(run_every=crontab(hour='*', minute='*', day_of_week='*'))
