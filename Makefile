@@ -25,7 +25,7 @@ node_modules/jscs/bin/jscs:
 test: ./ve/bin/python
 	npm install
 	npm install ./vendor/karma-junit-reporter.tar.gz
-	$(MANAGE) jenkins
+	$(MANAGE) jenkins --pep8-exclude=migrations
 	npm test
 
 integration: ./ve/bin/python
