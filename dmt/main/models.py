@@ -298,6 +298,9 @@ class Project(models.Model):
     def milestones(self):
         return Milestone.objects.filter(project=self).order_by('target_date')
 
+    def open_milestones(self):
+        return self.milestone_set.filter(status='OPEN').order_by('target_date')
+
     def managers(self):
         return [w.username for w in self.workson_set.filter(auth='manager')]
 

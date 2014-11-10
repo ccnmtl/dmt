@@ -38,7 +38,7 @@
 <table class="table" id="milestones">
 	<thead>
 		<tr>
-{% for milestone in object.milestones %}
+{% for milestone in object.open_milestones %}
 <th>{{milestone.name}}</th>
 {% endfor %}
 		</tr>
@@ -46,13 +46,13 @@
 
 	<tbody>
 		<tr>
-{% for milestone in object.milestones %}			
+{% for milestone in object.open_milestones %}			
 <td>{{milestone.target_date}}</td>
 {% endfor %}
 		</tr>
 
 		<tr>
-{% for milestone in object.milestones %}
+{% for milestone in object.open_milestones %}
 <td>
 <ul class="milestone" id="milestone-{{milestone.mid}}" data-mid="{{milestone.mid}}">
 {% for item in milestone.active_items %}
