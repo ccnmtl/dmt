@@ -239,17 +239,6 @@ Raven.setUser({
 {% endif %}
 </script>
 
-<script src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('input[name=target_date]').datepicker({
-        autoclose: true,
-        format: 'yyyy-mm-dd',
-        todayHighlight: true
-    });
-});
-</script>
-
 <script data-main="{{STATIC_URL}}js/src/main.js"
         src="{{STATIC_URL}}js/libs/require/require.js"></script>
 
