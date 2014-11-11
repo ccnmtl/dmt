@@ -493,6 +493,13 @@ span.attachment-action-text {
   height: 95px;
   margin-left: 0 !important;
   background: transparent url('/media/img/bg-honeycomb-brand.png') left top no-repeat;
+  padding: 0;
+}
+
+.theme-brand a.dmt-logo-link {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .theme-brand img {
