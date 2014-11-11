@@ -687,7 +687,7 @@
       <div class="alert alert-warning">sorry, DMT does not yet support the old PMT attachments. For now, to view/download this one, you will need to <a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">go back to the PMT</a></div>
       {% endif %}
       <div class="attachment-description">
-      {{attachment.description|safe}}
+      {{attachment.description|markdown}}
       </div>
     </td>
 	</tr>
@@ -713,7 +713,7 @@
             <nobr>on {{history_item.timestamp}}</nobr>
         </div>
         <div class="col-md-7 item-comment">
-            {{history_item.comment|safe}}
+            {{history_item.comment|markdown}}
         </div>
     </div>
     {% endfor %}
