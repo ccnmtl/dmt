@@ -375,6 +375,16 @@ class ProjectTest(TestCase):
         p = ProjectFactory()
         self.assertEqual(len(p.milestones()), 0)
 
+    def test_open_milestones_empty(self):
+        p = ProjectFactory()
+        self.assertEqual(len(p.open_milestones()), 0)
+
+    def test_open_milestones(self):
+        p = ProjectFactory()
+        MilestoneFactory(project=p, status='CLOSED')
+        self.assertEqual(len(p.milestones()), 1)
+        self.assertEqual(len(p.open_milestones()), 0)
+
     def test_guests_empty(self):
         p = ProjectFactory()
         self.assertEqual(p.guests(), [])
