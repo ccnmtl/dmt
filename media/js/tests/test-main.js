@@ -29,7 +29,8 @@ require.config({
     // testing. We have to manually prepend the src/ directory here.
     map: {
         '*': {
-            'models/notify': 'src/models/notify'
+            'models/notify': 'src/models/notify',
+            'utils/markdown_preview': 'src/utils/markdown_preview'
         }
     },
 

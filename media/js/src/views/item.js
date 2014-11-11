@@ -1,9 +1,13 @@
 define([
+    // libs
     'jquery',
     'underscore',
     'backbone',
+
+    // src
+    'utils/markdown_preview',
     'models/notify'
-], function($, _, Backbone, Notify) {
+], function($, _, Backbone, MarkdownPreview, Notify) {
     if ($('#item-template').length === 0) {
         return;
     }
@@ -23,6 +27,12 @@ define([
                     .on('change',
                         {notify: this.notify},
                         this.updateNotificationStatus);
+
+                var preview = new MarkdownPreview(
+                    $('textarea[name=comment]'),
+                    $('.dmt-markdown-item-preview')
+                );
+                preview.startEventHandler();
             },
             render: function() {
                 this.$el.html(this.template(this.model.attributes));
