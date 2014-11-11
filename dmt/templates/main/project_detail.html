@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load markup claimtags %}
+{% load waffle_tags %}
 
 {% block title %}Project: {{object.name}}{% endblock %}
 
@@ -110,6 +111,13 @@
       <dt>Feed</dt>
       <dd><a href="{% url 'project_feed' object.pk %}"><img src="{{STATIC_URL}}img/rss.png" width="14" height="14" alt="RSS" /></a></dd>
 		</dl>
+
+{% flag project_board %}
+<p>
+<a href="{% url 'project_board' object.pid %}"
+ class="btn btn-primary">Board View</a>
+</p>
+{% endflag %}
 
 {% for milestone in milestones %}
 <h3>
