@@ -162,6 +162,10 @@ span.badge {
   color: #fff;
 }
 
+.pr {
+  white-space: nowrap;
+}
+
 .pr0 {
   font-weight: bold !important;
   color: #9999cc !important;

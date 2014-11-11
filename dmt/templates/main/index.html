@@ -137,10 +137,10 @@
         {% for item in pmt_user.items %}
         <tr>
             <td data-field="item">
-                <div class="status-indicator {{item.target_date_status}} {{item.status_class}}"
+                {% comment %}<div class="status-indicator {{item.target_date_status}} {{item.status_class}}"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="{% ifequal item.status 'INPROGRESS' %}{{item.status_class}}{% else %}{{item.target_date_status}}{% endifequal %}"></div>
+                title="{% ifequal item.status 'INPROGRESS' %}{{item.status_class}}{% else %}{{item.target_date_status}}{% endifequal %}"></div>{% endcomment %}
                 
                 {% if item.is_bug %}
                 <img src="{{STATIC_URL}}img/icon-bug.png"
@@ -156,7 +156,7 @@
                 </span>
                 {% endifequal %}
             </td>
-            <td data-field="priority" class="pr{{item.priority}} hidden-xs">
+            <td data-field="priority" class="pr{{item.priority}} hidden-xs pr">
                 <span class="invisible">{{item.priority}}</span>
                 {{item.priority_label}}
             </td>
