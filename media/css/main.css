@@ -27,6 +27,7 @@ background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom,      -o-li
 background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom,         linear-gradient(to bottom, #b2cbea, #fff); /* W3C */
 background-attachment: fixed;
   height: 100%;
+  padding: 0 !important;
 }
 
 body > .container {
