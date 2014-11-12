@@ -24,13 +24,11 @@ node_modules/jscs/bin/jscs:
 
 test: ./ve/bin/python
 	npm install
-	npm install ./vendor/karma-junit-reporter.tar.gz
 	$(MANAGE) jenkins --pep8-exclude=migrations --enable-coverage --coverage-rcfile=.coveragerc
 	npm test
 
 integration: ./ve/bin/python
 	npm install
-	npm install ./vendor/karma-junit-reporter.tar.gz
 	$(MANAGE) jenkins --settings=dmt.settings_integration
 	npm test
 
