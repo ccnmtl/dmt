@@ -27,6 +27,7 @@ background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom,      -o-li
 background: url('/media/img/bg-honeycomb.png') repeat-x fixed bottom,         linear-gradient(to bottom, #b2cbea, #fff); /* W3C */
 background-attachment: fixed;
   height: 100%;
+  padding: 0 !important;
 }
 
 body > .container {
@@ -319,12 +320,14 @@ footer.page-footer {
     text-align: center;
 }
 
+.object-box,
 .item-box {
   display: block;
   margin: 0;
   padding: 0;
 }
 
+.object-details,
 .item-details {
   float: left;
   width: 980px;
@@ -343,6 +346,8 @@ footer.page-footer {
   font-size: 12px;
 }
 
+.object-details dt,
+.object-details dd,
 .item-details dt,
 .item-details dd {
   padding-top: 0;
@@ -363,6 +368,7 @@ footer.page-footer {
     word-wrap: break-word;
 }
 
+.object-action-set,
 .item-action-set {
   margin: -20px -25px 0 0;
   padding: 0;
@@ -372,12 +378,14 @@ footer.page-footer {
   background: transparent url('/media/img/bg-item-action-set.png') left top repeat-y;
 }
 
+.object-action-set ul,
 .item-action-set ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.object-action,
 .item-action {
   margin-left: 5px;
   padding: 0 8px;
@@ -389,6 +397,12 @@ footer.page-footer {
   vertical-align: center;
 }
 
+.object-action-link:focus,
+.item-action-link:focus {
+  outline: 0;
+}
+
+span.object-action-text,
 span.item-action-text {
   display: inline-block;
   font-size: 12px;
@@ -399,11 +413,13 @@ span.item-action-text {
   height: 16px;
 }
 
+.object-action:hover,
 .item-action:hover {
   color: #ff9900;
   border-left: 4px solid #b2cbea;
 }
 
+.object-action a,
 .item-action a {
   display: block;
   color: #999;
@@ -413,6 +429,7 @@ span.item-action-text {
   text-decoration: none;
 }
 
+.object-action a:hover,
 .item-action a:hover {
   color: #ff9900;
 }
@@ -462,6 +479,17 @@ span.attachment-action-text {
   margin-left: 5px;
   line-height: 11px;
   height: 16px;
+}
+
+.dmt-markdown-preview {
+  margin: 0;
+  padding: 6px;
+  border: 0;
+  background-color: #e8f0f8;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+  min-height: 34px;
 }
 
 .dmt-messages p {
@@ -815,6 +843,45 @@ div.ColVis_collectionBackground {
   margin-left: -30px;
 }
 
+.project-tabs {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-bottom: 5px solid #e2ebf5;
+}
+
+.project-tabs>li {
+	font-size: 12px;
+	border: 0;
+  border-bottom: 5px solid transparent;
+	text-transform: uppercase;
+	font-weight: 500;
+	margin-bottom: -5px;
+}
+
+.project-tabs>li.active,
+.project-tabs>li.active:hover {
+  border-bottom: 5px solid #f90;
+  background: #ffdb92;
+}
+
+.project-tabs>li.active a {
+  color: #000;
+}
+
+.project-tabs>li>a,
+.project-tabs>li.active a,
+.project-tabs>li>a:hover,
+.project-tabs>li.active a:hover {
+  border: 0;
+  background-color: transparent;
+}
+
+.project-tabs>li:hover {
+  background: #ffffcc;
+  border-bottom: 5px solid #ffcc66;
+}
+
 
 /* Global nav icons responsive */
 @media (max-width: 991px) and (min-width: 768px) {
@@ -828,18 +895,21 @@ div.ColVis_collectionBackground {
 }
 
 @media (min-width: 768px) {
+  .object-details,
   .item-details {
     width: 630px;
   }
 }
 
 @media (min-width: 992px) {
+  .object-details,
   .item-details {
     width: 770px;
   }
 }
 
 @media (min-width: 1200px) {
+  .object-details,
   .item-details {
     width: 970px;
   }
@@ -928,18 +998,22 @@ div.ColVis_collectionBackground {
     padding-left: 0;
     padding-right: 0;
   }
+  .object-details,
   .item-details {
     width: 100% !important;
     float: none;
   }
+  .object-details dt,
   .item-details dt {
     border-top: 1px dotted #ccc;
   }
+  .object-action-set,
   .item-action-set {
     float: none;
     margin: 10px 0;
     background: transparent url(none);
   }
+  .object-action,
   .item-action {
     float: left;
     border: 0;
@@ -947,11 +1021,13 @@ div.ColVis_collectionBackground {
     text-align: center;
     padding: 0;
   }
+  .object-action:hover,
   .item-action:hover {
     color: #ff9900;
     border: 0;
     border-bottom: 4px solid #b2cbea;
   }
+  .object-action a,
   .item-action a {
     padding-left: 12px;
     padding-right: 12px;
