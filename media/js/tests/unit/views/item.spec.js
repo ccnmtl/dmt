@@ -1,9 +1,10 @@
 define(
     [
         'jquery',
+        '../../../src/utils/markdown_preview',
         '../../../src/views/item',
         '../../../src/models/item'
-    ], function($, ItemView, Item) {
+    ], function($, MarkdownPreview, ItemView, Item) {
         test('should create an instance', function() {
             expect(1);
 
