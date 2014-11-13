@@ -2,7 +2,7 @@
 {% load markup claimtags %}
 {% load waffle_tags %}
 
-{% block title %}Project&ndash;{{object.name}}{% endblock %}
+{% block title %}Project: {{object.name}}{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
@@ -67,8 +67,6 @@
 
   <div class="object-details">
 
-
-
 <form id="add-milestone-form" action="add_milestone/" method="post" role="form">
 <div class="modal fade" id="add-milestone" tabindex="-1" role="dialog" aria-labelledby="add-milestone-label" aria-hidden="true">
   <div class="modal-dialog">
@@ -116,8 +114,8 @@
 	<li><a href="#personnel" data-toggle="tab">Personnel</a></li>
   <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
   <li><a href="#reports" data-toggle="tab">Reports</a></li>
-	<li><a href="#forum" data-toggle="tab">Forum</a></li>
-	<li><a href="#updates" data-toggle="tab">Status</a></li>
+	<li><a href="#forum" data-toggle="tab">Forum Posts</a></li>
+	<li><a href="#updates" data-toggle="tab">Status Updates</a></li>
 </ul>
 
 
@@ -315,20 +313,6 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 </div>
 
 </div>
-
-
-
-
-  </div><!-- /.object-details -->
-</div><!-- ./object-box -->
-
-<br />
-<br />
-<br />
-<br />
-
-
-
 {% endblock %}
 
 {% block js %}

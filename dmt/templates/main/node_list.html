@@ -48,7 +48,7 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 {% endfor %}</p>
 {% endif %}
 
-{{n.body}}
+{{n.body|markdown}}
 
 {% endfor %}
 {% if is_paginated %}
