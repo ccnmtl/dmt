@@ -872,9 +872,11 @@ div.ColVis_collectionBackground {
 .project-tabs>li>a,
 .project-tabs>li.active a,
 .project-tabs>li>a:hover,
-.project-tabs>li.active a:hover {
+.project-tabs>li.active a:hover,
+.project-tabs>li.active a:focus {
   border: 0;
   background-color: transparent;
+  outline: 0;
 }
 
 .project-tabs>li:hover {
@@ -897,7 +899,7 @@ div.ColVis_collectionBackground {
 @media (min-width: 768px) {
   .object-details,
   .item-details {
-    width: 630px;
+    width: 650px;
   }
 }
 
