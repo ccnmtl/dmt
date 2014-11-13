@@ -52,15 +52,15 @@
 	      <span class="glyphicon glyphicon-time"></span>
         <span class="object-action-text hidden-xs hidden-sm">Add tracker</span></a>
       </li>
-      <li class="object-action" title="Post to forum">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-node">
-	      <span class="glyphicon glyphicon-comment"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Post to forum</span></a>
-      </li>
       <li class="object-action" title="Update status">
         <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-update">
 	      <span class="glyphicon glyphicon-info-sign"></span>
         <span class="object-action-text hidden-xs hidden-sm">Update status</span></a>
+      </li>
+      <li class="object-action" title="Post to forum">
+        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-node">
+	      <span class="glyphicon glyphicon-comment"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Post to forum</span></a>
       </li>
     </ul>  
   </div><!-- ./object-action-set -->
@@ -111,7 +111,7 @@
 {% include 'main/project_add_update_form.html' %}
 
 <ul class="nav nav-tabs project-tabs">
-  <li class="active"><a href="#summary" data-toggle="tab">Summary</a></li>
+  <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
   <li><a href="#details" data-toggle="tab">Details</a></li>
 	<li><a href="#personnel" data-toggle="tab">Personnel</a></li>
   <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
@@ -122,28 +122,7 @@
 
 
 <div class="tab-content">
-	<div class="tab-pane fade in active" id="summary">
-
-  <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
-		 width="100%" />
-
-
-		<dl>
-			<dt>Status</dt>
-			<dd>{{object.status}}</dd>
-			<dt>Description</dt>
-			<dd>{{object.description|markdown}}</dd>
-			<dt>URL</dt>
-			<dd>{{object.url}}</dd>
-{% if object.wiki_category %}
-			<dt>Wiki Category</dt>
-			<dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}">{{object.wiki_category}}</a></dd>
-{% endif %}
-			</dd>
-      <dt>Feed</dt>
-      <dd><a href="{% url 'project_feed' object.pk %}"><img src="{{STATIC_URL}}img/rss.png" width="14" height="14" alt="RSS" /></a></dd>
-		</dl>
-
+	<div class="tab-pane fade in active" id="overview">
 
 {% for milestone in milestones %}
 <h3>
@@ -187,29 +166,24 @@
 
 	</div>
 
-  <div class="tab-pane fade" id="personnel">
-		<ul>
-				{% for u in object.personnel_in_project %}
-						<li><span class="personnel"><a href="{{u.get_absolute_url}}">{{u.fullname}}</a> <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
-				title="remove user from project" class="remove-link">[remove]</a></span></li>
-				{% endfor %}
-		</ul>
-
-		<form action="/project/{{object.pid}}/add_user/" method="post">
-			<p>Add Personnel:</p>
-			<select name="username">
-				{% for user in object.all_users_not_in_project %}
-				<option value="{{user.username}}">
-					{{user.fullname}}
-				</option>
-				{% endfor %}
-			</select> <input type="submit" value="add" class="btn
-			btn-primary" />
-		</form>
-
-	</div>
-
 	<div class="tab-pane fade" id="details">
+		<dl>
+			<dt>Status</dt>
+			<dd>{{object.status}}</dd>
+			<dt>Description</dt>
+			<dd>{{object.description|markdown}}</dd>
+			<dt>URL</dt>
+			<dd>{{object.url}}</dd>
+{% if object.wiki_category %}
+			<dt>Wiki Category</dt>
+			<dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}">{{object.wiki_category}}</a></dd>
+{% endif %}
+			</dd>
+      <dt>Feed</dt>
+      <dd><a href="{% url 'project_feed' object.pk %}"><img src="{{STATIC_URL}}img/rss.png" width="14" height="14" alt="RSS" /></a></dd>
+		</dl>
+
+
 
 		<dl>
 			<dt>Caretaker</dt>
@@ -238,6 +212,28 @@
 			<dt>poster?</dt>
 			<dd>{{object.poster}}</dd>
 		</dl>
+	</div>
+
+  <div class="tab-pane fade" id="personnel">
+		<ul>
+				{% for u in object.personnel_in_project %}
+						<li><span class="personnel"><a href="{{u.get_absolute_url}}">{{u.fullname}}</a> <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
+				title="remove user from project" class="remove-link">[remove]</a></span></li>
+				{% endfor %}
+		</ul>
+
+		<form action="/project/{{object.pid}}/add_user/" method="post">
+			<p>Add Personnel:</p>
+			<select name="username">
+				{% for user in object.all_users_not_in_project %}
+				<option value="{{user.username}}">
+					{{user.fullname}}
+				</option>
+				{% endfor %}
+			</select> <input type="submit" value="add" class="btn
+			btn-primary" />
+		</form>
+
 	</div>
 
 	<div class="tab-pane fade" id="milestones">
@@ -277,6 +273,9 @@
 </div>
 
 	<div class="tab-pane fade" id="reports">
+
+  <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
+		 width="100%" />
 
 		<ul>[NOT IMPLEMENTED YET]
 			<li>weekly</li>
