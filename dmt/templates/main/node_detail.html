@@ -37,7 +37,7 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
 </div>
 </form>
 
-{{object.body}}
+{{object.body|markdown}}
 
 <ul class="nav nav-tabs">
 	{% if object.replies %}
@@ -56,7 +56,7 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
 			<span class="text-muted">by <a href="{{reply.author.get_absolute_url}}">{{reply.author.fullname}}</a><br />
 			at {{reply.added}}</span>
 	</td>
-	<td>{{reply.body}}</td>
+	<td>{{reply.body|markdown}}</td>
 </tr>
 {% endfor %}
 </table>

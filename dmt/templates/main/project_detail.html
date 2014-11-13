@@ -2,7 +2,7 @@
 {% load markup claimtags %}
 {% load waffle_tags %}
 
-{% block title %}Project&ndash;{{object.name}}{% endblock %}
+{% block title %}Project: {{object.name}}{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
@@ -17,57 +17,25 @@
 
 {% block content %}
 
-<h1 class="page-title">Project &#8226; {{object.name}}</h1>
-
-<div class="object-box clearfix">
-  <div class="object-action-set clearfix">
-    <ul>
-      {% flag project_board %}
-      <li class="object-action" title="Board view">
-        <a href="{% url 'project_board' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-th-large"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Board view</span></a>
-      </li>
-      {% endflag %}
-      <li class="object-action" title="Edit project">
-        <a href="edit/" class="object-action-link"><span class="glyphicon glyphicon-pencil"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Edit project</span></a>
-      </li>
-      <li class="object-action" title="Add action item">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-action-item">
-	      <span class="glyphicon glyphicon-plus-sign"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Add action item</span></a>
-      </li>
-      <li class="object-action" title="Add bug">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-bug">
-	      <span class="glyphicon glyphicon-plus-sign"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Add bug</span></a>
-      </li>
-      <li class="object-action" title="Add task(s) to do">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-todo">
-	      <span class="glyphicon glyphicon-tasks"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Add task(s) to do</span></a>
-      </li>
-      <li class="object-action" title="Add tracker">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-tracker">
-	      <span class="glyphicon glyphicon-time"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Add tracker</span></a>
-      </li>
-      <li class="object-action" title="Post to forum">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-node">
-	      <span class="glyphicon glyphicon-comment"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Post to forum</span></a>
-      </li>
-      <li class="object-action" title="Update status">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-update">
-	      <span class="glyphicon glyphicon-info-sign"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Update status</span></a>
-      </li>
-    </ul>  
-  </div><!-- ./object-action-set -->
-
-  <div class="object-details">
+<h1 class="page-title">Project: {{object.name}}</h1>
 
 
+<div class="btn-group">
+	<a class="btn btn-default" href="">Return to the old PMT</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+	data-target="#add-bug"><span class="glyphicon glyphicon-plus"></span> Bug</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+	data-target="#add-action-item"><span class="glyphicon glyphicon-plus"></span> Action Item</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal"
+	data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span> Add Tracker</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-todo"><span class="glyphicon glyphicon-tasks"></span> Add Todo(s)</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-node"><span class="glyphicon glyphicon-comment"></span> Add Forum Post</a>
+	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-update">Add Status Update</a>
+</div>
+
+
+<p class="pull-right"><a href="edit/" class="btn btn-primary btn-xs"
+												 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
 
 <form id="add-milestone-form" action="add_milestone/" method="post" role="form">
 <div class="modal fade" id="add-milestone" tabindex="-1" role="dialog" aria-labelledby="add-milestone-label" aria-hidden="true">
@@ -110,14 +78,14 @@
 {% include 'main/project_add_node_form.html' %}
 {% include 'main/project_add_update_form.html' %}
 
-<ul class="nav nav-tabs project-tabs">
-  <li class="active"><a href="#summary" data-toggle="tab">Summary</a></li>
-  <li><a href="#details" data-toggle="tab">Details</a></li>
+<ul class="nav nav-tabs">
+  <li><a href="#summary" data-toggle="tab">Summary</a></li>
 	<li><a href="#personnel" data-toggle="tab">Personnel</a></li>
+  <li><a href="#details" data-toggle="tab">Details</a></li>
   <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
   <li><a href="#reports" data-toggle="tab">Reports</a></li>
-	<li><a href="#forum" data-toggle="tab">Forum</a></li>
-	<li><a href="#updates" data-toggle="tab">Status</a></li>
+	<li><a href="#forum" data-toggle="tab">Forum Posts</a></li>
+	<li><a href="#updates" data-toggle="tab">Status Updates</a></li>
 </ul>
 
 
@@ -125,7 +93,7 @@
 	<div class="tab-pane fade in active" id="summary">
 
   <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
-		 width="100%" />
+		 width="800" height="50" />
 
 
 		<dl>
@@ -144,6 +112,12 @@
       <dd><a href="{% url 'project_feed' object.pk %}"><img src="{{STATIC_URL}}img/rss.png" width="14" height="14" alt="RSS" /></a></dd>
 		</dl>
 
+{% flag project_board %}
+<p>
+<a href="{% url 'project_board' object.pid %}"
+ class="btn btn-primary">Board View</a>
+</p>
+{% endflag %}
 
 {% for milestone in milestones %}
 <h3>
@@ -316,20 +290,6 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 </div>
 
 </div>
-
-
-
-
-  </div><!-- /.object-details -->
-</div><!-- ./object-box -->
-
-<br />
-<br />
-<br />
-<br />
-
-
-
 {% endblock %}
 
 {% block js %}
