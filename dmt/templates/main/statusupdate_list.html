@@ -2,7 +2,11 @@
 {% load claimtags %}
 {% pmtuser as pmt_user %}
 
+{% block title %}Status Updates of Projects{% endblock %}
+
 {% block content %}
+
+<h1 class="page-title">Status Updates of Projects</h1>
 
 {% if is_paginated %}
 <ul class="pager">
