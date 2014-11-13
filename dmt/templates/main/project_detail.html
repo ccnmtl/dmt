@@ -277,7 +277,7 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 <a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
 </span>
 {% endfor %}</p>{% endif %}
-{{n.body}}
+{{n.body|markdown}}
 
 		{% endfor %}
 	</div>
@@ -285,7 +285,7 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 	<div class="tab-pane fade" id="updates">
 		{% for n in object.recent_status_updates %}
 
-<p>{{n.body}} &mdash; <a href="{{n.user.get_absolute_url}}">{{n.user.fullname}}</a> ({{n.added.date}})</p>
+<p>{{n.body|markdown}} &mdash; <a href="{{n.user.get_absolute_url}}">{{n.user.fullname}}</a> ({{n.added.date}})</p>
 		{% endfor %}
 </div>
 

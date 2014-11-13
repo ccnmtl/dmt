@@ -43,7 +43,7 @@
 {% if object.phone %}<dt>Phone<dt><dd>{{object.phone}}</dd>{% endif %}
 {% if object.office %}<dt>Office<dt><dd>{{object.office}}</dd>{% endif %}
 {% if object.bio %}
-<dt>Bio</dt><dd>{{object.bio}}</dd>
+<dt>Bio</dt><dd>{{object.bio|markdown}}</dd>
 {% endif %}
 {% with object.user_groups as groups %}
 {% if groups %}
@@ -171,7 +171,7 @@
 <a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
 </span>
 {% endfor %}</p>{% endif %}
-{{n.body}}
+{{n.body|markdown}}
 
 		{% endfor %}
 	</div>
@@ -180,7 +180,7 @@
 		{% for n in object.recent_status_updates %}
 
 <p>
-<a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>: {{n.body}} &mdash; {{n.added.date}}</p>
+<a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>: {{n.body|markdown}} &mdash; {{n.added.date}}</p>
 		{% endfor %}
 
 </div>
