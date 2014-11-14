@@ -917,6 +917,11 @@ div.ColVis_collectionBackground {
   padding: 0 10px;
 }
 
+.pagination-nav {
+  margin: auto;
+  text-align: center;
+}
+
 /* Global nav icons responsive */
 @media (max-width: 991px) and (min-width: 768px) {
   .nav-icon-items { background: url('/media/img/icon-items-l.png') center center no-repeat;}
