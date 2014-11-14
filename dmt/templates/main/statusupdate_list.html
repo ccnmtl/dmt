@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load markup %}
 {% load claimtags %}
 {% pmtuser as pmt_user %}
 
@@ -31,7 +32,7 @@
 {% for su in statusupdate_list %}
 <p>
 <a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a>:
- {{su.body}}
+ {{su.body|markdown}}
  &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>
  ({{su.added.date}})
 
