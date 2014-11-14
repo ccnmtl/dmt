@@ -545,7 +545,7 @@ span.attachment-action-text {
 
 .navbar-lower-level {
   height: 40px;
-  background: #e2ebf5;/
+  background: #e2ebf5;
   margin: 0 1px 0 120px;
   white-space: nowrap !important;
 }
@@ -884,6 +884,38 @@ div.ColVis_collectionBackground {
   border-bottom: 5px solid #ffcc66;
 }
 
+.status-update {
+  margin: 0 0 20px 0;
+  padding: 0;
+  border: 1px solid #e2ebf5;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.status-update p {
+  margin: 0;
+  padding: 0;
+}
+
+.status-update-byline {
+  margin: 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #888;
+  background-color: #f4f4f4;
+  -webkit-border-top-left-radius: 5px;
+     -moz-border-top-left-radius: 5px;
+          border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+     -moz-border-top-right-radius: 5px;
+          border-top-right-radius: 5px;
+}
+
+.status-update-body {
+  margin: 10px 0;
+  padding: 0 10px;
+}
 
 /* Global nav icons responsive */
 @media (max-width: 991px) and (min-width: 768px) {
