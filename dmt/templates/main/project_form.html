@@ -1,10 +1,14 @@
-n{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load bootstrap %}
 
+{% block title %}Create new project{% endblock %}
+
+
 {% block content %}
+<h1 class="page-title">Create a new project</h1>
+
 <form action="." method="post">{% csrf_token %}
 <fieldset>
-<legend>Create New Project</legend>
 
 {{form|bootstrap}}
 

@@ -171,10 +171,10 @@
       <dt>Description</dt>
       <dd>{{object.description|markdown}}</dd>
       <dt>URL</dt>
-      <dd>{{object.url}}</dd>
+      <dd><a href="{{object.url}}" target="_blank">{{object.url}}</a></dd>
   {% if object.wiki_category %}
       <dt>Wiki Category</dt>
-      <dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}">{{object.wiki_category}}</a></dd>
+      <dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}" target="_blank">{{object.wiki_category}}</a></dd>
   {% endif %}
       </dd>
       <dt>Feed</dt>
@@ -187,27 +187,27 @@
       <dt>Caretaker</dt>
             <dd><a href="{% url 'user_detail' object.caretaker.username %}"
                 >{{object.caretaker.fullname}}</a></dd>
-      <dt>type</dt>
+      <dt>Type</dt>
       <dd>{{object.type}}</dd>
-      <dt>area</dt>
+      <dt>Discipline</dt>
       <dd>{{object.area}}</dd>
-      <dt>restricted?</dt>
+      <dt>Restricted</dt>
       <dd>{{object.restricted}}</dd>
-      <dt>approach</dt>
+      <dt>Approach</dt>
       <dd>{{object.approach}}</dd>
-      <dt>info url</dt>
+      <dt>Information URL</dt>
       <dd>{{object.info_url}}</dd>
-      <dt>entry url</dt>
-      <dd>{{object.entry_url}}</dd>
-      <dt>eval url</dt>
+      <dt>Released?</dt>
+      <dd>{{object.entry_rel}}</dd>
+      <dt>Evaluation URL</dt>
       <dd>{{object.eval_url}}</dd>
-      <dt>project number</dt>
+      <dt>Project number</dt>
       <dd>{{object.projnum}}</dd>
-      <dt>scale</dt>
+      <dt>Scale</dt>
       <dd>{{object.scale}}</dd>
-      <dt>distrib</dt>
+      <dt>Distribution</dt>
       <dd>{{object.distrib}}</dd>
-      <dt>poster?</dt>
+      <dt>Poster project</dt>
       <dd>{{object.poster}}</dd>
     </dl>
   </div>
