@@ -884,6 +884,51 @@ div.ColVis_collectionBackground {
   border-bottom: 5px solid #ffcc66;
 }
 
+.project-form .page-title {
+  margin-bottom: 20px;
+}
+
+.project-form .form-group {
+  background-color: #f4f4f4;
+  padding: 2px;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.project-form .form-group .control-label {
+  padding: 2px 4px;
+}
+
+.project-form .form-group .control-label::after {
+  content: ":";
+}
+
+.project-form .form-group div {
+  margin: 0;
+  background-color: #fff;
+  -webkit-border-bottom-left-radius: 5px;
+     -moz-border-bottom-left-radius: 5px;
+          border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+     -moz-border-bottom-right-radius: 5px;
+          border-bottom-right-radius: 5px;
+}
+
+.project-form .form-group .radio {
+  padding: 4px;
+}
+
+.project-form .form-group .help-block {
+  background-color: #f4f4f4;
+}
+
+.project-form .button-set {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 .status-update {
   margin: 0 0 20px 0;
   padding: 0;
