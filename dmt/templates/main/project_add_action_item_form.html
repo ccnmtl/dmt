@@ -22,7 +22,8 @@
                             var milestoneActionItemTargets = [];
                             {% for milestone in object.milestone_set.all %}
                                 milestoneActionItemTargets.push(
-                                    new Date('{{milestone.target_date}}'));
+                                    new Date('{{milestone.target_date.isoformat}}')
+                                );
                             {% endfor %}
                         </script>
                         <label for="action_item-milestones">Milestone</label>
