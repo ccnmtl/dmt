@@ -267,18 +267,18 @@ class Project(models.Model):
     caretaker = models.ForeignKey(User, db_column='caretaker')
     description = models.TextField(blank=True)
     url = models.CharField("Project URL", max_length=255, blank=True)
+    info_url = models.CharField("Information URL", max_length=255, blank=True)
+    eval_url = models.CharField("Evaluation URL", max_length=255, blank=True)
+    wiki_category = models.CharField(max_length=256, blank=True)
     status = models.CharField(max_length=16, blank=True)
+    entry_rel = models.BooleanField("Released", default=False)
+    poster = models.BooleanField("Poster project", default=False)
     type = models.CharField(max_length=50, blank=True)
     area = models.CharField("Discipline", max_length=100, blank=True)
     restricted = models.CharField(max_length=10, blank=True)
     approach = models.CharField(max_length=50, blank=True)
-    info_url = models.CharField("Information URL", max_length=255, blank=True)
-    entry_rel = models.BooleanField("Released", default=False)
-    eval_url = models.CharField("Evaluation URL", max_length=255, blank=True)
     scale = models.CharField(max_length=20, blank=True)
     distrib = models.CharField("Distribution", max_length=20, blank=True)
-    poster = models.BooleanField("Poster project", default=False)
-    wiki_category = models.CharField(max_length=256, blank=True)
 
     class Meta:
         db_table = u'projects'
