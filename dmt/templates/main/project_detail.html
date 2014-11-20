@@ -136,7 +136,7 @@
     <a href="{% url 'milestone_detail' milestone.mid %}">{{ milestone.name }}</a>
   </h3>
   {% if milestone.active_items %}
-  <table class="table table-condensed table-striped tablesorter" id="project-items">
+  <table class="table table-condensed table-striped tablesorter" id="project-items-{{ milestone.mid }}">
   <thead>
     <tr>
       <th>Title</th>
@@ -164,7 +164,7 @@
     </tr>
     {% endfor %}
   </tbody>
-  </table>
+  </table>----
   {% else %}
   <p>no active items</p>
   {% endif %}
@@ -337,9 +337,11 @@
 <script>
 $(document).ready(function() 
     { 
+        {% for milestone in milestones %}
         {% if object.active_items %}
-            $("#project-items").tablesorter({sortList: [[2,1], [1,0]]});
+            $("#project-items-{{milestone.mid}}").tablesorter({sortList: [[2,1], [1,0]]});
         {% endif %}
+        {% endfor %}
         
         {% if object.milestone_set.count %}
             $("#milestone-table").tablesorter({
