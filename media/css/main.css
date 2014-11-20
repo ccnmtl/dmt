@@ -967,6 +967,13 @@ div.ColVis_collectionBackground {
   text-align: center;
 }
 
+/* Tablesort/tablecloth override */
+
+.headerSortUp,
+.headerSortDown {
+  background-color: #e2ebf5;
+}
+
 /* Global nav icons responsive */
 @media (max-width: 991px) and (min-width: 768px) {
   .nav-icon-items { background: url('/media/img/icon-items-l.png') center center no-repeat;}
