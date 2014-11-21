@@ -64,6 +64,11 @@
 	      <span class="glyphicon glyphicon-comment"></span>
         <span class="object-action-text hidden-xs hidden-sm">Post to forum</span></a>
       </li>
+      <li class="object-action" title="Activity feed">
+        <a href="{% url 'project_feed' object.pk %}">
+	      <span class="icon-rss"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Activity feed</span></a>
+      </li>
     </ul>  
   </div><!-- ./object-action-set -->
 
@@ -175,50 +180,67 @@
   </div>
   
   <div class="tab-pane fade" id="details">
-    <dl>
+    <dl class="dl-horizontal">
       <dt>Status</dt>
       <dd>{{object.status}}</dd>
+
+      <dt>Caretaker</dt>
+      <dd><a href="{% url 'user_detail' object.caretaker.username %}">{{object.caretaker.fullname}}</a></dd>
+
       <dt>Description</dt>
       <dd>{{object.description|markdown}}</dd>
-      <dt>URL</dt>
+
+      <dt>Project number</dt>
+      <dd>{{object.projnum}}</dd>
+
+      <dt>Project URL</dt>
       <dd><a href="{{object.url}}" target="_blank">{{object.url}}</a></dd>
+
+      <dt>Information URL</dt>
+      <dd>{{object.info_url}}</dd>
+
+      <dt>Evaluation URL</dt>
+      <dd>{{object.eval_url}}</dd>
+
   {% if object.wiki_category %}
       <dt>Wiki Category</dt>
       <dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}" target="_blank">{{object.wiki_category}}</a></dd>
   {% endif %}
       </dd>
-      <dt>Feed</dt>
-      <dd><a href="{% url 'project_feed' object.pk %}"><img src="{{STATIC_URL}}img/rss.png" width="14" height="14" alt="RSS" /></a></dd>
-    </dl>
-  
-  
-  
-    <dl>
-      <dt>Caretaker</dt>
-            <dd><a href="{% url 'user_detail' object.caretaker.username %}"
-                >{{object.caretaker.fullname}}</a></dd>
+
       <dt>Type</dt>
       <dd>{{object.type}}</dd>
+
       <dt>Discipline</dt>
       <dd>{{object.area}}</dd>
+
       <dt>Restricted</dt>
       <dd>{{object.restricted}}</dd>
+
       <dt>Approach</dt>
       <dd>{{object.approach}}</dd>
-      <dt>Information URL</dt>
-      <dd>{{object.info_url}}</dd>
+
       <dt>Released?</dt>
-      <dd>{{object.entry_rel}}</dd>
-      <dt>Evaluation URL</dt>
-      <dd>{{object.eval_url}}</dd>
-      <dt>Project number</dt>
-      <dd>{{object.projnum}}</dd>
+      <dd>{% if object.entry_rel %}
+      Yes
+      {% else %}
+      No
+      {% endif %}
+      </dd>
+
+      <dt>Poster project?</dt>
+      <dd>{% if object.poster %}
+      Yes
+      {% else %}
+      No
+      {% endif %}</dd>
+
       <dt>Scale</dt>
       <dd>{{object.scale}}</dd>
+
       <dt>Distribution</dt>
       <dd>{{object.distrib}}</dd>
-      <dt>Poster project</dt>
-      <dd>{{object.poster}}</dd>
+
     </dl>
   </div>
   
