@@ -127,25 +127,26 @@
   {% if not milestones %}
   <h3 class="text-muted">There are no outstanding items for this project.</h3>
   <p>You can add a new <a href="#" data-toggle="modal"
-     data-target="#add-milestone">milestone</a> or <a href="#" data-toggle="modal" data-target="#add-action-item">action item<a/>.</p>
+     data-target="#add-milestone">milestone</a> or <a href="#" data-toggle="modal" data-target="#add-action-item">action item</a>.</p>
   {% endif %}
   
   {% for milestone in milestones %}
-  <h3>
+  <div class="milestone-set">
+  <h4>
     Milestone:
     <a href="{% url 'milestone_detail' milestone.mid %}">{{ milestone.name }}</a>
-  </h3>
+  </h4>
   {% if milestone.active_items %}
   <table class="table table-condensed table-striped tablesorter" id="project-items-{{ milestone.mid }}">
   <thead>
     <tr>
       <th>Title</th>
       <th>Status</th>
-      <th>Priority</th>
-      <th>Target Date</th>
-      <th>Owner</th>
-      <th>Assigned To</th>
-      <th>Last Modified</th>
+      <th class="hidden-xs">Priority</th>
+      <th class="hidden-xs">Target Date</th>
+      <th class="hidden-sm hidden-xs">Owner</th>
+      <th class="hidden-xs">Assigned To</th>
+      <th class="hidden-sm hidden-xs">Modified</th>
     </tr>
   </thead>
   
@@ -155,12 +156,12 @@
     <tr>
       <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
   width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></td>
-      <td class="{{item.status_class}}">{{item.status}}</td>
-      <td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
-      <td>{{item.target_date|date:"Y-m-d"}}</td>
-      <td><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
-      <td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>
-      <td>{{item.last_mod|date:"Y-m-d"}}</td>
+      <td class="{{item.status_class}}">{{item.status}} {{item.r_status|default:""}}</td>
+      <td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
+      <td class="hidden-xs">{{item.target_date|date:"Y-m-d"}}</td>
+      <td class="hidden-sm hidden-xs"><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
+      <td class="hidden-xs"><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>
+      <td class="hidden-sm hidden-xs">{{item.last_mod|date:"Y-m-d"}}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -168,6 +169,7 @@
   {% else %}
   <p>no active items</p>
   {% endif %}
+  </div><!-- ./milestone-set -->
   {% endfor %}
   
   </div>

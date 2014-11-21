@@ -273,6 +273,7 @@ dd:hover .priority-select {
 	max-width: 400px;
 }
 
+
 /* Add Action Item */
 .owner-form-group,
 .assignedto-form-group {
@@ -929,6 +930,43 @@ div.ColVis_collectionBackground {
   margin-bottom: 30px;
 }
 
+.milestone-set {
+  margin-bottom: 20px;
+  border: 1px solid #e2ebf5;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+
+}
+
+.milestone-set>h4 {
+  margin: 0;
+  padding: 5px 10px;
+  background-color: #e2ebf5;
+  -webkit-border-top-left-radius: 5px;
+     -moz-border-top-left-radius: 5px;
+          border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+     -moz-border-top-right-radius: 5px;
+          border-top-right-radius: 5px;
+}
+
+.milestone-set>.table>thead>tr>th {
+  white-space: nowrap;
+  min-width: 90px;
+  max-width: 110px;
+  border-left: 1px solid #ddd;
+  border-collapse: collapse;
+}
+
+.milestone-set .tablesorter thead tr th:first-child {
+	border-left: none;
+}
+
+.milestone-set .tablesorter tbody tr td:nth-child(1) {
+	width: 185px;
+}
+
 .status-update {
   margin: 0 0 20px 0;
   padding: 0;
@@ -971,7 +1009,7 @@ div.ColVis_collectionBackground {
 
 .headerSortUp,
 .headerSortDown {
-  background-color: #e2ebf5;
+  background-color: #faedba;
 }
 
 /* Global nav icons responsive */
@@ -983,6 +1021,7 @@ div.ColVis_collectionBackground {
   .nav-icon-groups { background: url('/media/img/icon-groups-l.png') center center no-repeat;}
   .nav-icon-reports { background: url('/media/img/icon-reports-l.png') center center no-repeat;}
   .nav-icon-talk { background: url('/media/img/icon-talk-l.png') center center no-repeat;}
+  .milestone-set .tablesorter tbody tr td:nth-child(1) { width: 245px; }
 }
 
 @media (min-width: 768px) {
@@ -1004,6 +1043,7 @@ div.ColVis_collectionBackground {
   .item-details {
     width: 970px;
   }
+  .milestone-set .tablesorter tbody tr td:nth-child(1) { width: 370px; }
 }
 
 @media (max-width: 991px) {
@@ -1131,4 +1171,6 @@ div.ColVis_collectionBackground {
     height:23px;
     margin-top: -5px;
   }
+  .milestone-set .tablesorter tbody tr td:nth-child(1) { width: 100%; max-width: 600px; }
+  .milestone-set th.header { width: 120px; }
 }
