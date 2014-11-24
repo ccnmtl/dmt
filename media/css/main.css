@@ -1017,6 +1017,122 @@ div.ColVis_collectionBackground {
   padding: 0 10px;
 }
 
+.forum-entry {
+  margin: 0 0 10px 0;
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid #b2cbea;
+}
+
+.forum-project {
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+
+.forum-title {
+  margin: 0 0 5px 0;
+  padding: 0;
+}
+
+.forum-byline {
+  margin: 0 0 10px 0;
+  padding: 0;
+  font-size: 12px;
+}
+
+.forum-tags {
+  margin: 0;
+  padding: 0;
+}
+
+.forum-body {
+  margin: 0 0 20px 15px;
+  padding: 20px 0 0 0;
+}
+
+.forum-replies {
+  margin: 0 0 20px 15px;
+  padding: 20px 0 0 0;
+}
+
+.forum-reply {
+  margin: 0 0 0 20px;
+  padding: 10px 20px;
+  border-bottom: 1px dotted #ccc;
+  background: url('/media/img/bg-forum-caret.png') left center no-repeat;
+}
+
+.forum-tags dt {
+  width: auto;
+}
+
+.forum-tags dd {
+  margin-left: 50px;
+}
+
+.forum-project a
+{
+	color: #666;
+	font-size: 12px;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.forum-title h4 {
+  margin: 0;
+  padding: 0;
+}
+
+.forum-title a {
+  color: #333;
+  text-decoration: none;
+}
+
+.forum-title a:hover {
+  color: #428bca;
+  text-decoration: none;
+}
+
+.forum-replies .nav-tabs {
+  margin-top: 20px;
+  margin-bottom: 0;
+  border: 0;
+  border-bottom: 5px solid #e2ebf5;
+}
+
+.forum-replies .nav-tabs>li {
+	font-size: 12px;
+	border: 0;
+  border-bottom: 5px solid transparent;
+	text-transform: uppercase;
+	font-weight: 500;
+	margin-bottom: -5px;
+}
+
+.forum-replies .nav-tabs>li.active,
+.forum-replies .nav-tabs>li.active:hover {
+  border-bottom: 5px solid #f90;
+  background: #ffdb92;
+}
+
+.forum-replies .nav-tabs>li.active a {
+  color: #000;
+}
+
+.forum-replies .nav-tabs>li>a,
+.forum-replies .nav-tabs>li.active a,
+.forum-replies .nav-tabs>li>a:hover,
+.forum-replies .nav-tabs>li.active a:hover,
+.forum-replies .nav-tabs>li.active a:focus {
+  border: 0;
+  background-color: transparent;
+  outline: 0;
+}
+
+.forum-replies .nav-tabs>li:hover {
+  background: #ffffcc;
+  border-bottom: 5px solid #ffcc66;
+}
+
 .pagination-nav {
   margin: auto;
   text-align: center;
