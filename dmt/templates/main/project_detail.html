@@ -319,22 +319,48 @@
   </div>
   
   <div class="tab-pane fade" id="forum">
-    {% for n in object.recent_forum_posts %}
-  <h2><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h2>
-  <p class="byline">
-  by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
-  | {{n.added}}
-  </p>
+  {% for n in object.recent_forum_posts %}
+  {% ifequal n.reply_to 0 %}
+    <div class="forum-entry">
+      <div class="forum-title">
+        <h4><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h4>
+      </div>
+      <div class="forum-byline text-muted">
+        by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
+        | {{n.added}} 
+        | <a href="{{n.get_absolute_url}}#replies"><span class="glyphicon glyphicon-comment"></span> 
+        {% ifequal n.replies 0 %}
+          Add reply
+        {% else %}
+          {% ifequal n.replies 1 %}
+            {{n.replies}} reply
+          {% else %}
+            {{n.replies}} replies
+          {% endifequal %}
+        {% endifequal %}
+        </a>
+      </div>
+
   {% if n.tags.count %}
-  <p>TAGS:
-  {% for tag in n.tags.all %}
-  <span class="tag">
-  <a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
-  </span>
-  {% endfor %}</p>{% endif %}
-  {{n.body|markdown}}
-  
+  <dl class="dl-horizontal forum-tags">
+    <dt>Tags</dt>
+    <dd>
+    {% for tag in n.tags.all %}
+    <span class="tag">
+    <a href="/tag/{{tag.slug}}/"><span>{{tag}}</span></a>
+    <a href="remove_tag/{{tag.slug}}/" class="remove-link">x</a>
+    </span>
     {% endfor %}
+    </dd>
+  </dl><!-- /.forum-tags -->
+  {% endif %}
+
+      <div class="forum-body">
+      {{n.body|markdown}}
+      </div>
+    </div><!-- /.forum-entry -->
+  {% endifequal %}
+  {% endfor %}
   </div>
   
   <div class="tab-pane fade" id="updates">
