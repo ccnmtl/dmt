@@ -452,6 +452,23 @@ span.item-action-text {
   background: transparent url('/media/img/icon-rss-feed-hover.png') left top no-repeat;
 }
 
+.icon-add-bug {
+  margin: 0;
+  padding: 0;
+  width: 17px;
+  height: 16px;
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  line-height: 1;
+  background: transparent url('/media/img/icon-add-bug.png') left top no-repeat;
+}
+
+.object-action a:hover .icon-add-bug,
+.item-action a:hover .icon-add-bug {
+  background: transparent url('/media/img/icon-add-bug-hover.png') left top no-repeat;
+}
+
 .time-logged {
   margin: 0;
   padding: 0;
