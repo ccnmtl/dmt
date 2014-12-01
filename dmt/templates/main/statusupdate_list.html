@@ -1,60 +1,73 @@
 {% extends 'base.html' %}
+{% load markup %}
 {% load claimtags %}
 {% pmtuser as pmt_user %}
 
+{% block title %}Status Updates of Projects{% endblock %}
+
 {% block content %}
 
-{% if is_paginated %}
-<ul class="pager">
-{% if page_obj.has_previous %}
-  <li><a href="/status/?page={{ page_obj.previous_page_number }}">previous</a></li>
-{% else %}
-  <li class="disabled"><a href="#">previous</a></li>
-{% endif %}
-<li><span class="page-current">
- Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-</span></li>
-{% if page_obj.has_next %}
-  <li><a href="/status/?page={{ page_obj.next_page_number }}">next</a></li>
-{% else %}
-  <li class="disabled"><a href="#">next</a></li>
-{% endif %}
-</ul>
+<h1 class="page-title">Status Updates of Projects</h1>
 
+{% if is_paginated %}
+<div class="pagination-nav">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li><a href="/status/?page={{ page_obj.previous_page_number }}"><span aria-hidden="true"><b>&lt;</b></span><span class="sr-only">Previous</span></a></li>
+    {% else %}
+    <li class="disabled"><a href="#"><span aria-hidden="true"><span aria-hidden="true"><b>&lt;</b></span><span class="sr-only">Previous</span></a></li>
+    {% endif %}
+    <li class="disabled"><span class="page-current">
+     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span></li>
+
+    {% if page_obj.has_next %}
+      <li><a href="/status/?page={{ page_obj.next_page_number }}"><span aria-hidden="true"><b>&gt;</b></span><span class="sr-only">Next</span></a></li>
+    {% else %}
+      <li class="disabled"><a href="#"><span aria-hidden="true"><b>&gt;</b></span><span class="sr-only">Next</span></a></li>
+    {% endif %}
+  </ul>
+</div>
 {% endif %}
+
 
 
 {% for su in statusupdate_list %}
-<p>
-<a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a>:
- {{su.body}}
- &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>
- ({{su.added.date}})
-
-<a href="{{su.get_absolute_url}}"><span class="glyphicon glyphicon-edit"></span></a>
-
-</p>
-
+<div class="status-update">
+  <div class="status-update-byline">
+    <b><a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a></b> | <a href="{{n.user.get_absolute_url}}">{{su.user.fullname}}</a>
+    &#8226;
+    {{su.added.date}}
+    &nbsp;
+    <a href="{{su.get_absolute_url}}"><span class="glyphicon glyphicon-pencil"></span></a>
+  </div><!-- /.status-update-byline -->
+  <div class="status-update-body">
+    {{su.body|markdown}}
+  </div><!-- /.status-update-body -->
+</div><!-- /.status-update -->
 {% endfor %}
 
 
-{% if is_paginated %}
-<ul class="pager">
-{% if page_obj.has_previous %}
-  <li><a href="/status/?page={{ page_obj.previous_page_number }}">previous</a></li>
-{% else %}
-  <li class="disabled"><a href="#">previous</a></li>
-{% endif %}
-<li><span class="page-current">
- Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-</span></li>
-{% if page_obj.has_next %}
-  <li><a href="/status/?page={{ page_obj.next_page_number }}">next</a></li>
-{% else %}
-  <li class="disabled"><a href="#">next</a></li>
-{% endif %}
-</ul>
 
+{% if is_paginated %}
+<div class="pagination-nav">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li><a href="/status/?page={{ page_obj.previous_page_number }}"><span aria-hidden="true"><b>&lt;</b></span><span class="sr-only">Previous</span></a></li>
+    {% else %}
+    <li class="disabled"><a href="#"><span aria-hidden="true"><span aria-hidden="true"><b>&lt;</b></span><span class="sr-only">Previous</span></a></li>
+    {% endif %}
+    <li class="disabled"><span class="page-current">
+     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span></li>
+
+    {% if page_obj.has_next %}
+      <li><a href="/status/?page={{ page_obj.next_page_number }}"><span aria-hidden="true"><b>&gt;</b></span><span class="sr-only">Next</span></a></li>
+    {% else %}
+      <li class="disabled"><a href="#"><span aria-hidden="true"><b>&gt;</b></span><span class="sr-only">Next</span></a></li>
+    {% endif %}
+  </ul>
+</div>
 {% endif %}
 
 

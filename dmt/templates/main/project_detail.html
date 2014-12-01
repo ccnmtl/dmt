@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% load markup claimtags %}
+{% load waffle_tags %}
 
 {% block title %}Project: {{object.name}}{% endblock %}
+
+{% block extraclass %} class="project-page"{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
@@ -16,25 +19,60 @@
 
 {% block content %}
 
-<h1 class="page-title">Project: {{object.name}}</h1>
+<h1 class="page-title">Project &#8226; {{object.name}}</h1>
 
+<div class="object-box clearfix">
+  <div class="object-action-set clearfix">
+    <ul>
+      {% flag project_board %}
+      <li class="object-action" title="Board view">
+        <a href="{% url 'project_board' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-th-large"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Board view</span></a>
+      </li>
+      {% endflag %}
+      <li class="object-action" title="Edit project">
+        <a href="edit/" class="object-action-link"><span class="glyphicon glyphicon-pencil"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Edit project</span></a>
+      </li>
+      <li class="object-action" title="Add action item">
+        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-action-item">
+	      <span class="glyphicon glyphicon-check"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Add action item</span></a>
+      </li>
+      <li class="object-action" title="Add bug">
+        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-bug">
+	      <span class="icon-add-bug"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Add bug</span></a>
+      </li>
+      <li class="object-action" title="Add task(s) to do">
+        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-todo">
+	      <span class="glyphicon glyphicon-tasks"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Add task(s) to do</span></a>
+      </li>
+      <li class="object-action" title="Add tracker">
+        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-tracker">
+	      <span class="glyphicon glyphicon-time"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Add tracker</span></a>
+      </li>
+      <li class="object-action" title="Update status">
+        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-update">
+	      <span class="glyphicon glyphicon-info-sign"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Update status</span></a>
+      </li>
+      <li class="object-action" title="Post to forum">
+        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-node">
+	      <span class="glyphicon glyphicon-comment"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Post to forum</span></a>
+      </li>
+      <li class="object-action" title="Activity feed">
+        <a href="{% url 'project_feed' object.pk %}">
+	      <span class="icon-rss"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Activity feed</span></a>
+      </li>
+    </ul>  
+  </div><!-- ./object-action-set -->
 
-<div class="btn-group">
-	<a class="btn btn-default" href="">Return to the old PMT</a>
-	<a class="btn btn-primary" href="#" data-toggle="modal"
-	data-target="#add-bug"><span class="glyphicon glyphicon-plus"></span> Bug</a>
-	<a class="btn btn-primary" href="#" data-toggle="modal"
-	data-target="#add-action-item"><span class="glyphicon glyphicon-plus"></span> Action Item</a>
-	<a class="btn btn-primary" href="#" data-toggle="modal"
-	data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span> Add Tracker</a>
-	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-todo"><span class="glyphicon glyphicon-tasks"></span> Add Todo(s)</a>
-	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-node"><span class="glyphicon glyphicon-comment"></span> Add Forum Post</a>
-	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#add-update">Add Status Update</a>
-</div>
-
-
-<p class="pull-right"><a href="edit/" class="btn btn-primary btn-xs"
-												 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
+  <div class="object-details">
 
 <form id="add-milestone-form" action="add_milestone/" method="post" role="form">
 <div class="modal fade" id="add-milestone" tabindex="-1" role="dialog" aria-labelledby="add-milestone-label" aria-hidden="true">
@@ -77,210 +115,269 @@
 {% include 'main/project_add_node_form.html' %}
 {% include 'main/project_add_update_form.html' %}
 
-<ul class="nav nav-tabs">
-  <li><a href="#summary" data-toggle="tab">Summary</a></li>
-	<li><a href="#personnel" data-toggle="tab">Personnel</a></li>
+<ul class="nav nav-tabs project-tabs">
+  <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
   <li><a href="#details" data-toggle="tab">Details</a></li>
+	<li><a href="#personnel" data-toggle="tab">Personnel</a></li>
   <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
   <li><a href="#reports" data-toggle="tab">Reports</a></li>
-	<li><a href="#forum" data-toggle="tab">Forum Posts</a></li>
-	<li><a href="#updates" data-toggle="tab">Status Updates</a></li>
+	<li><a href="#forum" data-toggle="tab">Forum</a></li>
+	<li><a href="#updates" data-toggle="tab">Status</a></li>
 </ul>
 
 
 <div class="tab-content">
-	<div class="tab-pane fade in active" id="summary">
-
-  <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
-		 width="800" height="50" />
-
-
-		<dl>
-			<dt>Status</dt>
-			<dd>{{object.status}}</dd>
-			<dt>Description</dt>
-			<dd>{{object.description}}</dd>
-			<dt>URL</dt>
-			<dd>{{object.url}}</dd>
-{% if object.wiki_category %}
-			<dt>Wiki Category</dt>
-			<dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}">{{object.wiki_category}}</a></dd>
-{% endif %}
-			</dd>
-      <dt>Feed</dt>
-      <dd><a href="{% url 'project_feed' object.pk %}"><img src="{{STATIC_URL}}img/rss.png" width="14" height="14" alt="RSS" /></a></dd>
-		</dl>
-
-{% for milestone in milestones %}
-<h3>
+  <div class="tab-pane fade in active" id="overview">
+  
+  {% if not milestones %}
+  <h3 class="text-muted">There are no outstanding items for this project.</h3>
+  <p>You can add a new <a href="#" data-toggle="modal"
+     data-target="#add-milestone">milestone</a> or <a href="#" data-toggle="modal" data-target="#add-action-item">action item</a>.</p>
+  {% endif %}
+  
+  {% for milestone in milestones %}
+  <div class="milestone-set">
+  <h4>
     Milestone:
     <a href="{% url 'milestone_detail' milestone.mid %}">{{ milestone.name }}</a>
-</h3>
-{% if milestone.active_items %}
-<table class="table table-condensed table-striped tablesorter" id="project-items">
-	<thead>
-		<tr>
-			<th>Title</th>
-			<th>Status</th>
-			<th>Priority</th>
-			<th>Target Date</th>
-			<th>Owner</th>
-			<th>Assigned To</th>
-			<th>Last Modified</th>
-		</tr>
-	</thead>
+  </h4>
+  {% if milestone.active_items %}
+  <table class="table table-condensed table-striped tablesorter" id="project-items-{{ milestone.mid }}">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Status</th>
+      <th class="hidden-xs">Priority</th>
+      <th class="hidden-xs">Target Date</th>
+      <th class="hidden-sm hidden-xs">Owner</th>
+      <th class="hidden-xs">Assigned To</th>
+      <th class="hidden-sm hidden-xs">Modified</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+  
+    {% for item in milestone.active_items %}
+    <tr>
+      <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+  width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></td>
+      <td class="{{item.status_class}}">{{item.status}} {{item.r_status|default:""}}</td>
+      <td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
+      <td class="hidden-xs">{{item.target_date|date:"Y-m-d"}}</td>
+      <td class="hidden-sm hidden-xs"><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
+      <td class="hidden-xs"><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>
+      <td class="hidden-sm hidden-xs">{{item.last_mod|date:"Y-m-d"}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+  {% else %}
+  <p>no active items</p>
+  {% endif %}
+  </div><!-- ./milestone-set -->
+  {% endfor %}
+  
+  </div>
+  
+  <div class="tab-pane fade" id="details">
+    <dl class="dl-horizontal">
+      <dt>Status</dt>
+      <dd>{{object.status}}</dd>
 
-	<tbody>
+      <dt>Caretaker</dt>
+      <dd><a href="{% url 'user_detail' object.caretaker.username %}">{{object.caretaker.fullname}}</a></dd>
 
-		{% for item in milestone.active_items %}
-		<tr>
-			<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></td>
-			<td class="{{item.status_class}}">{{item.status}}</td>
-			<td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
-			<td>{{item.target_date|date:"Y-m-d"}}</td>
-			<td><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
-			<td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>
-			<td>{{item.last_mod|date:"Y-m-d"}}</td>
-		</tr>
-		{% endfor %}
-</tbody>
-</table>
-{% else %}
-<p>no active items</p>
-{% endif %}
-{% endfor %}
+      <dt>Description</dt>
+      <dd>{{object.description|markdown}}</dd>
 
-	</div>
+      <dt>Project number</dt>
+      <dd>{{object.projnum}}</dd>
 
+      <dt>Project URL</dt>
+      <dd><a href="{{object.url}}" target="_blank">{{object.url}}</a></dd>
+
+      <dt>Information URL</dt>
+      <dd>{{object.info_url}}</dd>
+
+      <dt>Evaluation URL</dt>
+      <dd>{{object.eval_url}}</dd>
+
+  {% if object.wiki_category %}
+      <dt>Wiki Category</dt>
+      <dd><a href="http://wiki.ccnmtl.columbia.edu/index.php/Category:{{object.wiki_category}}" target="_blank">{{object.wiki_category}}</a></dd>
+  {% endif %}
+      </dd>
+
+      <dt>Type</dt>
+      <dd>{{object.type}}</dd>
+
+      <dt>Discipline</dt>
+      <dd>{{object.area}}</dd>
+
+      <dt>Restricted</dt>
+      <dd>{{object.restricted}}</dd>
+
+      <dt>Approach</dt>
+      <dd>{{object.approach}}</dd>
+
+      <dt>Released?</dt>
+      <dd>{% if object.entry_rel %}
+      Yes
+      {% else %}
+      No
+      {% endif %}
+      </dd>
+
+      <dt>Poster project?</dt>
+      <dd>{% if object.poster %}
+      Yes
+      {% else %}
+      No
+      {% endif %}</dd>
+
+      <dt>Scale</dt>
+      <dd>{{object.scale}}</dd>
+
+      <dt>Distribution</dt>
+      <dd>{{object.distrib}}</dd>
+
+    </dl>
+  </div>
+  
   <div class="tab-pane fade" id="personnel">
-		<ul>
-				{% for u in object.personnel_in_project %}
-						<li><span class="personnel"><a href="{{u.get_absolute_url}}">{{u.fullname}}</a> <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
-				title="remove user from project" class="remove-link">[remove]</a></span></li>
-				{% endfor %}
-		</ul>
+    <ul>
+        {% for u in object.personnel_in_project %}
+            <li><span class="personnel"><a href="{{u.get_absolute_url}}">{{u.fullname}}</a> <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
+        title="remove user from project" class="remove-link">[remove]</a></span></li>
+        {% endfor %}
+    </ul>
+  
+    <form action="/project/{{object.pid}}/add_user/" method="post">
+      <p>Add Personnel:</p>
+      <select name="username">
+        {% for user in object.all_users_not_in_project %}
+        <option value="{{user.username}}">
+          {{user.fullname}}
+        </option>
+        {% endfor %}
+      </select> <input type="submit" value="add" class="btn
+      btn-primary" />
+    </form>
+  
+  </div>
+  
+  <div class="tab-pane fade" id="milestones">
+  
+  <p class="pull-right">
+  <a class="btn btn-primary btn-sm" href="#" data-toggle="modal"
+     data-target="#add-milestone"><span class="glyphicon glyphicon-plus"></span>
+    Add New Milestone</a></p>
+  
+  {% if object.milestone_set.count %}
+  <table class="table table-condensed table-striped tablesorter" id="milestone-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Target Date</th>
+      <th>Status</th>
+      <th># Open</th>
+      <th></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    {% for milestone in object.milestone_set.all %}
+    <tr>
+      <td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
+      <td>{{milestone.target_date|date:"Y-m-d"}}</td>
+      <td class="{{milestone.status_class}}">{{milestone.status}}</td>
+      <td>{{milestone.num_open_items}}</td>
+      <td><img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_logged&target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_estimated&_salt=1369503684.466&height=10&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=100&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
+     width="100" height="10" /></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  
+  </table>
+  {% endif %}
+  </div>
+  
+  <div class="tab-pane fade" id="reports">
+  
+  <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
+     width="100%" />
+  
+    <ul>[NOT IMPLEMENTED YET]
+      <li>weekly</li>
+      <li>monthly</li>
+      <li>quarterly</li>
+      <li>semestral</li>
+      <li>annual</li>
+      <li>custom</li>
+    </ul>
+  
+  </div>
+  
+  <div class="tab-pane fade" id="forum">
+  {% for n in object.recent_forum_posts %}
+  {% ifequal n.reply_to 0 %}
+    <div class="forum-entry">
+      <div class="forum-title">
+        <h4><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h4>
+      </div>
+      <div class="forum-byline text-muted">
+        by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
+        | {{n.added}} 
+        | <a href="{{n.get_absolute_url}}#replies"><span class="glyphicon glyphicon-comment"></span> 
+        {% ifequal n.replies 0 %}
+          Add reply
+        {% else %}
+          {% ifequal n.replies 1 %}
+            {{n.replies}} reply
+          {% else %}
+            {{n.replies}} replies
+          {% endifequal %}
+        {% endifequal %}
+        </a>
+      </div>
 
-		<form action="/project/{{object.pid}}/add_user/" method="post">
-			<p>Add Personnel:</p>
-			<select name="username">
-				{% for user in object.all_users_not_in_project %}
-				<option value="{{user.username}}">
-					{{user.fullname}}
-				</option>
-				{% endfor %}
-			</select> <input type="submit" value="add" class="btn
-			btn-primary" />
-		</form>
+  {% if n.tags.count %}
+  <dl class="dl-horizontal forum-tags">
+    <dt>Tags</dt>
+    <dd>
+    {% for tag in n.tags.all %}
+    <span class="tag">
+    <a href="/tag/{{tag.slug}}/"><span>{{tag}}</span></a>
+    <a href="remove_tag/{{tag.slug}}/" class="remove-link">x</a>
+    </span>
+    {% endfor %}
+    </dd>
+  </dl><!-- /.forum-tags -->
+  {% endif %}
 
-	</div>
-
-	<div class="tab-pane fade" id="details">
-
-		<dl>
-			<dt>Caretaker</dt>
-            <dd><a href="{% url 'user_detail' object.caretaker.username %}"
-                >{{object.caretaker.fullname}}</a></dd>
-			<dt>type</dt>
-			<dd>{{object.type}}</dd>
-			<dt>area</dt>
-			<dd>{{object.area}}</dd>
-			<dt>restricted?</dt>
-			<dd>{{object.restricted}}</dd>
-			<dt>approach</dt>
-			<dd>{{object.approach}}</dd>
-			<dt>info url</dt>
-			<dd>{{object.info_url}}</dd>
-			<dt>entry url</dt>
-			<dd>{{object.entry_url}}</dd>
-			<dt>eval url</dt>
-			<dd>{{object.eval_url}}</dd>
-			<dt>project number</dt>
-			<dd>{{object.projnum}}</dd>
-			<dt>scale</dt>
-			<dd>{{object.scale}}</dd>
-			<dt>distrib</dt>
-			<dd>{{object.distrib}}</dd>
-			<dt>poster?</dt>
-			<dd>{{object.poster}}</dd>
-		</dl>
-	</div>
-
-	<div class="tab-pane fade" id="milestones">
-
-<p class="pull-right">
-	<a class="btn btn-primary btn-sm" href="#" data-toggle="modal"
-		 data-target="#add-milestone"><span class="glyphicon glyphicon-plus"></span>
-		Add New Milestone</a></p>
-
-{% if object.milestone_set.count %}
-<table class="table table-condensed table-striped tablesorter" id="milestone-table">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Target Date</th>
-			<th>Status</th>
-			<th># Open</th>
-			<th></th>
-		</tr>
-	</thead>
-
-	<tbody>
-		{% for milestone in object.milestone_set.all %}
-		<tr>
-			<td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
-			<td>{{milestone.target_date|date:"Y-m-d"}}</td>
-			<td class="{{milestone.status_class}}">{{milestone.status}}</td>
-			<td>{{milestone.num_open_items}}</td>
-			<td><img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_logged&target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_estimated&_salt=1369503684.466&height=10&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=100&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
-		 width="100" height="10" /></td>
-		</tr>
-		{% endfor %}
-	</tbody>
-
-</table>
-{% endif %}
-</div>
-
-	<div class="tab-pane fade" id="reports">
-
-		<ul>[NOT IMPLEMENTED YET]
-			<li>weekly</li>
-			<li>monthly</li>
-			<li>quarterly</li>
-			<li>semestral</li>
-			<li>annual</li>
-			<li>custom</li>
-		</ul>
-
-	</div>
-
-	<div class="tab-pane fade" id="forum">
-		{% for n in object.recent_forum_posts %}
-<h2><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h2>
-<p class="byline">
-by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
-| {{n.added}}
-</p>
-{% if n.tags.count %}
-<p>TAGS:
-{% for tag in n.tags.all %}
-<span class="tag">
-<a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
-</span>
-{% endfor %}</p>{% endif %}
-{{n.body}}
-
-		{% endfor %}
-	</div>
-
-	<div class="tab-pane fade" id="updates">
-		{% for n in object.recent_status_updates %}
-
-<p>{{n.body}} &mdash; <a href="{{n.user.get_absolute_url}}">{{n.user.fullname}}</a> ({{n.added.date}})</p>
-		{% endfor %}
-</div>
-
+      <div class="forum-body">
+      {{n.body|markdown}}
+      </div>
+    </div><!-- /.forum-entry -->
+  {% endifequal %}
+  {% endfor %}
+  </div>
+  
+  <div class="tab-pane fade" id="updates">
+    {% for n in object.recent_status_updates %}
+    <div class="status-update">
+      <div class="status-update-byline">
+        <a href="{{n.user.get_absolute_url}}">{{n.user.fullname}}</a>
+        &#8226;
+        {{n.added.date}}
+      </div><!-- /.status-update-byline -->
+      <div class="status-update-body">
+        {{n.body|markdown}}
+      </div><!-- /.status-update-body -->
+    </div><!-- /.status-update -->
+    {% endfor %}
+  </div>
+  
 </div>
 {% endblock %}
 
@@ -290,9 +387,11 @@ by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
 <script>
 $(document).ready(function() 
     { 
+        {% for milestone in milestones %}
         {% if object.active_items %}
-            $("#project-items").tablesorter({sortList: [[2,1], [1,0]]});
+            $("#project-items-{{milestone.mid}}").tablesorter({sortList: [[3,1]]});
         {% endif %}
+        {% endfor %}
         
         {% if object.milestone_set.count %}
             $("#milestone-table").tablesorter({

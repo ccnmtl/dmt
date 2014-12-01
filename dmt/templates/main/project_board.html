@@ -1,0 +1,103 @@
+{% load bootstrap3 %}
+{% load waffle_tags %}
+{% flag project_board %}
+<html>
+
+<head>
+  <link href="{% bootstrap_css_url %}" rel="stylesheet">
+  <script src="{{STATIC_URL}}js/libs/jquery/jquery-min.js"></script>
+
+	<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+	<script src="{% bootstrap_javascript_url %}"></script>
+
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+<style>
+.item {
+    width: 250px;
+    border: #666 solid 1px;
+    padding: 5px;
+    margin: 5px;
+    background-color: #fff;
+    cursor: move;
+
+}
+.milestone {
+   width: 270px;
+   background-color: #eee;
+   list-style-type: none;
+   padding: 5px;
+}
+
+</style>
+
+</head>
+<body>
+
+<table class="table" id="milestones">
+	<thead>
+		<tr>
+{% for milestone in object.open_milestones %}
+<th>{{milestone.name}}</th>
+{% endfor %}
+		</tr>
+	</thead>
+
+	<tbody>
+		<tr>
+{% for milestone in object.open_milestones %}			
+<td>{{milestone.target_date}}</td>
+{% endfor %}
+		</tr>
+
+		<tr>
+{% for milestone in object.open_milestones %}
+<td>
+<ul class="milestone" id="milestone-{{milestone.mid}}" data-mid="{{milestone.mid}}">
+{% for item in milestone.active_items %}
+<li class="item" id="item-{{item.iid}}" data-iid="{{item.iid}}">
+{{item.title|truncatechars:70}}
+</li>
+{% endfor %}
+</ul>
+</td>
+{% endfor %}
+		</tr>
+	</tbody>
+
+</table>
+
+
+<script>
+
+var dropHandler = function (event, ui) {
+  var iid = ui.item[0].dataset['iid'];
+  var fromMid = event.target.dataset['mid'];
+  var toMid = ui.item[0].parentElement.dataset['mid'];
+
+  // nothing to do if it's not actually changing milestones
+  if (fromMid === toMid ) { return; }
+  $.ajax({
+    url: '/item/' + iid + '/set_milestone/',
+    type: 'POST',
+    data: {'mid': toMid}
+   });
+};
+
+$(function() {
+  $( "ul.milestone" ).sortable({
+     items : '.item'
+   , placeholder: "ui-state-highlight"
+   , forcePlaceholderSize: true
+   , connectWith: "ul.milestone"
+   , stop: dropHandler
+  });
+  $( "#milestones" ).disableSelection();
+});
+</script>
+</body>
+</html>
+{% else %}
+<p>Sorry, this feature is disabled</p>
+{% endflag %}

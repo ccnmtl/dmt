@@ -1,14 +1,25 @@
-n{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load bootstrap %}
 
+{% block title %}Project: Create new project{% endblock %}
+{% block extraclass %} class="project-form"{% endblock %}
+
+
 {% block content %}
+<h1 class="page-title">Project: Create a new project</h1>
+
+<p class="instructions"><a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Help_and_Tutorial#Create_a_new_project" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> Need help?</a></p>
+
+<br />
+
 <form action="." method="post">{% csrf_token %}
 <fieldset>
-<legend>Create New Project</legend>
 
 {{form|bootstrap}}
 
-<input type="submit" value="Save" class="btn btn-primary" />
+<div class="button-set">
+<input type="submit" value="Save project" class="btn btn-primary" />
+</div>
 </fieldset>
 </form>
 {% endblock %}

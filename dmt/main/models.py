@@ -261,24 +261,24 @@ def interval_sum(intervals):
 
 class Project(models.Model):
     pid = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-    pub_view = models.BooleanField(default=False)
+    name = models.CharField("Project name", max_length=255)
+    projnum = models.IntegerField("Project number", null=True, blank=True)
+    pub_view = models.BooleanField("PMT View", default=False)
     caretaker = models.ForeignKey(User, db_column='caretaker')
     description = models.TextField(blank=True)
+    url = models.CharField("Project URL", max_length=255, blank=True)
+    info_url = models.CharField("Information URL", max_length=255, blank=True)
+    eval_url = models.CharField("Evaluation URL", max_length=255, blank=True)
+    wiki_category = models.CharField(max_length=256, blank=True)
     status = models.CharField(max_length=16, blank=True)
+    entry_rel = models.BooleanField("Released", default=False)
+    poster = models.BooleanField("Poster project", default=False)
     type = models.CharField(max_length=50, blank=True)
-    area = models.CharField(max_length=100, blank=True)
-    url = models.CharField(max_length=255, blank=True)
+    area = models.CharField("Discipline", max_length=100, blank=True)
     restricted = models.CharField(max_length=10, blank=True)
     approach = models.CharField(max_length=50, blank=True)
-    info_url = models.CharField(max_length=255, blank=True)
-    entry_rel = models.BooleanField(default=False)
-    eval_url = models.CharField(max_length=255, blank=True)
-    projnum = models.IntegerField(null=True, blank=True)
     scale = models.CharField(max_length=20, blank=True)
-    distrib = models.CharField(max_length=20, blank=True)
-    poster = models.BooleanField(default=False)
-    wiki_category = models.CharField(max_length=256, blank=True)
+    distrib = models.CharField("Distribution", max_length=20, blank=True)
 
     class Meta:
         db_table = u'projects'
@@ -297,6 +297,9 @@ class Project(models.Model):
 
     def milestones(self):
         return Milestone.objects.filter(project=self).order_by('target_date')
+
+    def open_milestones(self):
+        return self.milestone_set.filter(status='OPEN').order_by('target_date')
 
     def managers(self):
         return [w.username for w in self.workson_set.filter(auth='manager')]

@@ -541,6 +541,15 @@ class TestItemViews(TestCase):
         i = Item.objects.get(iid=i.iid)
         self.assertEqual(i.milestone.project.pid, p.pid)
 
+    def test_item_set_milestone(self):
+        i = ItemFactory()
+        m = MilestoneFactory()
+        r = self.c.post(reverse('set_item_milestone', args=(i.iid,)),
+                        dict(mid=m.mid))
+        self.assertEqual(r.status_code, 200)
+        i = Item.objects.get(iid=i.iid)
+        self.assertEqual(i.milestone.mid, m.mid)
+
 
 class TestItemTagViews(LoggedInTestMixin, TestCase):
     def setUp(self):

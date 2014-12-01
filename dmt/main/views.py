@@ -477,12 +477,11 @@ class ProjectDetailView(LoggedInMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectDetailView, self).get_context_data(**kwargs)
-        ctx['milestones'] = [m for m in self.object.milestones()
-                             if Item.objects.filter(
-                                 milestone=m
-                             ).filter(
-                                 ~Q(status='VERIFIED')
-                             ).count() > 0]
+        ctx['milestones'] = [
+            m for m in self.object.milestones()
+            if Item.objects.filter(milestone=m).filter(
+                ~Q(status='VERIFIED')
+            ).count() > 0]
         return ctx
 
 
@@ -598,6 +597,21 @@ class ItemMoveProjectView(LoggedInMixin, View):
         # possibly close out the old one
         old_milestone.update_milestone()
         return HttpResponseRedirect(item.get_absolute_url())
+
+
+class ItemSetMilestoneView(LoggedInMixin, View):
+    def post(self, request, pk):
+        item = get_object_or_404(Item, iid=pk)
+        old_milestone = item.milestone
+        new_milestone = get_object_or_404(
+            Milestone, pk=request.POST.get('mid', ''))
+        item.milestone = new_milestone
+        item.save()
+        # possibly re-open a milestone
+        new_milestone.update_milestone()
+        # possibly close out the old one
+        old_milestone.update_milestone()
+        return HttpResponse("ok")
 
 
 class TagListView(LoggedInMixin, ListView):

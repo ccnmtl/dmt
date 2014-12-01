@@ -2,7 +2,11 @@ define([], function() {
     var FormUtils = function() {};
 
     FormUtils.prototype.refreshTargetDate = function($selectEl, targetDates) {
-        if (!targetDates || targetDates.length <= 0) {
+        if (
+            typeof $().datepicker === 'undefined' ||
+                !targetDates ||
+                targetDates.length <= 0
+        ) {
             return;
         }
 

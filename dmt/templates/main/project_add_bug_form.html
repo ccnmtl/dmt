@@ -31,7 +31,8 @@
                             var milestoneBugTargets = [];
                             {% for milestone in object.milestone_set.all %}
                                 milestoneBugTargets.push(
-                                    new Date('{{milestone.target_date}}'));
+                                    new Date('{{milestone.target_date.isoformat}}')
+                                );
                             {% endfor %}
                         </script>
                         <label for="bug-milestones">Milestone</label>
@@ -69,12 +70,28 @@
                     </div>
 
                     <div class="form-group">
-                        <textarea name="description" class="form-control" rows="5" placeholder="description"></textarea>
+                        <div class="instructions">
+                          <span class="glyphicon glyphicon-question-sign"></span>
+                          For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.
+                        </div>
+                        <textarea
+                             id="dmt-project-new-bug-desc"
+                             name="description"
+                             class="form-control"
+                             rows="5"
+                             placeholder="Description"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="instructions">
+                          Description preview:
+                        </div>
+                        <div class="dmt-markdown-project-bug-preview dmt-markdown-preview">Description</div>
                     </div>
 
                     <div class="form-group">
                         <label for="bug-tags">Tags</label>
-                        <input type="text" name="tags" id="bug-tags" placeholder="tags" class="form-control" />
+                        <input type="text" name="tags" id="bug-tags" placeholder="Add tags (comma or space separated)" class="form-control" />
                     </div>
 
                 </div>

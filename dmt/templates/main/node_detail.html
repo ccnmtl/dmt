@@ -1,78 +1,101 @@
 {% extends 'base.html' %}
 {% load markup %}
 
+
 {% block title %}Forum Post: {{object.subject}}{% endblock %}
 
 {% block content %}
-<ul class="breadcrumb">
-  <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
-  <li><a href="/forum/">Forum</a></li>
-</ul>
 
-<p class="pull-right"><a href="edit/" class="btn btn-primary btn-xs"
-												 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
-<h1><a href="{{object.get_absolute_url}}">{{object.subject}}</a></h1>
-
-<p><span class="text-muted">
-{% if object.project %}to <a href="{{object.project.get_absolute_url}}">{{object.project.name}}</a>{% endif %}
-by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
-| {{object.added}}</span>
-</p>
-<p>TAGS:
-{% if object.tags.count %}
-{% for tag in object.tags.all %}
-<span class="tag">
-<a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
-<a href="remove_tag/{{tag.slug}}/" class="remove-link">x</a>
-</span>
-{% endfor %}
-<br />
+<h1 class="page-title">Forum Posts: {{object.subject}}</h1>
+{% if object.project %}
+<div class="forum-project">
+  <a href="{{object.project.get_absolute_url}}">{{object.project.name}}</a>
+</div><!-- /.forum-project -->
 {% endif %}
-<form action="tag/" method="post">
-<div class="input-group">
-<input class="form-control" type="text" placeholder="add tags (comma separated)"
-			 name="tags" />
-<span class="input-group-btn"><input type="submit" value="tag"
-																		 class="btn btn-default" /></span>
-</div>
-</form>
 
-{{object.body}}
+<div class="forum-byline text-muted">
+by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a> 
+| {{object.added}}
+| <a href="edit/" title="Edit post"><span class="glyphicon glyphicon-pencil"></span> Edit post</a>
+</div><!-- /.forum-byline -->
 
+
+<dl class="dl-horizontal forum-tags">
+  <dt>Tags</dt>
+  <dd>
+  {% if object.tags %}
+  {% for tag in object.tags.all %}
+  <span class="tag">
+  <a href="/tag/{{tag.slug}}/"><span>{{tag}}</span></a>
+  <a href="remove_tag/{{tag.slug}}/" class="remove-link">x</a>
+  </span>
+  {% endfor %}
+  {% endif %}
+  <form action="tag/" method="post">
+  
+  <div class="input-group input-group-sm tag-form">
+  <input class="form-control" type="text" placeholder="Add tags (comma or space separated)" name="tags" />
+  <span class="input-group-btn"><input type="submit" value="Tag" class="btn btn-primary" /></span>
+  </div>
+  </form>
+  </dd>
+</dl><!-- /.forum-tags -->
+
+<div class="forum-body">
+   {{object.body|markdown}}  
+</div><!-- /.forum-body -->
+
+<div class="forum-replies">
+  <a name="replies"></a>
 <ul class="nav nav-tabs">
 	{% if object.replies %}
-	<li><a href="#replies" data-toggle="tab">Replies</a></li>
+	<li class="active"><a href="#replies" data-toggle="tab">
+  {% if object.replies == 1 %}
+    {{object.replies}} reply
+  {% else %}
+    {{object.replies}} replies
+  {% endif %}
+	</a></li>
 	{% endif %}
-	<li><a href="#add-reply" data-toggle="tab">Add Reply</a></li>
+	<li{% if not object.replies %} class="active"{% endif %}><a href="#add-reply" data-toggle="tab">Add Reply</a></li>
 </ul>
-
-<div class="tab-content">
-{% if object.replies %}
-  <div class="tab-pane fade in active" id="replies">
-<table class="table">
-{% for reply in object.get_replies %}
-<tr>
-	<td>
-			<span class="text-muted">by <a href="{{reply.author.get_absolute_url}}">{{reply.author.fullname}}</a><br />
-			at {{reply.added}}</span>
-	</td>
-	<td>{{reply.body}}</td>
-</tr>
-{% endfor %}
-</table>
-</div>
-  <div class="tab-pane fade in" id="add-reply">
-{% else %}
-  <div class="tab-pane fade in active" id="add-reply">
-{% endif %}
-<form action="reply/" method="post">
-	<div class="form-group">
-		<textarea name="body" class="form-control" rows="10"></textarea>
-	</div>
-
-<div class="pull-right"><input type="submit" value="Add Reply" class="btn btn-primary" /></div>
-</fieldset>
-</form>
-</div>
-</div>
+  
+  <div class="tab-content">
+    {% if object.replies %}
+    <div class="tab-pane fade in active" id="replies">
+      {% for reply in object.get_replies %}
+      <div class="forum-reply">
+        <div class="forum-byline text-muted">
+        By <a href="{{reply.author.get_absolute_url}}">{{reply.author.fullname}}</a> 
+        | {{reply.added}}
+        </div><!-- /.forum-byline -->
+        {{reply.body|markdown}}
+      </div>
+      {% endfor %}
+    </div><!-- /#replies -->
+    <div class="tab-pane fade in" id="add-reply">
+    {% else %}
+    <div class="tab-pane fade in active" id="add-reply">
+    {% endif %}
+      <div class="forum-reply">
+      <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+      For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+      <form action="reply/" method="post">
+      <fieldset>
+      <div class="form-group">
+      <textarea 
+          name="body" 
+          class="form-control" 
+          rows="5"
+          placeholder="{% if object.replies == 0 %}Start the discussion...
+          {% else %}Join the discussion...{% endif %}"></textarea>
+      </div>
+      
+      <div class="pull-right"><input type="submit" value="Add Reply" class="btn btn-primary" /></div>
+      </fieldset>
+      </form>
+      </div>
+    </div><!-- /#add-reply -->
+  </div><!-- /.tab-content -->
+</div><!-- /.forum-replies -->
 {% endblock %}

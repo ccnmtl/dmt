@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Reports{% endblock %}
+{% block title %}All Reports{% endblock %}
 
 {% block content %}
 <ul class="breadcrumb">
@@ -9,6 +9,10 @@
 </ul>
 
 <ul>
+    <li>
+        <a href="/status/">Status updates of projects</a>
+    </li>
+
     <li>
         <a href="{% url 'active_projects_report' %}">Active Projects</a>
     </li>

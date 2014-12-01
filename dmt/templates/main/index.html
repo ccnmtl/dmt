@@ -60,28 +60,36 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <input type="text" name="project" placeholder="project"
+                            <input type="text" name="project" placeholder="Project"
                                    class="form-control" id="project-input" />
                         </div>
                     </div>
-
+                    <br />
                     <div class="row">
                         <div class="col-sm-7">
-                            <input type="text" name="title" placeholder="task"
+                            <input type="text" name="title" placeholder="Task"
                                    id="tracker-task-input"
                                    class="form-control"/>
                         </div>
 
                         <div class="col-sm-3">
-                            <input type="text" name="time" placeholder="time"
+                            <input type="text" name="client" placeholder="Client UNI"
+                                   id="tracker-client-input"
+                                   class="form-control" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <input type="text" name="time" placeholder="Time"
                                    id="tracker-time-input"
                                    class="form-control" />
                         </div>
-
-                        <div class="col-sm-2">
-                            <input type="text" name="client" placeholder="client"
-                                   id="tracker-client-input"
-                                   class="form-control" />
+                        <div class="col-sm-6 instructions">
+                          <span class="glyphicon glyphicon-question-sign"></span>
+                          Enter time and unit, for example:
+                          <code>30hrs 59min</code><br />
+                          <a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Help_and_Tutorial#Time_formatting" target="_blank">Visit Help</a> for more information.
                         </div>
                     </div>
                 </form>
@@ -137,10 +145,10 @@
         {% for item in pmt_user.items %}
         <tr>
             <td data-field="item">
-                <div class="status-indicator {{item.target_date_status}} {{item.status_class}}"
+                {% comment %}<div class="status-indicator {{item.target_date_status}} {{item.status_class}}"
                 data-toggle="tooltip"
                 data-placement="bottom"
-                title="{% ifequal item.status 'INPROGRESS' %}{{item.status_class}}{% else %}{{item.target_date_status}}{% endifequal %}"></div>
+                title="{% ifequal item.status 'INPROGRESS' %}{{item.status_class}}{% else %}{{item.target_date_status}}{% endifequal %}"></div>{% endcomment %}
                 
                 {% if item.is_bug %}
                 <img src="{{STATIC_URL}}img/icon-bug.png"
@@ -156,7 +164,7 @@
                 </span>
                 {% endifequal %}
             </td>
-            <td data-field="priority" class="pr{{item.priority}} hidden-xs">
+            <td data-field="priority" class="pr{{item.priority}} hidden-xs pr">
                 <span class="invisible">{{item.priority}}</span>
                 {{item.priority_label}}
             </td>

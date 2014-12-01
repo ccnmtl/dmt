@@ -26,6 +26,7 @@ from dmt.main.views import (
     DeleteAttachmentView, GroupCreateView,
     DeactivateUserView, ItemMoveProjectView, RemoveUserFromGroupView,
     AddUserToGroupView, MilestoneDeleteView, OwnedItemsView,
+    ItemSetMilestoneView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
@@ -86,6 +87,9 @@ urlpatterns = patterns(
     (r'^item/(?P<pk>\d+)/reopen/$', ReopenItemView.as_view()),
     (r'^item/(?P<pk>\d+)/split/$', SplitItemView.as_view()),
     (r'^item/(?P<pk>\d+)/tag/$', TagItemView.as_view()),
+    url(r'^item/(?P<pk>\d+)/set_milestone/$',
+        ItemSetMilestoneView.as_view(),
+        name='set_item_milestone'),
     (r'^item/(?P<pk>\d+)/remove_tag/(?P<slug>[^/]+)/$',
      RemoveTagFromItemView.as_view()),
     (r'^item/(?P<pk>\d+)/priority/(?P<priority>\d)/$',
@@ -109,6 +113,9 @@ urlpatterns = patterns(
         name='project_create'),
     url(r'^project/(?P<pk>\d+)/$', ProjectDetailView.as_view(),
         name='project_detail'),
+    url(r'^project/(?P<pk>\d+)/board/$', ProjectDetailView.as_view(
+        template_name="main/project_board.html"),
+        name='project_board'),
     (r'^project/(?P<pk>\d+)/add_bug/$',
      ProjectAddItemView.as_view(item_type='bug')),
     (r'^project/(?P<pk>\d+)/add_action_item/$',

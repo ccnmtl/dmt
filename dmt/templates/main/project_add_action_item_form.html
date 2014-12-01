@@ -22,7 +22,8 @@
                             var milestoneActionItemTargets = [];
                             {% for milestone in object.milestone_set.all %}
                                 milestoneActionItemTargets.push(
-                                    new Date('{{milestone.target_date}}'));
+                                    new Date('{{milestone.target_date.isoformat}}')
+                                );
                             {% endfor %}
                         </script>
                         <label for="action_item-milestones">Milestone</label>
@@ -98,14 +99,28 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
-                        <textarea name="description" class="form-control" rows="5" placeholder="Description"></textarea>
+                        <div class="instructions">
+                          <span class="glyphicon glyphicon-question-sign"></span>
+                          For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.
+                        </div>
+                        <textarea
+                             id="dmt-project-new-item-desc"
+                             name="description"
+                             class="form-control"
+                             rows="5"
+                             placeholder="Description"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="instructions">
+                          Description preview:
+                        </div>
+                        <div class="dmt-markdown-project-item-preview dmt-markdown-preview">Description</div>
                     </div>
 
                     <div class="form-group">
                         <label for="action_item-tags">Tags</label>
-                        <input type="text" name="tags" id="action_item-tags" placeholder="tags" class="form-control" />
+                        <input type="text" name="tags" id="action_item-tags" placeholder="Add tags (comma or space separated)" class="form-control" />
                     </div>
 
                 </div>
