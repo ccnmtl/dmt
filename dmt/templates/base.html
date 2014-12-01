@@ -192,6 +192,7 @@
 {% endblock %}
 
     <div id="content">
+			{% if not request.user.is_anonymous %}
         {% if messages %}
         <div class="dmt-messages">
             {% for message in messages %}
@@ -205,6 +206,7 @@
             {% endfor %}
         </div>
         {% endif %}
+      {% endif %}
       <div class="row-fluid">
         <div class="span12" id="right-content">
             {% block pagetitle %}{% endblock %}
