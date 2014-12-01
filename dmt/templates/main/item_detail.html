@@ -254,10 +254,16 @@
                     <input type="hidden" name="iid" value="{{object.iid}}" id="item-iid-input" />
 
                     <div class="row">
-                        <div class="col-sm-3">
-                            <input type="text" name="time" placeholder="time"
-                                   id="tracker-time-input"
-                                   class="form-control" />
+                        <div class="col-sm-4">
+                            <input type="text" name="time" 
+                              placeholder="e.g. 1hr 20min" id="tracker-time-input"
+                              class="form-control" />
+                        </div>
+                        <div class="col-sm-6 instructions">
+                          <span class="glyphicon glyphicon-question-sign"></span>
+                          Enter time and unit, for example:
+                          <code>30hrs 59min</code><br />
+                          <a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Help_and_Tutorial#Log_time" target="_blank">Visit Help</a> for more information.
                         </div>
                     </div>
                 </form>
