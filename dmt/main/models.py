@@ -754,8 +754,9 @@ class Item(models.Model):
             Sum('actual_time'))
         return total['actual_time__sum']
 
-    def add_resolve_time(self, user, time):
-        completed = datetime.now()
+    def add_resolve_time(self, user, time, completed=None):
+        if not completed:
+            completed = datetime.now()
         ActualTime.objects.create(
             item=self,
             resolver=user,
