@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 
 from dmt.main.views import (
     AddTrackersView, SearchView,
-    AddCommentView, ResolveItemView,
+    AddCommentView, CommentDeleteView, ResolveItemView,
     InProgressItemView, VerifyItemView, ReopenItemView,
     SplitItemView, ItemDetailView,
     IndexView, ClientListView,
@@ -82,6 +82,8 @@ urlpatterns = patterns(
     url(r'^item/(?P<pk>\d+)/move_project/$', ItemMoveProjectView.as_view(),
         name='item-move-project'),
     (r'^item/(?P<pk>\d+)/comment/$', AddCommentView.as_view()),
+    url(r'^comment/(?P<pk>\d+)/delete/$', CommentDeleteView.as_view(),
+        name='comment_delete'),
     (r'^item/(?P<pk>\d+)/resolve/$', ResolveItemView.as_view()),
     (r'^item/(?P<pk>\d+)/inprogress/$', InProgressItemView.as_view()),
     (r'^item/(?P<pk>\d+)/verify/$', VerifyItemView.as_view()),

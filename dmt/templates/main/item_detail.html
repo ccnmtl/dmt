@@ -734,6 +734,21 @@
             <nobr>on {{history_item.timestamp}}</nobr>
         </div>
         <div class="col-md-7 item-comment">
+            {# Does this history item belong to the current user? #}
+            {% if request.user.username == history_item.user.username %}
+            {# Is it a comment? #}
+            {% if history_item.c %}
+            <form method="get"
+                  action="{% url 'comment_delete' history_item.c.cid %}">
+                <button type="submit"
+                        title="Delete comment"
+                        class="btn btn-default btn-xs pmt-delete">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </form>
+            {% endif %}
+            {% endif %}
+
             {{history_item.comment|markdown}}
         </div>
     </div>

@@ -368,6 +368,10 @@ footer.page-footer {
     word-wrap: break-word;
 }
 
+.item-history .item-comment button.pmt-delete {
+    float: right;
+}
+
 .object-action-set,
 .item-action-set {
   margin: -20px -25px 0 0;

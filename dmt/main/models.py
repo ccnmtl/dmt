@@ -1370,6 +1370,10 @@ class Comment(models.Model):
     def user(self):
         return User.objects.get(username=self.username)
 
+    def user_is_owner(self, user):
+        """Return True if user is comment owner."""
+        return self.username == user.username
+
 
 class StatusUpdate(models.Model):
     project = models.ForeignKey(Project)

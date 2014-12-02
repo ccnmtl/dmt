@@ -9,7 +9,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
-from dmt.main.models import Attachment, Item, ItemClient, Milestone, Project
+from dmt.main.models import (
+    Attachment, Comment, Item, ItemClient, Milestone, Project
+)
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 from datetime import timedelta
 import json
@@ -612,6 +614,29 @@ class TestItemWorkflow(TestCase):
             i.get_absolute_url() + "comment/",
             dict(comment=''))
         self.assertEqual(r.status_code, 302)
+
+    def test_delete_own_comment(self):
+        i = ItemFactory()
+        e = EventFactory(item=i)
+        comment = CommentFactory(item=i, event=e, username=self.u.username)
+        url = reverse('comment_delete', args=(comment.cid,))
+        r = self.c.post(url)
+        self.assertEqual(r.status_code, 302)
+
+        # Assert that comment is really deleted
+        with self.assertRaises(Comment.DoesNotExist):
+            Comment.objects.get(cid=comment.cid)
+
+    def test_delete_someone_elses_comment(self):
+        i = ItemFactory()
+        e = EventFactory(item=i)
+        comment = CommentFactory(item=i, event=e, username='someone_else')
+        url = reverse('comment_delete', args=(comment.cid,))
+        r = self.c.post(url)
+        self.assertEqual(r.status_code, 403)
+
+        # Assert that the comment still exists
+        Comment.objects.get(cid=comment.cid)
 
     def test_resolve(self):
         i = ItemFactory()
