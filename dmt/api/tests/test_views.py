@@ -42,6 +42,27 @@ class AddTrackerViewTest(TestCase):
             ))
         self.assertEqual(r.status_code, 200)
 
+    def test_post_backdated(self):
+        r = self.c.post(
+            "/api/1.0/trackers/add/",
+            dict(
+                pid=self.project.pid,
+                task="test",
+                time="1 hour",
+                completed="last",
+            ))
+        self.assertEqual(r.status_code, 200)
+
+        r = self.c.post(
+            "/api/1.0/trackers/add/",
+            dict(
+                pid=self.project.pid,
+                task="test",
+                time="1 hour",
+                completed="before_last",
+            ))
+        self.assertEqual(r.status_code, 200)
+
     def test_post_with_nonexistant_client(self):
         r = self.c.post(
             "/api/1.0/trackers/add/",

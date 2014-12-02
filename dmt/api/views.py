@@ -8,7 +8,7 @@ from rest_framework import filters, generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from simpleduration import Duration, InvalidDuration
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dmt.claim.models import Claim
 from dmt.main.models import Client, Item, Milestone, Notify, Project, User
@@ -172,6 +172,14 @@ class ProjectMilestoneList(generics.ListCreateAPIView):
         return Milestone.objects.filter(project__pk=pk)
 
 
+def process_completed(completed=None):
+    if completed == 'last':
+        return datetime.now() - timedelta(days=7)
+    if completed == 'before_last':
+        return datetime.now() - timedelta(days=14)
+    return completed
+
+
 class AddTrackerView(View):
     @method_decorator(login_required)
     def post(self, request):
@@ -179,6 +187,7 @@ class AddTrackerView(View):
         task = request.POST.get('task', None)
         d = new_duration(request.POST.get('time', '1 hour'))
         client_uni = request.POST.get('client', '')
+        completed = process_completed(request.POST.get('completed', ''))
 
         td = d.timedelta()
         # two required fields
@@ -203,7 +212,7 @@ class AddTrackerView(View):
                 item.add_clients([r[0]])
             else:
                 pass
-        item.add_resolve_time(user, td)
+        item.add_resolve_time(user, td, completed)
         return HttpResponse("ok")
 
 
