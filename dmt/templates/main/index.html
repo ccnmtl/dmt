@@ -24,28 +24,24 @@
 {% else %}
   {% pmtuser as pmt_user %}
 
-<p>
-    <ul class="nav nav-pills">
-        <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></li>
-        <li><a href="#" data-toggle="modal"
-               data-target="#add-tracker">
-                <span class="glyphicon glyphicon-time"></span>
-                Add Tracker
-        </a></li>
-        <li>
-            <a href="{% url 'add_trackers' %}">
-                <span class="glyphicon glyphicon-time"></span>
-                Add Trackers
-            </a>
-        </li>
-				<li>
-					  <a href="/report/user/{{pmt_user.username}}/weekly/">
-						    <span class="glyphicon glyphicon-stats"></span>
-						    Weekly Report
-					  </a>
-				</li>
+  <div class="object-action-set clearfix">
+    <ul>
+      <li class="object-action" title="Add tracker">
+        <a href="#" class="object-action-link" data-toggle="modal"
+        data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span>
+        <span class="object-action-text"><span class="hidden-xs">Add tracker</span><span class="visible-xs">Tracker</span></span></a>
+      </li>
+      <li class="object-action" title="Add trackers">
+        <a href="{% url 'add_trackers' %}" class="object-action-link"><span class="glyphicon glyphicon-align-left"></span>
+        <span class="object-action-text"><span class="hidden-xs">Add trackers</span><span class="visible-xs">Trackers</span></span></a>
+      </li>
+      <li class="object-action" title="My weekly report">
+        <a href="/report/user/{{pmt_user.username}}/weekly/" class="object-action-link"><span class="glyphicon glyphicon-stats"></span>
+        <span class="object-action-text"><span class="hidden-xs">My weekly report</span><span class="visible-xs">Weekly report</span></span></a>
+      </li>
     </ul>
-</p>
+  </div><!-- ./object-action-set -->
+
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
     <div class="modal-dialog">

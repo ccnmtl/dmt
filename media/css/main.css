@@ -379,6 +379,13 @@ footer.page-footer {
   background: transparent url('/media/img/bg-item-action-set.png') left top repeat-y;
 }
 
+.dashboard .object-action-set {
+  margin: 30px 0 10px 0;
+  padding: 0;
+  float: none;
+  background-image: none;
+}
+
 .object-action-set ul,
 .item-action-set ul {
   margin: 0;
@@ -398,6 +405,15 @@ footer.page-footer {
   vertical-align: center;
 }
 
+.dashboard .object-action {
+  margin-left: 0;
+  margin-right: 10px;
+  border: 0;
+  border-bottom: 4px solid transparent;
+  text-align: left;
+  float: left;
+}
+
 .object-action-link:focus,
 .item-action-link:focus {
   outline: 0;
@@ -414,10 +430,21 @@ span.item-action-text {
   height: 16px;
 }
 
+.dashboard span.object-action-text {
+  width: auto;
+  margin: 0;
+}
+
 .object-action:hover,
 .item-action:hover {
   color: #ff9900;
   border-left: 4px solid #b2cbea;
+}
+
+.dashboard .object-action:hover {
+  color: #ff9900;
+  border: 0;
+  border-bottom: 4px solid #b2cbea;
 }
 
 .object-action a,
@@ -428,6 +455,11 @@ span.item-action-text {
   padding-top: 8px;
   padding-bottom: 8px;
   text-decoration: none;
+}
+
+.dashboard .object-action a {
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .object-action a:hover,
@@ -883,6 +915,36 @@ div.ColVis_collectionBackground {
   background:-o-linear-gradient(top, #fff 0%, #fff 89%, #fff 100%);
   background:linear-gradient(top, #fff 0%, #fff 89%, #fff 100%);
   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 )
+}
+
+.dashboard table.dataTable thead th {
+  white-space: nowrap;
+vertical-align: bottom;
+border-bottom: 2px solid #ddd;
+padding: 5px;
+  border-left: 1px solid #ddd;
+  border-collapse: collapse;
+}
+
+.dashboard .table>thead:first-child>tr:first-child>th:first-child {
+	border-left: none;
+}
+
+.dashboard table.dataTable thead .sorting {
+  background: url("/media/img/bg.gif") no-repeat center right;
+  padding-right: 16px !important;
+}
+
+.dashboard table.dataTable thead .sorting_desc {
+  background: url("/media/img/asc.gif") no-repeat center right;
+  padding-right: 16px !important;
+  background-color: #faedba;
+}
+
+.dashboard table.dataTable thead .sorting_asc {
+  background: url("/media/img/desc.gif") no-repeat center right;
+  padding-right: 16px !important;
+  background-color: #faedba;
 }
 
 .project-breadcrumb {
