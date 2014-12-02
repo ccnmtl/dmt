@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.contrib.auth.models import User
@@ -5,7 +7,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 
 from dmt.claim.models import Claim, PMTUser
-from dmt.main.models import Notify
+from dmt.main.models import ActualTime, Item, Notify
 from dmt.main.tests.factories import MilestoneFactory, ClientFactory
 from dmt.main.tests.factories import ItemFactory, NotifyFactory
 
@@ -23,8 +25,8 @@ class AddTrackerViewTest(TestCase):
                                     email="testemail@columbia.edu",
                                     status="active")
         Claim.objects.create(django_user=self.u, pmt_user=pu)
-        m = MilestoneFactory()
-        self.project = m.project
+        self.milestone = MilestoneFactory()
+        self.project = self.milestone.project
 
     def test_post_without_required_fields(self):
         r = self.c.post(
@@ -42,7 +44,7 @@ class AddTrackerViewTest(TestCase):
             ))
         self.assertEqual(r.status_code, 200)
 
-    def test_post_backdated(self):
+    def test_post_backdated_last(self):
         r = self.c.post(
             "/api/1.0/trackers/add/",
             dict(
@@ -53,6 +55,15 @@ class AddTrackerViewTest(TestCase):
             ))
         self.assertEqual(r.status_code, 200)
 
+        # Assert that the created time is accurate
+        item = Item.objects.filter(milestone=self.milestone).first()
+        actual_time = ActualTime.objects.filter(item=item).first()
+        expected_time = datetime.now() - timedelta(days=7)
+        self.assertEqual(actual_time.completed.day, expected_time.day)
+        self.assertEqual(actual_time.completed.month, expected_time.month)
+        self.assertEqual(actual_time.completed.year, expected_time.year)
+
+    def test_post_backdated_before_last(self):
         r = self.c.post(
             "/api/1.0/trackers/add/",
             dict(
@@ -62,6 +73,13 @@ class AddTrackerViewTest(TestCase):
                 completed="before_last",
             ))
         self.assertEqual(r.status_code, 200)
+
+        item = Item.objects.filter(milestone=self.milestone).first()
+        actual_time = ActualTime.objects.filter(item=item).first()
+        expected_time = datetime.now() - timedelta(days=14)
+        self.assertEqual(actual_time.completed.day, expected_time.day)
+        self.assertEqual(actual_time.completed.month, expected_time.month)
+        self.assertEqual(actual_time.completed.year, expected_time.year)
 
     def test_post_with_nonexistant_client(self):
         r = self.c.post(
