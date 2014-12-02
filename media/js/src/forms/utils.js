@@ -22,7 +22,7 @@ define([], function() {
     };
 
     FormUtils.prototype.onSuccess = function($form, data, status) {
-        $form.find('input').val('');
+        $form.find('input:visible').val('');
 
         $form.find('.form-ajax-response').remove();
         $form.append(
