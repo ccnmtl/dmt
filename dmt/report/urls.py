@@ -14,6 +14,9 @@ urlpatterns = patterns(
         views.ActiveProjectsExportView.as_view(),
         name='active_projects_report_export'),
 
+    url(r'^project/(?P<pk>\d+)/hours/$', views.ProjectHoursView.as_view(),
+        name='project-hours-report'),
+
     url(r'^user/(?P<pk>\w+)/weekly/$', views.UserWeeklyView.as_view(),
         name='user_weekly_report'),
     url(r'^user/(?P<pk>\w+)/yearly/$', views.UserYearlyView.as_view(),

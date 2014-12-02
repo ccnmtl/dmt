@@ -306,15 +306,13 @@
   
   <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
      width="100%" />
-  
-    <ul>[NOT IMPLEMENTED YET]
-      <li>weekly</li>
-      <li>monthly</li>
-      <li>quarterly</li>
-      <li>semestral</li>
-      <li>annual</li>
-      <li>custom</li>
-    </ul>
+
+	<ul>
+		<li>Export project hours logged:
+			<a href="{% url 'project-hours-report' project.pid %}?format=csv">CSV</a>
+			or
+			<a href="{% url 'project-hours-report' project.pid %}?format=xls">XLS</a>
+	</ul>
   
   </div>
   

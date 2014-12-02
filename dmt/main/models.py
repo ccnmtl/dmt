@@ -573,6 +573,11 @@ ORDER BY hours_logged DESC;
         except IndexError:
             return None
 
+    def all_actual_times(self):
+        return ActualTime.objects.filter(
+            item__milestone__project=self,
+        ).order_by('completed')
+
 
 class Document(models.Model):
     did = models.AutoField(primary_key=True)
