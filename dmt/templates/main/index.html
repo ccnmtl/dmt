@@ -104,14 +104,21 @@
 </div><!-- /.modal -->
 
 {% with pmt_user.progress_report as progress %}
-<div class="progress">
-    <div class="progress-bar {% if progress.behind %}progress-bar-warning{% else %}progress-bar-success{% endif %}"
-         role="progressbar"
-         aria-valuenow="{{progress.week_percentage}}" aria-valuemin="0"
-         aria-valuemax="100" style="width: {{progress.week_percentage}}%;">
-        {{progress.hours_logged|floatformat}} hours
+<div class="progressbar-set">
+  <div class="progress-title">
+    Weekly hours logged: 
+  </div><!-- ./progress-title -->
+  <div class="progressbar-bar">
+    <div class="progress">
+        <div class="progress-bar {% if progress.behind %}progress-bar-warning{% else %}progress-bar-success{% endif %}"
+             role="progressbar"
+             aria-valuenow="{{progress.week_percentage}}" aria-valuemin="0"
+             aria-valuemax="100" style="width: {{progress.week_percentage}}%; text-align: right;">
+            <span class="progress-hours">{{progress.hours_logged|floatformat}}</span>
+        </div>
     </div>
-</div>
+  </div><!-- ./progressbar-bar -->
+</div><!-- ./progressbar-set -->
 {% endwith %}
 
 {% if pmt_user.username %}

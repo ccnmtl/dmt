@@ -753,6 +753,40 @@ background: #f00;
 background: #000;
 }
 
+.dashboard div.ColVis {
+  margin-top: -70px;
+}
+
+.progressbar-set {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  height: 25px;
+}
+
+.progress-title {
+  font-size: 11px;
+  line-height: 24px;
+  font-weight: bold;
+  float: left;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.progressbar-bar {
+  margin-left: 150px;
+  padding-top: 2px;
+}
+
+.progressbar-set .progress {
+  margin-bottom: 0;
+}
+
+.progress-hours {
+  font-size: 11px;
+  padding-right: 5px;
+  font-weight: bold;
+}
 
 /* Color spans */
 
