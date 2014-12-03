@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 {% load claimtags %}
 
+{% block title %}Move item to another project{% endblock %}
+
 {% block content %}
 {% pmtuser as pmt_user %}
 
+<h1 class="page-title clearfix">Move item to another project</h1>
+
+<br />
+
 <form action="." method="post">
-	<fieldset><legend>Move To a Different Project</legend>
+	<fieldset>
 	<div class="form-group">
 		<label for="resolve-status">Select New Project</label>
 
@@ -15,7 +21,7 @@
 			{% endfor %}
 		</select>
 	</div>
-	<input type="submit" value="move item to project" class="btn btn-primary"/>
+	<input type="submit" value="Move" class="btn btn-primary"/>
 	</fieldset>
 </form>
 
