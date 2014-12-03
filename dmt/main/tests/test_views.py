@@ -201,6 +201,11 @@ class TestProjectViews(TestCase):
                         dict())
         self.assertEquals(r.status_code, 404)
 
+    def test_timeline(self):
+        p = ProjectFactory()
+        r = self.c.get(reverse("project_timeline", args=[p.pid]))
+        self.assertEqual(r.status_code, 200)
+
     def test_add_action_item_form_owner(self):
         milestone = MilestoneFactory()
         milestone.project.add_personnel(self.pu, auth='manager')

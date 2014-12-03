@@ -69,6 +69,13 @@
 	      <span class="icon-rss"></span>
         <span class="object-action-text hidden-xs hidden-sm">Activity feed</span></a>
       </li>
+      {% flag project_timeline %}
+      <li class="object-action" title="Timeline">
+        <a href="{% url 'project_timeline' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-list"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Timeline</span></a>
+      </li>
+      {% endflag %}
+
     </ul>  
   </div><!-- ./object-action-set -->
 

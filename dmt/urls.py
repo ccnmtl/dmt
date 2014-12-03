@@ -12,6 +12,7 @@ from dmt.main.views import (
     ClientDetailView, ForumView, GroupDetailView, GroupListView,
     NodeDetailView, MilestoneDetailView,
     ProjectListView, MyProjectListView, ProjectDetailView,
+    ProjectTimeLineView,
     UserListView, UserDetailView, NodeReplyView, ProjectAddTodoView,
     ProjectAddNodeView, TagItemView, RemoveTagFromItemView,
     TagNodeView, RemoveTagFromNodeView,
@@ -116,6 +117,8 @@ urlpatterns = patterns(
     url(r'^project/(?P<pk>\d+)/board/$', ProjectDetailView.as_view(
         template_name="main/project_board.html"),
         name='project_board'),
+    url(r'^project/(?P<pk>\d+)/timeline/$', ProjectTimeLineView.as_view(),
+        name='project_timeline'),
     (r'^project/(?P<pk>\d+)/add_bug/$',
      ProjectAddItemView.as_view(item_type='bug')),
     (r'^project/(?P<pk>\d+)/add_action_item/$',

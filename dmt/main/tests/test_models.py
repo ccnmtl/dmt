@@ -507,6 +507,22 @@ class ProjectTest(TestCase):
         i = m.item_set.all()[0]
         self.assertEqual(i.estimated_time.seconds, 7200)
 
+    def test_timeline_empty(self):
+        p = ProjectFactory()
+        self.assertEqual(p.timeline(), [])
+
+    def test_timeline_notempty(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserFactory()
+        p.add_item(type='action item', title="new item",
+                   assigned_to=u, owner=u, milestone=m,
+                   priority=1, description="",
+                   estimated_time="2 hours",
+                   status='OPEN', r_status='')
+        t = p.timeline()
+        self.assertEqual(len(t), 1)
+
 
 class TestAttachment(TestCase):
     def test_image(self):
