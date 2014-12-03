@@ -1014,11 +1014,13 @@ padding: 5px;
   border-bottom: 5px solid #ffcc66;
 }
 
-.project-form .page-title {
+.project-form .page-title,
+.item-form .page-title {
   margin-bottom: 20px;
 }
 
-.project-form .form-group {
+.project-form .form-group,
+.item-form .form-group {
   background-color: #f4f4f4;
   padding: 2px;
   -webkit-border-radius: 5px;
@@ -1026,15 +1028,18 @@ padding: 5px;
           border-radius: 5px;
 }
 
-.project-form .form-group .control-label {
+.project-form .form-group .control-label,
+.item-form .form-group .control-label {
   padding: 2px 4px;
 }
 
-.project-form .form-group .control-label::after {
+.project-form .form-group .control-label::after,
+.item-form .form-group .control-label::after {
   content: ":";
 }
 
-.project-form .form-group div {
+.project-form .form-group div,
+.item-form .form-group div {
   margin: 0;
   background-color: #fff;
   -webkit-border-bottom-left-radius: 5px;
@@ -1045,18 +1050,35 @@ padding: 5px;
           border-bottom-right-radius: 5px;
 }
 
-.project-form .form-group .radio {
+.project-form .form-group .radio,
+.item-form .form-group .radio {
   padding: 4px;
 }
 
-.project-form .form-group .help-block {
+.project-form .form-group .help-block,
+.item-form .form-group .help-block {
   background-color: #f4f4f4;
 }
 
-.project-form .button-set {
+.project-form .button-set,
+.item-form .button-set {
   text-align: center;
   margin-top: 30px;
   margin-bottom: 30px;
+}
+
+.item-form .button-set {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.item-form input[id*="estimated_time_"] {
+  width: 40px;
+}
+
+.item-form label[class*="estimated_time_"] {
+  margin-right: 30px;
 }
 
 .milestone-set {
