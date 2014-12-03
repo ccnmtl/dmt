@@ -1,9 +1,22 @@
 {% extends 'base.html' %}
 
+{% block title %}Item #{{object.iid}}&ndash;{{object.title}}{% endblock %}
+
 {% block content %}
 
+<h1 class="page-title">Delete this item?</h1>
+
+<br />
+
+<p>Item #{{object.iid}} &#8220;{% if object.is_bug %}BUG:{% endif %} {{object.title}}&#8221; will be deleted if you continue.</p>
+<p><b>Are you sure?</b></p>
+
+<br />
+
+
 <form action="." method="post">{% csrf_token %}
-<input class="btn btn-danger" type="submit" value="yes, delete this item"/>
+<a href="{{object.get_absolute_url}}" class="btn btn-default">No, keep this item</a>
+<input class="btn btn-danger" type="submit" value="Yes, delete this item"/>
 </form>
 
 {% endblock %}
