@@ -134,3 +134,12 @@ class PassedMilestonesViewTests(LoggedInTestMixin, TestCase):
         r = self.client.get(reverse('passed_milestones_report'))
         self.assertEqual(r.status_code, 200)
         self.assertTrue(m.name in r.content)
+
+
+class ProjectHoursViewTests(LoggedInTestMixin, TestCase):
+    def test_report(self):
+        i = ItemFactory()
+        p = i.milestone.project
+        r = self.client.get(
+            reverse('project-hours-report', args=[p.pid]) + "?format=csv")
+        self.assertEqual(r.status_code, 200)
