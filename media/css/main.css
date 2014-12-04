@@ -1420,3 +1420,7 @@ padding: 5px;
   .milestone-set .tablesorter tbody tr td:nth-child(1) { width: 100%; max-width: 600px; }
   .milestone-set th.header { width: 120px; }
 }
+
+.pmt-timeline-item {
+    border-top: 1px solid #f1f1f1;
+}

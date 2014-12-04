@@ -35,6 +35,7 @@
 <h3 class="text-muted">{{i.timestamp|date:"D, F jS Y"}}</h3>
 {% endifchanged %}
 
+<div class="pmt-timeline-item">
 <div class="row">
 <div class="col-sm-3">
 <h4>
@@ -75,6 +76,8 @@
 	</div>
 </div>
 {% endwith %}
+</div> <!-- end .pmt-timeline-item -->
+
 {% endfor %}
 {% else %}
 <p>No activity between {{week_start}} and {{week_end}}</p>
