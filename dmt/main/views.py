@@ -28,6 +28,7 @@ from .forms import (
     ProjectUpdateForm, MilestoneUpdateForm)
 from .utils import new_duration, safe_basename
 from dmt.claim.models import Claim
+from dmt.report.mixins import PrevNextWeekMixin
 
 from datetime import datetime, timedelta
 from simpleduration import Duration, InvalidDuration
@@ -482,6 +483,26 @@ class ProjectDetailView(LoggedInMixin, DetailView):
             if Item.objects.filter(milestone=m).filter(
                 ~Q(status='VERIFIED')
             ).count() > 0]
+        return ctx
+
+
+class ProjectTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
+    model = Project
+    template_name = "main/project_timeline.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ProjectTimeLineView, self).get_context_data(**kwargs)
+
+        ctx['timeline'] = self.object.timeline(
+            start=self.week_start,
+            end=self.week_end,
+        )
+        ctx.update(
+            week_start=self.week_start.date,
+            week_end=self.week_end.date,
+            prev_week=self.prev_week.date,
+            next_week=self.next_week.date,
+        )
         return ctx
 
 

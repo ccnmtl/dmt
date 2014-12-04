@@ -1,0 +1,197 @@
+from datetime import datetime
+from dmt.main.utils import interval_to_hours
+
+
+class TimeLineItem(object):
+    def __lt__(self, other):
+        return self.timestamp() < other.timestamp()
+
+    # methods to override
+
+    def user(self):
+        return None
+
+    def project(self):
+        return None
+
+    def event_type(self):
+        return None
+
+    def timestamp(self):
+        return None
+
+    def title(self):
+        return None
+
+    def body(self):
+        return None
+
+    def label(self):
+        return None
+
+    def url(self):
+        return None
+
+
+class TimeLineEvent(TimeLineItem):
+    def __init__(self, comment):
+        self.c = comment
+        self.event = comment.event
+        self.u = self.c.user()
+
+    def timestamp(self):
+        return self.event.event_date_time
+
+    def event_type(self):
+        return "event"
+
+    def title(self):
+        return self.event.item.title
+
+    def body(self):
+        return self.c.comment
+
+    def user(self):
+        return self.u
+
+    def url(self):
+        return self.event.item.get_absolute_url()
+
+    def project(self):
+        return self.event.item.milestone.project
+
+
+class TimeLineComment(TimeLineItem):
+    def __init__(self, comment):
+        self.c = comment
+
+    def event_type(self):
+        return "comment"
+
+    def timestamp(self):
+        return self.c.add_date_time
+
+    def user(self):
+        return self.c.user()
+
+    def body(self):
+        return self.c.comment
+
+    def title(self):
+        return self.c.item.title
+
+    def label(self):
+        return "COMMENT ADDED"
+
+    def url(self):
+        return self.c.item.get_absolute_url()
+
+    def project(self):
+        return self.c.item.milestone.project
+
+
+class TimeLineActualTime(TimeLineItem):
+    def __init__(self, actualtime):
+        self.a = actualtime
+
+    def timestamp(self):
+        return self.a.completed
+
+    def user(self):
+        return self.a.resolver
+
+    def title(self):
+        return self.a.item.title
+
+    def body(self):
+        return "%.2f hours" % interval_to_hours(self.a.actual_time)
+
+    def event_type(self):
+        return "actual_time"
+
+    def label(self):
+        return "TIME LOGGED"
+
+    def url(self):
+        return self.a.item.get_absolute_url()
+
+    def project(self):
+        return self.a.item.milestone.project
+
+
+class TimeLineStatus(TimeLineItem):
+    def __init__(self, s):
+        self.s = s
+
+    def user(self):
+        return self.s.user
+
+    def timestamp(self):
+        return datetime.combine(self.s.added, datetime.min.time())
+
+    def event_type(self):
+        return "status_update"
+
+    def title(self):
+        return "status update"
+
+    def body(self):
+        return self.s.body
+
+    def label(self):
+        return "STATUS UPDATE"
+
+    def project(self):
+        return self.s.project
+
+
+class TimeLinePost(TimeLineItem):
+    def __init__(self, p):
+        self.p = p
+
+    def timestamp(self):
+        return self.p.added
+
+    def event_type(self):
+        return "forum_post"
+
+    def user(self):
+        return self.p.author
+
+    def title(self):
+        return self.p.subject
+
+    def body(self):
+        return self.p.body
+
+    def label(self):
+        return "FORUM POST"
+
+    def url(self):
+        return self.p.get_absolute_url()
+
+    def project(self):
+        return self.p.project
+
+
+class TimeLineMilestone(TimeLineItem):
+    def __init__(self, m):
+        self.m = m
+
+    def timestamp(self):
+        return datetime.combine(self.m.target_date, datetime.min.time())
+
+    def event_type(self):
+        return "milestone"
+
+    def title(self):
+        return self.m.name
+
+    def label(self):
+        return "MILESTONE"
+
+    def url(self):
+        return self.m.get_absolute_url()
+
+    def project(self):
+        return self.m.project
