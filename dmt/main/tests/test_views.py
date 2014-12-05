@@ -618,7 +618,7 @@ class TestItemWorkflow(TestCase):
     def test_delete_own_comment(self):
         i = ItemFactory()
         e = EventFactory(item=i)
-        comment = CommentFactory(item=i, event=e, username=self.u.username)
+        comment = CommentFactory(item=i, event=e, username=self.pu.username)
         url = reverse('comment_delete', args=(comment.cid,))
         r = self.c.post(url)
         self.assertEqual(r.status_code, 302)
