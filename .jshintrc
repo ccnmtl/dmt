@@ -21,6 +21,7 @@
         "log",
         "connect",
         "milestoneActionItemTargets",
-        "milestoneBugTargets"
+        "milestoneBugTargets",
+				"Bloodhound"
     ]
 }
