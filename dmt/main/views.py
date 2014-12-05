@@ -532,6 +532,26 @@ class ProjectTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
         return ctx
 
 
+class UserTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
+    model = User
+    template_name = "main/user_timeline.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(UserTimeLineView, self).get_context_data(**kwargs)
+
+        ctx['timeline'] = self.object.timeline(
+            start=self.week_start,
+            end=self.week_end,
+        )
+        ctx.update(
+            week_start=self.week_start.date,
+            week_end=self.week_end.date,
+            prev_week=self.prev_week.date,
+            next_week=self.next_week.date,
+        )
+        return ctx
+
+
 class ProjectUpdateView(LoggedInMixin, UpdateView):
     model = Project
     form_class = ProjectUpdateForm

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load markup claimtags %}
+{% load waffle_tags %}
+
+{% block title %}User: {{object.fullname}}{% endblock %}
+
+{% block extraclass %} class="project-page"{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
+{% endblock %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+
+{% block content %}
+
+<h1 class="page-title">User Timeline &#8226; {{object.fullname}}</h1>
+
+
+<ul class="pager">
+  <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">previous week</a></li>
+  <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>
+</ul>
+
+{% if timeline %}
+{% for i in timeline %}
+{% with i.timestamp|date:"Y-m-d" as date %}
+{% ifchanged date %}
+<hr />
+<h3 class="text-muted">{{i.timestamp|date:"D, F jS Y"}}</h3>
+{% endifchanged %}
+
+<div class="pmt-timeline-item">
+<div class="row">
+<div class="col-sm-3">
+<h4>
+{% ifequal i.event_type "event" %}
+		<span class="glyphicon glyphicon-star"></span>
+{% endifequal %}
+{% ifequal i.event_type "comment" %}
+		<span class="glyphicon glyphicon-comment"></span>
+{% endifequal %}
+{% ifequal i.event_type "actual_time" %}
+		<span class="glyphicon glyphicon-time"></span>
+{% endifequal %}
+{% ifequal i.event_type "status_update" %}
+		<span class="glyphicon glyphicon-info-sign"></span>
+{% endifequal %}
+{% ifequal i.event_type "forum_post" %}
+		<span class="glyphicon glyphicon-bullhorn"></span>
+{% endifequal %}
+{% if i.label %}{{i.label}}{% endif %}</h4></div>
+<div class="col-sm-6">
+		<h4>{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title}}{% if i.url %}</a>{% endif %}</h4>
+</div>
+<div class="col-sm-3">
+<a href="{{i.project.get_absolute_url}}">{{i.project.name}}</a>
+</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-11 col-sm-offset-1">
+		{% if i.body %}
+		{{i.body|markdown}}
+		{% endif %}
+	</div>
+</div>
+{% endwith %}
+</div> <!-- end .pmt-timeline-item -->
+
+{% endfor %}
+{% else %}
+<p>No activity between {{week_start}} and {{week_end}}</p>
+{% endif %}
+
+{% endblock %}

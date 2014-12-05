@@ -72,6 +72,10 @@
             <ul class="dropdown-menu user-menu-list">
               <li><a href="/accounts/logout/"><span class="grey"><span class="glyphicon glyphicon-log-out"></span></span> Log out</a></li>
               <li><a href="{{pmt_user.get_absolute_url}}"><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a></li>
+{% flag user_timeline %}
+<li><a href="{% url 'user_timeline' pmt_user.username %}">View Timeline</a></li>
+{% endflag %}
+
             </ul>
           </li>
         {% endif %}

@@ -1109,6 +1109,11 @@ class UserTest(TestCase):
         owned = Item.objects.get(iid=owned.iid)
         self.assertEqual(owned.owner, self.pu)
 
+    def test_timeline(self):
+        u = UserFactory()
+        r = self.client.get(reverse("user_timeline", args=[u.username]))
+        self.assertEqual(r.status_code, 200)
+
 
 class TestAddTrackersView(LoggedInTestMixin, TestCase):
     def test_add_trackers_view(self):
