@@ -63,9 +63,10 @@ require([
                 source: projects.ttAdapter()
             });
             $('#project-input').on(
-                'typeahead:selected', function(object, datum) {
-                $('#tracker-pid-input').val(datum.pid);
-            });
+                'typeahead:selected',
+                function(object, datum) {
+                    $('#tracker-pid-input').val(datum.pid);
+                });
         }
     });
 });
