@@ -24,8 +24,8 @@ require([
         limit: 10,
         prefetch: {
             url: '/drf/projects/',
-            filter: function (projects) {
-                return $.map(projects.results, function (data) {
+            filter: function(projects) {
+                return $.map(projects.results, function(data) {
                     return {
                         name: data.name,
                         pid: data.pid
@@ -35,8 +35,8 @@ require([
         },
         remote: {
             url: '/drf/projects/?search=%QUERY',
-            filter: function (projects) {
-                return $.map(projects.results, function (data) {
+            filter: function(projects) {
+                return $.map(projects.results, function(data) {
                     return {
                         name: data.name,
                         pid: data.pid
@@ -57,13 +57,14 @@ require([
         }
 
         if (typeof $().typeahead === 'function') {
-            $("#project-input").typeahead(null, {
+            $('#project-input').typeahead(null, {
                 name: 'results',
                 displayKey: 'name',
                 source: projects.ttAdapter()
             });
-            $("#project-input").on("typeahead:selected", function (object, datum) {
-                $("#tracker-pid-input").val(datum.pid);
+            $('#project-input').on(
+                'typeahead:selected', function(object, datum) {
+                $('#tracker-pid-input').val(datum.pid);
             });
         }
     });
