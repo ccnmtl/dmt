@@ -24,28 +24,24 @@
 {% else %}
   {% pmtuser as pmt_user %}
 
-<p>
-    <ul class="nav nav-pills">
-        <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl">Return to the old PMT</a></li>
-        <li><a href="#" data-toggle="modal"
-               data-target="#add-tracker">
-                <span class="glyphicon glyphicon-time"></span>
-                Add Tracker
-        </a></li>
-        <li>
-            <a href="{% url 'add_trackers' %}">
-                <span class="glyphicon glyphicon-time"></span>
-                Add Trackers
-            </a>
-        </li>
-				<li>
-					  <a href="/report/user/{{pmt_user.username}}/weekly/">
-						    <span class="glyphicon glyphicon-stats"></span>
-						    Weekly Report
-					  </a>
-				</li>
+  <div class="object-action-set clearfix">
+    <ul>
+      <li class="object-action" title="Add tracker">
+        <a href="#" class="object-action-link" data-toggle="modal"
+        data-target="#add-tracker"><span class="glyphicon glyphicon-time"></span>
+        <span class="object-action-text"><span class="hidden-xs">Add tracker</span><span class="visible-xs">Tracker</span></span></a>
+      </li>
+      <li class="object-action" title="Add trackers">
+        <a href="{% url 'add_trackers' %}" class="object-action-link"><span class="glyphicon glyphicon-align-left"></span>
+        <span class="object-action-text"><span class="hidden-xs">Add trackers</span><span class="visible-xs">Trackers</span></span></a>
+      </li>
+      <li class="object-action" title="My weekly report">
+        <a href="/report/user/{{pmt_user.username}}/weekly/" class="object-action-link"><span class="glyphicon glyphicon-stats"></span>
+        <span class="object-action-text"><span class="hidden-xs">My weekly report</span><span class="visible-xs">Weekly report</span></span></a>
+      </li>
     </ul>
-</p>
+  </div><!-- ./object-action-set -->
+
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
     <div class="modal-dialog">
@@ -60,28 +56,36 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <input type="text" name="project" placeholder="project"
+                            <input type="text" name="project" placeholder="Project"
                                    class="form-control" id="project-input" />
                         </div>
                     </div>
-
+                    <br />
                     <div class="row">
                         <div class="col-sm-7">
-                            <input type="text" name="title" placeholder="task"
+                            <input type="text" name="title" placeholder="Task"
                                    id="tracker-task-input"
                                    class="form-control"/>
                         </div>
 
                         <div class="col-sm-3">
-                            <input type="text" name="time" placeholder="time"
+                            <input type="text" name="client" placeholder="Client UNI"
+                                   id="tracker-client-input"
+                                   class="form-control" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <input type="text" name="time" placeholder="Time"
                                    id="tracker-time-input"
                                    class="form-control" />
                         </div>
-
-                        <div class="col-sm-2">
-                            <input type="text" name="client" placeholder="client"
-                                   id="tracker-client-input"
-                                   class="form-control" />
+                        <div class="col-sm-6 instructions">
+                          <span class="glyphicon glyphicon-question-sign"></span>
+                          Enter time and unit, for example:
+                          <code>30hrs 59min</code><br />
+                          <a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Help_and_Tutorial#Time_formatting" target="_blank">Visit Help</a> for more information.
                         </div>
                     </div>
                 </form>
@@ -96,14 +100,21 @@
 </div><!-- /.modal -->
 
 {% with pmt_user.progress_report as progress %}
-<div class="progress">
-    <div class="progress-bar {% if progress.behind %}progress-bar-warning{% else %}progress-bar-success{% endif %}"
-         role="progressbar"
-         aria-valuenow="{{progress.week_percentage}}" aria-valuemin="0"
-         aria-valuemax="100" style="width: {{progress.week_percentage}}%;">
-        {{progress.hours_logged|floatformat}} hours
+<div class="progressbar-set">
+  <div class="progress-title">
+    Weekly hours logged: 
+  </div><!-- ./progress-title -->
+  <div class="progressbar-bar">
+    <div class="progress">
+        <div class="progress-bar {% if progress.behind %}progress-bar-warning{% else %}progress-bar-success{% endif %}"
+             role="progressbar"
+             aria-valuenow="{{progress.week_percentage}}" aria-valuemin="0"
+             aria-valuemax="100" style="width: {{progress.week_percentage}}%; text-align: right;">
+            <span class="progress-hours">{{progress.hours_logged|floatformat}}</span>
+        </div>
     </div>
-</div>
+  </div><!-- ./progressbar-bar -->
+</div><!-- ./progressbar-set -->
 {% endwith %}
 
 {% if pmt_user.username %}
@@ -199,9 +210,6 @@
 {% endblock %}
 
 {% block js %}
-<script src="{{STATIC_URL}}js/libs/typeahead/bloodhound.min.js"></script>
-<script src="{{STATIC_URL}}js/libs/typeahead/typeahead.jquery.min.js"></script>
-
 <script>
 $(document).ready(function() {
     {% pmtuser as pmt_user %}
@@ -220,41 +228,6 @@ $(document).ready(function() {
             .draw();
     {% endif %}
 
-    var projects = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        prefetch: {
-            url: '/drf/projects/',
-            filter: function (projects) {
-                return $.map(projects.results, function (data) {
-                    return {
-                        name: data.name,
-                        pid: data.pid
-                    };
-                });
-            }
-        },
-        remote: {
-        url: '/drf/projects/?search=%QUERY',
-            filter: function (projects) {
-                return $.map(projects.results, function (data) {
-                    return {
-                        name: data.name,
-                        pid: data.pid
-                    };
-                });
-            }
-        }
-    });
-    projects.initialize();
-    $("#project-input").typeahead(null, {
-        name: 'results',
-        displayKey: 'name',
-        source: projects.ttAdapter()
-    });
-    $("#project-input").on("typeahead:selected", function (object, datum) {
-        $("#tracker-pid-input").val(datum.pid);
-    });
     $('.status-indicator').tooltip();
 });
 </script>

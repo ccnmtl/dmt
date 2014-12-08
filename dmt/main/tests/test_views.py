@@ -9,7 +9,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
-from dmt.main.models import Attachment, Item, ItemClient, Milestone, Project
+from dmt.main.models import (
+    Attachment, Comment, Item, ItemClient, Milestone, Project
+)
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 from datetime import timedelta
 import json
@@ -200,6 +202,11 @@ class TestProjectViews(TestCase):
         r = self.c.post(p.get_absolute_url() + "add_action_item/",
                         dict())
         self.assertEquals(r.status_code, 404)
+
+    def test_timeline(self):
+        p = ProjectFactory()
+        r = self.c.get(reverse("project_timeline", args=[p.pid]))
+        self.assertEqual(r.status_code, 200)
 
     def test_add_action_item_form_owner(self):
         milestone = MilestoneFactory()
@@ -607,6 +614,29 @@ class TestItemWorkflow(TestCase):
             i.get_absolute_url() + "comment/",
             dict(comment=''))
         self.assertEqual(r.status_code, 302)
+
+    def test_delete_own_comment(self):
+        i = ItemFactory()
+        e = EventFactory(item=i)
+        comment = CommentFactory(item=i, event=e, username=self.u.username)
+        url = reverse('comment_delete', args=(comment.cid,))
+        r = self.c.post(url)
+        self.assertEqual(r.status_code, 302)
+
+        # Assert that comment is really deleted
+        with self.assertRaises(Comment.DoesNotExist):
+            Comment.objects.get(cid=comment.cid)
+
+    def test_delete_someone_elses_comment(self):
+        i = ItemFactory()
+        e = EventFactory(item=i)
+        comment = CommentFactory(item=i, event=e, username='someone_else')
+        url = reverse('comment_delete', args=(comment.cid,))
+        r = self.c.post(url)
+        self.assertEqual(r.status_code, 403)
+
+        # Assert that the comment still exists
+        Comment.objects.get(cid=comment.cid)
 
     def test_resolve(self):
         i = ItemFactory()
@@ -1078,6 +1108,11 @@ class UserTest(TestCase):
 
         owned = Item.objects.get(iid=owned.iid)
         self.assertEqual(owned.owner, self.pu)
+
+    def test_timeline(self):
+        u = UserFactory()
+        r = self.client.get(reverse("user_timeline", args=[u.username]))
+        self.assertEqual(r.status_code, 200)
 
 
 class TestAddTrackersView(LoggedInTestMixin, TestCase):

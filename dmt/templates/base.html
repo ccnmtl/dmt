@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>DMT &#8226; {% block title %}{% endblock %}</title>
+  <title>PMT &#8226; {% block title %}{% endblock %}</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="description" content="dmt">
@@ -72,6 +72,10 @@
             <ul class="dropdown-menu user-menu-list">
               <li><a href="/accounts/logout/"><span class="grey"><span class="glyphicon glyphicon-log-out"></span></span> Log out</a></li>
               <li><a href="{{pmt_user.get_absolute_url}}"><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a></li>
+{% flag user_timeline %}
+<li><a href="{% url 'user_timeline' pmt_user.username %}">View Timeline</a></li>
+{% endflag %}
+
             </ul>
           </li>
         {% endif %}
@@ -192,6 +196,7 @@
 {% endblock %}
 
     <div id="content">
+			{% if not request.user.is_anonymous %}
         {% if messages %}
         <div class="dmt-messages">
             {% for message in messages %}
@@ -205,6 +210,7 @@
             {% endfor %}
         </div>
         {% endif %}
+      {% endif %}
       <div class="row-fluid">
         <div class="span12" id="right-content">
             {% block pagetitle %}{% endblock %}

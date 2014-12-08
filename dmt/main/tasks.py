@@ -192,3 +192,20 @@ def weekly_report_emails():
 def user_weekly_report_email(username):
     u = User.objects.get(username=username)
     u.send_weekly_report()
+
+
+@periodic_task(run_every=crontab(hour=0, minute=0))
+def bump_someday_maybe_target_dates():
+    """ Someday/Maybe milestones are "special" and
+    should never actually reach a target date.
+    so once a day, we take any that are upcoming
+    and push them far into the future again. """
+    now = datetime.now()
+    upcoming = now + timedelta(weeks=4)
+    future = now + timedelta(weeks=52)
+    for m in Milestone.objects.filter(
+            name="Someday/Maybe",
+            target_date__lt=upcoming,
+            status='OPEN'):
+        m.target_date = future.date()
+        m.save()

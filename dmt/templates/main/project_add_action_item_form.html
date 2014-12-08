@@ -10,19 +10,20 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="add-action_item-label">Add Action Item</h4>
+                    <h4 class="modal-title" id="add-action_item-label">Add action item</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="action_item-title">Title</label>
-                        <input type="text" name="title" placeholder="action item title" id="action_item-title" class="form-control"/>
+                        <input type="text" name="title" placeholder="Action item title" id="action_item-title" class="form-control"/>
                     </div>
                     <div class="form-group">
                         <script>
                             var milestoneActionItemTargets = [];
                             {% for milestone in object.milestone_set.all %}
                                 milestoneActionItemTargets.push(
-                                    new Date('{{milestone.target_date}}'));
+                                    new Date('{{milestone.target_date.isoformat}}')
+                                );
                             {% endfor %}
                         </script>
                         <label for="action_item-milestones">Milestone</label>
@@ -42,8 +43,8 @@
                         </select>
                     </div>
 
-                    <div>
-                        <div class="form-group pull-left owner-form-group">
+                    <div class="clearfix">
+                        <div class="form-group pull-left form-group-col-2">
                             <label for="action_item-owner">Owner</label>
                             <select name="owner" id="action_item-owner"
                                     class="form-control">
@@ -56,7 +57,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group pull-right assignedto-form-group">
+                        <div class="form-group pull-right form-group-col-2">
                             <label for="action_item-assigned_to">Assigned To</label>
                             <select name="assigned_to" id="action_item-assigned_to"
                                     class="form-control">
@@ -71,30 +72,37 @@
                         </div>
                     </div>
 
-                    <div class="clearfix"></div>
 
+                    <div class="clearfix">
+                      <div class="form-group pull-left form-group-col-2">
+                          <label for="action_item-priority">Priority</label>
+                          <select name="priority" id="action_item-priority" class="form-control">
+                              <option value="0">ICING</option>
+                              <option value="1" selected="selected">LOW</option>
+                              <option value="2">MEDIUM</option>
+                              <option value="3">HIGH</option>
+                              <option value="4">CRITICAL</option>
+                          </select>
+                      </div>
 
-                    <div class="form-group">
-                        <label for="action_item-priority">Priority</label>
-                        <select name="priority" id="action_item-priority" class="form-control">
-                            <option value="0">ICING</option>
-                            <option value="1" selected="selected">LOW</option>
-                            <option value="2">MEDIUM</option>
-                            <option value="3">HIGH</option>
-                            <option value="4">CRITICAL</option>
-                        </select>
+                      <div class="form-group pull-right form-group-col-2">
+                          <label for="target_date">Target Date</label>
+                          <input type="text" name="target_date" id="id_target_date"
+                                 class="form-control" />
+                      </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="target_date">Target Date</label>
-                        <input type="text" name="target_date" id="id_target_date"
-                               class="form-control" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="bug-estimate">Time Estimate</label>
-                        <input type="text" name="estimated_time" id="bug-estimate"
-                               value="1 hour" class="form-control"/>
+                    <div class="clearfix">
+                      <div class="form-group pull-left form-group-col-2">
+                          <label for="bug-estimate">Time Estimate</label>
+                          <input type="text" name="estimated_time" id="bug-estimate"
+                                 value="1 hour" class="form-control"/>
+                      </div>
+  
+                      <div class="form-group pull-right form-group-col-2">
+                          <label for="action_item-tags">Tags</label>
+                          <input type="text" name="tags" id="action_item-tags" placeholder="Add tags (comma or space separated)" class="form-control" />
+                      </div>
                     </div>
 
                     <div class="form-group">
@@ -115,11 +123,6 @@
                           Description preview:
                         </div>
                         <div class="dmt-markdown-project-item-preview dmt-markdown-preview">Description</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="action_item-tags">Tags</label>
-                        <input type="text" name="tags" id="action_item-tags" placeholder="Add tags (comma or space separated)" class="form-control" />
                     </div>
 
                 </div>

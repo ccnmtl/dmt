@@ -8,6 +8,10 @@ from taggit.managers import TaggableManager
 from django.core.mail import send_mail
 from django_statsd.clients import statsd
 from simpleduration import Duration, InvalidDuration
+from .timeline import (
+    TimeLineEvent, TimeLineComment,
+    TimeLinePost, TimeLineActualTime, TimeLineStatus,
+    TimeLineMilestone)
 import re
 import textwrap
 
@@ -228,6 +232,57 @@ class User(models.Model):
 
     def remove_from_all_groups(self):
         self.ingroup_set.all().delete()
+
+    def timeline(self, start=None, end=None):
+        all_events = []
+        if end is None:
+            end = datetime.now()
+
+        if start is None:
+            start = end - timedelta(weeks=1)
+
+        events = Comment.objects.filter(
+            username=self.username,
+            add_date_time__gt=start,
+            add_date_time__lte=end,
+        ).exclude(event=None).select_related(
+            'event_item', 'event_item__milestone',
+            'event_item__milestone__project',
+            'username', 'event', 'item')
+        all_events.extend([TimeLineEvent(c) for c in events])
+
+        comments = Comment.objects.filter(
+            username=self.username,
+            event=None,
+            add_date_time__gt=start,
+            add_date_time__lte=end,
+        ).select_related('item', 'item__milestone', 'item__milestone__project')
+        all_events.extend([TimeLineComment(c) for c in comments])
+
+        actual_times = ActualTime.objects.filter(
+            resolver=self,
+            completed__gt=start,
+            completed__lte=end,
+        ).select_related('item', 'item__milestone', 'item__milestone__project')
+        all_events.extend([TimeLineActualTime(a) for a in actual_times])
+
+        statuses = StatusUpdate.objects.filter(
+            user=self,
+            added__gt=start,
+            added__lte=end,
+        ).select_related('project')
+        all_events.extend([TimeLineStatus(s) for s in statuses])
+
+        posts = Node.objects.filter(
+            author=self,
+            added__gt=start,
+            added__lte=end,
+        ).select_related('project')
+        all_events.extend([TimeLinePost(p) for p in posts])
+
+        all_events.sort()
+        all_events.reverse()
+        return all_events
 
 
 class ProjectUser(object):
@@ -573,6 +628,69 @@ ORDER BY hours_logged DESC;
         except IndexError:
             return None
 
+    def all_actual_times(self):
+        return ActualTime.objects.filter(
+            item__milestone__project=self,
+        ).order_by('completed')
+
+    def timeline(self, start=None, end=None):
+        all_events = []
+        if end is None:
+            end = datetime.now()
+
+        if start is None:
+            start = end - timedelta(weeks=1)
+
+        events = Comment.objects.filter(
+            event__item__milestone__project=self,
+            add_date_time__gt=start,
+            add_date_time__lte=end,
+        ).select_related('event_item', 'event_item__milestone',
+                         'event_item__milestone__project',
+                         'username', 'event', 'item')
+        all_events.extend([TimeLineEvent(c) for c in events])
+
+        comments = Comment.objects.filter(
+            item__milestone__project=self,
+            add_date_time__gt=start,
+            add_date_time__lte=end,
+        ).select_related('item', 'item__milestone', 'item__milestone__project',
+                         'user')
+        all_events.extend([TimeLineComment(c) for c in comments])
+
+        actual_times = ActualTime.objects.filter(
+            item__milestone__project=self,
+            completed__gt=start,
+            completed__lte=end,
+        ).select_related('item', 'item__milestone', 'item__milestone__project',
+                         'resolver')
+        all_events.extend([TimeLineActualTime(a) for a in actual_times])
+
+        statuses = StatusUpdate.objects.filter(
+            project=self,
+            added__gt=start,
+            added__lte=end,
+        ).select_related('project', 'user')
+        all_events.extend([TimeLineStatus(s) for s in statuses])
+
+        posts = Node.objects.filter(
+            project=self,
+            added__gt=start,
+            added__lte=end,
+        ).select_related('project', 'author')
+        all_events.extend([TimeLinePost(p) for p in posts])
+
+        milestones = Milestone.objects.filter(
+            project=self,
+            target_date__gt=start,
+            target_date__lte=end,
+        )
+        all_events.extend(TimeLineMilestone(m) for m in milestones)
+
+        all_events.sort()
+        all_events.reverse()
+        return all_events
+
 
 class Document(models.Model):
     did = models.AutoField(primary_key=True)
@@ -754,8 +872,9 @@ class Item(models.Model):
             Sum('actual_time'))
         return total['actual_time__sum']
 
-    def add_resolve_time(self, user, time):
-        completed = datetime.now()
+    def add_resolve_time(self, user, time, completed=None):
+        if not completed:
+            completed = datetime.now()
         ActualTime.objects.create(
             item=self,
             resolver=user,
@@ -1298,6 +1417,13 @@ class Comment(models.Model):
     class Meta:
         db_table = u'comments'
         ordering = ['add_date_time', ]
+
+    def user(self):
+        return User.objects.get(username=self.username)
+
+    def user_is_owner(self, user):
+        """Return True if user is comment owner."""
+        return self.username == user.username
 
 
 class StatusUpdate(models.Model):

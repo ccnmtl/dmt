@@ -3,10 +3,10 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
@@ -18,9 +18,10 @@ from django_statsd.clients import statsd
 from taggit.models import Tag
 from taggit.utils import parse_tags
 import markdown
-from .models import (
-    Project, Milestone, Item, InGroup, Node, User, Client, StatusUpdate,
-    ActualTime, Notify, Attachment)
+from dmt.main.models import (
+    Comment, Project, Milestone, Item, InGroup, Node, User, Client,
+    StatusUpdate, ActualTime, Notify, Attachment
+)
 from .models import interval_sum
 from .forms import (
     ItemUpdateForm,
@@ -28,6 +29,7 @@ from .forms import (
     ProjectUpdateForm, MilestoneUpdateForm)
 from .utils import new_duration, safe_basename
 from dmt.claim.models import Claim
+from dmt.report.mixins import PrevNextWeekMixin
 
 from datetime import datetime, timedelta
 from simpleduration import Duration, InvalidDuration
@@ -133,6 +135,31 @@ class AddCommentView(LoggedInMixin, View):
         log_time(item, user, request)
         statsd.incr('main.comment_added')
         return HttpResponseRedirect(item.get_absolute_url())
+
+
+class CommentDeleteView(LoggedInMixin, DeleteView):
+    model = Comment
+
+    def get_object(self, queryset=None):
+        """Ensure that the comment is owned by request.user."""
+        comment = super(CommentDeleteView, self).get_object()
+        if not comment.user_is_owner(self.request.user):
+            raise PermissionDenied
+        return comment
+
+    def get_success_url(self):
+        # Get the item's url from the comment
+        cid = self.kwargs['pk']
+        comment = get_object_or_404(Comment, cid=cid)
+        item = comment.item
+        return reverse('item_detail', args=(item.iid,))
+
+    def post(self, request, *args, **kwargs):
+        cid = self.kwargs['pk']
+        comment = get_object_or_404(Comment, cid=cid)
+        if not comment.user_is_owner(request.user):
+            raise PermissionDenied
+        return super(CommentDeleteView, self).post(request, args, kwargs)
 
 
 class ResolveItemView(LoggedInMixin, View):
@@ -482,6 +509,46 @@ class ProjectDetailView(LoggedInMixin, DetailView):
             if Item.objects.filter(milestone=m).filter(
                 ~Q(status='VERIFIED')
             ).count() > 0]
+        return ctx
+
+
+class ProjectTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
+    model = Project
+    template_name = "main/project_timeline.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ProjectTimeLineView, self).get_context_data(**kwargs)
+
+        ctx['timeline'] = self.object.timeline(
+            start=self.week_start,
+            end=self.week_end,
+        )
+        ctx.update(
+            week_start=self.week_start.date,
+            week_end=self.week_end.date,
+            prev_week=self.prev_week.date,
+            next_week=self.next_week.date,
+        )
+        return ctx
+
+
+class UserTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
+    model = User
+    template_name = "main/user_timeline.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(UserTimeLineView, self).get_context_data(**kwargs)
+
+        ctx['timeline'] = self.object.timeline(
+            start=self.week_start,
+            end=self.week_end,
+        )
+        ctx.update(
+            week_start=self.week_start.date,
+            week_end=self.week_end.date,
+            prev_week=self.prev_week.date,
+            next_week=self.next_week.date,
+        )
         return ctx
 
 

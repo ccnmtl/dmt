@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load markup %}
+{% load waffle_tags %}
 
 {% block title %}User: {{object.fullname}}{% endblock %}
 
@@ -57,7 +58,9 @@
 {% endwith %}
 </dl>
 
-
+{% flag user_timeline %}
+<p><a href="{% url 'user_timeline' object.username %}">View Timeline</a></p>
+{% endflag %}
 
 <ul class="nav nav-tabs">
   <li><a href="#items" data-toggle="tab">Items</a></li>

@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="add-tracker-label">Add Tracker(s)</h4>
+                <h4 class="modal-title" id="add-tracker-label">Add Tracker</h4>
             </div>
             <div class="modal-body">
                 <form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">
@@ -12,23 +12,43 @@
 
                     <div class="row">
                         <div class="col-sm-7">
-                            <input type="text" name="title" placeholder="task"
+                            <input type="text" name="title" placeholder="Task"
                                    id="tracker-task-input"
                                    class="form-control"/>
                         </div>
 
                         <div class="col-sm-3">
-                            <input type="text" name="time" placeholder="time"
-                                   id="tracker-time-input"
-                                   class="form-control" />
-                        </div>
-
-                        <div class="col-sm-2">
-                            <input type="text" name="client" placeholder="client"
+                            <input type="text" name="client" placeholder="Client UNI"
                                    id="tracker-client-input"
                                    class="form-control" />
                         </div>
                     </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <input type="text" name="time"
+                                  placeholder="Time"
+                                  id="tracker-time-input"
+                                  class="form-control" />
+                        </div>
+                        <div class="col-sm-6 instructions">
+                          <span class="glyphicon glyphicon-question-sign"></span>
+                          Enter time and unit, for example:
+                          <code>30hrs 59min</code><br />
+                          <a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Help_and_Tutorial#Time_formatting" target="_blank">Visit Help</a> for more information.
+                        </div>
+                    </div>
+
+										<div class="row">
+											<div class="col-sm-10">
+                        <label for="tracker-completed">completed at</label>
+												<select class="form-control" name="completed" id="tracker-completed">
+													<option value="" selected="selected">this week</option>
+													<option value="last">last week</option>
+													<option value="before_last">week before last</option>
+												</select>
+											</div>
+										</div>
                 </form>
             </div>
             <div class="modal-footer">

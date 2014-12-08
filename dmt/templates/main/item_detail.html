@@ -254,10 +254,16 @@
                     <input type="hidden" name="iid" value="{{object.iid}}" id="item-iid-input" />
 
                     <div class="row">
-                        <div class="col-sm-3">
-                            <input type="text" name="time" placeholder="time"
-                                   id="tracker-time-input"
-                                   class="form-control" />
+                        <div class="col-sm-4">
+                            <input type="text" name="time" 
+                              placeholder="Time" id="tracker-time-input"
+                              class="form-control" />
+                        </div>
+                        <div class="col-sm-6 instructions">
+                          <span class="glyphicon glyphicon-question-sign"></span>
+                          Enter time and unit, for example:
+                          <code>30hrs 59min</code><br />
+                          <a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Help_and_Tutorial#Time_formatting" target="_blank">Visit Help</a> for more information.
                         </div>
                     </div>
                 </form>
@@ -429,7 +435,7 @@
                   class="close"
                   data-dismiss="modal"
                   aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="add-comment-label">Add Comment</h4>
+        <h4 class="modal-title" id="add-comment-label">Write Comment</h4>
       </div>
       <div class="modal-body">
           <div class="form-group">
@@ -474,7 +480,7 @@
         <h4 class="modal-title" id="add-attachment-label">Add Attachment</h4>
       </div>
       <div class="modal-body">
-          <p id="status">Please select a file</p>
+          <p id="status"><b>Please select a file</b></p>
           <div class="form-group">
               <input type="file" id="file" onchange="s3_upload();"/>
           </div>
@@ -513,43 +519,43 @@
       </div>
       <div class="modal-body">
 					<div class="form-group">
-						<input type="text" name="title_0" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_0" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_1" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_1" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_2" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_2" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_3" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_3" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_4" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_4" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_5" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_5" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_6" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_6" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_7" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_7" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_8" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_8" class="form-control" placeholder="Sub-item title" />
 					</div>
 
 					<div class="form-group">
-						<input type="text" name="title_9" class="form-control" placeholder="new sub-item title" />
+						<input type="text" name="title_9" class="form-control" placeholder="Sub-item title" />
 					</div>
       </div>
       <div class="modal-footer">
@@ -728,6 +734,21 @@
             <nobr>on {{history_item.timestamp}}</nobr>
         </div>
         <div class="col-md-7 item-comment">
+            {# Does this history item belong to the current user? #}
+            {% if request.user.username == history_item.user.username %}
+            {# Is it a comment? #}
+            {% if history_item.c %}
+            <form method="get"
+                  action="{% url 'comment_delete' history_item.c.cid %}">
+                <button type="submit"
+                        title="Delete comment"
+                        class="btn btn-default btn-xs pmt-delete">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </form>
+            {% endif %}
+            {% endif %}
+
             {{history_item.comment|markdown}}
         </div>
     </div>

@@ -23,6 +23,10 @@ require([
     }
 
     $(document).ready(function() {
+        if (!$('#add-action-item-form')) {
+            return;
+        }
+
         var preview = new MarkdownPreview(
             $('textarea#dmt-project-new-item-desc'),
             $('.dmt-markdown-project-item-preview')

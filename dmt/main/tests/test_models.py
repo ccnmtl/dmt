@@ -5,7 +5,7 @@ from django.core import mail
 import unittest
 from .factories import (
     UserFactory, ItemFactory, NodeFactory, ProjectFactory,
-    AttachmentFactory, ClientFactory,
+    AttachmentFactory, ClientFactory, StatusUpdateFactory,
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
 from simpleduration import Duration
@@ -106,6 +106,17 @@ class UserModelTest(TestCase):
         u.send_weekly_report()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "PMT Weekly Report")
+
+    def test_timeline_empty(self):
+        u = UserFactory()
+        t = u.timeline()
+        self.assertEqual(t, [])
+
+    def test_timeline_notempty(self):
+        u = UserFactory()
+        StatusUpdateFactory(user=u)
+        t = u.timeline()
+        self.assertEqual(len(t), 1)
 
 
 class ProjectUserTest(TestCase):
@@ -506,6 +517,22 @@ class ProjectTest(TestCase):
         self.assertTrue(m.item_set.all().count() > 0)
         i = m.item_set.all()[0]
         self.assertEqual(i.estimated_time.seconds, 7200)
+
+    def test_timeline_empty(self):
+        p = ProjectFactory()
+        self.assertEqual(p.timeline(), [])
+
+    def test_timeline_notempty(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserFactory()
+        p.add_item(type='action item', title="new item",
+                   assigned_to=u, owner=u, milestone=m,
+                   priority=1, description="",
+                   estimated_time="2 hours",
+                   status='OPEN', r_status='')
+        t = p.timeline()
+        self.assertEqual(len(t), 1)
 
 
 class TestAttachment(TestCase):

@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
 from dmt.claim.models import Claim
-from dmt.main.models import User, Item, Milestone
+from dmt.main.models import User, Item, Milestone, Project
 from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
 from .models import (
@@ -11,6 +11,32 @@ from .models import (
     WeeklySummaryReportCalculator)
 from .mixins import PrevNextWeekMixin
 from .utils import ReportFileGenerator
+
+
+class ProjectHoursView(LoggedInMixin, View):
+    def get(self, request, pk):
+        p = get_object_or_404(Project, pk=pk)
+        actual_times = p.all_actual_times()
+        filename = "project-hours-%d" % p.pid
+
+        column_names = [
+            'iid', 'item title', 'type', 'owner', 'assigned_to',
+            'priority', 'target_date', 'estimated_time',
+            'mid', 'milestone', 'user', 'hours', 'completed at']
+
+        rows = [[a.item.iid, a.item.title, a.item.type,
+                 a.item.owner.username, a.item.assigned_to.username,
+                 a.item.priority, a.item.target_date,
+                 interval_to_hours(a.item.estimated_time),
+                 a.item.milestone.mid, a.item.milestone.name,
+                 a.resolver.username, interval_to_hours(a.actual_time),
+                 a.completed]
+                for a in actual_times]
+
+        generator = ReportFileGenerator()
+        return generator.generate(
+            column_names, rows, filename,
+            self.request.GET.get('format', 'csv'))
 
 
 class ActiveProjectsView(LoggedInMixin, TemplateView):
