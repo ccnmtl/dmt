@@ -284,6 +284,13 @@ class User(models.Model):
         all_events.reverse()
         return all_events
 
+    def passed_open_milestones(self):
+        return Milestone.objects.filter(
+            project__caretaker=self,
+            status='OPEN',
+            target_date__lt=datetime.now(),
+        ).order_by('target_date')
+
 
 class ProjectUser(object):
     def __init__(self, project, user):
