@@ -793,7 +793,7 @@ background: #000;
 }
 
 .progressbar-set {
-  margin: 0;
+  margin: 60px 0 0 0;
   padding: 0;
   border: 0;
   height: 25px;
