@@ -17,12 +17,14 @@
 
 {% block content %}
 
+
 <h1 class="page-title">My Dashboard</h1>
 
 {% if request.user.is_anonymous %}
   <p>Please Login</p>
 {% else %}
   {% pmtuser as pmt_user %}
+  {% with pmt_user.passed_open_milestones as overdue_milestones %}
 
   <div class="object-action-set clearfix">
     <ul>
@@ -42,21 +44,18 @@
     </ul>
   </div><!-- ./object-action-set -->
 
-
-
-
 <ul class="nav nav-tabs project-tabs">
-{% with pmt_user.passed_open_milestones as overdue_milestones %}
 {% if overdue_milestones %}
   <li class="active"><a href="#overdue-milestones" data-toggle="tab">Overdue Milestones</a></li>
-{% endif %}
-{% endwith %}
   <li><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
+{% else %}
+  <li class="active"><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
+{% endif %}
+
 </ul>
 
 <div class="tab-content">
 
-{% with pmt_user.passed_open_milestones as overdue_milestones %}
 {% if overdue_milestones %}
 <div class="tab-pane fade in active" id="overdue-milestones">
 <div class="panel panel-danger">
@@ -80,9 +79,12 @@
 </div>
 </div>
 {% endif %}
-{% endwith %}
 
-<div class="tab-pane fade" id="outstanding-items">
+{% if overdue_milestones %}
+    <div class="tab-pane fade" id="outstanding-items">
+{% else %}
+    <div class="tab-pane fade in active" id="outstanding-items">
+{% endif %}
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
     <div class="modal-dialog">
@@ -250,6 +252,7 @@
 </div>
 </div>
 
+{% endwith %}
 {% endif %}
 
 {% endblock %}
