@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="." method="post">{% csrf_token %}
+<h2>Are you sure you want to delete the "{{object.name}}" tag?</h2>
+<p>It will be removed from all items and nodes across all projects.</p>
+<a href="{{object.get_absolute_url}}" class="btn btn-default">No, keep this tag</a>
+<input class="btn btn-danger" type="submit" value="Yes, delete this tag"/>
+</form>
+
+{% endblock %}

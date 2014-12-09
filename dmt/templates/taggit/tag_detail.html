@@ -8,6 +8,12 @@
 </ul>
 <h1>Tag: {{object.name}}</h1>
 
+<p class="pull-right">
+<a href="{% url 'delete_tag' object.slug %}" class="btn btn-danger"><span class="glyphicon
+																											glyphicon-trash"></span>
+	Delete</a>
+</p>
+
 {% if items %}
 <h2>Items</h2>
     <table class="table table-striped table-condensed">

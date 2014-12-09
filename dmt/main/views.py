@@ -404,6 +404,11 @@ class StatusUpdateDeleteView(LoggedInMixin, DeleteView):
     success_url = "/status/"
 
 
+class DeleteTagView(LoggedInMixin, DeleteView):
+    model = Tag
+    success_url = "/tag/"
+
+
 class ClientDetailView(LoggedInMixin, DetailView):
     model = Client
 
