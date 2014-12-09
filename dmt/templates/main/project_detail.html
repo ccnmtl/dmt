@@ -144,10 +144,18 @@
   
   {% for milestone in milestones %}
   <div class="milestone-set">
-  <h4>
-    Milestone:
-    <a href="{% url 'milestone_detail' milestone.mid %}">{{ milestone.name }}</a>
-  </h4>
+    <div class="milestone-header clearfix">
+      <h4>
+        Milestone:
+        <a href="{% url 'milestone_detail' milestone.mid %}">{{ milestone.name }}</a>
+      </h4>
+      <div class="milestone-date">
+      <b>Target: {{milestone.target_date|date:"Y-m-d"}}</b>
+      {% if milestone.target_date_passed %}
+      - <span class="late"><b>OVERDUE</b></span>
+      {% endif %}
+      </div>
+    </div>
   {% if milestone.active_items %}
   <table class="table table-condensed table-striped tablesorter" id="project-items-{{ milestone.mid }}">
   <thead>

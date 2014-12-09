@@ -69,7 +69,7 @@
 </tr>
 {% for m in overdue_milestones %}
 <tr>
-	<td>{{m.target_date|timesince}} ago</td>
+	<td>{{m.target_date|timesince}} ago ({{m.target_date}})</td>
 	<td><a href="{{m.project.get_absolute_url}}">{{m.project.name}}</a></td>
 	<td><a href="{{m.get_absolute_url}}">{{m.name}}</a></td>
 	<td>{{m.active_items.count}} item{{m.active_items.count|pluralize}} blocking</td>
