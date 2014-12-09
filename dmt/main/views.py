@@ -666,6 +666,59 @@ class TagListView(LoggedInMixin, ListView):
     queryset = Tag.objects.all().order_by("name")
 
 
+class ProjectTagListView(LoggedInMixin, DetailView):
+    model = Project
+    template_name = "main/project_tags.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectTagListView, self).get_context_data(**kwargs)
+        # django-taggit makes this kind of a hard
+        # query to express (especially with our lake of
+        # regular 'id' columns on legacy tables.)
+        # dropping down to raw SQL for this.
+
+        tags = Tag.objects.raw(
+            """SELECT t.id as id, t.name as name, t.slug as slug
+FROM taggit_tag t, taggit_taggeditem ti, django_content_type dct,
+     milestones m, items i
+WHERE
+  t.id = ti.tag_id
+  AND ti.content_type_id = dct.id
+  AND m.pid = %s
+  AND i.mid = m.mid
+  AND ti.object_id = i.iid
+  AND dct.model = 'item'""", [self.object.pid])
+        tags = list(set(tags))
+        tags.sort(key=lambda x: x.name.lower())
+        context['tags'] = tags
+        return context
+
+
+class ProjectTagView(LoggedInMixin, View):
+    model = Project
+    template_name = "main/project_tag.html"
+
+    def get(self, request, pk, slug):
+        project = get_object_or_404(Project, pk=pk)
+        tag = get_object_or_404(Tag, slug=slug)
+        items = Item.objects.raw(
+            """SELECT i.iid as iid
+FROM taggit_tag t, taggit_taggeditem ti, django_content_type dct,
+     milestones m, items i
+WHERE
+  t.id = ti.tag_id
+  AND t.slug = %s
+  AND ti.content_type_id = dct.id
+  AND m.pid = %s
+  AND i.mid = m.mid
+  AND ti.object_id = i.iid
+  AND dct.model = 'item'""", [slug, project.pid])
+
+        return render(
+            request, self.template_name,
+            dict(project=project, tag=tag, items=items))
+
+
 class TagDetailView(LoggedInMixin, DetailView):
     model = Tag
 
