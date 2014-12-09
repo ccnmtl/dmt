@@ -204,7 +204,7 @@ td.upcoming, div.upcoming {
 td.due, div.due {
 		color: #f93;
 }
-td.late, div.late {
+td.late, div.late, span.late {
 		color: #f00;
 }
 td.overdue, div.overdue {
@@ -333,6 +333,7 @@ footer.page-footer {
   width: 980px;
 }
 
+.object-description,
 .item-description {
   margin: 20px 0;
 }
@@ -1094,7 +1095,7 @@ padding: 5px;
 
 }
 
-.milestone-set>h4 {
+.milestone-set .milestone-header {
   margin: 0;
   padding: 5px 10px;
   background-color: #e2ebf5;
@@ -1104,6 +1105,18 @@ padding: 5px;
   -webkit-border-top-right-radius: 5px;
      -moz-border-top-right-radius: 5px;
           border-top-right-radius: 5px;
+}
+
+.milestone-header>h4 {
+  margin: 0;
+  padding: 0;
+  float: left;
+}
+
+.milestone-header .milestone-date {
+  font-size: 12px;
+  float: right;
+  text-align: right;
 }
 
 .milestone-set>.table>thead>tr>th {
@@ -1444,6 +1457,17 @@ padding: 5px;
   }
   .milestone-set .tablesorter tbody tr td:nth-child(1) { width: 100%; max-width: 600px; }
   .milestone-set th.header { width: 120px; }
+  .milestone-header>h4 {
+    margin: 0 0 5px 0;
+    padding: 0;
+    float: none;
+  }
+  
+  .milestone-header .milestone-date {
+    font-size: 12px;
+    float: none;
+    text-align: left;
+  }
 }
 
 .pmt-timeline-item {
