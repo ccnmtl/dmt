@@ -140,11 +140,17 @@ class AddCommentView(LoggedInMixin, View):
 class CommentDeleteView(LoggedInMixin, DeleteView):
     model = Comment
 
+    def require_comment_owner(self, comment):
+        """Raise an error if request.user doesn't own the given comment."""
+        pmt_user = get_object_or_404(Claim,
+                                     django_user=self.request.user).pmt_user
+        if not comment.user_is_owner(pmt_user):
+            raise PermissionDenied
+
     def get_object(self, queryset=None):
         """Ensure that the comment is owned by request.user."""
         comment = super(CommentDeleteView, self).get_object()
-        if not comment.user_is_owner(self.request.user):
-            raise PermissionDenied
+        self.require_comment_owner(comment)
         return comment
 
     def get_success_url(self):
@@ -157,8 +163,7 @@ class CommentDeleteView(LoggedInMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         cid = self.kwargs['pk']
         comment = get_object_or_404(Comment, cid=cid)
-        if not comment.user_is_owner(request.user):
-            raise PermissionDenied
+        self.require_comment_owner(comment)
         return super(CommentDeleteView, self).post(request, args, kwargs)
 
 

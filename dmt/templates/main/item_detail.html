@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load waffle_tags %}
+{% load claimtags %}
 
 {% block title %}Item #{{object.iid}}&ndash;{{object.title}}{% endblock %}
 
@@ -734,8 +735,10 @@
             <nobr>on {{history_item.timestamp}}</nobr>
         </div>
         <div class="col-md-7 item-comment">
+            {% pmtuser as pmt_user %}
+
             {# Does this history item belong to the current user? #}
-            {% if request.user.username == history_item.user.username %}
+            {% if pmt_user.username == history_item.user.username %}
             {# Is it a comment? #}
             {% if history_item.c %}
             <form method="get"
