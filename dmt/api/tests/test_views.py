@@ -62,7 +62,7 @@ class AddTrackerViewTest(TestCase):
         ).first()
         actual_time = ActualTime.objects.filter(item=item).first()
         expected_time = datetime.utcnow() - timedelta(days=7)
-        self.assertEqual(actual_time.completed.date().day, expected_time.day)
+        self.assertEqual(actual_time.completed.day, expected_time.day)
         self.assertEqual(actual_time.completed.month, expected_time.month)
         self.assertEqual(actual_time.completed.year, expected_time.year)
 
