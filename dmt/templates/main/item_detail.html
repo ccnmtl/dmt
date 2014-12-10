@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load waffle_tags %}
+{% load claimtags %}
 
 {% block title %}Item #{{object.iid}}&ndash;{{object.title}}{% endblock %}
 
@@ -75,7 +76,6 @@
   </div><!-- ./item-action-set -->
 
   <div class="item-details">
-    {% comment %}<p class="no-margin no-padding">(<a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">Return to the old PMT</a>)</p>{% endcomment %}
     <div class="item-description">{{object.description|markdown}}</div>
 
     <dl class="dl-horizontal">
@@ -302,7 +302,7 @@
 
 				<div class="form-group">
 					<div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-          For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+          For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
 					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
 				</div>
 
@@ -336,7 +336,7 @@
       <div class="modal-body">
           <div class="form-group">
             <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+                        For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
               <textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
           </div>
           <div class="form-group">
@@ -368,7 +368,7 @@
       <div class="modal-body">
 				<div class="form-group">
 				<div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+                        For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
 					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
 				</div>
       </div>
@@ -401,7 +401,7 @@
       <div class="modal-body">
           <div class="form-group">
           <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-                        For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.</div>
+                        For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
               <textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
           </div>
           <div class="form-group">
@@ -441,7 +441,7 @@
           <div class="form-group">
               <div class="instructions">
                 <span class="glyphicon glyphicon-question-sign"></span>
-                For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.
+                For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.
               </div>
               <textarea name="comment"
                         class="form-control"
@@ -493,7 +493,7 @@
           <div class="form-group">
               <div class="instructions">
                 <span class="glyphicon glyphicon-question-sign"></span>
-                For text formatting, please see the <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a> for syntax rules.
+                For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.
               </div>
               <textarea name="description" class="form-control" rows="5" placeholder="Description"></textarea>
           </div>
@@ -734,8 +734,10 @@
             <nobr>on {{history_item.timestamp}}</nobr>
         </div>
         <div class="col-md-7 item-comment">
+            {% pmtuser as pmt_user %}
+
             {# Does this history item belong to the current user? #}
-            {% if request.user.username == history_item.user.username %}
+            {% if pmt_user.username == history_item.user.username %}
             {# Is it a comment? #}
             {% if history_item.c %}
             <form method="get"

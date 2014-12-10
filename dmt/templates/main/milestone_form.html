@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
 
+{% block title %}Edit Milestone&ndash;{{object.name}}{% endblock %}
+{% block extraclass %} class="project-form"{% endblock %}
+
 {% block content %}
+<h1 class="page-title">Milestone: Edit {{object.name}}</h1>
+
 
 <div class="form-group pull-right">
 {% if object.is_empty %}
@@ -13,11 +18,14 @@
 </div>
 
 <form action="." method="post">{% csrf_token %}
-<fieldset><legend>Edit Milestone</legend>
+<fieldset>
+
 {{form|bootstrap}}
 
+<div class="button-set">
 <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
 <input type="submit" value="Save" class="btn btn-primary" />
+</div>
 </fieldset>
 </form>
 {% endblock %}

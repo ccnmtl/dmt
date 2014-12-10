@@ -233,6 +233,57 @@ class User(models.Model):
     def remove_from_all_groups(self):
         self.ingroup_set.all().delete()
 
+    def timeline(self, start=None, end=None):
+        all_events = []
+        if end is None:
+            end = datetime.now()
+
+        if start is None:
+            start = end - timedelta(weeks=1)
+
+        events = Comment.objects.filter(
+            username=self.username,
+            add_date_time__gt=start,
+            add_date_time__lte=end,
+        ).exclude(event=None).select_related(
+            'event_item', 'event_item__milestone',
+            'event_item__milestone__project',
+            'username', 'event', 'item')
+        all_events.extend([TimeLineEvent(c) for c in events])
+
+        comments = Comment.objects.filter(
+            username=self.username,
+            event=None,
+            add_date_time__gt=start,
+            add_date_time__lte=end,
+        ).select_related('item', 'item__milestone', 'item__milestone__project')
+        all_events.extend([TimeLineComment(c) for c in comments])
+
+        actual_times = ActualTime.objects.filter(
+            resolver=self,
+            completed__gt=start,
+            completed__lte=end,
+        ).select_related('item', 'item__milestone', 'item__milestone__project')
+        all_events.extend([TimeLineActualTime(a) for a in actual_times])
+
+        statuses = StatusUpdate.objects.filter(
+            user=self,
+            added__gt=start,
+            added__lte=end,
+        ).select_related('project')
+        all_events.extend([TimeLineStatus(s) for s in statuses])
+
+        posts = Node.objects.filter(
+            author=self,
+            added__gt=start,
+            added__lte=end,
+        ).select_related('project')
+        all_events.extend([TimeLinePost(p) for p in posts])
+
+        all_events.sort()
+        all_events.reverse()
+        return all_events
+
     def passed_open_milestones(self):
         return Milestone.objects.filter(
             project__caretaker=self,

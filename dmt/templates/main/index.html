@@ -17,37 +17,14 @@
 
 {% block content %}
 
+
 <h1 class="page-title">My Dashboard</h1>
 
 {% if request.user.is_anonymous %}
   <p>Please Login</p>
 {% else %}
   {% pmtuser as pmt_user %}
-
-{% with pmt_user.passed_open_milestones as overdue_milestones %}
-{% if overdue_milestones %}
-<div class="panel panel-danger">
-<div class="panel-heading">Your Overdue Milestones</div>
-<table class="table table-striped table-condensed">
-<tr>
-	<th>Target Date</th>
-	<th>Project</th>
-	<th>Milestone</th>
-	<th></th>
-</tr>
-{% for m in overdue_milestones %}
-<tr>
-	<td>{{m.target_date|timesince}} ago</td>
-	<td><a href="{{m.project.get_absolute_url}}">{{m.project.name}}</a></td>
-	<td><a href="{{m.get_absolute_url}}">{{m.name}}</a></td>
-	<td>{{m.active_items.count}} item{{m.active_items.count|pluralize}} blocking</td>
-</tr>
-{% endfor %}
-</table>
-</div>
-{% endif %}
-{% endwith %}
-
+  {% with pmt_user.passed_open_milestones as overdue_milestones %}
 
   <div class="object-action-set clearfix">
     <ul>
@@ -67,6 +44,47 @@
     </ul>
   </div><!-- ./object-action-set -->
 
+<ul class="nav nav-tabs project-tabs">
+{% if overdue_milestones %}
+  <li class="active"><a href="#overdue-milestones" data-toggle="tab">Overdue Milestones</a></li>
+  <li><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
+{% else %}
+  <li class="active"><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
+{% endif %}
+
+</ul>
+
+<div class="tab-content">
+
+{% if overdue_milestones %}
+<div class="tab-pane fade in active" id="overdue-milestones">
+<div class="panel panel-danger">
+<div class="panel-heading"><b><span class="glyphicon glyphicon-exclamation-sign"></span> You have overdue milestones</b></div>
+<table class="table table-striped table-condensed">
+<tr>
+	<th>Target Date</th>
+	<th>Project</th>
+	<th>Milestone</th>
+	<th></th>
+</tr>
+{% for m in overdue_milestones %}
+<tr>
+	<td>{{m.target_date|timesince}} ago ({{m.target_date}})</td>
+	<td><a href="{{m.project.get_absolute_url}}">{{m.project.name}}</a></td>
+	<td><a href="{{m.get_absolute_url}}">{{m.name}}</a></td>
+	<td>{{m.active_items.count}} item{{m.active_items.count|pluralize}} blocking</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+</div>
+{% endif %}
+
+{% if overdue_milestones %}
+    <div class="tab-pane fade" id="outstanding-items">
+{% else %}
+    <div class="tab-pane fade in active" id="outstanding-items">
+{% endif %}
 
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
     <div class="modal-dialog">
@@ -231,6 +249,10 @@
     You need to <a href="/claim/">claim your account</a> first.
 </div>
 {% endif %}
+</div>
+</div>
+
+{% endwith %}
 {% endif %}
 
 {% endblock %}
