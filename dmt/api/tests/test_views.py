@@ -49,17 +49,20 @@ class AddTrackerViewTest(TestCase):
             "/api/1.0/trackers/add/",
             dict(
                 pid=self.project.pid,
-                task="test",
+                task="test backdated last",
                 time="1 hour",
                 completed="last",
             ))
         self.assertEqual(r.status_code, 200)
 
         # Assert that the created time is accurate
-        item = Item.objects.filter(milestone=self.milestone).first()
+        item = Item.objects.filter(
+            milestone=self.milestone,
+            title="test backdated last"
+        ).first()
         actual_time = ActualTime.objects.filter(item=item).first()
         expected_time = datetime.now() - timedelta(days=7)
-        self.assertEqual(actual_time.completed.day, expected_time.day)
+        self.assertEqual(actual_time.completed.date().day, expected_time.day)
         self.assertEqual(actual_time.completed.month, expected_time.month)
         self.assertEqual(actual_time.completed.year, expected_time.year)
 

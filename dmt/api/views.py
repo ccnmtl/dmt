@@ -188,7 +188,6 @@ class AddTrackerView(View):
         d = new_duration(request.POST.get('time', '1 hour'))
         client_uni = request.POST.get('client', '')
         completed = process_completed(request.POST.get('completed', ''))
-
         td = d.timedelta()
         # two required fields
         if None in [pid, task]:
