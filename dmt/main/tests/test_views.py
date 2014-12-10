@@ -391,6 +391,20 @@ class MyProjectViewTests(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertFalse(p.name in r.content)
 
+    def test_project_tag_list(self):
+        p = ProjectFactory()
+        r = self.client.get(reverse('project_tag_list', args=[p.pid]))
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue("Project Tags for" in r.content)
+
+    def test_project_tag_detail(self):
+        i = ItemFactory()
+        i.tags.add("foo")
+        r = self.client.get(
+            reverse('project_tag', args=[i.milestone.project.pid, 'foo']))
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(i.get_absolute_url() in r.content)
+
 
 class TestMilestoneViews(TestCase):
     def setUp(self):

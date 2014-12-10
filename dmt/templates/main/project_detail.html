@@ -75,6 +75,11 @@
         <span class="object-action-text hidden-xs hidden-sm">Timeline</span></a>
       </li>
       {% endflag %}
+			<li class="object-action" title="Project Tags">
+				<a href="{% url 'project_tag_list' object.pid %}"
+					 class="object-action-link"><span class="glyphicon glyphicon-tags"></span>
+					<span class="object-action-text hidden-xs hidden-sm">Tags</span></a>
+			</li>
 
     </ul>  
   </div><!-- ./object-action-set -->
