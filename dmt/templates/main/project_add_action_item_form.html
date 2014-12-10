@@ -66,9 +66,12 @@
                                         {% ifequal user.username object.caretaker.username %}
                                         selected="selected"
                                         {% endifequal %}
-                                        >{{user.fullname}}</option>
+                                        >{{user.fullname}}{% ifequal user.username object.caretaker.username %}
+                                        *
+                                        {% endifequal %}</option>
                                 {% endfor %}
                             </select>
+                            <div class="instructions">* Caretaker</div>
                         </div>
                     </div>
 
