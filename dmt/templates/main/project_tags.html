@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Project Tags for: <a href="{{object.get_absolute_url}}">{{object.name}}</a></h1>
+<ul>
+{% for tag in tags %}
+<li><a href="{{tag.slug}}/">{{tag.name}}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

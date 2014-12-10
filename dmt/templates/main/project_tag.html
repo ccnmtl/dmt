@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Project: <a href="{{project.get_absolute_url}}">{{project.name}}</a></h1>
+<h2>Tag: {{tag.name}}</h2>
+
+{% if items %}
+<h2>Items</h2>
+    <table class="table table-striped table-condensed">
+    	<thead>
+    		<tr>
+    			<th>Item</th>
+    			<th>Priority</th>
+					<th>Owner</th>
+					<th>Assigned To</th>
+    			<th>Target Date</th>
+    			<th>Modified</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+
+<ul> 
+{% for item in items %}
+    <tr>
+    	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+    	width="14" height="14"/>
+ {% endif %}
+<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:40}}</a>
+{% ifequal item.status "OPEN" %}
+{% else %}
+<span class="{{item.status_class}} badge pull-right">{{item.status_display}}</span>
+{% endifequal %}
+</td>
+    	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
+			<td><a href="{{item.owner.get_absolute_url}}">{{item.owner.fullname}}</a></td>
+			<td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to.fullname}}</a></td>
+    	<td class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
+    	<td>{{item.last_mod|date:"Y-m-d"}}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endif %}
+{% endblock %}
