@@ -8,11 +8,13 @@ require([
             var task = $form.find('#tracker-task-input').val();
             var time = $form.find('#tracker-time-input').val();
             var client = $form.find('#tracker-client-input').val();
+            var completed = $form.find('#tracker-completed-input').val();
 
             $.ajax({
                 type: 'POST',
                 url: '/api/1.0/trackers/add/',
-                data: {pid: pid, task: task, time: time, client: client},
+                data: {pid: pid, task: task, time: time, client: client,
+                      completed: completed},
                 success: function(data, status) {
                     return formUtils.onSuccess($form, data, status);
                 },
