@@ -267,7 +267,7 @@
   <div class="tab-pane fade" id="personnel">
     <ul>
         {% for u in object.personnel_in_project %}
-            <li><span class="personnel"><a href="{{u.get_absolute_url}}">{{u.fullname}}</a> <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
+            <li><span class="personnel"><a href="{{u.get_absolute_url}}">{{u.fullname}}</a>{% ifequal u.username object.caretaker.username %} (Caretaker) {% endifequal %} <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
         title="remove user from project" class="remove-link">[remove]</a></span></li>
         {% endfor %}
     </ul>
