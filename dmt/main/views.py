@@ -906,8 +906,11 @@ class ProjectAddStatusUpdateView(LoggedInMixin, View):
 class ProjectAddMilestoneView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
+        name = request.POST.get('name', u'Untitled milestone')
+        if len(name) == 0:
+            name = "Untitled milestone"
         Milestone.objects.create(
-            project=project, name=request.POST.get('name', 'new milestone'),
+            project=project, name=name,
             status='OPEN',
             target_date=request.POST.get('target_date', datetime.now().date())
         )
