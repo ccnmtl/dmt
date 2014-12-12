@@ -1224,6 +1224,9 @@ class Client(models.Model):
     def active(self):
         return self.status == 'active'
 
+    def get_absolute_url(self):
+        return "/client/%d/" % self.client_id
+
 
 class ItemClient(models.Model):
     item = models.ForeignKey(Item, db_column='iid')

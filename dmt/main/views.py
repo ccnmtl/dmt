@@ -384,6 +384,19 @@ class ClientListView(LoggedInMixin, FilterView):
     paginate_by = 100
 
 
+class AddClientView(LoggedInMixin, CreateView):
+    model = Client
+    fields = ['email', 'lastname', 'firstname', 'department', 'school']
+
+    def form_valid(self, form):
+        current_user = get_object_or_404(
+            Claim, django_user=self.request.user).pmt_user
+        form.instance.contact = current_user
+        form.instance.status = 'active'
+        form.instance.save()
+        return super(AddClientView, self).form_valid(form)
+
+
 class StatusUpdateListView(LoggedInMixin, ListView):
     model = StatusUpdate
     paginate_by = 20
