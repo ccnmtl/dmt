@@ -1469,6 +1469,17 @@ padding: 5px;
     float: none;
     text-align: left;
   }
+	.login-box,
+	.login-header,
+	.login-form {
+		width: 300px;
+	}
+	.login-form {
+		text-align: center;
+	}
+	.login {
+		margin-top: 30px;
+	}
 }
 
 .pmt-timeline-item {
