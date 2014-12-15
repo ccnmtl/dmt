@@ -10,7 +10,8 @@ from django.test import TestCase
 from waffle import Flag
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import (
-    Attachment, Comment, Item, ItemClient, Milestone, Project
+    Attachment, Comment, Item, ItemClient, Milestone, Project,
+    Client
 )
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 from datetime import timedelta
@@ -84,6 +85,31 @@ class TestClientViews(TestCase):
             reverse('client_detail', args=(self.client_mock.client_id,)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['recent_items'].first(), item)
+
+    def test_add_client_form(self):
+        r = self.client.get(reverse('add_client'))
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue("Add New Client" in r.content)
+
+    def test_add_client(self):
+        r = self.client.post(
+            reverse('add_client', args=[]),
+            dict(
+                email='abc123@columbia.edu',
+                lastname="testlastname",
+                firstname="testfirstname",
+                department="testdepartment",
+                school="testschool",
+            )
+        )
+        self.assertEqual(r.status_code, 302)
+        c = Client.objects.get(email='abc123@columbia.edu')
+        self.assertEqual(c.lastname, "testlastname")
+        self.assertEqual(c.firstname, "testfirstname")
+        self.assertEqual(c.department, "testdepartment")
+        self.assertEqual(c.school, "testschool")
+        self.assertEqual(c.status, "active")
+        self.assertEqual(c.contact, self.pu)
 
 
 class TestProjectViews(TestCase):

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block content %}
+<h1>Add New Client</h1>
+<form action="." method="post">{% csrf_token %}
+<fieldset>
+{{form|bootstrap}}
+
+<div class="button-set">
+<input type="submit" value="Add Client" class="btn btn-primary" />
+</div>
+
+</fieldset>
+</form>
+{% endblock %}
