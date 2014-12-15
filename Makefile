@@ -20,7 +20,7 @@ node_modules/jshint/bin/jshint:
 	npm install jshint --prefix .
 
 node_modules/jscs/bin/jscs:
-	npm install jscs --prefix .
+	npm install jscs@1.8.1 --prefix .
 
 test: ./ve/bin/python
 	npm install
