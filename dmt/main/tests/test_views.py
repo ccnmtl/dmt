@@ -93,7 +93,7 @@ class TestClientViews(TestCase):
 
     def test_add_client(self):
         r = self.client.post(
-            reverse('add_client'),
+            reverse('add_client', args=[]),
             dict(
                 email='abc123@columbia.edu',
                 lastname="testlastname",
