@@ -1104,6 +1104,24 @@ class GroupTest(TestCase):
         self.assertTrue(r.status_code, 404)
 
 
+class CreateUserTest(TestCase):
+    def test_create_user(self):
+        new_user = User.objects.create(
+            username='newuser',
+            email="newuser@example.com",
+            is_superuser=False,
+        )
+        new_user.set_password("test")
+        new_user.save()
+        self.client.login(username="newuser", password="test")
+        r = self.client.post(
+            reverse("create_user", args=[]),
+            dict())
+        self.assertEqual(r.status_code, 302)
+        u = PMTUser.objects.get(username='newuser')
+        self.assertEqual(u.email, new_user.email)
+
+
 class UserTest(TestCase):
     def setUp(self):
         self.u = User.objects.create(
