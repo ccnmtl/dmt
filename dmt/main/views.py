@@ -555,6 +555,31 @@ class ProjectTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
         return ctx
 
 
+class CreateUserView(View):
+    def post(self, request):
+        if request.user.is_anonymous():
+            # can't use a regular LoggedInMixin here since
+            # we want them to be logged in, but don't
+            # expect them to have a PMT User yet, while the
+            # mixin does.
+            return HttpResponseRedirect("/login/")
+        # don't do anything fancy, just make a PMT User to
+        # match the request user and hook them up.
+        u = User.objects.create(
+            username=request.user.username,
+            fullname=request.user.get_full_name(),
+            email=request.user.email,
+            status='active',
+            password='nopassword',
+        )
+        print "made a new user: %s" % u.username
+        Claim.objects.create(
+            django_user=request.user,
+            pmt_user=u)
+        # then send them to their profile page
+        return HttpResponseRedirect(u.get_absolute_url())
+
+
 class UserTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
     model = User
     template_name = "main/user_timeline.html"
