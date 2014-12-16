@@ -1,19 +1,40 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
+{% block title %}Edit User Profile &ndash;{{object.fullname}}{% endblock %}
+{% block extraclass %} class="object-form"{% endblock %}
 
 {% block content %}
+<h1 class="page-title clearfix">Edit User Profile &#8226; {{object.fullname}}</h1>
+
+<br />
+
+<div class="object-box clearfix">
 {% if object.active %}
 {% if request.user.is_superuser %}
-<a class="btn btn-danger pull-right" href="{% url 'user_deactivate' object.username %}">Deactivate</a>
+  <div class="object-action-set clearfix" style="margin-top: 0;">
+    <ul>
+      <li class="object-action" title="Deactivate user">
+        <a href="{% url 'user_deactivate' object.username %}" class="object-action-link"><span class="glyphicon glyphicon-ban-circle"></span>
+        <span class="object-action-text hidden-xs hidden-sm">Deactivate user</span></a>
+      </li>
+    </ul>
+  </div><!-- ./object-action-set -->
 {% endif %}
 {% endif %}
 
-<form action="." method="post">{% csrf_token %}
-<fieldset><legend>Edit User</legend>
-{{form|bootstrap}}
 
-<a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
-<input type="submit" value="Save" class="btn btn-primary" />
-</fieldset>
-</form>
+  <div class="object-details">
+    <form action="." method="post">{% csrf_token %}
+    <fieldset>
+    
+    {{form|bootstrap}}
+    
+    <div class="button-set">
+    <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
+    <input type="submit" value="Save" class="btn btn-primary" />
+    <div>
+    </fieldset>
+    </form>
+  </div><!-- /.object-details -->
+</div><!-- /.object-box -->
 {% endblock %}
