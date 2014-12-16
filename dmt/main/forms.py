@@ -29,8 +29,9 @@ class UserUpdateForm(ModelForm):
             "photo_url": TextInput(),
             "campus": TextInput(),
             "building": TextInput(),
-            "room": TextInput(),
+            "room": TextInput()
         }
+
 
 class ProjectCreateForm(ModelForm):
     target_date = forms.CharField(label='Proposed release date')
