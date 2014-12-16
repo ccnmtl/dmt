@@ -10,8 +10,7 @@
 
 <form action="." method="post" class="form form-horizontal">
 <fieldset>
-	<legend>You need to claim an account</legend>
-
+	<legend>Claim an Existing Account</legend>
 <select name="user">
 {% for user in available_users %}
 <option value="{{user.username}}" {% ifequal likely user.username %}selected="selected"{% endifequal %}>{{user.fullname}} ({{user.username}})</option>
@@ -20,5 +19,16 @@
 <input type="submit" value="claim account" class="btn" />
 </fieldset>
 </form>
+
+<form action="{% url 'create_user' %}" method="post" class="form form-horizontal">
+<fieldset>
+	<legend>I am a new user, make me a new account<legend>
+
+			<input type="submit" value="new account" class="btn" />
+</fieldset>
+
+</form>
+
+
 {% endif %}
 {% endblock %}
