@@ -1,6 +1,6 @@
 import re
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, TextInput
 from .models import StatusUpdate, Node, User, Project, Milestone, Item
 
 
@@ -22,7 +22,15 @@ class UserUpdateForm(ModelForm):
         fields = ["fullname", "email", "type", "title", "phone",
                   "bio", "photo_url", "photo_width", "photo_height",
                   "campus", "building", "room"]
-
+        widgets = {
+            "type": TextInput(),
+            "title": TextInput(),
+            "phone": TextInput(),
+            "photo_url": TextInput(),
+            "campus": TextInput(),
+            "building": TextInput(),
+            "room": TextInput(),
+        }
 
 class ProjectCreateForm(ModelForm):
     target_date = forms.CharField(label='Proposed release date')
