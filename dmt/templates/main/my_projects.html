@@ -15,6 +15,11 @@
 
 
 {% block content %}
+
+<h1 class="page-title">My Projects</h1>
+
+<br />
+
 <div class="tab-content">
     <div class="tab-pane fade in active" id="list">
         <table class="table table-condensed table-striped tablesorter" id="projects-table">
@@ -34,24 +39,24 @@
                     <td>
                         {{p.last_mod|date:"Y-m-d"}}
                     </td>
-                    <td>
+                    <td> <b>Add: </b>
                         <button type="button"
-                                class="btn btn-primary btn-xs add-todo"
+                                class="btn btn-default btn-xs add-todo"
                                 data-toggle="modal" data-target="#add-todo"
                                 data-pid="{{p.pid}}">
-                            <span class="glyphicon glyphicon-plus"></span> TODO
+                             TODO
                         </button>
                         <button type="button"
-                                class="btn btn-primary btn-xs add-node"
+                                class="btn btn-default btn-xs add-node"
                                 data-toggle="modal" data-target="#add-node"
                                 data-pid="{{p.pid}}">
-                            <span class="glyphicon glyphicon-plus"></span> Forum Post
+                             Forum Post
                         </button>
                         <button type="button"
-                                class="btn btn-primary btn-xs add-update"
+                                class="btn btn-default btn-xs add-update"
                                 data-toggle="modal" data-target="#add-update"
                                 data-pid="{{p.pid}}">
-                            <span class="glyphicon glyphicon-plus"></span> Status Update
+                             Status Update
                         </button>
                     </td>
                 </tr>
@@ -72,7 +77,7 @@
 <script>
     $(document).ready(function() {
         $("#projects-table").tablesorter({
-            sortList: [[1, 0]],
+            sortList: [[1, 1]],
             headers: { 2: { sorter: false}}
         });
 
