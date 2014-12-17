@@ -301,7 +301,7 @@ class TestProjectViews(TestCase):
     def test_create_project_get(self):
         r = self.c.get(reverse('project_create'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('Create New Project' in r.content)
+        self.assertTrue('Create new project' in r.content)
 
     def test_create_project_post(self):
         test_name = 'Test project'
