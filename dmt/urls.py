@@ -163,7 +163,7 @@ urlpatterns = patterns(
     (r'^tag/(?P<slug>[^/]+)/$', TagDetailView.as_view()),
     url(r'^tag/(?P<slug>[^/]+)/delete/$', DeleteTagView.as_view(),
         name="delete_tag"),
-    (r'^dashboard/$', DashboardView.as_view()),
+    url(r'^dashboard/$', DashboardView.as_view(), name='project_dashboard'),
     url(r'^feeds/forum/rss/$', ForumFeed(), name='forum_feed'),
     url(r'^feeds/status/$', StatusUpdateFeed(), name='status_feed'),
     url(r'^feeds/project/(?P<pk>\d+)/$', ProjectFeed(), name='project_feed'),

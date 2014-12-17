@@ -110,11 +110,9 @@
               </a>
               <ul class="dropdown-menu">
               <li><a href="/">My Dashboard</a></li>
-{% if pmt_user.username %}
+            {% if pmt_user.username %}
                 <li><a href="{% url 'owned_items' pmt_user.username %}">Owned items</a></li>
-{% endif %}
-                <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=watched_items" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> Watched items</a></li>
-                <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=someday_maybe" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> Someday/Maybe</a></li>
+            {% endif %}
               </ul>
             </li>
             <li class="dropdown">
@@ -122,12 +120,12 @@
               <span class="hidden-sm">Projects</span> <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="{% url 'my_project_list' %}">My Projects</a></li>
-                <li><a href="{% url 'project_list' %}">All Projects</a></li>
-                <li><a href="{% url 'project_create' %}"><span class="glyphicon glyphicon-plus-sign"></span> Create New Project</a></li>
+                <li><a href="{% url 'my_project_list' %}">My projects</a></li>
+                <li><a href="{% url 'project_list' %}">All projects</a></li>
+                <li><a href="{% url 'project_create' %}"><span class="glyphicon glyphicon-plus-sign"></span> Create new project</a></li>
                 {% if pmt_user.has_recent_active_projects %}
                 <li class="divider"></li>
-                <li><p class="navbar-text"><b>Your Recent Projects</b></p></li>
+                <li><p class="navbar-text"><b>Your recent projects</b></p></li>
                 {% for project in pmt_user.recent_active_projects %}
                 <li><a href="{% url 'project_detail' project.pid %}">
                 {{project.name|truncatechars:40}}
@@ -142,8 +140,7 @@
             <ul class="dropdown-menu">
               <li><a href="/client/?contact={{pmt_user.username}}&amp;status=active">My active clients</a></li>
               <li><a href="/client/">All clients</a></li>
-              <li><a href="http://pmt.ccnmtl.columbia.edu/home.pl?mode=new_clients" class="old-pmt"><span class="glyphicon glyphicon-arrow-left"></span> New clients</a></li>
-              <li><a href="{% url 'add_client' %}"><span class="glyphicon glyphicon-plus-sign"></span> Add a client</a></li>
+              <li><a href="{% url 'add_client' %}"><span class="glyphicon glyphicon-plus-sign"></span> Add new client</a></li>
             </ul>
             </li>
             <li class="dropdown">
@@ -166,6 +163,7 @@
                 <li class="divider"></li>
                 <li><p class="navbar-text"><b>Global reports:</b></p></li>
                 <li><a href="{% url 'report_list' %}">All reports</a></li>
+                <li><a href="{% url 'project_dashboard' %}">Projects dashboard</a></li>
               </ul>
             </li>
             <li class="dropdown">
