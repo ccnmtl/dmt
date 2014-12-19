@@ -16,7 +16,7 @@ import re
 import textwrap
 
 
-class User(models.Model):
+class UserProfile(models.Model):
     username = models.CharField(max_length=32, primary_key=True)
     fullname = models.CharField(max_length=128, blank=True)
     email = models.CharField(max_length=32)
@@ -326,7 +326,7 @@ class Project(models.Model):
     name = models.CharField("Project name", max_length=255)
     projnum = models.IntegerField("Project number", null=True, blank=True)
     pub_view = models.BooleanField("PMT View", default=False)
-    caretaker = models.ForeignKey(User, db_column='caretaker')
+    caretaker = models.ForeignKey(UserProfile, db_column='caretaker')
     description = models.TextField(blank=True)
     url = models.CharField("Project URL", max_length=255, blank=True)
     info_url = models.CharField("Information URL", max_length=255, blank=True)
@@ -419,7 +419,7 @@ class Project(models.Model):
     def all_users_not_in_project(self):
         already_in = set([w.username
                           for w in WorksOn.objects.filter(project=self)])
-        all_users = set(User.objects.filter(status='active'))
+        all_users = set(UserProfile.objects.filter(status='active'))
         return sorted(list(all_users - already_in),
                       key=lambda x: x.fullname.lower())
 
@@ -708,7 +708,7 @@ class Document(models.Model):
     url = models.CharField(max_length=256, blank=True)
     description = models.TextField(blank=True)
     version = models.CharField(max_length=16, blank=True)
-    author = models.ForeignKey(User, db_column='author')
+    author = models.ForeignKey(UserProfile, db_column='author')
     last_mod = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -810,9 +810,9 @@ class Item(models.Model):
     type = models.CharField(
         max_length=12,
         choices=[('bug', 'bug'), ('action item', 'action item')])
-    owner = models.ForeignKey(User, db_column='owner',
+    owner = models.ForeignKey(UserProfile, db_column='owner',
                               related_name='owned_items')
-    assigned_to = models.ForeignKey(User, db_column='assigned_to',
+    assigned_to = models.ForeignKey(UserProfile, db_column='assigned_to',
                                     related_name='assigned_items')
     title = models.CharField(max_length=255)
     milestone = models.ForeignKey(Milestone, db_column='mid')
@@ -1165,7 +1165,7 @@ class HistoryEvent(HistoryItem):
         return self._get_comment().comment
 
     def user(self):
-        return User.objects.get(username=self._get_comment().username)
+        return UserProfile.objects.get(username=self._get_comment().username)
 
 
 class HistoryComment(HistoryItem):
@@ -1179,7 +1179,7 @@ class HistoryComment(HistoryItem):
         return self.c.comment
 
     def user(self):
-        return User.objects.get(username=self.c.username)
+        return UserProfile.objects.get(username=self.c.username)
 
 
 class Notify(models.Model):
@@ -1187,7 +1187,7 @@ class Notify(models.Model):
                              null=False,
                              db_column='iid',
                              related_name='notifies')
-    username = models.ForeignKey(User, db_column='username')
+    username = models.ForeignKey(UserProfile, db_column='username')
 
     class Meta:
         db_table = u'notify'
@@ -1208,7 +1208,7 @@ class Client(models.Model):
     add_affiliation = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=32, blank=True)
     email = models.CharField(max_length=128, blank=True)
-    contact = models.ForeignKey(User, null=True, db_column='contact',
+    contact = models.ForeignKey(UserProfile, null=True, db_column='contact',
                                 blank=True)
     comments = models.TextField(blank=True)
     status = models.CharField(max_length=16, blank=True)
@@ -1240,7 +1240,7 @@ class Node(models.Model):
     nid = models.AutoField(primary_key=True)
     subject = models.CharField(max_length=256, blank=True)
     body = models.TextField(blank=True)
-    author = models.ForeignKey(User, db_column='author')
+    author = models.ForeignKey(UserProfile, db_column='author')
     reply_to = models.IntegerField(null=True, blank=True)
     replies = models.IntegerField(null=True, blank=True)
     type = models.CharField(max_length=8)
@@ -1303,7 +1303,7 @@ class Node(models.Model):
 
 
 class WorksOn(models.Model):
-    username = models.ForeignKey(User, db_column='username')
+    username = models.ForeignKey(UserProfile, db_column='username')
     project = models.ForeignKey(Project, db_column='pid')
     auth = models.CharField(max_length=16)
 
@@ -1330,16 +1330,16 @@ class Events(models.Model):
 
 class NotifyProject(models.Model):
     pid = models.ForeignKey(Project, db_column='pid')
-    username = models.ForeignKey(User, db_column='username')
+    username = models.ForeignKey(UserProfile, db_column='username')
 
     class Meta:
         db_table = u'notify_project'
 
 
 class InGroup(models.Model):
-    grp = models.ForeignKey(User, db_column='grp',
+    grp = models.ForeignKey(UserProfile, db_column='grp',
                             related_name='group_members')
-    username = models.ForeignKey(User, null=True,
+    username = models.ForeignKey(UserProfile, null=True,
                                  db_column='username', blank=True)
 
     @staticmethod
@@ -1364,7 +1364,7 @@ class ProjectClient(models.Model):
 
 class ActualTime(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')
-    resolver = models.ForeignKey(User, db_column='resolver')
+    resolver = models.ForeignKey(UserProfile, db_column='resolver')
     actual_time = IntervalField(null=True, blank=True)
     completed = models.DateTimeField(primary_key=True)
 
@@ -1395,7 +1395,7 @@ class Attachment(models.Model):
     type = models.CharField(max_length=8, blank=True)
     url = models.CharField(max_length=256, blank=True)
     description = models.TextField(blank=True)
-    author = models.ForeignKey(User, db_column='author')
+    author = models.ForeignKey(UserProfile, db_column='author')
     last_mod = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -1429,7 +1429,7 @@ class Comment(models.Model):
         ordering = ['add_date_time', ]
 
     def user(self):
-        return User.objects.get(username=self.username)
+        return UserProfile.objects.get(username=self.username)
 
     def user_is_owner(self, user):
         """Return True if user is comment owner."""
@@ -1438,7 +1438,7 @@ class Comment(models.Model):
 
 class StatusUpdate(models.Model):
     project = models.ForeignKey(Project)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(UserProfile)
     added = models.DateTimeField(auto_now_add=True)
     body = models.TextField(blank=True, default=u"")
 

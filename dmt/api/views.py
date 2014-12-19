@@ -11,7 +11,8 @@ from simpleduration import Duration, InvalidDuration
 from datetime import datetime, timedelta
 
 from dmt.claim.models import Claim
-from dmt.main.models import Client, Item, Milestone, Notify, Project, User
+from dmt.main.models import (
+    Client, Item, Milestone, Notify, Project, UserProfile)
 from dmt.main.utils import new_duration
 
 from .serializers import (
@@ -55,7 +56,7 @@ class GitUpdateView(View):
         item = get_object_or_404(Item, iid=iid)
         email = request.POST.get('email', None)
         email = normalize_email(email)
-        user = get_object_or_404(User, email=email)
+        user = get_object_or_404(UserProfile, email=email)
         status = request.POST.get('status', '')
         resolve_time = request.POST.get('resolve_time', '')
         comment = request.POST.get('comment', '')
@@ -224,5 +225,5 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserSerializer

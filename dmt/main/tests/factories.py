@@ -1,13 +1,13 @@
 import factory
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
-from dmt.main.models import User, Project, Milestone, Item
+from dmt.main.models import UserProfile, Project, Milestone, Item
 from dmt.main.models import Comment, Events, Node, ActualTime, StatusUpdate
 from dmt.main.models import Client, Attachment, Notify, InGroup
 
 
 class UserFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = User
+    FACTORY_FOR = UserProfile
     username = factory.Sequence(lambda n: 'user{0}'.format(n))
     fullname = factory.Sequence(lambda n: 'User {0}'.format(n))
     email = factory.Sequence(lambda n: 'user{0}@columbia.edu'.format(n))

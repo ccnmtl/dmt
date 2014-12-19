@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from dmt.main.models import User as PMTUser
+from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import InGroup
 from dmt.main.tests.factories import ItemFactory, MilestoneFactory
 from dmt.main.tests.support.mixins import LoggedInTestMixin

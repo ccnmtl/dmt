@@ -19,7 +19,7 @@ from taggit.models import Tag
 from taggit.utils import parse_tags
 import markdown
 from dmt.main.models import (
-    Comment, Project, Milestone, Item, InGroup, Node, User, Client,
+    Comment, Project, Milestone, Item, InGroup, Node, UserProfile, Client,
     StatusUpdate, ActualTime, Notify, Attachment
 )
 from .models import interval_sum
@@ -74,7 +74,7 @@ class SearchView(LoggedInMixin, TemplateView):
                 q=q)
         return dict(
             q=q,
-            users=User.objects.filter(
+            users=UserProfile.objects.filter(
                 Q(fullname__icontains=q) |
                 Q(bio__icontains=q) |
                 Q(username__icontains=q)
@@ -238,7 +238,7 @@ class ReassignItemView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
         assigned_to = get_object_or_404(
-            User,
+            UserProfile,
             username=request.POST.get('assigned_to', ''))
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.reassign(user, assigned_to, comment)
@@ -255,7 +255,7 @@ class ChangeOwnerItemView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         user = get_object_or_404(Claim, django_user=request.user).pmt_user
         owner = get_object_or_404(
-            User,
+            UserProfile,
             username=request.POST.get('owner', ''))
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.change_owner(user, owner, comment)
@@ -463,10 +463,11 @@ class GroupCreateView(LoggedInMixin, View):
     def post(self, request):
         group_name = request.POST.get('group')
         username = "grp_" + re.sub(r'\W', '', group_name).lower()
-        if not group_name or User.objects.filter(username=username).exists():
+        if not group_name or UserProfile.objects.filter(
+                username=username).exists():
             return HttpResponseRedirect(reverse('group_list'))
         group_name = group_name + " (group)"
-        User.objects.create(
+        UserProfile.objects.create(
             fullname=group_name, username=username,
             email='nobody@localhost', password='nopassword',
             grp=True)
@@ -565,7 +566,7 @@ class CreateUserView(View):
             return HttpResponseRedirect("/login/")
         # don't do anything fancy, just make a PMT User to
         # match the request user and hook them up.
-        u = User.objects.create(
+        u = UserProfile.objects.create(
             username=request.user.username,
             fullname=request.user.get_full_name(),
             email=request.user.email,
@@ -581,7 +582,7 @@ class CreateUserView(View):
 
 
 class UserTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
-    model = User
+    model = UserProfile
     template_name = "main/user_timeline.html"
 
     def get_context_data(self, **kwargs):
@@ -607,24 +608,25 @@ class ProjectUpdateView(LoggedInMixin, UpdateView):
 
 
 class UserListView(LoggedInMixin, FilterView):
-    model = User
+    model = UserProfile
 
     def get_queryset(self):
-        user_list = User.objects.filter(grp__exact=False)
+        user_list = UserProfile.objects.filter(grp__exact=False)
         return user_list
 
 
 class UserDetailView(LoggedInMixin, DetailView):
-    model = User
+    model = UserProfile
+    template_name = "main/user_detail.html"
 
 
 class OwnedItemsView(LoggedInMixin, DetailView):
-    model = User
+    model = UserProfile
     template_name = "main/owned_items.html"
 
 
 class UserUpdateView(LoggedInMixin, UpdateView):
-    model = User
+    model = UserProfile
     form_class = UserUpdateForm
 
 
@@ -632,26 +634,26 @@ class DeactivateUserView(SuperUserOnlyMixin, View):
     template_name = "main/user_deactivate.html"
 
     def get(self, request, pk):
-        u = get_object_or_404(User, username=pk)
+        u = get_object_or_404(UserProfile, username=pk)
         return render(request, self.template_name,
                       dict(user=u))
 
     def post(self, request, pk):
-        u = get_object_or_404(User, username=pk)
+        u = get_object_or_404(UserProfile, username=pk)
         u.status = 'inactive'
         u.save()
         for k in request.POST.keys():
             if k.startswith('project_'):
                 pid = k[len('project_'):]
                 project = get_object_or_404(Project, pid=pid)
-                c = get_object_or_404(User, username=request.POST[k])
+                c = get_object_or_404(UserProfile, username=request.POST[k])
                 project.caretaker = c
                 project.save()
             if k.startswith('item_assigned_'):
                 iid = k[len('item_assigned_'):]
                 item = get_object_or_404(Item, iid=iid)
                 assigned_to = get_object_or_404(
-                    User,
+                    UserProfile,
                     username=request.POST[k])
                 item.reassign(u, assigned_to, 'deactivating ' + u.username)
                 item.touch()
@@ -659,7 +661,7 @@ class DeactivateUserView(SuperUserOnlyMixin, View):
                 iid = k[len('item_owner_'):]
                 item = get_object_or_404(Item, iid=iid)
                 owner = get_object_or_404(
-                    User,
+                    UserProfile,
                     username=request.POST[k])
                 item.change_owner(u, owner, 'deactivating ' + u.username)
                 item.touch()
@@ -842,13 +844,13 @@ class ProjectRemoveUserView(LoggedInMixin, View):
 
     def get(self, request, pk, username):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(User, username=username)
+        user = get_object_or_404(UserProfile, username=username)
         return render(request, self.template_name,
                       dict(project=project, user=user))
 
     def post(self, request, pk, username):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(User, username=username)
+        user = get_object_or_404(UserProfile, username=username)
         project.remove_personnel(user)
         return HttpResponseRedirect(project.get_absolute_url())
 
@@ -856,7 +858,8 @@ class ProjectRemoveUserView(LoggedInMixin, View):
 class ProjectAddUserView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(User, username=request.POST.get('username'))
+        user = get_object_or_404(
+            UserProfile, username=request.POST.get('username'))
         project.add_personnel(user)
         return HttpResponseRedirect(project.get_absolute_url())
 
@@ -889,9 +892,9 @@ class ProjectAddItemView(LoggedInMixin, View):
         tags = clean_tags(request.POST.get('tags', u''))
         description = request.POST.get('description', u'')
         assigned_to = get_object_or_404(
-            User, username=request.POST.get('assigned_to'))
+            UserProfile, username=request.POST.get('assigned_to'))
         owner = get_object_or_404(
-            User, username=request.POST.get(
+            UserProfile, username=request.POST.get(
                 'owner', user.username))
         milestone = get_object_or_404(
             Milestone, mid=request.POST.get('milestone'))
@@ -1166,7 +1169,7 @@ class GroupDetailView(LoggedInMixin, ListView):
         ctx = super(GroupDetailView, self).get_context_data(**kwargs)
 
         group_name = self.kwargs['pk']
-        group = get_object_or_404(User, username=group_name)
+        group = get_object_or_404(UserProfile, username=group_name)
         ctx['group_name'] = InGroup.verbose_name(group.fullname)
         ctx['group'] = group
         ctx['eligible_users'] = self.eligible_users(group_name)
@@ -1181,7 +1184,7 @@ class GroupDetailView(LoggedInMixin, ListView):
         return [x.username for x in group_memberships]
 
     def eligible_users(self, group_name):
-        active_users = set(User.objects.filter(status='active'))
+        active_users = set(UserProfile.objects.filter(status='active'))
         members = set(self.members(group_name))
         return sorted(active_users - members, key=lambda x: x.fullname.lower())
 
@@ -1196,18 +1199,19 @@ class RemoveUserFromGroupView(LoggedInMixin, View):
 
 class AddUserToGroupView(LoggedInMixin, View):
     def post(self, request, pk):
-        g = get_object_or_404(User, username=pk)
-        u = get_object_or_404(User, username=request.POST.get('username'))
+        g = get_object_or_404(UserProfile, username=pk)
+        u = get_object_or_404(
+            UserProfile, username=request.POST.get('username'))
         ig, _created = InGroup.objects.get_or_create(grp=g, username=u)
         return HttpResponseRedirect(reverse('group_detail', args=(pk,)))
 
 
 class GroupListView(LoggedInMixin, ListView):
     template_name = "main/group_list.html"
-    model = User
+    model = UserProfile
 
     def get_queryset(self):
-        groups = User.objects.filter(grp=True)
+        groups = UserProfile.objects.filter(grp=True)
 
         group_list = [(group.username, InGroup.verbose_name(group.fullname))
                       for group in groups]
