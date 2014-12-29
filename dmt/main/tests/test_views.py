@@ -92,16 +92,25 @@ class TestClientViews(TestCase):
         self.assertTrue("Add New Client" in r.content)
 
     def test_add_client(self):
-        r = self.client.post(
-            reverse('add_client', args=[]),
-            dict(
-                email='abc123@columbia.edu',
-                lastname="testlastname",
-                firstname="testfirstname",
-                department="testdepartment",
-                school="testschool",
+        def makepost():
+            return self.client.post(
+                reverse('add_client', args=[]),
+                dict(
+                    email='abc123@columbia.edu',
+                    lastname="testlastname",
+                    firstname="testfirstname",
+                    department="testdepartment",
+                    school="testschool",
+                )
             )
-        )
+        try:
+            r = makepost()
+        except IOError:
+            # travis gives us random failures here sometimes. with
+            # IOError: [Errno 11] Resource temporarily unavailable
+            # afaict, the only thing to do is. try it again and
+            # it *ought* to work.
+            r = makepost()
         self.assertEqual(r.status_code, 302)
         c = Client.objects.get(email='abc123@columbia.edu')
         self.assertEqual(c.lastname, "testlastname")
