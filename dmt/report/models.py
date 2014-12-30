@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from dmt.main.models import ActualTime, InGroup, Project, User
+from dmt.main.models import ActualTime, InGroup, Project, UserProfile
 
 
 class ActiveProjectsCalculator(object):
@@ -24,8 +24,8 @@ class StaffReportCalculator(object):
         user_data = []
         for grp in self.groups:
             try:
-                group_user = User.objects.get(username="grp_" + grp)
-            except User.DoesNotExist:
+                group_user = UserProfile.objects.get(username="grp_" + grp)
+            except UserProfile.DoesNotExist:
                 continue
 
             for user in group_user.users_in_group():
@@ -52,7 +52,7 @@ class StaffReportCalculator(object):
 class WeeklySummaryReportCalculator(object):
     def __init__(self, groups):
         groupnames = ['grp_' + x for x in groups]
-        self.groups = User.objects.filter(username__in=groupnames)
+        self.groups = UserProfile.objects.filter(username__in=groupnames)
         self.groupnames = [InGroup.verbose_name(x.fullname)
                            for x in self.groups]
 

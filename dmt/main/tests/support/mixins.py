@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from dmt.claim.models import Claim
-from dmt.main.models import User as PMTUser
+from dmt.main.models import UserProfile as PMTUser
 
 
 class LoggedInTestMixin(TestCase):

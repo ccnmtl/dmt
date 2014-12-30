@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.forms import ModelForm, TextInput
-from .models import StatusUpdate, Node, User, Project, Milestone, Item
+from .models import StatusUpdate, Node, UserProfile, Project, Milestone, Item
 
 
 class StatusUpdateForm(ModelForm):
@@ -18,7 +18,7 @@ class NodeUpdateForm(ModelForm):
 
 class UserUpdateForm(ModelForm):
     class Meta:
-        model = User
+        model = UserProfile
         fields = ["fullname", "email", "type", "title", "phone",
                   "bio", "photo_url", "photo_width", "photo_height",
                   "campus", "building", "room"]

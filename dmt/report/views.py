@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
 from dmt.claim.models import Claim
-from dmt.main.models import User, Item, Milestone, Project
+from dmt.main.models import UserProfile, Item, Milestone, Project
 from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
 from .models import (
@@ -102,7 +102,7 @@ class UserYearlyView(LoggedInMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(UserYearlyView, self).get_context_data(**kwargs)
         username = kwargs['pk']
-        user = get_object_or_404(User, username=username)
+        user = get_object_or_404(UserProfile, username=username)
         now = datetime.today()
         interval_start = now + timedelta(days=-365)
         interval_end = now
@@ -121,7 +121,7 @@ class UserWeeklyView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(UserWeeklyView, self).get_context_data(**kwargs)
         username = kwargs['pk']
-        user = get_object_or_404(User, username=username)
+        user = get_object_or_404(UserProfile, username=username)
         data = user.weekly_report(self.week_start, self.week_end)
         data.update(dict(u=user, now=self.now,
                          week_start=self.week_start.date,

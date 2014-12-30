@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
-from dmt.main.models import User as PMTUser
+from dmt.main.models import UserProfile as PMTUser
 
 
 class Claim(models.Model):

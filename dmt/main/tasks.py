@@ -5,7 +5,7 @@ from django_statsd.clients import statsd
 from datetime import datetime, timedelta
 import time
 from .models import Item, ActualTime, interval_sum
-from .models import User, Milestone
+from .models import UserProfile, Milestone
 from dmt.claim.models import Claim
 from pytz import AmbiguousTimeError
 
@@ -104,7 +104,8 @@ def hours_logged_report():
 
 @periodic_task(run_every=crontab(hour='*', minute='*', day_of_week='*'))
 def user_stats():
-    active_users = User.objects.filter(status='active', grp=False).count()
+    active_users = UserProfile.objects.filter(
+        status='active', grp=False).count()
     claimed = Claim.objects.all().count()
     statsd.gauge('users.active', active_users)
     statsd.gauge('users.claimed', claimed)
@@ -184,13 +185,13 @@ def close_passed_milestones():
 
 @periodic_task(run_every=crontab(hour=12, minute=0, day_of_week='fri'))
 def weekly_report_emails():
-    for user in User.objects.filter(status='active', grp=False):
+    for user in UserProfile.objects.filter(status='active', grp=False):
         user_weekly_report_email.delay(username=user.username)
 
 
 @task
 def user_weekly_report_email(username):
-    u = User.objects.get(username=username)
+    u = UserProfile.objects.get(username=username)
     u.send_weekly_report()
 
 

@@ -1,5 +1,5 @@
 from dmt.main.models import (
-    Client, Item, Milestone, Notify, Project, User
+    Client, Item, Milestone, Notify, Project, UserProfile
 )
 
 from rest_framework import serializers
@@ -64,7 +64,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
+        model = UserProfile
         fields = ('username', 'fullname', 'email', 'status',
                   'type', 'title', 'phone', 'bio', 'photo_url',
                   'photo_width', 'photo_height', 'campus',
