@@ -91,6 +91,10 @@ class TestClientViews(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue("Add New Client" in r.content)
 
+    @unittest.skipIf(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test has intermittent issues with PostgreSQL")
     def test_add_client(self):
         r = self.client.post(
             reverse('add_client', args=[]),
