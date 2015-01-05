@@ -16,7 +16,7 @@ class ClientSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
-    notifies = serializers.RelatedField(many=True)
+    notifies = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Item
@@ -39,8 +39,8 @@ class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class NotifySerializer(serializers.Serializer):
-    item = serializers.RelatedField()
-    username = serializers.RelatedField()
+    item = serializers.PrimaryKeyRelatedField(read_only=True)
+    username = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Notify
@@ -50,7 +50,9 @@ class NotifySerializer(serializers.Serializer):
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     milestone_set = serializers.HyperlinkedRelatedField(
         many=True,
-        view_name='milestone-detail')
+        view_name='milestone-detail',
+        read_only=True
+    )
 
     class Meta:
         model = Project
