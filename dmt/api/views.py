@@ -7,15 +7,19 @@ from django.views.generic import View
 from rest_framework import filters, generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 from simpleduration import Duration, InvalidDuration
 from datetime import datetime, timedelta
+from dateutil import parser
 
 from dmt.claim.models import Claim
 from dmt.main.models import (
-    Client, Item, Milestone, Notify, Project, UserProfile)
+    Client, Item, Milestone, Notify, Project, UserProfile
+)
 from dmt.main.utils import new_duration
 
-from .serializers import (
+from dmt.api.auth import SafeOriginAuthentication
+from dmt.api.serializers import (
     ClientSerializer, ItemSerializer, MilestoneSerializer, NotifySerializer,
     ProjectSerializer, UserSerializer,
 )
@@ -42,6 +46,58 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     paginate_by = 20
+
+
+class ExternalAddItemView(APIView):
+    """An endpoint to add an action item from outside the PMT.
+
+    For Mediathread, Edblogs, etc.
+    """
+    authentication_classes = (SafeOriginAuthentication,)
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        pid = request.data.get('pid')
+        title = request.data.get('title', 'External issue report')
+        description = request.data.get('description', 'No description')
+        email = request.data.get('email', 'No email')
+        name = request.data.get('name', 'Anonymous')
+        item_type = request.data.get('type', 'bug')
+        assignee_username = request.data.get('assigned_to')
+        owner_username = request.data.get('owner')
+        priority = request.data.get('priority', '1')
+        target_date = request.data.get('target_date', '')
+        estimated_time = request.data.get('estimated_time', '1 hour')
+
+        description += '\n-----\n\nSubmitted by ' + name + ' <' + email + '>'
+        project = get_object_or_404(Project, pid=pid)
+
+        try:
+            assignee = UserProfile.objects.get(username=assignee_username)
+        except UserProfile.DoesNotExist:
+            assignee = project.caretaker
+
+        try:
+            owner = UserProfile.objects.get(username=owner_username)
+        except UserProfile.DoesNotExist:
+            owner = project.caretaker
+
+        milestone = project.upcoming_milestone()
+
+        i = project.add_item(
+            type=item_type,
+            milestone=milestone,
+            title=title,
+            assigned_to=assignee,
+            owner=owner,
+            priority=priority,
+            target_date=parser.parse(target_date).date(),
+            description=description,
+            estimated_time=estimated_time
+        )
+
+        data = ItemSerializer(i, context={'request': request}).data
+        return Response(data)
 
 
 def normalize_email(email):
