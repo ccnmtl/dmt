@@ -1,4 +1,4 @@
-Django==1.7.1
+Django==1.7.2
 Markdown==2.5.1
 uuid==1.30
 psycopg2==2.5.4
