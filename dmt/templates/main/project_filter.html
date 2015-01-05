@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
+{% block extraclass %} class="project-page"{% endblock %}
 
-{% block title %}Projects{% endblock %}
+{% block title %}All Projects{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
@@ -15,9 +16,14 @@
 
 
 {% block content %}
-<ul class="nav nav-tabs">
-  <li><a href="#list" data-toggle="tab">List</a></li>
-  <li><a href="#filter" data-toggle="tab">Filter</a></li>
+
+<h1 class="page-title">All Projects</h1>
+
+<br />
+
+<ul class="nav nav-tabs project-tabs">
+  <li class="active"><a href="#list" data-toggle="tab"> List </a></li>
+  <li><a href="#filter" data-toggle="tab"> Filter projects </a></li>
 </ul>
 
 <div class="tab-content">

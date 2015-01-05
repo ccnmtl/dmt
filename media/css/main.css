@@ -1329,6 +1329,10 @@ padding: 5px;
   .item-comment {
     margin-top: 10px;
   }
+	.btn-add {
+	  display: block;
+	  margin-bottom: 5px;
+	}
 }
 
 @media (max-width: 767px) {
@@ -1473,6 +1477,9 @@ padding: 5px;
 	}
 	.login {
 		margin-top: 30px;
+	}
+	.btn-add {
+	  display: block;
 	}
 }
 

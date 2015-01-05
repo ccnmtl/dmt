@@ -27,7 +27,7 @@
                 <tr>
                     <th>Project</th>
                     <th>Latest Activity</th>
-                    <th>Actions</th>
+                    <th>Add...</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,21 +39,21 @@
                     <td>
                         {{p.last_mod|date:"Y-m-d"}}
                     </td>
-                    <td> <b>Add: </b>
+                    <td>
                         <button type="button"
-                                class="btn btn-default btn-xs add-todo"
+                                class="btn btn-default btn-xs btn-add add-todo"
                                 data-toggle="modal" data-target="#add-todo"
                                 data-pid="{{p.pid}}">
-                             TODO
+                             To-Do
                         </button>
                         <button type="button"
-                                class="btn btn-default btn-xs add-node"
+                                class="btn btn-default btn-xs btn-add add-node"
                                 data-toggle="modal" data-target="#add-node"
                                 data-pid="{{p.pid}}">
                              Forum Post
                         </button>
                         <button type="button"
-                                class="btn btn-default btn-xs add-update"
+                                class="btn btn-default btn-xs btn-add add-update"
                                 data-toggle="modal" data-target="#add-update"
                                 data-pid="{{p.pid}}">
                              Status Update
