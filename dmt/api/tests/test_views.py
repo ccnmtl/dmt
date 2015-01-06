@@ -8,10 +8,12 @@ from rest_framework.test import APITestCase
 
 from dmt.claim.models import Claim, PMTUser
 from dmt.main.models import ActualTime, Item, Notify
-from dmt.main.tests.factories import MilestoneFactory, ClientFactory
+from dmt.main.tests.factories import (
+    ClientFactory, MilestoneFactory, ProjectFactory, UserFactory
+)
 from dmt.main.tests.factories import ItemFactory, NotifyFactory
 
-from ..serializers import ItemSerializer
+from dmt.api.serializers import ItemSerializer
 
 
 class AddTrackerViewTest(TestCase):
@@ -227,6 +229,63 @@ class ItemTests(APITestCase):
 
         usernames = [n.lower() for n in r.data['notifies']]
         self.assertIn(self.pu.username.lower(), usernames)
+
+
+class ExternalAddItemTests(APITestCase):
+    def setUp(self):
+        self.title = 'Test item title'
+        self.email = 'submission_email@example.com'
+        self.name = 'Item Submitter'
+        self.owner = UserFactory()
+        self.project = ProjectFactory()
+        self.milestone = MilestoneFactory(project=self.project)
+        self.estimated_time = '1h'
+        self.target_date = '2015-01-01'
+
+    def test_post_creates_action_item(self):
+        r = self.client.post(reverse('external-add-item'), {
+            'title': self.title,
+            'email': self.email,
+            'name': self.name,
+            'pid': unicode(self.project.pk),
+            'mid': unicode(self.milestone.pk),
+            'type': 'action item',
+            'owner': self.owner.username,
+            'assigned_to': self.owner.username,
+            'estimated_time': self.estimated_time,
+            'target_date': self.target_date,
+        })
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.data.get('title'), self.title)
+        self.assertTrue(
+            'Submitted by Item Submitter <submission_email@example.com>' in
+            r.data.get('description')
+        )
+        self.assertEqual(r.data.get('type'), 'action item')
+        self.assertTrue(self.owner.username in r.data.get('owner'))
+        self.assertTrue(self.owner.username in r.data.get('assigned_to'))
+        self.assertTrue(unicode(self.milestone.pk) in r.data.get('milestone'))
+        self.assertEqual(r.data.get('estimated_time'), '1:00:00')
+        self.assertEqual(r.data.get('target_date'), self.target_date)
+
+    def test_post_redirects_client(self):
+        redirect_url = 'http://example.com'
+
+        r = self.client.post(reverse('external-add-item'), {
+            'title': self.title,
+            'email': self.email,
+            'name': self.name,
+            'pid': unicode(self.project.pk),
+            'mid': unicode(self.milestone.pk),
+            'type': 'action item',
+            'owner': self.owner.username,
+            'assigned_to': self.owner.username,
+            'estimated_time': self.estimated_time,
+            'target_date': self.target_date,
+            'redirect_url': redirect_url,
+        })
+        self.assertEqual(r.status_code, 302)
+        self.assertRedirects(r, redirect_url, fetch_redirect_response=False)
 
 
 class NotifyTests(APITestCase):

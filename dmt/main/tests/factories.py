@@ -7,7 +7,9 @@ from dmt.main.models import Client, Attachment, Notify, InGroup
 
 
 class UserFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = UserProfile
+    class Meta:
+        model = UserProfile
+
     username = factory.Sequence(lambda n: 'user{0}'.format(n))
     fullname = factory.Sequence(lambda n: 'User {0}'.format(n))
     email = factory.Sequence(lambda n: 'user{0}@columbia.edu'.format(n))
@@ -16,7 +18,9 @@ class UserFactory(factory.DjangoModelFactory):
 
 
 class ProjectFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Project
+    class Meta:
+        model = Project
+
     pid = factory.Sequence(lambda n: n)
     name = factory.Sequence(lambda n: 'Test Project {0}'.format(n))
     pub_view = True
@@ -24,7 +28,9 @@ class ProjectFactory(factory.DjangoModelFactory):
 
 
 class MilestoneFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Milestone
+    class Meta:
+        model = Milestone
+
     mid = factory.Sequence(lambda n: n)
     project = factory.SubFactory(ProjectFactory)
     name = factory.Sequence(lambda n: 'Test Milestone {0}'.format(n))
@@ -33,7 +39,9 @@ class MilestoneFactory(factory.DjangoModelFactory):
 
 
 class ItemFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Item
+    class Meta:
+        model = Item
+
     iid = factory.Sequence(lambda n: n)
     type = "bug"
     owner = factory.SubFactory(UserFactory)
@@ -45,13 +53,17 @@ class ItemFactory(factory.DjangoModelFactory):
 
 
 class NotifyFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Notify
+    class Meta:
+        model = Notify
+
     item = factory.SubFactory(ItemFactory)
     username = factory.SubFactory(UserFactory)
 
 
 class EventFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Events
+    class Meta:
+        model = Events
+
     eid = factory.Sequence(lambda n: n)
     status = "OPEN"
     event_date_time = datetime(2020, 12, 1).replace(tzinfo=utc)
@@ -59,7 +71,9 @@ class EventFactory(factory.DjangoModelFactory):
 
 
 class CommentFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Comment
+    class Meta:
+        model = Comment
+
     cid = factory.Sequence(lambda n: n)
     comment = "a comment"
     add_date_time = datetime(2020, 12, 1).replace(tzinfo=utc)
@@ -69,7 +83,9 @@ class CommentFactory(factory.DjangoModelFactory):
 
 
 class NodeFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Node
+    class Meta:
+        model = Node
+
     nid = factory.Sequence(lambda n: n)
     added = datetime(2020, 12, 1).replace(tzinfo=utc)
     modified = datetime(2020, 12, 1).replace(tzinfo=utc)
@@ -77,7 +93,9 @@ class NodeFactory(factory.DjangoModelFactory):
 
 
 class ActualTimeFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = ActualTime
+    class Meta:
+        model = ActualTime
+
     item = factory.SubFactory(ItemFactory)
     resolver = factory.SubFactory(UserFactory)
     actual_time = timedelta(hours=1).total_seconds()
@@ -85,7 +103,9 @@ class ActualTimeFactory(factory.DjangoModelFactory):
 
 
 class ClientFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Client
+    class Meta:
+        model = Client
+
     client_id = factory.Sequence(lambda n: n)
     lastname = "clientlastname"
     firstname = "clientfirstname"
@@ -99,14 +119,18 @@ class ClientFactory(factory.DjangoModelFactory):
 
 
 class StatusUpdateFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = StatusUpdate
+    class Meta:
+        model = StatusUpdate
+
     project = factory.SubFactory(ProjectFactory)
     user = factory.SubFactory(UserFactory)
     body = "some text as a body"
 
 
 class AttachmentFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Attachment
+    class Meta:
+        model = Attachment
+
     item = factory.SubFactory(ItemFactory)
     filename = "foo.jpg"
     title = "an attachment"
@@ -115,6 +139,8 @@ class AttachmentFactory(factory.DjangoModelFactory):
 
 
 class GroupFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = InGroup
+    class Meta:
+        model = InGroup
+
     grp = factory.SubFactory(UserFactory, grp=True)
     username = factory.SubFactory(UserFactory)

@@ -487,6 +487,7 @@ class Project(models.Model):
         item.add_project_notification()
         item.update_email("%s added\n\n%s" % (type, description), owner)
         milestone.update_milestone()
+        return item
 
     def recent_forum_posts(self, count=10):
         return self.node_set.all()[:count]
