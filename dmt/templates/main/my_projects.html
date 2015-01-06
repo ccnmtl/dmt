@@ -20,51 +20,47 @@
 
 <br />
 
-<div class="tab-content">
-    <div class="tab-pane fade in active" id="list">
-        <table class="table table-condensed table-striped tablesorter" id="projects-table">
-            <thead>
-                <tr>
-                    <th>Project</th>
-                    <th>Latest Activity</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in object_list %}
-                <tr>
-                    <td>
-                        <a href="{% url 'project_detail' p.pid %}">{{p.name}}</a>
-                    </td>
-                    <td>
-                        {{p.last_mod|date:"Y-m-d"}}
-                    </td>
-                    <td> <b>Add: </b>
-                        <button type="button"
-                                class="btn btn-default btn-xs add-todo"
-                                data-toggle="modal" data-target="#add-todo"
-                                data-pid="{{p.pid}}">
-                             TODO
-                        </button>
-                        <button type="button"
-                                class="btn btn-default btn-xs add-node"
-                                data-toggle="modal" data-target="#add-node"
-                                data-pid="{{p.pid}}">
-                             Forum Post
-                        </button>
-                        <button type="button"
-                                class="btn btn-default btn-xs add-update"
-                                data-toggle="modal" data-target="#add-update"
-                                data-pid="{{p.pid}}">
-                             Status Update
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+<table class="table table-condensed table-striped tablesorter table-sortable" id="projects-table">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Latest Activity</th>
+            <th>Add...</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in object_list %}
+        <tr>
+            <td>
+                <a href="{% url 'project_detail' p.pid %}">{{p.name}}</a>
+            </td>
+            <td>
+                {{p.last_mod|date:"Y-m-d"}}
+            </td>
+            <td>
+                <button type="button"
+                        class="btn btn-default btn-xs btn-add add-todo"
+                        data-toggle="modal" data-target="#add-todo"
+                        data-pid="{{p.pid}}">
+                     To-Do
+                </button>
+                <button type="button"
+                        class="btn btn-default btn-xs btn-add add-node"
+                        data-toggle="modal" data-target="#add-node"
+                        data-pid="{{p.pid}}">
+                     Forum Post
+                </button>
+                <button type="button"
+                        class="btn btn-default btn-xs btn-add add-update"
+                        data-toggle="modal" data-target="#add-update"
+                        data-pid="{{p.pid}}">
+                     Status Update
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% include 'main/project_add_todo_form.html' %}
 {% include 'main/project_add_node_form.html' %}

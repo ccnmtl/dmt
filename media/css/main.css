@@ -1113,7 +1113,8 @@ padding: 5px;
 }
 
 .milestone-set>.table>thead>tr>th,
-.milestone-page .table>thead>tr>th {
+.milestone-page .table>thead>tr>th,
+.table-sortable>thead>tr>th {
   white-space: nowrap;
   min-width: 90px;
   max-width: 110px;
@@ -1122,7 +1123,8 @@ padding: 5px;
 }
 
 .milestone-set .tablesorter thead tr th:first-child,
-.milestone-page .tablesorter thead tr th:first-child {
+.milestone-page .tablesorter thead tr th:first-child,
+.table-sortable>thead>tr>th:first-child {
 	border-left: none;
 }
 
@@ -1329,6 +1331,10 @@ padding: 5px;
   .item-comment {
     margin-top: 10px;
   }
+	.btn-add {
+	  display: block;
+	  margin-bottom: 5px;
+	}
 }
 
 @media (max-width: 767px) {
@@ -1473,6 +1479,9 @@ padding: 5px;
 	}
 	.login {
 		margin-top: 30px;
+	}
+	.btn-add {
+	  display: block;
 	}
 }
 
