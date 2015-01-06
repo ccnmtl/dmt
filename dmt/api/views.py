@@ -7,7 +7,6 @@ from django.views.generic import View
 from rest_framework import filters, generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
 from simpleduration import Duration, InvalidDuration
 from datetime import datetime, timedelta
 from dateutil import parser
@@ -18,7 +17,7 @@ from dmt.main.models import (
 )
 from dmt.main.utils import new_duration
 
-from dmt.api.auth import SafeOriginAuthentication
+from dmt.api.auth import IsAnonymous, SafeOriginAuthentication
 from dmt.api.serializers import (
     ClientSerializer, ItemSerializer, MilestoneSerializer, NotifySerializer,
     ProjectSerializer, UserSerializer,
@@ -54,7 +53,7 @@ class ExternalAddItemView(APIView):
     For Mediathread, Edblogs, etc.
     """
     authentication_classes = (SafeOriginAuthentication,)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAnonymous,)
 
     def redirect_or_return_item(self, request, item, redirect_url, append_iid):
         if redirect_url:
