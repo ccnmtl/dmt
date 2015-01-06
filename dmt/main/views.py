@@ -22,8 +22,9 @@ from dmt.main.models import (
     Comment, Project, Milestone, Item, InGroup, Node, UserProfile, Client,
     StatusUpdate, ActualTime, Notify, Attachment
 )
-from .models import interval_sum
-from .forms import (
+from dmt.main.models import interval_sum
+from dmt.main.filters import ClientFilter, ProjectFilter, UserFilter
+from dmt.main.forms import (
     ItemUpdateForm,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm)
@@ -380,6 +381,7 @@ class IndexView(LoggedInMixin, TemplateView):
 
 
 class ClientListView(LoggedInMixin, FilterView):
+    filterset_class = ClientFilter
     model = Client
     paginate_by = 100
 
@@ -509,6 +511,7 @@ class ProjectCreateView(LoggedInMixin, CreateView):
 
 
 class ProjectListView(LoggedInMixin, FilterView):
+    filterset_class = ProjectFilter
     model = Project
 
 
@@ -608,6 +611,8 @@ class ProjectUpdateView(LoggedInMixin, UpdateView):
 
 
 class UserListView(LoggedInMixin, FilterView):
+    template_name = 'main/user_filter.html'
+    filterset_class = UserFilter
     model = UserProfile
 
     def get_queryset(self):
