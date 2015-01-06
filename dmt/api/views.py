@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
@@ -56,8 +56,18 @@ class ExternalAddItemView(APIView):
     authentication_classes = (SafeOriginAuthentication,)
     permission_classes = (AllowAny,)
 
+    def redirect_or_return_item(self, request, item, redirect_url, append_iid):
+        if redirect_url:
+            if append_iid:
+                redirect_url += 'iid=' + unicode(item.pk)
+            return redirect(redirect_url)
+        else:
+            data = ItemSerializer(item, context={'request': request}).data
+            return Response(data)
+
     def post(self, request, format=None):
         pid = request.data.get('pid')
+        mid = request.data.get('mid')
         title = request.data.get('title', 'External issue report')
         description = request.data.get('description', 'No description')
         email = request.data.get('email', 'No email')
@@ -68,6 +78,8 @@ class ExternalAddItemView(APIView):
         priority = request.data.get('priority', '1')
         target_date = request.data.get('target_date', '')
         estimated_time = request.data.get('estimated_time', '1 hour')
+        redirect_url = request.data.get('redirect_url', '')
+        append_iid = request.data.get('append_iid', '')
 
         description += '\n-----\n\nSubmitted by ' + name + ' <' + email + '>'
         project = get_object_or_404(Project, pid=pid)
@@ -82,9 +94,12 @@ class ExternalAddItemView(APIView):
         except UserProfile.DoesNotExist:
             owner = project.caretaker
 
-        milestone = project.upcoming_milestone()
+        try:
+            milestone = Milestone.objects.get(mid=mid)
+        except Milestone.DoesNotExist:
+            milestone = project.upcoming_milestone()
 
-        i = project.add_item(
+        item = project.add_item(
             type=item_type,
             milestone=milestone,
             title=title,
@@ -96,8 +111,8 @@ class ExternalAddItemView(APIView):
             estimated_time=estimated_time
         )
 
-        data = ItemSerializer(i, context={'request': request}).data
-        return Response(data)
+        return self.redirect_or_return_item(
+            request, item, redirect_url, append_iid)
 
 
 def normalize_email(email):
