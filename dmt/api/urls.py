@@ -2,13 +2,14 @@ from django.conf.urls import include, patterns, url
 
 from rest_framework import routers
 
-from .views import (
+from dmt.api.views import (
     AddTrackerView,
     ItemHoursView, GitUpdateView,
     UserViewSet, ProjectMilestoneList,
     ClientViewSet, ProjectViewSet,
     MilestoneViewSet, ItemViewSet,
-    MilestoneItemList, NotifyView
+    MilestoneItemList, NotifyView,
+    ExternalAddItemView
 )
 
 router = routers.DefaultRouter()
@@ -31,4 +32,6 @@ urlpatterns = patterns(
     (r'^trackers/add/', AddTrackerView.as_view()),
     (r'^items/(?P<pk>\d+)/hours/$', ItemHoursView.as_view()),
     (r'^git/$', GitUpdateView.as_view()),
+    url(r'^external_add_item/$', ExternalAddItemView.as_view(),
+        name='external-add-item'),
 )
