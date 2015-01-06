@@ -130,7 +130,7 @@ class TestProjectViews(TestCase):
 
     def test_all_projects_page(self):
         p = ProjectFactory()
-        r = self.c.get("/project/")
+        r = self.c.get(reverse('project_list'))
         self.assertEqual(r.status_code, 200)
         self.assertTrue(p.name in r.content)
         self.assertTrue(p.get_absolute_url() in r.content)
@@ -1220,3 +1220,9 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         i = Item.objects.last()
         resolve_time = i.get_resolve_time()
         self.assertEqual(resolve_time, timedelta(0, 3600))
+
+
+class TestUserViews(LoggedInTestMixin, TestCase):
+    def test_user_list_page(self):
+        response = self.client.get(reverse('user_list'))
+        self.assertEqual(response.status_code, 200)

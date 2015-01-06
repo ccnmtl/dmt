@@ -75,7 +75,7 @@ django-stagingcontext==0.1.0
 django-ga-context==0.1.0
 django-impersonate==0.9
 django-pgsql-interval-field==0.9.3
-django-filter==0.8
+django-filter==0.9.1
 djangorestframework==3.0.2
 django-taggit==0.12.1a
 django-templatetag-sugar==1.0
