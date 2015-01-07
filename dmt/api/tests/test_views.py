@@ -232,11 +232,19 @@ class ItemTests(APITestCase):
 
 
 class ExternalAddItemUnAuthedTests(APITestCase):
-    def test_post_is_forbidden(self):
+    def test_post_external_host_is_forbidden(self):
         r = self.client.post(
             reverse('external-add-item'),
             {},
-            REMOTE_HOST='example.com'
+            REMOTE_HOST='http://example.com'
+        )
+        self.assertEqual(r.status_code, 403)
+
+    def test_post_external_referrer_is_forbidden(self):
+        r = self.client.post(
+            reverse('external-add-item'),
+            {},
+            HTTP_REFERER='http://example.com'
         )
         self.assertEqual(r.status_code, 403)
 
@@ -253,7 +261,7 @@ class ExternalAddItemAuthedTests(APITestCase):
         self.target_date = '2015-01-01'
 
         # Mock for passing the SafeOriginPermission
-        self.remote_host = 'example.columbia.edu'
+        self.remote_host = 'http://example.columbia.edu'
 
     def test_post_creates_action_item(self):
         r = self.client.post(reverse('external-add-item'), {
@@ -299,6 +307,21 @@ class ExternalAddItemAuthedTests(APITestCase):
         }, REMOTE_HOST=self.remote_host)
         self.assertEqual(r.status_code, 302)
         self.assertRedirects(r, redirect_url, fetch_redirect_response=False)
+
+    def test_post_referrer_permission(self):
+        r = self.client.post(reverse('external-add-item'), {
+            'title': self.title,
+            'email': self.email,
+            'name': self.name,
+            'pid': unicode(self.project.pk),
+            'mid': unicode(self.milestone.pk),
+            'type': 'action item',
+            'owner': self.owner.username,
+            'assigned_to': self.owner.username,
+            'estimated_time': self.estimated_time,
+            'target_date': self.target_date,
+        }, HTTP_REFERER=self.remote_host)
+        self.assertEqual(r.status_code, 200)
 
 
 class NotifyTests(APITestCase):
