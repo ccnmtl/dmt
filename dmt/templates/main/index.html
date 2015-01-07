@@ -24,7 +24,6 @@
   <p>Please Login</p>
 {% else %}
   {% pmtuser as pmt_user %}
-  {% with pmt_user.passed_open_milestones as overdue_milestones %}
 
   <div class="object-action-set clearfix">
     <ul>
@@ -44,48 +43,7 @@
     </ul>
   </div><!-- ./object-action-set -->
 
-<ul class="nav nav-tabs project-tabs">
-{% if overdue_milestones %}
-  <li class="active"><a href="#overdue-milestones" data-toggle="tab">Overdue Milestones</a></li>
-  <li><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
-{% else %}
-  <li class="active"><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
-{% endif %}
-
-</ul>
-
-<div class="tab-content">
-
-{% if overdue_milestones %}
-<div class="tab-pane fade in active" id="overdue-milestones">
-<div class="panel panel-danger">
-<div class="panel-heading"><b><span class="glyphicon glyphicon-exclamation-sign"></span> You have overdue milestones</b></div>
-<table class="table table-striped table-condensed">
-<tr>
-	<th>Target Date</th>
-	<th>Project</th>
-	<th>Milestone</th>
-	<th></th>
-</tr>
-{% for m in overdue_milestones %}
-<tr>
-	<td>{{m.target_date|timesince}} ago ({{m.target_date}})</td>
-	<td><a href="{{m.project.get_absolute_url}}">{{m.project.name}}</a></td>
-	<td><a href="{{m.get_absolute_url}}">{{m.name}}</a></td>
-	<td>{{m.active_items.count}} item{{m.active_items.count|pluralize}} blocking</td>
-</tr>
-{% endfor %}
-</table>
-</div>
-</div>
-{% endif %}
-
-{% if overdue_milestones %}
-    <div class="tab-pane fade" id="outstanding-items">
-{% else %}
-    <div class="tab-pane fade in active" id="outstanding-items">
-{% endif %}
-
+<!-- ADD TRACKER -->
 <div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -143,6 +101,50 @@
 </div><!-- /.modal -->
 
 
+  {% with pmt_user.passed_open_milestones as overdue_milestones %}
+
+  <ul class="nav nav-tabs project-tabs">
+    {% if overdue_milestones %}
+      <li class="active"><a href="#overdue-milestones" data-toggle="tab">Overdue Milestones</a></li>
+      <li><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
+    {% else %}
+      <li class="active"><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
+    {% endif %}
+  </ul>
+
+<div class="tab-content">
+
+{% if overdue_milestones %}
+  <div class="tab-pane fade in active" id="overdue-milestones">
+    <div class="panel panel-danger">
+    <div class="panel-heading"><b><span class="glyphicon glyphicon-exclamation-sign"></span> You have overdue milestones</b></div>
+    <table class="table table-striped table-condensed">
+    <tr>
+      <th>Target Date</th>
+      <th>Project</th>
+      <th>Milestone</th>
+      <th></th>
+    </tr>
+    {% for m in overdue_milestones %}
+    <tr>
+      <td>{{m.target_date|timesince}} ago ({{m.target_date}})</td>
+      <td><a href="{{m.project.get_absolute_url}}">{{m.project.name}}</a></td>
+      <td><a href="{{m.get_absolute_url}}">{{m.name}}</a></td>
+      <td>{{m.active_items.count}} item{{m.active_items.count|pluralize}} blocking</td>
+    </tr>
+    {% endfor %}
+    </table>
+    </div>
+  </div><!-- /#overdue-milestones -->
+{% endif %}
+
+
+{% if overdue_milestones %}
+    <div class="tab-pane fade" id="outstanding-items">
+{% else %}
+    <div class="tab-pane fade in active" id="outstanding-items">
+{% endif %}
+
 {% with pmt_user.progress_report as progress %}
 <div class="progressbar-set">
   <div class="progress-title">
@@ -166,37 +168,34 @@
 <table class="table table-striped table-condensed table-responsive"
        id="user-items"
        data-show-columns="true"
-       data-sort-name="priority"
+       data-sort-name="status"
        data-sort-order="desc">
     <thead>
         <tr>
-            <th data-field="item"
-                data-sortable="true">Item</th>
-            <th data-field="priority"
-                data-sortable="true" class="hidden-xs">Priority</th>
-            <th data-field="project"
-                data-sortable="true" class="hidden-xs">Project</th>
-            <th data-field="target-date"
-                data-sortable="true" class="hidden-xs">Target Date</th>
-            <th data-field="milestone"
-                data-visible="false"
-                data-sortable="true" class="hidden-xs">Milestone</th>
-            <th data-field="owner"
-                data-visible="false"
-                data-sortable="true" class="hidden-xs">Owner</th>
-            <th data-field="modified"
-                data-sortable="true" class="hidden-xs">Modified</th>
+          <th data-field="item"
+            data-sortable="true">Item</th>
+          <th data-field="status"
+            data-sortable="true">Status</th>
+          <th data-field="priority"
+            data-sortable="true" class="hidden-xs">Priority</th>
+          <th data-field="target-date"
+            data-sortable="true" class="hidden-xs">Target Date</th>
+          <th data-field="project"
+            data-sortable="true" class="hidden-xs">Project</th>
+          <th data-field="milestone"
+            data-visible="false"
+            data-sortable="true" class="hidden-xs">Milestone</th>
+          <th data-field="owner"
+            data-visible="false"
+            data-sortable="true" class="hidden-xs">Owner</th>
+          <th data-field="modified"
+            data-sortable="true" class="hidden-xs">Modified</th>
         </tr>
     </thead>
     <tbody>
         {% for item in pmt_user.items %}
         <tr>
             <td data-field="item">
-                {% comment %}<div class="status-indicator {{item.target_date_status}} {{item.status_class}}"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="{% ifequal item.status 'INPROGRESS' %}{{item.status_class}}{% else %}{{item.target_date_status}}{% endifequal %}"></div>{% endcomment %}
-                
                 {% if item.is_bug %}
                 <img src="{{STATIC_URL}}img/icon-bug.png"
                      width="14" height="14"/>
@@ -204,24 +203,19 @@
                 <a href="{{item.get_absolute_url}}">
                     {{item.title|truncatechars:70}}
                 </a>
-                {% ifequal item.status "OPEN" %}
-                {% else %}
-                <span class="{{item.status_class}} badge pull-right">
-                    {{item.status_display}}
-                </span>
-                {% endifequal %}
             </td>
+            <td class="{{item.status_class}}">{{item.status}} {{item.r_status|default:""}}</td>
             <td data-field="priority" class="pr{{item.priority}} hidden-xs pr">
                 <span class="invisible">{{item.priority}}</span>
                 {{item.priority_label}}
+            </td>
+            <td data-field="target-date" class="{{item.target_date_status}} hidden-xs">
+                {{item.target_date|date:"Y-m-d"}}
             </td>
             <td data-field="project" class="hidden-xs">
                 <a href="{{item.milestone.project.get_absolute_url}}">
                     {{item.milestone.project.name|truncatechars:40}}
                 </a>
-            </td>
-            <td data-field="target-date" class="{{item.target_date_status}} hidden-xs">
-                {{item.target_date|date:"Y-m-d"}}
             </td>
             <td data-field="milestone" class="hidden-xs">
                 <a href="{% url 'milestone_detail' item.milestone.mid %}">
@@ -243,17 +237,24 @@
 {% else %}
 <p>You have no active items right now.</p>
 {% endif %}
+{% comment %}pmt_user.items{% endcomment %}
 
 {% else %}
 <div class="alert alert-error">
     You need to <a href="/claim/">claim your account</a> first.
 </div>
 {% endif %}
-</div>
-</div>
+{% comment %}pmt_user.username{% endcomment %}
+</div><!-- /#outstanding-items -->
+
+
+</div><!-- ./tab-content -->
 
 {% endwith %}
+{% comment %}overdue_milestones{% endcomment %}
+
 {% endif %}
+{% comment %}request.user.is_anonymous{% endcomment %}
 
 {% endblock %}
 
@@ -264,7 +265,7 @@ $(document).ready(function() {
     {% if pmt_user.items %}
         var table = $('table#user-items').DataTable({
             aoColumnDefs: [
-                { bVisible: false, aTargets: [4, 5] }
+                { bVisible: false, aTargets: [5, 6] }
             ],
             dom: 'C<"clear">lfrtip',
             colVis: {
@@ -275,8 +276,6 @@ $(document).ready(function() {
             .order([1, 'desc'], [3, 'asc'])
             .draw();
     {% endif %}
-
-    $('.status-indicator').tooltip();
 });
 </script>
 {% endblock %}
