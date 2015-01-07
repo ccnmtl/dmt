@@ -231,7 +231,17 @@ class ItemTests(APITestCase):
         self.assertIn(self.pu.username.lower(), usernames)
 
 
-class ExternalAddItemTests(APITestCase):
+class ExternalAddItemUnAuthedTests(APITestCase):
+    def test_post_is_forbidden(self):
+        r = self.client.post(
+            reverse('external-add-item'),
+            {},
+            REMOTE_HOST='example.com'
+        )
+        self.assertEqual(r.status_code, 403)
+
+
+class ExternalAddItemAuthedTests(APITestCase):
     def setUp(self):
         self.title = 'Test item title'
         self.email = 'submission_email@example.com'
@@ -241,6 +251,9 @@ class ExternalAddItemTests(APITestCase):
         self.milestone = MilestoneFactory(project=self.project)
         self.estimated_time = '1h'
         self.target_date = '2015-01-01'
+
+        # Mock for passing the SafeOriginPermission
+        self.remote_host = 'example.columbia.edu'
 
     def test_post_creates_action_item(self):
         r = self.client.post(reverse('external-add-item'), {
@@ -254,7 +267,7 @@ class ExternalAddItemTests(APITestCase):
             'assigned_to': self.owner.username,
             'estimated_time': self.estimated_time,
             'target_date': self.target_date,
-        })
+        }, REMOTE_HOST=self.remote_host)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.data.get('title'), self.title)
         self.assertTrue(
@@ -283,7 +296,7 @@ class ExternalAddItemTests(APITestCase):
             'estimated_time': self.estimated_time,
             'target_date': self.target_date,
             'redirect_url': redirect_url,
-        })
+        }, REMOTE_HOST=self.remote_host)
         self.assertEqual(r.status_code, 302)
         self.assertRedirects(r, redirect_url, fetch_redirect_response=False)
 
