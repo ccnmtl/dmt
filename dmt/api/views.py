@@ -76,10 +76,15 @@ class ExternalAddItemView(APIView):
         priority = request.data.get('priority', '1')
         target_date = request.data.get('target_date', '')
         estimated_time = request.data.get('estimated_time', '1 hour')
+        debug_info = request.data.get('debug_info', '')
         redirect_url = request.data.get('redirect_url', '')
         append_iid = request.data.get('append_iid', '')
 
-        description += '\n-----\n\nSubmitted by ' + name + ' <' + email + '>'
+        if debug_info:
+            description += '\n-----\n\nDEBUG INFO:\n' + debug_info + '\n'
+
+        description += '\n-----\n\nSubmitted by ' \
+            + name + ' <' + email + '>\n'
         project = get_object_or_404(Project, pid=pid)
 
         try:
