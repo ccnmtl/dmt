@@ -79,6 +79,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = [
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware',
     'django.middleware.common.CommonMiddleware',
