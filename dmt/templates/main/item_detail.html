@@ -249,7 +249,7 @@
                 <h4 class="modal-title" id="add-time-label">Log Time</h4>
             </div>
             <div class="modal-body">
-                <form id="add-time-form" role="form">{% csrf_token %}
+                <form id="add-time-form" role="form">
                     <input type="hidden" name="iid" value="{{object.iid}}" id="item-iid-input" />
 
                     <div class="row">
@@ -740,7 +740,7 @@
             {# Is it a comment? #}
             {% if history_item.c %}
             <form method="get"
-                  action="{% url 'comment_delete' history_item.c.cid %}">{% csrf_token %}
+                  action="{% url 'comment_delete' history_item.c.cid %}">
                 <button type="submit"
                         title="Delete comment"
                         class="btn btn-default btn-xs pmt-delete">
