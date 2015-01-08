@@ -175,7 +175,7 @@
       </span>
       {% endfor %}
       {% endif %}
-      <form action="tag/" method="post">
+      <form action="tag/" method="post">{% csrf_token %}
       <div class="input-group input-group-sm tag-form">
       <input class="form-control" type="text" placeholder="Add tags (comma or space separated)" name="tags" />
       <span class="input-group-btn"><input type="submit" value="Tag" class="btn btn-primary" /></span>
@@ -249,7 +249,7 @@
                 <h4 class="modal-title" id="add-time-label">Log Time</h4>
             </div>
             <div class="modal-body">
-                <form id="add-time-form" role="form">
+                <form id="add-time-form" role="form">{% csrf_token %}
                     <input type="hidden" name="iid" value="{{object.iid}}" id="item-iid-input" />
 
                     <div class="row">
@@ -278,7 +278,7 @@
 
 
 {% if object.resolvable %}
-<form action="resolve/" method="post" role="form">
+<form action="resolve/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="resolve" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -324,7 +324,7 @@
 {% endif %}
 
 {% if object.inprogressable %}
-<form action="inprogress/" method="post" role="form">
+<form action="inprogress/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="mark-in-progress" tabindex="-1" role="dialog" aria-labelledby="inprogress-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -356,7 +356,7 @@
 {% endif %}
 
 {% if object.verifiable %}
-<form action="verify/" method="post" role="form">
+<form action="verify/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="verify" tabindex="-1" role="dialog" aria-labelledby="verify-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -389,7 +389,7 @@
 {% endif %}
 
 {% if object.reopenable %}
-<form action="reopen/" method="post" role="form">
+<form action="reopen/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="reopen" tabindex="-1" role="dialog" aria-labelledby="reopen-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -420,7 +420,7 @@
 </form>
 {% endif %}
 
-<form action="comment/" method="post" role="form">
+<form action="comment/" method="post" role="form">{% csrf_token %}
     <div class="modal fade"
          id="add-comment"
          tabindex="-1"
@@ -470,7 +470,7 @@
 </form>
 
 {% flag s3_upload %}
-<form action="add_attachment/" method="post" role="form">
+<form action="add_attachment/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="add-attachment" tabindex="-1" role="dialog" aria-labelledby="add-attachment-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -508,7 +508,7 @@
 </form>
 {% endflag %}
 
-<form action="split/" method="post" role="form">
+<form action="split/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="split" tabindex="-1" role="dialog" aria-labelledby="split-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -567,7 +567,7 @@
 </form>
 
 
-<form action="assigned_to/" method="post" role="form">
+<form action="assigned_to/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="reassign" tabindex="-1" role="dialog" aria-labelledby="reassign-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -607,7 +607,7 @@
 </div><!-- /.modal -->
 </form>
 
-<form action="owner/" method="post" role="form">
+<form action="owner/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="change-owner" tabindex="-1" role="dialog" aria-labelledby="reassign-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -740,7 +740,7 @@
             {# Is it a comment? #}
             {% if history_item.c %}
             <form method="get"
-                  action="{% url 'comment_delete' history_item.c.cid %}">
+                  action="{% url 'comment_delete' history_item.c.cid %}">{% csrf_token %}
                 <button type="submit"
                         title="Delete comment"
                         class="btn btn-default btn-xs pmt-delete">
