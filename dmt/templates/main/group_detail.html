@@ -34,7 +34,7 @@
     </td>
 		<td>
 			<form action="{% url 'remove_user_from_group' group.username %}"
-						method="post">
+						method="post">{% csrf_token %}
 				<input type="hidden" name="username" value="{{user.username}}" />
 			<input type="submit" class="btn btn-warning pull-right btn-xs"
 						 value="remove" />
@@ -44,7 +44,7 @@
 {% endfor %}
 </table>
 
-<form action="add_user/" method="post">
+<form action="add_user/" method="post">{% csrf_token %}
 <fieldset><legend>Add User to this Group</legend>
 <select name="username" class="form-control">
 {% for user in eligible_users %}

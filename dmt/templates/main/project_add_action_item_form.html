@@ -4,7 +4,7 @@
 {% else %}
   {% pmtuser as pmt_user %}
 
-<form id="add-action-item-form" action="add_action_item/" method="post" role="form">
+<form id="add-action-item-form" action="add_action_item/" method="post" role="form">{% csrf_token %}
     <div class="modal fade" id="add-action-item" tabindex="-1" role="dialog" aria-labelledby="add-action_item-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

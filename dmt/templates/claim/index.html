@@ -8,7 +8,7 @@
 <p>Back to the <a href="/">home page now</a></p>
 {% else %}
 
-<form action="." method="post" class="form form-horizontal">
+<form action="." method="post" class="form form-horizontal">{% csrf_token %}
 <fieldset>
 	<legend>Claim an Existing Account</legend>
 <select name="user">
@@ -20,7 +20,7 @@
 </fieldset>
 </form>
 
-<form action="{% url 'create_user' %}" method="post" class="form form-horizontal">
+<form action="{% url 'create_user' %}" method="post" class="form form-horizontal">{% csrf_token %}
 <fieldset>
 	<legend>I am a new user, make me a new account<legend>
 
