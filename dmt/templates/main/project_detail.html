@@ -86,7 +86,7 @@
 
   <div class="object-details">
 
-<form id="add-milestone-form" action="add_milestone/" method="post" role="form">
+<form id="add-milestone-form" action="add_milestone/" method="post" role="form">{% csrf_token %}
 <div class="modal fade" id="add-milestone" tabindex="-1" role="dialog" aria-labelledby="add-milestone-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -272,7 +272,7 @@
         {% endfor %}
     </ul>
   
-    <form action="/project/{{object.pid}}/add_user/" method="post">
+    <form action="/project/{{object.pid}}/add_user/" method="post">{% csrf_token %}
       <p>Add Personnel:</p>
       <select name="username">
         {% for user in object.all_users_not_in_project %}

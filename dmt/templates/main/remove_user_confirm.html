@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form action="." method="post">
+<form action="." method="post">{% csrf_token %}
 <p>Are you sure you want to remove <b>{{user.fullname}}</b> from
 	the <b>{{project.name}}</b> Project?
 

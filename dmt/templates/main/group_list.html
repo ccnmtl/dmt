@@ -30,7 +30,7 @@
 
 </div>
 
-<form action="{% url 'group_create' %}" method="post" class="form-inline" >
+<form action="{% url 'group_create' %}" method="post" class="form-inline" >{% csrf_token %}
 	<fieldset><legend>Add Group</legend>
 		<input type="text" placeholder="group name" name="group"
 		class="form-control" />

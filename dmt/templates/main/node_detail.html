@@ -31,7 +31,7 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
   </span>
   {% endfor %}
   {% endif %}
-  <form action="tag/" method="post">
+  <form action="tag/" method="post">{% csrf_token %}
   
   <div class="input-group input-group-sm tag-form">
   <input class="form-control" type="text" placeholder="Add tags (comma or space separated)" name="tags" />
@@ -80,7 +80,7 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
       <div class="forum-reply">
       <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
       For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
-      <form action="reply/" method="post">
+      <form action="reply/" method="post">{% csrf_token %}
       <fieldset>
       <div class="form-group">
       <textarea 
