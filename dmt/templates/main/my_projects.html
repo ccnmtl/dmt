@@ -81,7 +81,7 @@
         $.each(buttons, function(k, v) {
             $(document).on('click', 'button.add-'+v, function () {
                 var pid = $(this).data('pid');
-                $('#add-'+v+'-form').attr('action', '/project/'+pid+'/add_todo/');
+                $('#add-'+v+'-form').attr('action', '/project/'+pid+'/add_'+v+'/');
             });
         });
     });
