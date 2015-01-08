@@ -540,7 +540,7 @@ to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
                   if u.grp]
         for g in groups:
             users.update(u.users_in_group())
-        return list(users)
+        return sorted(list(users), key=lambda user: user.fullname.lower())
 
     def current_date(self):
         """ very simple helper that makes it easier to set the
