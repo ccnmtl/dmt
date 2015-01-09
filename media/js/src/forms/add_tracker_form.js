@@ -13,10 +13,17 @@ require([
             $.ajax({
                 type: 'POST',
                 url: '/api/1.0/trackers/add/',
-                data: {pid: pid, task: task, time: time, client: client,
-                      completed: completed},
+                data: {
+                    pid: pid,
+                    task: task,
+                    time: time,
+                    client: client,
+                    completed: completed
+                },
                 success: function(data, status) {
-                    return formUtils.onSuccess($form, data, status);
+                    return formUtils.onSuccess($form, data, status, [
+                        '#tracker-task-input', '#tracker-time-input'
+                    ]);
                 },
                 error: function(xhr, status, error) {
                     return formUtils.onError($form, xhr, status, error);

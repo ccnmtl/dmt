@@ -1,3 +1,15 @@
+require.config({
+    paths: {
+        // Major libraries
+        jquery: '../libs/jquery/jquery-min',
+        underscore: '../libs/underscore/underscore-min',
+        backbone: '../libs/backbone/backbone-min',
+
+        // Require.js plugins
+        text: '../libs/require/text'
+    }
+});
+
 require([
     // libs
     '../libs/jquery/jquery-min',

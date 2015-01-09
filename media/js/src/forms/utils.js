@@ -1,4 +1,4 @@
-define([], function() {
+define(['underscore'], function(_) {
     var FormUtils = function() {};
 
     FormUtils.prototype.refreshTargetDate = function($selectEl, targetDates) {
@@ -21,8 +21,20 @@ define([], function() {
         }
     };
 
-    FormUtils.prototype.onSuccess = function($form, data, status) {
-        $form.find('input:visible').val('');
+    /**
+     * @param {array} clearSelectors - An optional argument that can
+     *   contain an array of selectors that the form clears on success.
+     *   If this argument isn't used, onSuccess defaults to clearing
+     *   every visible input in the form.
+     */
+    FormUtils.prototype.onSuccess = function(
+        $form, data, status, clearSelectors
+    ) {
+        if (_.isArray(clearSelectors)) {
+            $form.find(clearSelectors.join(', ')).val('');
+        } else {
+            $form.find('input:visible').val('');
+        }
 
         $form.find('.form-ajax-response').remove();
         $form.append(
