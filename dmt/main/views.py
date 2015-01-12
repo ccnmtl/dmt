@@ -631,6 +631,7 @@ class OwnedItemsView(LoggedInMixin, DetailView):
 
 
 class UserUpdateView(LoggedInMixin, UpdateView):
+    template_name = 'main/user_form.html'
     model = UserProfile
     form_class = UserUpdateForm
 
