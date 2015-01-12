@@ -18,7 +18,7 @@ from dmt.main.models import (
 )
 from dmt.main.utils import new_duration
 
-from dmt.api.auth import SafeOriginPermission
+from dmt.api.auth import SafeOriginAuthentication, SafeOriginPermission
 from dmt.api.serializers import (
     ClientSerializer, ItemSerializer, MilestoneSerializer, NotifySerializer,
     ProjectSerializer, UserSerializer,
@@ -53,6 +53,7 @@ class ExternalAddItemView(APIView):
 
     For Mediathread, Edblogs, etc.
     """
+    authentication_classes = (SafeOriginAuthentication,)
     permission_classes = (SafeOriginPermission,)
 
     def redirect_or_return_item(self, request, item, redirect_url, append_iid):
