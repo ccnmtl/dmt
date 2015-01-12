@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load claimtags %}
 {% block extraclass %} class="dashboard"{% endblock %}
-{% block title %}My Dashboard{% endblock %}
+{% block title %}My Items{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/typeahead.js-bootstrap.css">
+<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
 {% endblock %}
 
 
@@ -18,7 +19,7 @@
 {% block content %}
 
 
-<h1 class="page-title">My Dashboard</h1>
+<h1 class="page-title">My Items</h1>
 
 {% if request.user.is_anonymous %}
   <p>Please Login</p>
@@ -110,6 +111,7 @@
     {% else %}
       <li class="active"><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
     {% endif %}
+      <li><a href="#owned-items" data-toggle="tab">Owned Items</a></li>
   </ul>
 
 <div class="tab-content">
@@ -181,10 +183,8 @@
             <th data-field="target-date"
                 data-sortable="true" class="hidden-xs">Target Date</th>
             <th data-field="milestone"
-                data-visible="false"
                 data-sortable="true" class="hidden-xs">Milestone</th>
             <th data-field="owner"
-                data-visible="false"
                 data-sortable="true" class="hidden-xs">Owner</th>
             <th data-field="modified"
                 data-sortable="true" class="hidden-xs">Modified</th>
@@ -255,6 +255,49 @@
 {% comment %}pmt_user.username{% endcomment %}
 </div><!-- /#outstanding-items -->
 
+<div class="tab-pane fade" id="owned-items">
+{% if pmt_user.username %}
+{% if pmt_user.open_owned_items %}
+<table class="table table-condensed table-striped tablesorter" id="owned-items">
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th>Priority</th>
+			<th>Target Date</th>
+			<th>Assigned To</th>
+			<th>Project</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+{% for item in pmt_user.open_owned_items %}
+<tr>
+	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+	width="14" height="14"/> {% endif %}<a href="{% url 'item_detail' item.iid %}">{{item.title|truncatechars:70}}</a></td>
+	<td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
+	<td class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
+	<td><a href="{% url 'user_detail' item.assigned_to.username %}">{{item.assigned_to.fullname}}</a></td>
+	<td><a href="{% url 'project_detail' item.milestone.project.pid %}">{{item.milestone.project.name}}</a></td>
+
+	<td class="{{item.status_class}}">{{item.status}}</td>
+
+</tr>
+{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<p>This user has no outstanding owned items</p>
+{% endif %}
+{% comment %}pmt_user.open_owned_items{% endcomment %}
+
+{% else %}
+<div class="alert alert-error">
+    You need to <a href="/claim/">claim your account</a> first.
+</div>
+{% endif %}
+{% comment %}pmt_user.username{% endcomment %}
+</div><!-- /#owned-items -->
+
 
 </div><!-- ./tab-content -->
 
@@ -267,13 +310,14 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
 <script>
 $(document).ready(function() {
     {% pmtuser as pmt_user %}
     {% if pmt_user.items %}
         var table = $('table#user-items').DataTable({
             aoColumnDefs: [
-                { bVisible: false, aTargets: [5, 6] }
+                { bVisible: false, aTargets: [4, 6] }
             ],
             dom: 'C<"clear">lfrtip',
             colVis: {
@@ -284,6 +328,7 @@ $(document).ready(function() {
             .order([1, 'desc'], [3, 'asc'])
             .draw();
     {% endif %}
+    $("table#owned-items").tablesorter({sortList: [[1,0], [3,1]]}); 
 });
 </script>
 {% endblock %}
