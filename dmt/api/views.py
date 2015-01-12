@@ -64,6 +64,7 @@ class ExternalAddItemView(APIView):
             data = ItemSerializer(item, context={'request': request}).data
             return Response(data)
 
+    @method_decorator(csrf_exempt)
     def post(self, request, format=None):
         pid = request.data.get('pid')
         mid = request.data.get('mid')
