@@ -1226,3 +1226,8 @@ class TestUserViews(LoggedInTestMixin, TestCase):
     def test_user_list_page(self):
         response = self.client.get(reverse('user_list'))
         self.assertEqual(response.status_code, 200)
+
+    def test_user_form_page(self):
+        response = self.client.get(reverse('user_edit',
+                                           args=[self.pu.username]))
+        self.assertEqual(response.status_code, 200)
