@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import View
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import filters, generics, viewsets
 from rest_framework.response import Response
@@ -125,6 +126,7 @@ def normalize_email(email):
 
 
 class GitUpdateView(View):
+    @csrf_exempt
     def post(self, request):
         iid = request.POST.get('iid', None)
         item = get_object_or_404(Item, iid=iid)
