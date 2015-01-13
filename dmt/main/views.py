@@ -575,6 +575,7 @@ class CreateUserView(View):
             email=request.user.email,
             status='active',
             password='nopassword',
+            user=request.user,
         )
         print "made a new user: %s" % u.username
         Claim.objects.create(
