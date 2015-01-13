@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.db import connection, models
 from django.db.models.aggregates import Sum
 from django.conf import settings
@@ -33,6 +34,7 @@ class UserProfile(models.Model):
     campus = models.TextField(blank=True)
     building = models.TextField(blank=True)
     room = models.TextField(blank=True)
+    user = models.OneToOneField(User, null=True)
 
     class Meta:
         db_table = u'users'
