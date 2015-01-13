@@ -1124,6 +1124,7 @@ class CreateUserTest(TestCase):
         self.assertEqual(r.status_code, 302)
         u = PMTUser.objects.get(username='newuser')
         self.assertEqual(u.email, new_user.email)
+        self.assertEqual(u.user.id, new_user.id)
 
 
 class UserTest(TestCase):
