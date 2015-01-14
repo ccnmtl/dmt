@@ -33,6 +33,13 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
     }
     CELERY_ALWAYS_EAGER = True
 
+    WHITELIST_ORIGIN_IPS = (
+    )
+
+    WHITELIST_ORIGIN_URLS = (
+        '.columbia.edu',
+    )
+
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = [
