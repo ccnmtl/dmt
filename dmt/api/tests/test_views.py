@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.test import APITestCase
 
-from dmt.claim.models import Claim, PMTUser
+from dmt.claim.models import Claim
 from dmt.main.models import ActualTime, Item, Notify
 from dmt.main.tests.factories import (
     ClientFactory, MilestoneFactory, ProjectFactory, UserFactory
@@ -23,10 +23,6 @@ class AddTrackerViewTest(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        pu = PMTUser.objects.create(username="testpmtuser",
-                                    email="testemail@columbia.edu",
-                                    status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=pu)
         self.milestone = MilestoneFactory()
         self.project = self.milestone.project
 
@@ -132,10 +128,6 @@ class ItemHoursViewTest(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        pu = PMTUser.objects.create(username="testpmtuser",
-                                    email="testemail@columbia.edu",
-                                    status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=pu)
         self.item = ItemFactory()
 
     def test_post(self):
@@ -215,12 +207,8 @@ class ItemTests(APITestCase):
                       r.data["assigned_to"].lower())
 
     def test_get_with_notification(self):
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
-
-        self.notification = NotifyFactory(item=self.item, username=self.pu)
+        self.notification = NotifyFactory(
+            item=self.item, username=self.u.userprofile)
 
         r = self.client.get(
             reverse('item-detail', kwargs={'pk': self.item.iid}))
@@ -228,7 +216,7 @@ class ItemTests(APITestCase):
         self.assertEqual(r.data['iid'], self.item.iid)
 
         usernames = [n.lower() for n in r.data['notifies']]
-        self.assertIn(self.pu.username.lower(), usernames)
+        self.assertIn(self.u.userprofile.username.lower(), usernames)
 
 
 class ExternalAddItemTests(APITestCase):
@@ -311,10 +299,7 @@ class NotifyTests(APITestCase):
         self.u = User.objects.create(username="testuser")
         self.u.set_password("test")
         self.u.save()
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
+        self.pu = self.u.userprofile
         self.item = ItemFactory()
         self.n = NotifyFactory(item=self.item, username=self.pu)
         self.url = reverse("notify", kwargs={'pk': self.n.item.iid})

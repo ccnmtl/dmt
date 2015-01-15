@@ -28,7 +28,7 @@ from dmt.main.views import (
     DeleteAttachmentView, GroupCreateView,
     DeactivateUserView, ItemMoveProjectView, RemoveUserFromGroupView,
     AddUserToGroupView, MilestoneDeleteView, OwnedItemsView,
-    ItemSetMilestoneView, CreateUserView,
+    ItemSetMilestoneView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
@@ -56,7 +56,6 @@ urlpatterns = patterns(
     url(r'^add_trackers/$', AddTrackersView.as_view(), name='add_trackers'),
     (r'^api/1.0/', include('dmt.api.urls')),
     (r'^drf/', include('dmt.api.urls')),
-    (r'^claim/', include('dmt.claim.urls')),
     (r'^search/$', SearchView.as_view()),
     (r'^client/$', ClientListView.as_view()),
     url(r'^client/(?P<pk>\d+)/$', ClientDetailView.as_view(),
@@ -150,7 +149,6 @@ urlpatterns = patterns(
     (r'^status/(?P<pk>\d+)/delete/$', StatusUpdateDeleteView.as_view()),
     (r'^report/', include('dmt.report.urls')),
     url(r'^user/$', UserListView.as_view(), name='user_list'),
-    url(r'^user/add/$', CreateUserView.as_view(), name='create_user'),
     url(r'^user/(?P<pk>\w+)/$', UserDetailView.as_view(), name='user_detail'),
     url(r'^user/(?P<pk>\w+)/deactivate/$', DeactivateUserView.as_view(),
         name='user_deactivate'),
