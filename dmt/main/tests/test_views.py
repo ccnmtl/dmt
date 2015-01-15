@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
 from waffle import Flag
-from dmt.claim.models import Claim, PMTUser
+from dmt.claim.models import PMTUser
 from dmt.main.models import (
     Attachment, Comment, Item, ItemClient, Milestone, Project,
     Client
@@ -26,10 +26,6 @@ class BasicTest(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_root(self):
         response = self.c.get("/")
@@ -54,7 +50,8 @@ class BasicTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_owned_items(self):
-        response = self.c.get(reverse('owned_items', args=[self.pu.username]))
+        response = self.c.get(
+            reverse('owned_items', args=[self.u.userprofile.username]))
         self.assertEquals(response.status_code, 200)
         self.assertTrue("Owned Items" in response.content)
 
@@ -65,11 +62,6 @@ class TestClientViews(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.client.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
-
         self.client_mock = ClientFactory()
 
     def test_client_detail_page(self):
@@ -113,7 +105,7 @@ class TestClientViews(TestCase):
         self.assertEqual(c.department, "testdepartment")
         self.assertEqual(c.school, "testschool")
         self.assertEqual(c.status, "active")
-        self.assertEqual(c.contact, self.pu)
+        self.assertEqual(c.contact, self.u.userprofile)
 
 
 class TestProjectViews(TestCase):
@@ -123,10 +115,6 @@ class TestProjectViews(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_all_projects_page(self):
         p = ProjectFactory()
@@ -178,7 +166,7 @@ class TestProjectViews(TestCase):
         r = self.c.get(p.get_absolute_url())
         self.assertTrue("xyzzy" in r.content)
 
-        r = self.c.get(self.pu.get_absolute_url())
+        r = self.c.get(self.u.userprofile.get_absolute_url())
         self.assertTrue("xyzzy" in r.content)
 
         r = self.c.get("/status/")
@@ -249,11 +237,11 @@ class TestProjectViews(TestCase):
 
     def test_add_action_item_form_owner(self):
         milestone = MilestoneFactory()
-        milestone.project.add_personnel(self.pu, auth='manager')
+        milestone.project.add_personnel(self.u.userprofile, auth='manager')
         r = self.c.get(milestone.project.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue(
-            "value=\"testpmtuser\" selected=\"selected\"" in r.content)
+            "value=\"testuser\" selected=\"selected\"" in r.content)
 
     def test_add_action_item(self):
         u = UserFactory()
@@ -402,7 +390,7 @@ class TestProjectViews(TestCase):
                      'target_date': '2020-04-28',
                      'test_wiki_category': ''})
         p = Project.objects.get(name='Test project name')
-        self.assertTrue(self.pu in p.personnel_in_project())
+        self.assertTrue(self.u.userprofile in p.personnel_in_project())
 
 
 class MyProjectViewTests(TestCase):
@@ -411,14 +399,10 @@ class MyProjectViewTests(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.client.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_my_projects_page_in_project(self):
         p = ProjectFactory()
-        p.add_personnel(self.pu)
+        p.add_personnel(self.u.userprofile)
         r = self.client.get(reverse('my_project_list'))
         self.assertEqual(r.status_code, 200)
         self.assertTrue(p.name in r.content)
@@ -452,10 +436,6 @@ class TestMilestoneViews(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_project_page(self):
         m = MilestoneFactory()
@@ -496,10 +476,6 @@ class TestItemViews(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_item_view(self):
         i = ItemFactory()
@@ -509,8 +485,8 @@ class TestItemViews(TestCase):
 
     def test_item_view_notification_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
-        i = ItemFactory(assigned_to=self.pu)
-        NotifyFactory(item=i, username=self.pu)
+        i = ItemFactory(assigned_to=self.u.userprofile)
+        NotifyFactory(item=i, username=self.u.userprofile)
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue("input_notification" in r.content)
@@ -647,10 +623,6 @@ class TestItemWorkflow(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_add_comment(self):
         i = ItemFactory()
@@ -671,7 +643,8 @@ class TestItemWorkflow(TestCase):
     def test_delete_own_comment(self):
         i = ItemFactory()
         e = EventFactory(item=i)
-        comment = CommentFactory(item=i, event=e, username=self.pu.username)
+        comment = CommentFactory(
+            item=i, event=e, username=self.u.userprofile.username)
         url = reverse('comment_delete', args=(comment.cid,))
         r = self.c.post(url)
         self.assertEqual(r.status_code, 302)
@@ -718,7 +691,8 @@ class TestItemWorkflow(TestCase):
         self.assertTrue("2:30:00" in r.content)
 
     def test_resolve_self_assigned(self):
-        i = ItemFactory(owner=self.pu, assigned_to=self.pu)
+        i = ItemFactory(owner=self.u.userprofile,
+                        assigned_to=self.u.userprofile)
         r = self.c.post(
             i.get_absolute_url() + "resolve/",
             dict(comment='this is a comment',
@@ -862,10 +836,6 @@ class TestHistory(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_item_view(self):
         i = ItemFactory()
@@ -886,10 +856,6 @@ class TestForum(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_forum_index(self):
         r = self.c.get("/forum/")
@@ -961,10 +927,6 @@ class TestForumTagViews(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_add_tag(self):
         i = NodeFactory()
@@ -1056,11 +1018,6 @@ class GroupTest(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.client.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
-
         self.group = GroupFactory()
 
     def test_group_list(self):
@@ -1108,25 +1065,6 @@ class GroupTest(TestCase):
         self.assertTrue(r.status_code, 404)
 
 
-class CreateUserTest(TestCase):
-    def test_create_user(self):
-        new_user = User.objects.create(
-            username='newuser',
-            email="newuser@example.com",
-            is_superuser=False,
-        )
-        new_user.set_password("test")
-        new_user.save()
-        self.client.login(username="newuser", password="test")
-        r = self.client.post(
-            reverse("create_user", args=[]),
-            dict())
-        self.assertEqual(r.status_code, 302)
-        u = PMTUser.objects.get(username='newuser')
-        self.assertEqual(u.email, new_user.email)
-        self.assertEqual(u.user.id, new_user.id)
-
-
 class UserTest(TestCase):
     def setUp(self):
         self.u = User.objects.create(
@@ -1135,10 +1073,6 @@ class UserTest(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.client.login(username="testuser", password="test")
-        self.pu = PMTUser.objects.create(username="testpmtuser",
-                                         email="testemail@columbia.edu",
-                                         status="active")
-        Claim.objects.create(django_user=self.u, pmt_user=self.pu)
 
     def test_deactivate_user_form(self):
         u = UserFactory(status='active')
@@ -1161,9 +1095,10 @@ class UserTest(TestCase):
         owned = ItemFactory(owner=u)
         # reassign it to the request user
         params = dict()
-        params["project_%d" % p.pid] = self.pu.username
-        params["item_assigned_%d" % assigned.iid] = self.pu.username
-        params["item_owner_%d" % owned.iid] = self.pu.username
+        params["project_%d" % p.pid] = self.u.userprofile.username
+        params[
+            "item_assigned_%d" % assigned.iid] = self.u.userprofile.username
+        params["item_owner_%d" % owned.iid] = self.u.userprofile.username
         r = self.client.post(
             u.get_absolute_url() + "deactivate/",
             params)
@@ -1173,13 +1108,13 @@ class UserTest(TestCase):
 
         # refetch and check
         p = Project.objects.get(pid=p.pid)
-        self.assertEqual(p.caretaker, self.pu)
+        self.assertEqual(p.caretaker, self.u.userprofile)
 
         assigned = Item.objects.get(iid=assigned.iid)
-        self.assertEqual(assigned.assigned_to, self.pu)
+        self.assertEqual(assigned.assigned_to, self.u.userprofile)
 
         owned = Item.objects.get(iid=owned.iid)
-        self.assertEqual(owned.owner, self.pu)
+        self.assertEqual(owned.owner, self.u.userprofile)
 
     def test_timeline(self):
         u = UserFactory()
@@ -1201,7 +1136,7 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         'django.db.backends.postgresql_psycopg2',
         "This test requires PostgreSQL")
     def test_add_trackers_post_tracker(self):
-        p = ProjectFactory(caretaker=self.pu)
+        p = ProjectFactory(caretaker=self.u.userprofile)
         MilestoneFactory(project=p)
         r = self.client.post(
             reverse('add_trackers'),
@@ -1230,5 +1165,5 @@ class TestUserViews(LoggedInTestMixin, TestCase):
 
     def test_user_form_page(self):
         response = self.client.get(reverse('user_edit',
-                                           args=[self.pu.username]))
+                                           args=[self.u.userprofile.username]))
         self.assertEqual(response.status_code, 200)

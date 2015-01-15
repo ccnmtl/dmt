@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.db import connection, models
 from django.db.models.aggregates import Sum
+from django.db.models.signals import post_save
 from django.conf import settings
 from datetime import timedelta, datetime
 from interval.fields import IntervalField
@@ -292,6 +293,24 @@ class UserProfile(models.Model):
             status='OPEN',
             target_date__lt=datetime.now(),
         ).order_by('target_date')
+
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        profile = UserProfile.objects.create(
+            user=instance,
+            username=instance.username,
+            fullname=instance.get_full_name(),
+            email=instance.email,
+            status='active',
+            password='nopassword',
+        )
+        from dmt.claim.models import Claim
+        Claim.objects.create(
+            django_user=instance,
+            pmt_user=profile)
+
+post_save.connect(create_user_profile, sender=User)
 
 
 class ProjectUser(object):
