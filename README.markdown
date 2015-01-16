@@ -3,5 +3,3 @@
 DMT is ccnmtl's new project management tool.
 
 Really, it's a Django port of our old [PMT](https://github.com/ccnmtl/pmt/).
-
-Ignore me. I just need to test something again.
