@@ -16,33 +16,30 @@
 </ul>
 
 <h2>
-    Most Active Projects for the last {{days}} days
-    <br />
-    <small>
-        {{interval_start|format_date}} &ndash; {{interval_end|format_date}}
-    </small>
+    Most Active Projects
 </h2>
+<h4>
+    {{interval_start|format_mdy}} &ndash; {{interval_end|format_mdy}}
+</h4>
 
-<form>
-    <div class="control-group">
-        Total hours reported:
-        <strong>{{total_hours}}</strong>
+{% include 'report/range_offset_form.html' %}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="control-group">
+            Total hours reported:
+            <strong>{{total_hours}}</strong>
+        </div>
+
+        <div class="control-group">
+            Export as:
+            <a href="{% url 'active_projects_report_export' %}?format=csv&range={{range}}&offset={{offset}}"
+               >.csv</a>,
+            <a href="{% url 'active_projects_report_export' %}?format=xlsx&range={{range}}&offset={{offset}}"
+               >.xlsx</a>
+        </div>
     </div>
-    <div class="control-group">
-        Number of days to display:
-        <input type="number" min="1" max="365" name="days" value="{{days}}" />
-        <input type="submit" />
-    </div>
-    <div class="control-group">
-        Export as:
-        <a href="{% url 'active_projects_report_export' %}?format=csv&days={{days}}">
-            .csv
-        </a>,
-        <a href="{% url 'active_projects_report_export' %}?format=xlsx&days={{days}}">
-            .xlsx
-        </a>
-    </div>
-</form>
+</div>
 
 <table id="active-projects-report" class="table table-bordered table-striped tablesorter">
     <thead>

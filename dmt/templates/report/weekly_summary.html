@@ -33,12 +33,10 @@
 
 <div>
     Export as:
-    <a href="{% url 'weekly_summary_report_export' %}?format=csv&date={{now_str}}">
-        .csv
-    </a>,
-    <a href="{% url 'weekly_summary_report_export' %}?format=xlsx&date={{now_str}}">
-        .xlsx
-    </a>
+    <a href="{% url 'weekly_summary_report_export' %}?format=csv&date={{now_str}}"
+       >.csv</a>,
+    <a href="{% url 'weekly_summary_report_export' %}?format=xlsx&date={{now_str}}"
+       >.xlsx</a>
 </div>
 
 <table class="table table-bordered table-striped">

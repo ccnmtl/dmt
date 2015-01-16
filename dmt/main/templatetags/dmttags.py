@@ -8,9 +8,18 @@ register = template.Library()
 def format_date(dt):
     """
     Takes a datetime and formats it like this:
-    Tuesday, July 15, 2014
+      Tuesday, July 15, 2014
     """
     return dt.strftime('%A, %B %d, %Y')
+
+
+@register.filter
+def format_mdy(dt):
+    """
+    Takes a datetime and formats it like this:
+      Jul. 15, 2014
+    """
+    return dt.strftime('%b. %d, %Y')
 
 
 @register.filter

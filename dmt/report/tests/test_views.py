@@ -26,7 +26,7 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
     def test_active_project_export_csv_view(self):
         r = self.client.get(
             reverse('active_projects_report_export') +
-            '?format=csv&days=31')
+            '?format=csv&range=31&offset=0')
         self.assertEqual(r.status_code, 200)
 
     @unittest.skipUnless(
@@ -36,7 +36,7 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
     def test_active_project_export_excel_view(self):
         r = self.client.get(
             reverse('active_projects_report_export') +
-            '?format=xlsx&days=31')
+            '?format=xlsx&range=31&offset=0')
         self.assertEqual(r.status_code, 200)
 
 
@@ -82,11 +82,15 @@ class StaffReportTest(LoggedInTestMixin, TestCase):
 
 class StaffReportExportTests(LoggedInTestMixin, TestCase):
     def test_active_project_export_csv_view(self):
-        r = self.client.get(reverse('staff_report_export') + '?format=csv')
+        r = self.client.get(
+            reverse('staff_report_export') +
+            '?format=csv&range=7&offset=0')
         self.assertEqual(r.status_code, 200)
 
     def test_active_project_export_excel_view(self):
-        r = self.client.get(reverse('staff_report_export') + '?format=xlsx')
+        r = self.client.get(
+            reverse('staff_report_export') +
+            '?format=xlsx&range=7&offset=0')
         self.assertEqual(r.status_code, 200)
 
 

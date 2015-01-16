@@ -2,15 +2,16 @@ from datetime import datetime, timedelta
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
+
 from dmt.claim.models import Claim
 from dmt.main.models import UserProfile, Item, Milestone, Project
 from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
-from .models import (
+from dmt.report.models import (
     ActiveProjectsCalculator, StaffReportCalculator,
     WeeklySummaryReportCalculator)
-from .mixins import PrevNextWeekMixin
-from .utils import ReportFileGenerator
+from dmt.report.mixins import PrevNextWeekMixin, RangeOffsetMixin
+from dmt.report.utils import ReportFileGenerator
 
 
 class ProjectHoursView(LoggedInMixin, View):
@@ -39,43 +40,28 @@ class ProjectHoursView(LoggedInMixin, View):
             self.request.GET.get('format', 'csv'))
 
 
-class ActiveProjectsView(LoggedInMixin, TemplateView):
+class ActiveProjectsView(LoggedInMixin, RangeOffsetMixin, TemplateView):
     template_name = "report/active_projects.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(ActiveProjectsView, self).get_context_data(**kwargs)
-
-        days = 31
-        if self.request.GET.get('days', None):
-            days = int(self.request.GET['days'])
+    def get_context_data(self, *args, **kwargs):
+        context = super(ActiveProjectsView, self).get_context_data(
+            *args, **kwargs)
 
         calc = ActiveProjectsCalculator()
-        data = calc.calc(days)
+        data = calc.calc(context.get('interval_start'),
+                         context.get('interval_end'))
         context.update(data)
-
-        # Find dates for displaying to the user
-        now = datetime.now()
-        context['interval_start'] = now + timedelta(days=-days)
-        context['interval_end'] = now
-
         return context
 
 
-class ActiveProjectsExportView(LoggedInMixin, View):
+class ActiveProjectsExportView(LoggedInMixin, RangeOffsetMixin, View):
     def get(self, request, *args, **kwargs):
-        days = 31
-        if self.request.GET.get('days', None):
-            days = int(self.request.GET['days'])
-
         calc = ActiveProjectsCalculator()
-        data = calc.calc(days)
+        data = calc.calc(self.interval_start, self.interval_end)
 
         # Find dates for displaying to the user
-        now = datetime.now()
-        interval_start = now + timedelta(days=-days)
-        interval_end = now
-        start_str = interval_start.strftime('%Y%m%d')
-        end_str = interval_end.strftime('%Y%m%d')
+        start_str = self.interval_start.strftime('%Y%m%d')
+        end_str = self.interval_end.strftime('%Y%m%d')
         filename = "active-projects-%s-%s" % (start_str, end_str)
 
         column_names = ['ID', 'Name', 'Project Number', 'Last worked on',
@@ -140,7 +126,7 @@ class StaffReportPreviousWeekView(LoggedInMixin, PrevNextWeekMixin, View):
                 self.prev_week.year, self.prev_week.month, self.prev_week.day))
 
 
-class StaffReportView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
+class StaffReportView(LoggedInMixin, RangeOffsetMixin, TemplateView):
     template_name = "report/staff_report.html"
 
     def get_context_data(self, **kwargs):
@@ -148,29 +134,24 @@ class StaffReportView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
         calc = StaffReportCalculator(['designers', 'programmers', 'video',
                                       'educationaltechnologists',
                                       'management'])
-        data = calc.calc(self.week_start, self.week_end)
-        context.update(dict(now=self.now, now_str=self.now_str,
-                            week_start=self.week_start.date,
-                            week_end=self.week_end.date,
-                            prev_week=self.prev_week.date,
-                            prev_week_str=self.prev_week_str,
-                            next_week=self.next_week.date,
-                            next_week_str=self.next_week_str))
+        context.update(dict(interval_start=self.interval_start,
+                            interval_end=self.interval_end))
+        data = calc.calc(self.interval_start, self.interval_end)
         context.update(data)
         return context
 
 
-class StaffReportExportView(LoggedInMixin, PrevNextWeekMixin, View):
+class StaffReportExportView(LoggedInMixin, RangeOffsetMixin, View):
     def get(self, request, *args, **kwargs):
         self.get_params()
 
         calc = StaffReportCalculator(['designers', 'programmers', 'video',
                                       'educationaltechnologists',
                                       'management'])
-        data = calc.calc(self.week_start, self.week_end)
+        data = calc.calc(self.interval_start, self.interval_end)
 
-        start_str = self.week_start.strftime('%Y%m%d')
-        end_str = self.week_end.strftime('%Y%m%d')
+        start_str = self.interval_start.strftime('%Y%m%d')
+        end_str = self.interval_end.strftime('%Y%m%d')
         filename = "staff-report-%s-%s" % (start_str, end_str)
 
         column_names = ['Staff Member', 'Group', 'Hours Logged']

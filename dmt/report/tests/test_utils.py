@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..utils import ReportFileGenerator
+from dmt.report.utils import ReportFileGenerator
 
 
 class ReportFileGeneratorTests(TestCase):

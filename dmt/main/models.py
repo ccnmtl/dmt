@@ -74,10 +74,14 @@ class UserProfile(models.Model):
         return sorted(set(list(projects)), key=lambda x: x.name.lower())
 
     def resolve_times_for_interval(self, start, end):
+        # Handle dates as well as datetimes
+        start_date = getattr(start, 'date', start)
+        end_date = getattr(end, 'date', end)
+
         return ActualTime.objects.filter(
             resolver=self,
-            completed__gt=start.date,
-            completed__lte=end.date
+            completed__gt=start_date,
+            completed__lte=end_date
         ).select_related('item', 'item__milestone', 'item__milestone__project')
 
     def total_resolve_times(self):
@@ -95,9 +99,8 @@ class UserProfile(models.Model):
 
     def interval_time(self, start, end):
         return interval_sum(
-            [
-                a.actual_time
-                for a in self.resolve_times_for_interval(start, end)])
+            [a.actual_time
+             for a in self.resolve_times_for_interval(start, end)])
 
     def weekly_report(self, week_start, week_end):
         # TODO: rename to something more generic now that this is
@@ -630,6 +633,7 @@ ORDER BY p.projnum
 
     @staticmethod
     def projects_active_between(start, end):
+        """ Return projects active between the given dates. """
         projects = Project.objects.raw("""
 SELECT
     p.pid,
