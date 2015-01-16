@@ -40,7 +40,7 @@
 {% endif %}
 
 {% if user.open_assigned_items %}
-<h2>Open items assigned to this user:</h2>
+<h2>Open and Resolved items assigned to this user:</h2>
 
 <p>These must be reassigned to someone else</p>
 
@@ -53,7 +53,7 @@
 	</tr>
 </thead>
 <tbody>
-{% for i in user.open_assigned_items %}
+{% for i in user.non_verified_assigned_items %}
 <tr>
 	<td><a href="{{i.get_absolute_url}}">{{i.title}}</a></td>
 	<td><a href="{{i.milestone.project.get_absolute_url}}">{{i.milestone.project.name}}</a></td>
@@ -71,11 +71,11 @@
 </table>
 
 {% else %}
-<p>There are no open items assigned to this user.</p>
+<p>There are no open/resolved items assigned to this user.</p>
 {% endif %}
 
 {% if user.non_verified_owned_items %}
-<h2>Resolved items owned by this user:</h2>
+<h2>Open and Resolved items owned by this user:</h2>
 
 <p>Ownership on these must be changed to someone else</p>
 
@@ -107,7 +107,7 @@
 </table>
 
 {% else %}
-<p>There are no resolved items owned by this user.</p>
+<p>There are no open/resolved items owned by this user.</p>
 {% endif %}
 
 
