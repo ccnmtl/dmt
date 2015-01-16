@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django_filters import (
-    CharFilter, FilterSet, ModelChoiceFilter, NumberFilter
+    CharFilter, FilterSet, ModelChoiceFilter, NumberFilter,
+    ChoiceFilter,
 )
 
 from dmt.main.models import UserProfile
@@ -37,3 +38,5 @@ class UserFilter(FilterSet):
     phone = CharFilter(label='Phone Number', lookup_type='icontains')
     title = CharFilter(lookup_type='icontains')
     bio = CharFilter(lookup_type='icontains')
+    status = ChoiceFilter(choices=[("active", "active"),
+                                   ("inactive", "inactive")])
