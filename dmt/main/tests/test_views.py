@@ -1167,3 +1167,16 @@ class TestUserViews(LoggedInTestMixin, TestCase):
         response = self.client.get(reverse('user_edit',
                                            args=[self.u.userprofile.username]))
         self.assertEqual(response.status_code, 200)
+
+    def test_user_list_status_filter(self):
+        u1 = UserFactory(status='active')
+        u2 = UserFactory(status='inactive')
+        r = self.client.get(
+            reverse('user_list') + "?status=active")
+        self.assertTrue(u1.username in r.content)
+        self.assertFalse(u2.username in r.content)
+
+        r = self.client.get(
+            reverse('user_list') + "?status=inactive")
+        self.assertFalse(u1.username in r.content)
+        self.assertTrue(u2.username in r.content)
