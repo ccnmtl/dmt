@@ -151,6 +151,14 @@ class UserProfile(models.Model):
             ).exclude(status='VERIFIED').select_related(
             'milestone', 'milestone__project')
 
+    def non_verified_assigned_items(self):
+        """ all items assigned to this user that
+        are OPEN, INPROGRESS, or RESOLVED"""
+        return Item.objects.filter(
+            assigned_to=self,
+            ).exclude(status='VERIFIED').select_related(
+            'milestone', 'milestone__project')
+
     def items(self):
         assigned = set(self.open_assigned_items())
         owned = set(self.resolved_owned_items())
