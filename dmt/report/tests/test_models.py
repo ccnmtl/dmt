@@ -2,7 +2,26 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 from django.conf import settings
 import unittest
-from ..models import StaffReportCalculator, WeeklySummaryReportCalculator
+
+from dmt.report.models import (
+    ActiveProjectsCalculator,
+    StaffReportCalculator, WeeklySummaryReportCalculator
+)
+
+
+class ActiveProjectsCalculatorTests(TestCase):
+    def setUp(self):
+        now = datetime.today()
+        self.interval_start = now - timedelta(days=365)
+        self.interval_end = self.interval_start + timedelta(days=365)
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_calc_on_empty_db(self):
+        calc = ActiveProjectsCalculator()
+        calc.calc(self.interval_start, self.interval_end)
 
 
 class StaffReportCalculatorTests(TestCase):

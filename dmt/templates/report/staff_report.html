@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
 {% endblock %}
 
-{% block title %}Staff Report: {{week_start}} to {{week_end}}{% endblock %}
+{% block title %}Staff Report{% endblock %}
 
 {% block primarynavtabs %}
 {% endblock %}
@@ -20,20 +20,18 @@
     <li class="active">Staff Report</li>
 </ul>
 
-<h2>Staff Report for the week from {{week_start}} to {{week_end}}</h2>
-<ul class="pager">
-    <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">previous week</a></li>
-    <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>
-</ul>
+<h2>Staff Report from {{interval_start}} to {{interval_end}}</h2>
 
-<div>
-    Export as:
-    <a href="{% url 'staff_report_export' %}?format=csv&date={{now_str}}">
-        .csv
-    </a>,
-    <a href="{% url 'staff_report_export' %}?format=xlsx&date={{now_str}}">
-        .xlsx
-    </a>
+{% include 'report/range_offset_form.html' %}
+
+<div class="row">
+    <div class="col-md-3">
+        Export as:
+        <a href="{% url 'staff_report_export' %}?format=csv&range={{range}}&offset={{offset}}"
+           >.csv</a>,
+        <a href="{% url 'staff_report_export' %}?format=xlsx&range={{range}}&offset={{offset}}"
+           >.xlsx</a>
+    </div>
 </div>
 
 <table class="table table-striped table-condensed tablesorter" id="staff-report">

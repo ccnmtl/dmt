@@ -1,17 +1,13 @@
-from datetime import datetime, timedelta
 from dmt.main.models import ActualTime, InGroup, Project, UserProfile
 
 
 class ActiveProjectsCalculator(object):
-    def calc(self, days):
-        now = datetime.now()
-        end = now
-        start = now - timedelta(days=days)
-        projects = Project.projects_active_between(start, end)
+    def calc(self, interval_start, interval_end):
+        projects = Project.projects_active_between(
+            interval_start, interval_end)
         total_hours = round(
             sum([p.hours_logged.total_seconds() for p in projects]) / 3600, 2)
-        return dict(days=days,
-                    projects=projects,
+        return dict(projects=projects,
                     total_hours=total_hours)
 
 
