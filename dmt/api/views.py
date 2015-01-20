@@ -12,7 +12,6 @@ from simpleduration import Duration, InvalidDuration
 from datetime import datetime, timedelta
 from dateutil import parser
 
-from dmt.claim.models import Claim
 from dmt.main.models import (
     Client, Item, Milestone, Notify, Project, UserProfile
 )
@@ -35,7 +34,7 @@ class ItemHoursView(View):
     @method_decorator(login_required)
     def post(self, request, pk):
         item = get_object_or_404(Item, iid=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         d = new_duration(request.POST.get('time', '1 hour'))
         td = d.timedelta()
         item.add_resolve_time(user, td)
@@ -201,8 +200,7 @@ class NotifyView(APIView):
     def delete(self, request, pk, **kwargs):
         if request.user.is_authenticated():
             item = get_object_or_404(Item, iid=pk)
-            user = get_object_or_404(Claim,
-                                     django_user=request.user).pmt_user
+            user = request.user.userprofile
             Notify.objects.get(username=user, item=item).delete()
             return Response(status=204)
         else:
@@ -210,8 +208,7 @@ class NotifyView(APIView):
 
     def get(self, request, pk):
         if request.user.is_authenticated():
-            user = get_object_or_404(Claim,
-                                     django_user=request.user).pmt_user
+            user = request.user.userprofile
             pmt_username = user.username
             get_object_or_404(Notify,
                               item_id=pk,
@@ -226,8 +223,7 @@ class NotifyView(APIView):
             return Response(status=403)
 
         item = get_object_or_404(Item, iid=pk)
-        user = get_object_or_404(Claim,
-                                 django_user=request.user).pmt_user
+        user = request.user.userprofile
         Notify.objects.get_or_create(username=user, item=item)
         return Response(status=201)
 
@@ -236,8 +232,7 @@ class NotifyView(APIView):
             return Response(status=403)
 
         item = get_object_or_404(Item, iid=pk)
-        user = get_object_or_404(Claim,
-                                 django_user=request.user).pmt_user
+        user = request.user.userprofile
         Notify.objects.get_or_create(username=user, item=item)
         return Response(status=201)
 
@@ -273,7 +268,7 @@ class AddTrackerView(View):
             return HttpResponse("bad request")
 
         project = get_object_or_404(Project, pid=pid)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         milestone = project.upcoming_milestone()
         item = Item.objects.create(
             milestone=milestone,

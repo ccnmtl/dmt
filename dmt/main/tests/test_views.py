@@ -9,12 +9,11 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
 from waffle import Flag
-from dmt.claim.models import PMTUser
+from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import (
     Attachment, Comment, Item, ItemClient, Milestone, Project,
     Client
 )
-from dmt.claim.models import Claim
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 from datetime import timedelta
 import json
@@ -28,7 +27,6 @@ class BasicTest(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        Claim.objects.create(django_user=self.u, pmt_user=self.u.userprofile)
 
     def test_root(self):
         response = self.c.get("/")
@@ -479,7 +477,6 @@ class TestItemViews(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        Claim.objects.create(django_user=self.u, pmt_user=self.u.userprofile)
 
     def test_item_view(self):
         i = ItemFactory()
@@ -840,8 +837,6 @@ class TestHistory(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        Claim.objects.create(django_user=self.u,
-                             pmt_user=self.u.userprofile)
 
     def test_item_view(self):
         i = ItemFactory()
@@ -862,7 +857,6 @@ class TestForum(TestCase):
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
-        Claim.objects.create(django_user=self.u, pmt_user=self.u.userprofile)
 
     def test_forum_index(self):
         r = self.c.get("/forum/")
@@ -1026,7 +1020,6 @@ class GroupTest(TestCase):
         self.u.save()
         self.client.login(username="testuser", password="test")
         self.group = GroupFactory()
-        Claim.objects.create(django_user=self.u, pmt_user=self.u.userprofile)
 
     def test_group_list(self):
         response = self.client.get(reverse('group_list'))

@@ -1,6 +1,5 @@
 {% load bootstrap3 %}
 {% load compress %}
-{% load claimtags %}
 {% load waffle_tags %}
 
 <!DOCTYPE html>
@@ -59,10 +58,9 @@
         {% if request.user.is_anonymous %}
         <li>You’re not logged in</li>
         {% else %}
-          {% pmtuser as pmt_user %}
           <li class="dropdown">
-            <a class="dropdown-toggle username" data-toggle="dropdown" href="#">{% if pmt_user.photo_url %}
-            <img src="{{pmt_user.photo_url}}" class="img-circle user-avatar" />
+            <a class="dropdown-toggle username" data-toggle="dropdown" href="#">{% if request.user.userprofile.photo_url %}
+            <img src="{{request.user.userprofile.photo_url}}" class="img-circle user-avatar" />
             {% else %}
             <span class="glyphicon glyphicon-user"></span>
             {% endif %}
@@ -71,9 +69,9 @@
             </a>
             <ul class="dropdown-menu user-menu-list">
               <li><a href="/accounts/logout/"><span class="grey"><span class="glyphicon glyphicon-log-out"></span></span> Log out</a></li>
-              <li><a href="{{pmt_user.get_absolute_url}}"><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a></li>
+              <li><a href="{{request.user.userprofile.get_absolute_url}}"><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a></li>
 {% flag user_timeline %}
-<li><a href="{% url 'user_timeline' pmt_user.username %}">View Timeline</a></li>
+<li><a href="{% url 'user_timeline' request.user.userprofile.username %}">View Timeline</a></li>
 {% endflag %}
 
             </ul>
@@ -92,7 +90,6 @@
       </div><!-- /.navbar-top-level -->
       <div class="navbar-lower-level">
       {% if not request.user.is_anonymous %}
-      {% pmtuser as pmt_user %}
         <div class="navbar-header dmt-navbar-header">
           <button type="button" class="navbar-toggle dmt-navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
@@ -114,10 +111,10 @@
                 <li><a href="{% url 'my_project_list' %}">My projects</a></li>
                 <li><a href="{% url 'project_list' %}">All projects</a></li>
                 <li><a href="{% url 'project_create' %}"><span class="glyphicon glyphicon-plus-sign"></span> Create new project</a></li>
-                {% if pmt_user.has_recent_active_projects %}
+                {% if request.user.userprofile.has_recent_active_projects %}
                 <li class="divider"></li>
                 <li><p class="navbar-text"><b>Your recent projects</b></p></li>
-                {% for project in pmt_user.recent_active_projects %}
+                {% for project in request.user.userprofile.recent_active_projects %}
                 <li><a href="{% url 'project_detail' project.pid %}">
                 {{project.name|truncatechars:40}}
                 </a></li>
@@ -129,7 +126,7 @@
             <li><a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-clients"></span> <span class="hidden-sm">Clients</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="/client/?contact={{pmt_user.username}}&amp;status=active">My active clients</a></li>
+              <li><a href="/client/?contact={{request.user.userprofile.username}}&amp;status=active">My active clients</a></li>
               <li><a href="/client/">All clients</a></li>
               <li><a href="{% url 'add_client' %}"><span class="glyphicon glyphicon-plus-sign"></span> Add new client</a></li>
             </ul>
@@ -149,7 +146,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><p class="navbar-text"><b>My reports:</b></p></li>
-                <li><a href="/report/user/{{pmt_user.username}}/weekly/">Weekly report</a></li>
+                <li><a href="/report/user/{{request.user.userprofile.username}}/weekly/">Weekly report</a></li>
                 <li><a href="{% url 'yearly_review_report' %}">Yearly review</a></li>
                 <li class="divider"></li>
                 <li><p class="navbar-text"><b>Global reports:</b></p></li>
