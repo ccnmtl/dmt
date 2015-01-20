@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
@@ -468,11 +469,24 @@ class GroupCreateView(LoggedInMixin, View):
         if not group_name or UserProfile.objects.filter(
                 username=username).exists():
             return HttpResponseRedirect(reverse('group_list'))
+        # we need a 1-1 mapping to a django user
+        user = User.objects.create(
+            username=username,
+            first_name=group_name,
+            last_name='(group)',
+            is_superuser=False,
+            is_staff=False,
+            is_active=True,
+            email='nobody@localhost',
+        )
+        user.set_unusable_password()
         group_name = group_name + " (group)"
-        UserProfile.objects.create(
-            fullname=group_name, username=username,
-            email='nobody@localhost', password='nopassword',
-            grp=True)
+        up = user.userprofile
+        up.fullname = group_name
+        up.email = 'nobody@localhost'
+        up.password = 'nopassword'
+        up.grp = True
+        up.save()
         return HttpResponseRedirect(
             reverse('group_detail', args=(username,)))
 

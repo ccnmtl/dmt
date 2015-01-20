@@ -1,12 +1,15 @@
 import factory
 from datetime import datetime, timedelta
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from django.utils.timezone import utc
 from dmt.main.models import UserProfile, Project, Milestone, Item
 from dmt.main.models import Comment, Events, Node, ActualTime, StatusUpdate
 from dmt.main.models import Client, Attachment, Notify, InGroup
+from dmt.main.models import create_user_profile
 
 
-class UserFactory(factory.DjangoModelFactory):
+class UserProfileFactory(factory.DjangoModelFactory):
     class Meta:
         model = UserProfile
 
@@ -15,6 +18,23 @@ class UserFactory(factory.DjangoModelFactory):
     email = factory.Sequence(lambda n: 'user{0}@columbia.edu'.format(n))
     grp = False
     password = ""
+    user = factory.SubFactory('dmt.main.tests.factories.UserFactory',
+                              userprofile=None)
+
+
+class UserFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = User
+
+    username = factory.Sequence(lambda n: "user_%d" % n)
+    userprofile = factory.RelatedFactory(UserProfileFactory, 'user')
+
+    @classmethod
+    def _generate(cls, create, attrs):
+        post_save.disconnect(create_user_profile, User)
+        user = super(UserFactory, cls)._generate(create, attrs)
+        post_save.connect(create_user_profile, User)
+        return user
 
 
 class ProjectFactory(factory.DjangoModelFactory):
@@ -24,7 +44,7 @@ class ProjectFactory(factory.DjangoModelFactory):
     pid = factory.Sequence(lambda n: n)
     name = factory.Sequence(lambda n: 'Test Project {0}'.format(n))
     pub_view = True
-    caretaker = factory.SubFactory(UserFactory)
+    caretaker = factory.SubFactory(UserProfileFactory)
 
 
 class MilestoneFactory(factory.DjangoModelFactory):
@@ -44,8 +64,8 @@ class ItemFactory(factory.DjangoModelFactory):
 
     iid = factory.Sequence(lambda n: n)
     type = "bug"
-    owner = factory.SubFactory(UserFactory)
-    assigned_to = factory.SubFactory(UserFactory)
+    owner = factory.SubFactory(UserProfileFactory)
+    assigned_to = factory.SubFactory(UserProfileFactory)
     title = factory.Sequence(lambda n: 'Test Item {0}'.format(n))
     milestone = factory.SubFactory(MilestoneFactory)
     status = "OPEN"
@@ -57,7 +77,7 @@ class NotifyFactory(factory.DjangoModelFactory):
         model = Notify
 
     item = factory.SubFactory(ItemFactory)
-    username = factory.SubFactory(UserFactory)
+    username = factory.SubFactory(UserProfileFactory)
 
 
 class EventFactory(factory.DjangoModelFactory):
@@ -89,7 +109,7 @@ class NodeFactory(factory.DjangoModelFactory):
     nid = factory.Sequence(lambda n: n)
     added = datetime(2020, 12, 1).replace(tzinfo=utc)
     modified = datetime(2020, 12, 1).replace(tzinfo=utc)
-    author = factory.SubFactory(UserFactory)
+    author = factory.SubFactory(UserProfileFactory)
 
 
 class ActualTimeFactory(factory.DjangoModelFactory):
@@ -97,7 +117,7 @@ class ActualTimeFactory(factory.DjangoModelFactory):
         model = ActualTime
 
     item = factory.SubFactory(ItemFactory)
-    resolver = factory.SubFactory(UserFactory)
+    resolver = factory.SubFactory(UserProfileFactory)
     actual_time = timedelta(hours=1).total_seconds()
     completed = datetime(2013, 12, 20).replace(tzinfo=utc)
 
@@ -114,7 +134,7 @@ class ClientFactory(factory.DjangoModelFactory):
     department = "Testing"
     school = "TestSchool"
     email = "testclient@columbia.edu"
-    contact = factory.SubFactory(UserFactory)
+    contact = factory.SubFactory(UserProfileFactory)
     status = 'active'
 
 
@@ -123,7 +143,7 @@ class StatusUpdateFactory(factory.DjangoModelFactory):
         model = StatusUpdate
 
     project = factory.SubFactory(ProjectFactory)
-    user = factory.SubFactory(UserFactory)
+    user = factory.SubFactory(UserProfileFactory)
     body = "some text as a body"
 
 
@@ -135,12 +155,12 @@ class AttachmentFactory(factory.DjangoModelFactory):
     filename = "foo.jpg"
     title = "an attachment"
     type = "jpg"
-    author = factory.SubFactory(UserFactory)
+    author = factory.SubFactory(UserProfileFactory)
 
 
 class GroupFactory(factory.DjangoModelFactory):
     class Meta:
         model = InGroup
 
-    grp = factory.SubFactory(UserFactory, grp=True)
-    username = factory.SubFactory(UserFactory)
+    grp = factory.SubFactory(UserProfileFactory, grp=True)
+    username = factory.SubFactory(UserProfileFactory)
