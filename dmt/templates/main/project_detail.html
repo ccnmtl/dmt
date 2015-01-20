@@ -214,13 +214,13 @@
       <dd>{{object.projnum}}</dd>
 
       <dt>Project URL</dt>
-      <dd><a href="{{object.url}}" target="_blank">{{object.url}}</a></dd>
+      <dd>{% if object.url %}<a href="{{object.url}}" target="_blank">{{object.url}}</a>{% endif %}</dd>
 
       <dt>Information URL</dt>
-      <dd>{{object.info_url}}</dd>
+      <dd>{% if object.info_url %}<a href="{{object.info_url}}" target="_blank">{{object.info_url}}</a>{% endif %}</dd>
 
       <dt>Evaluation URL</dt>
-      <dd>{{object.eval_url}}</dd>
+      <dd>{% if object.eval_url %}<a href="{{object.eval_url}}" target="_blank">{{object.eval_url}}</a>{% endif %}</dd>
 
   {% if object.wiki_category %}
       <dt>Wiki Category</dt>
