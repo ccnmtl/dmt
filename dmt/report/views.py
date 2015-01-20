@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
 
-from dmt.claim.models import Claim
 from dmt.main.models import UserProfile, Item, Milestone, Project
 from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
@@ -78,7 +77,7 @@ class ActiveProjectsExportView(LoggedInMixin, RangeOffsetMixin, View):
 
 class YearlyReviewView(LoggedInMixin, View):
     def get(self, request):
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         return HttpResponseRedirect("/report/user/%s/yearly/" % user.username)
 
 

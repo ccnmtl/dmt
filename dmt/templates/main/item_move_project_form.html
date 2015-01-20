@@ -1,10 +1,8 @@
 {% extends 'base.html' %}
-{% load claimtags %}
 
 {% block title %}Move item to another project{% endblock %}
 
 {% block content %}
-{% pmtuser as pmt_user %}
 
 <h1 class="page-title clearfix">Move item to another project</h1>
 
@@ -16,7 +14,7 @@
 		<label for="resolve-status">Select New Project</label>
 
 		<select name="project" class="form-control">
-			{% for project in pmt_user.personnel_on %}
+			{% for project in request.user.userprofile.personnel_on %}
 			<option value="{{project.pid}}">{{project.name}}</option>
 			{% endfor %}
 		</select>

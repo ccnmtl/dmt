@@ -30,7 +30,6 @@ from dmt.main.forms import (
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm)
 from .utils import new_duration, safe_basename
-from dmt.claim.models import Claim
 from dmt.report.mixins import PrevNextWeekMixin
 
 from datetime import datetime, timedelta
@@ -46,16 +45,9 @@ import ntpath
 import re
 
 
-def has_claim(user):
-    r = Claim.objects.filter(django_user=user)
-    return r.count() == 1
-
-
 class LoggedInMixin(object):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        if not has_claim(self.request.user):
-            return HttpResponseRedirect("/claim/")
         return super(LoggedInMixin, self).dispatch(*args, **kwargs)
 
 
@@ -127,7 +119,7 @@ def log_time(item, user, request):
 class AddCommentView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         body = request.POST.get('comment', u'')
         if body == '':
             return HttpResponseRedirect(item.get_absolute_url())
@@ -144,8 +136,7 @@ class CommentDeleteView(LoggedInMixin, DeleteView):
 
     def require_comment_owner(self, comment):
         """Raise an error if request.user doesn't own the given comment."""
-        pmt_user = get_object_or_404(Claim,
-                                     django_user=self.request.user).pmt_user
+        pmt_user = self.request.user.userprofile
         if not comment.user_is_owner(pmt_user):
             raise PermissionDenied
 
@@ -172,7 +163,7 @@ class CommentDeleteView(LoggedInMixin, DeleteView):
 class ResolveItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         r_status = request.POST.get('r_status', u'FIXED')
         comment = markdown.markdown(request.POST.get('comment', u''))
         if (item.assigned_to.username == item.owner.username and
@@ -193,7 +184,7 @@ class ResolveItemView(LoggedInMixin, View):
 class InProgressItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.mark_in_progress(user, comment)
         item.touch()
@@ -208,7 +199,7 @@ class InProgressItemView(LoggedInMixin, View):
 class VerifyItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.verify(user, comment)
         item.touch()
@@ -223,7 +214,7 @@ class VerifyItemView(LoggedInMixin, View):
 class ReopenItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         comment = markdown.markdown(request.POST.get('comment', u''))
         item.reopen(user, comment)
         item.touch()
@@ -238,7 +229,7 @@ class ReopenItemView(LoggedInMixin, View):
 class ReassignItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         assigned_to = get_object_or_404(
             UserProfile,
             username=request.POST.get('assigned_to', ''))
@@ -255,7 +246,7 @@ class ReassignItemView(LoggedInMixin, View):
 class ChangeOwnerItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         owner = get_object_or_404(
             UserProfile,
             username=request.POST.get('owner', ''))
@@ -294,7 +285,7 @@ class ItemPriorityView(LoggedInMixin, View):
     def get(self, request, pk, priority):
         # TODO: make this happen through POST
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         item.set_priority(int(priority), user)
         item.touch()
         statsd.incr('main.priority_changed')
@@ -319,7 +310,7 @@ class RemoveTagFromItemView(LoggedInMixin, View):
 class SplitItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
 
         new_items = []
         titles = [request.POST.get(k) for k in request.POST.keys()
@@ -354,8 +345,7 @@ class ItemDetailView(LoggedInMixin, DetailView):
         context['assigned_to_current_user'] = False
         context['notifications_enabled_for_current_user'] = False
 
-        current_user = \
-            get_object_or_404(Claim, django_user=self.request.user).pmt_user
+        current_user = self.request.user.userprofile
 
         if (current_user):
             current_username = current_user.username
@@ -392,8 +382,7 @@ class AddClientView(LoggedInMixin, CreateView):
     fields = ['email', 'lastname', 'firstname', 'department', 'school']
 
     def form_valid(self, form):
-        current_user = get_object_or_404(
-            Claim, django_user=self.request.user).pmt_user
+        current_user = self.request.user.userprofile
         form.instance.contact = current_user
         form.instance.status = 'active'
         form.instance.save()
@@ -496,8 +485,7 @@ class ProjectCreateView(LoggedInMixin, CreateView):
     form_class = ProjectCreateForm
 
     def form_valid(self, form):
-        current_user = \
-            get_object_or_404(Claim, django_user=self.request.user).pmt_user
+        current_user = self.request.user.userprofile
         form.instance.caretaker = current_user
         form.instance.save()
 
@@ -534,8 +522,7 @@ class MyProjectListView(LoggedInMixin, ListView):
     template_name = 'main/my_projects.html'
 
     def get_queryset(self):
-        current_user = get_object_or_404(
-            Claim, django_user=self.request.user).pmt_user
+        current_user = self.request.user.userprofile
         project_list = current_user.personnel_on()
         return project_list
 
@@ -821,7 +808,7 @@ class TagDetailView(LoggedInMixin, DetailView):
 class NodeReplyView(LoggedInMixin, View):
     def post(self, request, pk):
         node = get_object_or_404(Node, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         body = request.POST.get('body', u'')
         if body == '':
             return HttpResponseRedirect(node.get_absolute_url())
@@ -862,7 +849,7 @@ class ProjectAddUserView(LoggedInMixin, View):
 class ProjectAddTodoView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         tags = clean_tags(request.POST.get('tags', u''))
         for k in request.POST.keys():
             if not k.startswith('title_'):
@@ -879,7 +866,7 @@ class ProjectAddItemView(LoggedInMixin, View):
     item_type = "action item"
 
     def post(self, request, pk):
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         project = get_object_or_404(Project, pid=pk)
         title = request.POST.get('title', u"Untitled")
         if len(title) == 0:
@@ -915,7 +902,7 @@ class ProjectAddItemView(LoggedInMixin, View):
 class ProjectAddNodeView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         body = request.POST.get('body', u'')
         if body == '':
             return HttpResponseRedirect(project.get_absolute_url())
@@ -929,7 +916,7 @@ class ProjectAddNodeView(LoggedInMixin, View):
 class ProjectAddStatusUpdateView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         body = request.POST.get('body', u'')
         if body == '':
             return HttpResponseRedirect(project.get_absolute_url())
@@ -1124,7 +1111,7 @@ class SignS3View(LoggedInMixin, View):
 class ItemAddAttachmentView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
         title = request.POST.get('title', 'no title')
         description = request.POST.get('description', '')
         url = request.POST.get('s3_url')
@@ -1225,14 +1212,13 @@ class AddTrackersView(LoggedInMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(AddTrackersView, self).get_context_data(**kwargs)
-        current_user = \
-            get_object_or_404(Claim, django_user=self.request.user).pmt_user
+        current_user = self.request.user.userprofile
         ctx['trackers'] = range(10)
         ctx['projects'] = current_user.recent_active_projects()
         return ctx
 
     def post(self, request):
-        user = get_object_or_404(Claim, django_user=request.user).pmt_user
+        user = request.user.userprofile
 
         for i in range(10):
             self.handle_form_row(i, request, user)

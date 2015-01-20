@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 
 from rest_framework.test import APITestCase
 
-from dmt.claim.models import Claim
 from dmt.main.models import ActualTime, Item, Notify
 from dmt.main.tests.factories import (
     ClientFactory, MilestoneFactory, ProjectFactory, UserProfileFactory
@@ -309,7 +308,7 @@ class NotifyTests(APITestCase):
         r = self.client.delete(self.url)
         self.assertEqual(r.status_code, 204)
 
-        user = Claim.objects.get(django_user=self.u).pmt_user
+        user = self.u.userprofile
         notify = Notify.objects.filter(item=self.item, username=user)
         self.assertEqual(len(notify), 0)
 
@@ -340,7 +339,7 @@ class NotifyTests(APITestCase):
         r = self.client.post(self.url)
         self.assertEqual(r.status_code, 201)
 
-        user = Claim.objects.get(django_user=self.u).pmt_user
+        user = self.u.userprofile
         notify = Notify.objects.get(item=self.item, username=user)
         self.assertIsInstance(notify, Notify)
 
@@ -353,7 +352,7 @@ class NotifyTests(APITestCase):
         r = self.client.put(self.url)
         self.assertEqual(r.status_code, 201)
 
-        user = Claim.objects.get(django_user=self.u).pmt_user
+        user = self.u.userprofile
         notify = Notify.objects.get(item=self.item, username=user)
         self.assertIsInstance(notify, Notify)
 
