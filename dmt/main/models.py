@@ -35,7 +35,7 @@ class UserProfile(models.Model):
     campus = models.TextField(blank=True)
     building = models.TextField(blank=True)
     room = models.TextField(blank=True)
-    user = models.OneToOneField(User, null=True)
+    user = models.OneToOneField(User)
 
     class Meta:
         db_table = u'users'
