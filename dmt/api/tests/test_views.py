@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase
 from dmt.claim.models import Claim
 from dmt.main.models import ActualTime, Item, Notify
 from dmt.main.tests.factories import (
-    ClientFactory, MilestoneFactory, ProjectFactory, UserFactory
+    ClientFactory, MilestoneFactory, ProjectFactory, UserProfileFactory
 )
 from dmt.main.tests.factories import ItemFactory, NotifyFactory
 
@@ -224,7 +224,7 @@ class ExternalAddItemTests(APITestCase):
         self.title = 'Test item title'
         self.email = 'submission_email@example.com'
         self.name = 'Item Submitter'
-        self.owner = UserFactory()
+        self.owner = UserProfileFactory()
         self.project = ProjectFactory()
         self.milestone = MilestoneFactory(project=self.project)
         self.estimated_time = '1h'

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core import mail
 import unittest
 from .factories import (
-    UserFactory, ItemFactory, NodeFactory, ProjectFactory,
+    UserProfileFactory, ItemFactory, NodeFactory, ProjectFactory,
     AttachmentFactory, ClientFactory, StatusUpdateFactory,
     ActualTimeFactory, MilestoneFactory)
 from datetime import datetime, timedelta
@@ -24,17 +24,17 @@ class InGroupTest(TestCase):
 
 class UserModelTest(TestCase):
     def test_gau(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(u.get_absolute_url(), "/user/%s/" % u.username)
 
     def test_unicode(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(str(u), u.fullname)
 
     def test_active(self):
-        u = UserFactory(status='active')
+        u = UserProfileFactory(status='active')
         self.assertTrue(u.active())
-        u = UserFactory(status='inactive')
+        u = UserProfileFactory(status='inactive')
         self.assertFalse(u.active())
 
     def test_weekly_report(self):
@@ -46,51 +46,51 @@ class UserModelTest(TestCase):
         self.assertEqual(len(r['active_projects']), 1)
 
     def test_manager_on(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(u.manager_on(), [])
 
     def test_developer_on(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(u.developer_on(), [])
 
     def test_guest_on(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(u.guest_on(), [])
 
     def test_clients_empty(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(len(u.clients()), 0)
 
     def test_user_groups_empty(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(len(u.user_groups()), 0)
 
     def test_users_in_group_empty(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(len(u.users_in_group()), 0)
 
     def test_has_recent_active_projects(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertFalse(u.has_recent_active_projects())
 
     def test_recent_active_projects(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(u.recent_active_projects(), [])
 
     def test_total_resolve_times(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(u.total_resolve_times(), 0.)
 
     def test_total_assigned_time(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         self.assertEqual(u.total_assigned_time(), 0.)
 
     def test_group_fullname(self):
-        u = UserFactory(fullname="foo (group)")
+        u = UserProfileFactory(fullname="foo (group)")
         self.assertEqual(u.group_fullname(), "foo")
 
     def test_weekly_report_email_body(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         r = u.weekly_report_email_body(1.0, True)
         self.assertEqual(
             r,
@@ -102,18 +102,18 @@ class UserModelTest(TestCase):
             """You've logged 1.0 hours this week. Good job!\n""")
 
     def test_send_weekly_report(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         u.send_weekly_report()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "PMT Weekly Report")
 
     def test_timeline_empty(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         t = u.timeline()
         self.assertEqual(t, [])
 
     def test_timeline_notempty(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         StatusUpdateFactory(user=u)
         t = u.timeline()
         self.assertEqual(len(t), 1)
@@ -121,7 +121,7 @@ class UserModelTest(TestCase):
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         p = ProjectFactory()
         pu = ProjectUser(p, u)
         start = datetime(year=2013, month=12, day=16)
@@ -210,14 +210,14 @@ class ItemTest(TestCase):
 
     def test_add_cc_active_user(self):
         i = ItemFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         i.add_cc(u)
         self.assertEqual(
             Notify.objects.filter(item=i.iid, username=u.username).count(), 1)
 
     def test_add_cc_inactive_user(self):
         i = ItemFactory()
-        u = UserFactory(status='inactive')
+        u = UserProfileFactory(status='inactive')
         i.add_cc(u)
         with self.assertRaises(Notify.DoesNotExist):
             Notify.objects.get(item=i.iid, username=u.username)
@@ -238,7 +238,7 @@ class ItemTest(TestCase):
 
     def test_add_resolve_time(self):
         i = ItemFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         td = Duration('1 hour').timedelta()
         i.add_resolve_time(u, td)
         self.assertEqual(ActualTime.objects.count(), 1)
@@ -254,7 +254,7 @@ class ItemTest(TestCase):
         "This test requires PostgreSQL")
     def test_get_resolve_zero(self):
         i = ItemFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         td = Duration('0h').timedelta()
         i.add_resolve_time(u, td)
         resolve_time = i.get_resolve_time()
@@ -266,7 +266,7 @@ class ItemTest(TestCase):
         "This test requires PostgreSQL")
     def test_get_resolve_time_1h(self):
         i = ItemFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         td = Duration('1 hour').timedelta()
         i.add_resolve_time(u, td)
         resolve_time = i.get_resolve_time()
@@ -274,8 +274,8 @@ class ItemTest(TestCase):
 
     def test_reassign(self):
         i = ItemFactory()
-        u = UserFactory()
-        assignee = UserFactory()
+        u = UserProfileFactory()
+        assignee = UserProfileFactory()
         i.reassign(u, assignee, '')
         self.assertEqual(
             Notify.objects.filter(
@@ -288,11 +288,11 @@ class ItemTest(TestCase):
     def test_get_resolve_time_multiple_times(self):
         i = ItemFactory()
 
-        u = UserFactory()
+        u = UserProfileFactory()
         td = Duration('1 hour').timedelta()
         i.add_resolve_time(u, td)
 
-        u = UserFactory()
+        u = UserProfileFactory()
         td = Duration('1 hour').timedelta()
         i.add_resolve_time(u, td)
 
@@ -352,7 +352,7 @@ class NodeTest(TestCase):
         n = NodeFactory()
         p = ProjectFactory()
         n.project = p
-        u = UserFactory()
+        u = UserProfileFactory()
         n.save()
 
         class DummyReply(object):
@@ -402,26 +402,26 @@ class ProjectTest(TestCase):
 
     def test_managers(self):
         p = ProjectFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_manager(u)
         self.assertEqual(p.managers(), [u])
 
     def test_developers(self):
         p = ProjectFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_developer(u)
         self.assertEqual(p.developers(), [u])
 
     def test_guests(self):
         p = ProjectFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_guest(u)
         self.assertEqual(p.guests(), [u])
 
     def test_set_managers(self):
         p = ProjectFactory()
-        u1 = UserFactory()
-        u2 = UserFactory()
+        u1 = UserProfileFactory()
+        u2 = UserProfileFactory()
         p.set_managers([u1, u2])
         self.assertEqual(p.managers(), [u1, u2])
         p.set_managers([u1])
@@ -429,8 +429,8 @@ class ProjectTest(TestCase):
 
     def test_set_developers(self):
         p = ProjectFactory()
-        u1 = UserFactory()
-        u2 = UserFactory()
+        u1 = UserProfileFactory()
+        u2 = UserProfileFactory()
         p.set_developers([u1, u2])
         self.assertEqual(p.developers(), [u1, u2])
         p.set_developers([u1])
@@ -438,8 +438,8 @@ class ProjectTest(TestCase):
 
     def test_set_guests(self):
         p = ProjectFactory()
-        u1 = UserFactory()
-        u2 = UserFactory()
+        u1 = UserProfileFactory()
+        u2 = UserProfileFactory()
         p.set_guests([u1, u2])
         self.assertEqual(p.guests(), [u1, u2])
         p.set_guests([u1])
@@ -447,7 +447,7 @@ class ProjectTest(TestCase):
 
     def test_only_one_role_allowed(self):
         p = ProjectFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_manager(u)
         self.assertEqual(p.managers(), [u])
         self.assertEqual(p.developers(), [])
@@ -476,7 +476,7 @@ class ProjectTest(TestCase):
 
     def test_remove_personnel(self):
         p = ProjectFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_manager(u)
         self.assertEqual(p.managers(), [u])
         p.remove_personnel(u)
@@ -486,8 +486,8 @@ class ProjectTest(TestCase):
 
     def test_all_users_not_in_project(self):
         p = ProjectFactory()
-        u1 = UserFactory(status='active')
-        u2 = UserFactory(status='active')
+        u1 = UserProfileFactory(status='active')
+        u2 = UserProfileFactory(status='active')
         p.add_manager(u1)
         self.assertTrue(u2 in p.all_users_not_in_project())
         self.assertFalse(u1 in p.all_users_not_in_project())
@@ -495,7 +495,7 @@ class ProjectTest(TestCase):
     def test_add_item_invalid_duration(self):
         m = MilestoneFactory()
         p = m.project
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_item(type='action item', title="new item",
                    assigned_to=u, owner=u, milestone=m,
                    priority=1, description="",
@@ -508,7 +508,7 @@ class ProjectTest(TestCase):
     def test_add_item_valid_duration(self):
         m = MilestoneFactory()
         p = m.project
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_item(type='action item', title="new item",
                    assigned_to=u, owner=u, milestone=m,
                    priority=1, description="",
@@ -525,7 +525,7 @@ class ProjectTest(TestCase):
     def test_timeline_notempty(self):
         m = MilestoneFactory()
         p = m.project
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_item(type='action item', title="new item",
                    assigned_to=u, owner=u, milestone=m,
                    priority=1, description="",

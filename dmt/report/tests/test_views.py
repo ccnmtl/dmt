@@ -1,9 +1,9 @@
 from django.test import TestCase
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import InGroup
-from dmt.main.tests.factories import ItemFactory, MilestoneFactory
+from dmt.main.tests.factories import (
+    ItemFactory, MilestoneFactory, UserProfileFactory)
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 import unittest
 
@@ -63,8 +63,8 @@ class UserYearlyTest(LoggedInTestMixin, TestCase):
 class StaffReportTest(LoggedInTestMixin, TestCase):
     def setUp(self):
         super(StaffReportTest, self).setUp()
-        self.pg = PMTUser.objects.create(username='grp_programmers',
-                                         fullname='programmers (group)')
+        self.pg = UserProfileFactory(username='grp_programmers',
+                                     fullname='programmers (group)')
         InGroup.objects.create(grp=self.pg, username=self.pu)
 
     def test_staff_report_date_specified(self):

@@ -1,6 +1,7 @@
 from .factories import (
     ClientFactory, ProjectFactory, MilestoneFactory,
-    ItemFactory, NodeFactory, EventFactory, CommentFactory, UserFactory,
+    ItemFactory, NodeFactory, EventFactory, CommentFactory,
+    UserProfileFactory, UserFactory,
     StatusUpdateFactory, NotifyFactory, GroupFactory,
     AttachmentFactory)
 from django.conf import settings
@@ -13,6 +14,7 @@ from dmt.main.models import (
     Attachment, Comment, Item, ItemClient, Milestone, Project,
     Client
 )
+from dmt.claim.models import Claim
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 from datetime import timedelta
 import json
@@ -22,10 +24,11 @@ import unittest
 class BasicTest(TestCase):
     def setUp(self):
         self.c = self.client
-        self.u = User.objects.create(username="testuser")
+        self.u = UserFactory(username="testuser")
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
+        Claim.objects.create(django_user=self.u, pmt_user=self.u.userprofile)
 
     def test_root(self):
         response = self.c.get("/")
@@ -190,7 +193,7 @@ class TestProjectViews(TestCase):
 
     def test_remove_user(self):
         p = ProjectFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         p.add_manager(u)
         r = self.c.get(p.get_absolute_url() + "remove_user/%s/" % u.username)
         self.assertTrue(u.fullname in r.content)
@@ -200,7 +203,7 @@ class TestProjectViews(TestCase):
 
     def test_add_user(self):
         p = ProjectFactory()
-        u = UserFactory(status='active')
+        u = UserProfileFactory(status='active')
         r = self.c.post(p.get_absolute_url() + "add_user/",
                         dict(username=u.username))
         self.assertEqual(r.status_code, 302)
@@ -244,7 +247,7 @@ class TestProjectViews(TestCase):
             "value=\"testuser\" selected=\"selected\"" in r.content)
 
     def test_add_action_item(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         milestone = MilestoneFactory()
 
         r = self.c.post(milestone.project.get_absolute_url() +
@@ -260,7 +263,7 @@ class TestProjectViews(TestCase):
         self.assertEqual(items[0].title, "Untitled")
 
     def test_add_action_item_empty_title(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         milestone = MilestoneFactory()
 
         r = self.c.post(milestone.project.get_absolute_url() +
@@ -277,7 +280,7 @@ class TestProjectViews(TestCase):
         self.assertEqual(items[0].title, "Untitled")
 
     def test_add_action_item_owner(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         milestone = MilestoneFactory()
 
         r = self.c.post(milestone.project.get_absolute_url() +
@@ -472,10 +475,11 @@ class TestMilestoneViews(TestCase):
 class TestItemViews(TestCase):
     def setUp(self):
         self.c = self.client
-        self.u = User.objects.create(username="testuser")
+        self.u = UserFactory(username="testuser")
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
+        Claim.objects.create(django_user=self.u, pmt_user=self.u.userprofile)
 
     def test_item_view(self):
         i = ItemFactory()
@@ -812,7 +816,7 @@ class TestItemWorkflow(TestCase):
 
     def test_reassign(self):
         i = ItemFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         r = self.c.post(i.get_absolute_url() + "assigned_to/",
                         dict(assigned_to=u.username))
         self.assertEqual(r.status_code, 302)
@@ -821,7 +825,7 @@ class TestItemWorkflow(TestCase):
 
     def test_change_owner(self):
         i = ItemFactory()
-        u = UserFactory()
+        u = UserProfileFactory()
         r = self.c.post(i.get_absolute_url() + "owner/",
                         dict(owner=u.username))
         self.assertEqual(r.status_code, 302)
@@ -832,10 +836,12 @@ class TestItemWorkflow(TestCase):
 class TestHistory(TestCase):
     def setUp(self):
         self.c = self.client
-        self.u = User.objects.create(username="testuser")
+        self.u = UserFactory(username="testuser")
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
+        Claim.objects.create(django_user=self.u,
+                             pmt_user=self.u.userprofile)
 
     def test_item_view(self):
         i = ItemFactory()
@@ -852,10 +858,11 @@ class TestHistory(TestCase):
 class TestForum(TestCase):
     def setUp(self):
         self.c = self.client
-        self.u = User.objects.create(username="testuser")
+        self.u = UserFactory(username="testuser")
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
+        Claim.objects.create(django_user=self.u, pmt_user=self.u.userprofile)
 
     def test_forum_index(self):
         r = self.c.get("/forum/")
@@ -976,7 +983,7 @@ class TestFeeds(TestCase):
 class TestDRFViews(TestCase):
     def setUp(self):
         self.c = self.client
-        self.u = User.objects.create(username="testuser")
+        self.u = UserFactory(username="testuser")
         self.u.set_password("test")
         self.u.save()
         self.c.login(username="testuser", password="test")
@@ -1014,11 +1021,12 @@ class TestDRFViews(TestCase):
 
 class GroupTest(TestCase):
     def setUp(self):
-        self.u = User.objects.create(username="testuser")
+        self.u = UserFactory(username="testuser")
         self.u.set_password("test")
         self.u.save()
         self.client.login(username="testuser", password="test")
         self.group = GroupFactory()
+        Claim.objects.create(django_user=self.u, pmt_user=self.u.userprofile)
 
     def test_group_list(self):
         response = self.client.get(reverse('group_list'))
@@ -1045,7 +1053,7 @@ class GroupTest(TestCase):
 
     def test_add_user_to_group(self):
         grp_username = self.group.grp.username
-        u = UserFactory()
+        u = UserProfileFactory()
         r = self.client.post(
             reverse('add_user_to_group', args=(grp_username,)),
             dict(username=u.username))
@@ -1075,12 +1083,12 @@ class UserTest(TestCase):
         self.client.login(username="testuser", password="test")
 
     def test_deactivate_user_form(self):
-        u = UserFactory(status='active')
+        u = UserProfileFactory(status='active')
         r = self.client.get(u.get_absolute_url() + "deactivate/")
         self.assertEqual(r.status_code, 200)
 
     def test_deactivate_simple(self):
-        u = UserFactory(status='active')
+        u = UserProfileFactory(status='active')
         r = self.client.post(u.get_absolute_url() + "deactivate/",
                              dict())
         self.assertEqual(r.status_code, 302)
@@ -1088,7 +1096,7 @@ class UserTest(TestCase):
         self.assertFalse(u.active())
 
     def test_deactivate_populated(self):
-        u = UserFactory(status='active')
+        u = UserProfileFactory(status='active')
         # this user actually has some stuff
         p = ProjectFactory(caretaker=u)
         assigned = ItemFactory(assigned_to=u)
@@ -1117,7 +1125,7 @@ class UserTest(TestCase):
         self.assertEqual(owned.owner, self.u.userprofile)
 
     def test_timeline(self):
-        u = UserFactory()
+        u = UserProfileFactory()
         r = self.client.get(reverse("user_timeline", args=[u.username]))
         self.assertEqual(r.status_code, 200)
 
@@ -1169,8 +1177,8 @@ class TestUserViews(LoggedInTestMixin, TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_user_list_status_filter(self):
-        u1 = UserFactory(status='active')
-        u2 = UserFactory(status='inactive')
+        u1 = UserProfileFactory(status='active')
+        u2 = UserProfileFactory(status='inactive')
         r = self.client.get(
             reverse('user_list') + "?status=active")
         self.assertTrue(u1.username in r.content)
