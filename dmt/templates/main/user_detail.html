@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load waffle_tags %}
+{% load emoji_tags %}
 
 {% block title %}User: {{object.fullname}}{% endblock %}
 
@@ -44,7 +45,7 @@
 {% if object.phone %}<dt>Phone<dt><dd>{{object.phone}}</dd>{% endif %}
 {% if object.office %}<dt>Office<dt><dd>{{object.office}}</dd>{% endif %}
 {% if object.bio %}
-<dt>Bio</dt><dd>{{object.bio|markdown}}</dd>
+<dt>Bio</dt><dd>{{object.bio|markdown|emoji_replace}}</dd>
 {% endif %}
 {% with object.user_groups as groups %}
 {% if groups %}
@@ -90,7 +91,7 @@
 {% for item in object.items %}
 <tr>
 	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></td>
+	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
 	<td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
 	<td class="{{item.status_class}}">{{item.status}}</td>
 	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
@@ -174,7 +175,7 @@
 <a href="/tag/{{tag.slug}}/"><span class="label label-info">{{tag}}</span></a>
 </span>
 {% endfor %}</p>{% endif %}
-{{n.body|markdown}}
+{{n.body|markdown|emoji_replace}}
 
 		{% endfor %}
 	</div>
@@ -183,7 +184,7 @@
 		{% for n in object.recent_status_updates %}
 
 <p>
-<a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>: {{n.body|markdown}} &mdash; {{n.added.date}}</p>
+<a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>: {{n.body|markdown|emoji_replace}} &mdash; {{n.added.date}}</p>
 		{% endfor %}
 
 </div>

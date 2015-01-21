@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load waffle_tags %}
+{% load emoji_tags %}
 
 {% block title %}Project: {{object.name}}{% endblock %}
 
@@ -180,7 +181,7 @@
     {% for item in milestone.active_items %}
     <tr>
       <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-  width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></td>
+  width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
       <td class="{{item.status_class}}">{{item.status}} {{item.r_status|default:""}}</td>
       <td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
       <td class="hidden-xs">{{item.target_date|date:"Y-m-d"}}</td>
@@ -208,7 +209,7 @@
       <dd><a href="{% url 'user_detail' object.caretaker.username %}">{{object.caretaker.fullname}}</a></dd>
 
       <dt>Description</dt>
-      <dd>{{object.description|markdown}}</dd>
+      <dd>{{object.description|markdown|emoji_replace}}</dd>
 
       <dt>Project number</dt>
       <dd>{{object.projnum}}</dd>
@@ -308,7 +309,7 @@
   <tbody>
     {% for milestone in object.milestone_set.all %}
     <tr>
-      <td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
+      <td><a href="{{milestone.get_absolute_url}}">{{milestone.name|emoji_replace}}</a></td>
       <td>{{milestone.target_date|date:"Y-m-d"}}</td>
       <td class="{{milestone.status_class}}">{{milestone.status}}</td>
       <td>{{milestone.num_open_items}}</td>
@@ -341,7 +342,7 @@
   {% ifequal n.reply_to 0 %}
     <div class="forum-entry">
       <div class="forum-title">
-        <h4><a href="{{n.get_absolute_url}}">{{n.subject}}</a></h4>
+        <h4><a href="{{n.get_absolute_url}}">{{n.subject|emoji_replace}}</a></h4>
       </div>
       <div class="forum-byline text-muted">
         by <a href="{{n.author.get_absolute_url}}">{{n.author.fullname}}</a>
@@ -374,7 +375,7 @@
   {% endif %}
 
       <div class="forum-body">
-      {{n.body|markdown}}
+      {{n.body|markdown|emoji_replace}}
       </div>
     </div><!-- /.forum-entry -->
   {% endifequal %}
@@ -390,7 +391,7 @@
         {{n.added.date}}
       </div><!-- /.status-update-byline -->
       <div class="status-update-body">
-        {{n.body|markdown}}
+        {{n.body|markdown|emoji_replace}}
       </div><!-- /.status-update-body -->
     </div><!-- /.status-update -->
     {% endfor %}

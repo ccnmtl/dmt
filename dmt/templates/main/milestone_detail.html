@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load markup %}
+{% load emoji_tags %}
 
 {% block title %}Milestone&ndash;{{object.name}}{% endblock %}
 {% block extraclass %} class="milestone-page"{% endblock %}
@@ -42,7 +43,7 @@
   </div><!-- ./object-action-set -->
 
   <div class="object-details">
-    <div class="object-description">{{object.description|markdown}}</div>
+    <div class="object-description">{{object.description|markdown|emoji_replace}}</div>
     
     <dl class="dl-horizontal">
       <dt>Status</dt>
@@ -82,7 +83,7 @@
 		{% for item in object.item_set.all %}
 		<tr>
 			<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-	           width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></td>
+	           width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
 			<td class="{{item.status_class}} ">{{item.status}}</td>
 			<td class="pr{{item.priority}} hidden-xs">{{item.priority_label}}</td>
 			<td  class="hidden-xs"class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
