@@ -84,3 +84,4 @@ django-celery==3.1.16
 django-markwhat==2014.9.20
 django-casper==0.0.2c
 django-bootstrap3==5.0.2
+django-emoji==2.0.0

@@ -1495,3 +1495,7 @@ padding: 5px;
 button.pmt-report-submit {
     margin-top: 25px;
 }
+
+.emoji {
+    height: 1.5em;
+}

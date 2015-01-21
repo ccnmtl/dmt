@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load emoji_tags %}
 {% block extraclass %} class="dashboard"{% endblock %}
 {% block title %}My Items{% endblock %}
 
@@ -203,7 +204,7 @@
                      width="14" height="14"/>
                 {% endif %}
                 <a href="{{item.get_absolute_url}}">
-                    {{item.title|truncatechars:70}}
+                    {{item.title|truncatechars:70|emoji_replace}}
                 </a>
                 {% ifequal item.status "OPEN" %}
                 {% else %}
@@ -270,7 +271,7 @@
 {% for item in pmt_user.open_owned_items %}
 <tr>
 	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-	width="14" height="14"/> {% endif %}<a href="{% url 'item_detail' item.iid %}">{{item.title|truncatechars:70}}</a></td>
+	width="14" height="14"/> {% endif %}<a href="{% url 'item_detail' item.iid %}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
 	<td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
 	<td class="{{item.target_date_status}} hidden-xs">{{item.target_date|date:"Y-m-d"}}</td>
 	<td><a href="{% url 'user_detail' item.assigned_to.username %}">{{item.assigned_to.fullname}}</a></td>

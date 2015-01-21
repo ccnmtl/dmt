@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load waffle_tags %}
+{% load emoji_tags %}
 
 {% block title %}User: {{object.fullname}}{% endblock %}
 
@@ -56,7 +57,7 @@
 {% endifequal %}
 {% if i.label %}{{i.label}}{% endif %}</h4></div>
 <div class="col-sm-6">
-		<h4>{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title}}{% if i.url %}</a>{% endif %}</h4>
+		<h4>{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}</h4>
 </div>
 <div class="col-sm-3">
 <a href="{{i.project.get_absolute_url}}">{{i.project.name}}</a>
@@ -66,7 +67,7 @@
 <div class="row">
 	<div class="col-sm-11 col-sm-offset-1">
 		{% if i.body %}
-		{{i.body|markdown}}
+		{{i.body|markdown|emoji_replace}}
 		{% endif %}
 	</div>
 </div>

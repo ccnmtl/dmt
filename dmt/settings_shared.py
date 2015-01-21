@@ -136,6 +136,7 @@ INSTALLED_APPS = [
     'djcelery',
     'django_markwhat',
     'bootstrap3',
+    'emoji',
     'dmt.main',
     'dmt.claim',
     'dmt.report',

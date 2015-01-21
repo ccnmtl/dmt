@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load waffle_tags %}
+{% load emoji_tags %}
 
 {% block title %}Item #{{object.iid}}&ndash;{{object.title}}{% endblock %}
 
@@ -20,7 +21,7 @@
 </p>
 
 
-<h1 class="page-title no-margin no-padding">Item #{{object.iid}} &#8226; {% if object.is_bug %}BUG:{% endif %} {{object.title}}</h1>
+<h1 class="page-title no-margin no-padding">Item #{{object.iid}} &#8226; {% if object.is_bug %}BUG:{% endif %} {{object.title|emoji_replace}}</h1>
 
 
 <p class="item-status">
@@ -75,7 +76,7 @@
   </div><!-- ./item-action-set -->
 
   <div class="item-details">
-    <div class="item-description">{{object.description|markdown}}</div>
+    <div class="item-description">{{object.description|markdown|emoji_replace}}</div>
 
     <dl class="dl-horizontal">
       <dt>Mark item as</dt>
@@ -705,7 +706,7 @@
       <div class="alert alert-warning">sorry, DMT does not yet support the old PMT attachments. For now, to view/download this one, you will need to <a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">go back to the PMT</a></div>
       {% endif %}
       <div class="attachment-description">
-      {{attachment.description|markdown}}
+      {{attachment.description|markdown|emoji_replace}}
       </div>
     </td>
 	</tr>
@@ -747,7 +748,7 @@
             {% endif %}
             {% endif %}
 
-            {{history_item.comment|markdown}}
+            {{history_item.comment|markdown|emoji_replace}}
         </div>
     </div>
     {% endfor %}

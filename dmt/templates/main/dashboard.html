@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load markup %}
+{% load emoji_tags %}
 
 {% block content %}
 <h1>Dashboard</h1>
@@ -43,7 +44,7 @@
 	<td>{{milestone.estimated_time_remaining|floatformat}} hours
 	({{milestone.num_open_items}} items)</td>
 	<td><a href="{{milestone.project.get_absolute_url}}">{{milestone.project.name|truncatechars:40}}</a></td>
-	<td><a href="{{milestone.get_absolute_url}}">{{milestone.name|truncatechars:40}}</a></td>
+	<td><a href="{{milestone.get_absolute_url}}">{{milestone.name|truncatechars:40|emoji_replace}}</a></td>
 	<td><img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_logged&target=ccnmtl.app.gauges.dmt.milestones.{{milestone.mid}}.hours_estimated&_salt=1369503684.466&height=10&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=50&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-8months"
 		 width="50" height="10" /></td>
 </tr>
@@ -90,7 +91,7 @@
 <div class="col-md-3">
 <a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a></div>
 <div class="col-md-6">
- {{su.body|markdown}}
+ {{su.body|markdown|emoji_replace}}
 </div>
 <div class="col-md-3">
  &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>
