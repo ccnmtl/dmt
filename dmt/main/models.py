@@ -24,7 +24,6 @@ class UserProfile(models.Model):
     email = models.CharField(max_length=32)
     status = models.CharField(max_length=16, blank=True)
     grp = models.BooleanField(default=False)
-    password = models.CharField(max_length=256, blank=True)
     type = models.TextField(blank=True)
     title = models.TextField(blank=True)
     phone = models.TextField(blank=True)
@@ -314,7 +313,6 @@ def create_user_profile(sender, instance, created, **kwargs):
             fullname=instance.get_full_name(),
             email=instance.email,
             status='active',
-            password='nopassword',
         )
 
 post_save.connect(create_user_profile, sender=User)
