@@ -147,6 +147,7 @@ if 'jenkins' in sys.argv:
     COMPRESS_ENABLED = False
 
 INTERNAL_IPS = ('127.0.0.1', )
+
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',
     'debug_toolbar.panels.timer.TimerDebugPanel',
@@ -156,6 +157,9 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.sql.SQLDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
 )
+DEBUG_TOOLBAR_CONFIG = {
+    'INSERT_BEFORE': '<span class="djdt-insert-here">',
+}
 
 STATSD_CLIENT = 'statsd.client'
 STATSD_PREFIX = 'dmt'

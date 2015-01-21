@@ -45,6 +45,10 @@
 </head>
 <body{% block extraclass %}{% endblock %}>
 
+    <!-- insert django-debug-toolbar here because it needs to load
+         before require.js -->
+    <span class="djdt-insert-here"></span>
+
 {% block topnavbar %}
   <nav class="navbar navbar-default navbar-inverse navbar-dmt navbar-fixed-top" role="navigation">
     <div class="container container-theme">
