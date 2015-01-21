@@ -308,7 +308,7 @@ class UserProfile(models.Model):
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        profile = UserProfile.objects.create(
+        UserProfile.objects.create(
             user=instance,
             username=instance.username,
             fullname=instance.get_full_name(),
@@ -316,10 +316,6 @@ def create_user_profile(sender, instance, created, **kwargs):
             status='active',
             password='nopassword',
         )
-        from dmt.claim.models import Claim
-        Claim.objects.create(
-            django_user=instance,
-            pmt_user=profile)
 
 post_save.connect(create_user_profile, sender=User)
 
