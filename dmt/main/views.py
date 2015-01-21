@@ -473,7 +473,6 @@ class GroupCreateView(LoggedInMixin, View):
         up = user.userprofile
         up.fullname = group_name
         up.email = 'nobody@localhost'
-        up.password = 'nopassword'
         up.grp = True
         up.save()
         return HttpResponseRedirect(
