@@ -7,7 +7,8 @@ require.config({
 
         // Require.js plugins
         text: '../libs/require/text'
-    }
+    },
+    urlArgs: 'bust=' +  (new Date()).getTime()
 });
 
 require([
