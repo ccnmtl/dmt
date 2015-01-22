@@ -47,9 +47,22 @@
 {% if object.bio %}
 <dt>Bio</dt><dd>{{object.bio|markdown|emoji_replace}}</dd>
 {% endif %}
+
+
+<dt>Primary Group</dt>
+<dd>
+    {% if object.primary_group %}
+    <a href="{% url 'group_detail' object.primary_group.username %}"
+       >{{object.primary_group.group_fullname}}</a>
+    {% else %}
+    <em>Unassigned</em>
+    {% endif %}
+</dd>
+
+
 {% with object.user_groups as groups %}
 {% if groups %}
-<dt>Groups</dt><dd>
+<dt>Secondary Groups</dt><dd>
 {% for g in groups %}
 <a href="{% url 'group_detail' g.username %}">
     {{g.group_fullname}}</a>{% if not forloop.last %}, {% endif %}
