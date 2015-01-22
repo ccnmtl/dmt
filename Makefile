@@ -33,7 +33,7 @@ integration: ./ve/bin/python
 	npm test
 
 flake8: ./ve/bin/python
-	$(FLAKE8) $(APP) --max-complexity=7
+	$(FLAKE8) $(APP) --exclude=migrations --max-complexity=7
 
 runserver: ./ve/bin/python check
 	$(MANAGE) runserver
