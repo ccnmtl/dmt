@@ -35,6 +35,10 @@ class UserProfile(models.Model):
     building = models.TextField(blank=True)
     room = models.TextField(blank=True)
     user = models.OneToOneField(User)
+    primary_group = models.ForeignKey('UserProfile',
+                                      blank=True,
+                                      null=True,
+                                      limit_choices_to={'grp': True})
 
     class Meta:
         db_table = u'users'
