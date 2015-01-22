@@ -32,8 +32,6 @@ from dmt.main.views import (
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
-admin.autodiscover()
-
 redirect_after_logout = getattr(settings, 'LOGOUT_REDIRECT_URL', None)
 auth_urls = (r'^accounts/', include('django.contrib.auth.urls'))
 logout_page = (
