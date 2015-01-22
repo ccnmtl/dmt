@@ -54,7 +54,6 @@ JENKINS_TASKS = (
 PROJECT_APPS = [
     'dmt.api',
     'dmt.main',
-    'dmt.claim',
     'dmt.report',
 ]
 
@@ -138,7 +137,6 @@ INSTALLED_APPS = [
     'bootstrap3',
     'emoji',
     'dmt.main',
-    'dmt.claim',
     'dmt.report',
     'dmt.api',
 ]
