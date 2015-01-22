@@ -977,14 +977,16 @@ padding: 5px;
   margin-left: -30px;
 }
 
-.project-tabs {
+.project-tabs,
+.object-tabs {
   margin-top: 20px;
   margin-bottom: 20px;
   border: 0;
   border-bottom: 5px solid #e2ebf5;
 }
 
-.project-tabs>li {
+.project-tabs>li,
+.object-tabs>li {
 	font-size: 12px;
 	border: 0;
   border-bottom: 5px solid transparent;
@@ -994,12 +996,15 @@ padding: 5px;
 }
 
 .project-tabs>li.active,
-.project-tabs>li.active:hover {
+.project-tabs>li.active:hover,
+.object-tabs>li.active,
+.object-tabs>li.active:hover {
   border-bottom: 5px solid #f90;
   background: #ffdb92;
 }
 
-.project-tabs>li.active a {
+.project-tabs>li.active a,
+.object-tabs>li.active a {
   color: #000;
 }
 
@@ -1007,13 +1012,19 @@ padding: 5px;
 .project-tabs>li.active a,
 .project-tabs>li>a:hover,
 .project-tabs>li.active a:hover,
-.project-tabs>li.active a:focus {
+.project-tabs>li.active a:focus,
+.object-tabs>li>a,
+.object-tabs>li.active a,
+.object-tabs>li>a:hover,
+.object-tabs>li.active a:hover,
+.object-tabs>li.active a:focus {
   border: 0;
   background-color: transparent;
   outline: 0;
 }
 
-.project-tabs>li:hover {
+.project-tabs>li:hover,
+.object-tabs>li:hover {
   background: #ffffcc;
   border-bottom: 5px solid #ffcc66;
 }
@@ -1337,6 +1348,9 @@ padding: 5px;
 	.btn-add {
 	  display: block;
 	  margin-bottom: 5px;
+	}
+	.user-inactive, .user-inactive a {
+	  color: #999;
 	}
 }
 
