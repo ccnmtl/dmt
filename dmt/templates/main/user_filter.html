@@ -55,12 +55,16 @@
 
 </div>
 
-<div class="tab-pane fade" id="filter">
-<p><a class="btn btn-success" href="/user/">Clear Filter</a></p>
-<hr />
+<div class="tab-pane fade object-form" id="filter">
+
 <form action="" method="get">
   {{ filter.form|bootstrap }}
-  <input type="submit" class="btn btn-primary" value="filter" />
+
+  <div class="button-set">
+    <input type="submit" class="btn btn-primary" value="Filter" />
+    <input type="reset" value="Reset Filter" class="btn btn-warning" />
+    <a href="/user/" class="btn btn-default">Cancel</a>
+  </div>
 </form>
 
 </div>
