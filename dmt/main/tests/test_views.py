@@ -107,6 +107,7 @@ class TestClientViews(TestCase):
         self.assertEqual(c.school, "testschool")
         self.assertEqual(c.status, "active")
         self.assertEqual(c.contact, self.u.userprofile)
+        self.assertEqual(c.user, self.u)
 
 
 class TestProjectViews(TestCase):
@@ -258,6 +259,7 @@ class TestProjectViews(TestCase):
         items = Item.objects.filter(milestone=milestone, assigned_to=u)
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0].assigned_to, u)
+        self.assertEqual(items[0].assigned_user, u.user)
         self.assertEqual(items[0].title, "Untitled")
 
     def test_add_action_item_empty_title(self):
@@ -275,6 +277,7 @@ class TestProjectViews(TestCase):
         items = Item.objects.filter(milestone=milestone, assigned_to=u)
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0].assigned_to, u)
+        self.assertEqual(items[0].assigned_user, u.user)
         self.assertEqual(items[0].title, "Untitled")
 
     def test_add_action_item_owner(self):
@@ -288,7 +291,8 @@ class TestProjectViews(TestCase):
                          "owner": u.username})
         self.assertEqual(r.status_code, 302)
 
-        items = Item.objects.filter(milestone=milestone, owner=u)
+        items = Item.objects.filter(milestone=milestone, owner=u,
+                                    owner_user=u.user)
         self.assertEqual(len(items), 1)
 
     def test_create_project_get(self):
@@ -1110,12 +1114,14 @@ class UserTest(TestCase):
         # refetch and check
         p = Project.objects.get(pid=p.pid)
         self.assertEqual(p.caretaker, self.u.userprofile)
+        self.assertEqual(p.caretaker_user, self.u)
 
         assigned = Item.objects.get(iid=assigned.iid)
         self.assertEqual(assigned.assigned_to, self.u.userprofile)
 
         owned = Item.objects.get(iid=owned.iid)
         self.assertEqual(owned.owner, self.u.userprofile)
+        self.assertEqual(owned.owner_user, self.u)
 
     def test_timeline(self):
         u = UserProfileFactory()

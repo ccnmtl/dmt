@@ -428,7 +428,8 @@ class Project(models.Model):
     def add_personnel(self, user, auth='guest'):
         # make sure we don't duplicate any
         WorksOn.objects.filter(project=self, username=user).delete()
-        WorksOn.objects.create(username=user, project=self, auth=auth)
+        WorksOn.objects.create(username=user, project=self, auth=auth,
+                               user=user.user)
 
     def set_personnel(self, users, auth='guest'):
         WorksOn.objects.filter(project=self, auth=auth).delete()
@@ -502,7 +503,9 @@ class Project(models.Model):
             milestone=milestone,
             type=type,
             owner=owner,
+            owner_user=owner.user,
             assigned_to=assigned_to,
+            assigned_user=assigned_to.user,
             title=title,
             priority=priority,
             status=status,
@@ -531,6 +534,7 @@ class Project(models.Model):
             subject=subject,
             body=body,
             author=user,
+            user=user.user,
             reply_to=0,
             replies=0,
             type='post',
@@ -924,6 +928,7 @@ class Item(models.Model):
         ActualTime.objects.create(
             item=self,
             resolver=user,
+            user=user.user,
             actual_time=time,
             completed=completed)
 
@@ -1012,6 +1017,7 @@ class Item(models.Model):
 
     def reassign(self, user, assigned_to, comment):
         self.assigned_to = assigned_to
+        self.assigned_user = assigned_to.user
         self.save()
         e = Events.objects.create(
             status="OPEN",
@@ -1027,6 +1033,7 @@ class Item(models.Model):
 
     def change_owner(self, user, owner, comment):
         self.owner = owner
+        self.owner_user = owner.user
         self.save()
         e = Events.objects.create(
             status="OPEN",
@@ -1073,9 +1080,14 @@ class Item(models.Model):
         if user.status == "inactive":
             # don't bother with inactive users
             return
-        Notify.objects.get_or_create(
+        n, _ = Notify.objects.get_or_create(
             item=self,
             username=user)
+        # if we just added 'user' into the above, it could
+        # result in duplicate entries since the user field
+        # is currently empty for these.
+        n.user = user.user
+        n.save()
 
     def update_email(self, comment, user):
         body = comment.replace(
@@ -1125,7 +1137,9 @@ Please do not reply to this message.
         new_item = Item.objects.create(
             type=self.type,
             owner=self.owner,
+            owner_user=self.owner.user,
             assigned_to=self.assigned_to,
+            assigned_user=self.assigned_to.user,
             title=new_title,
             milestone=self.milestone,
             status='OPEN',
@@ -1311,6 +1325,7 @@ class Node(models.Model):
             subject='Re: ' + self.subject,
             body=body,
             author=user,
+            user=user.user,
             reply_to=self.nid,
             replies=0,
             type='comment',

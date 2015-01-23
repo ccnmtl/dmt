@@ -224,7 +224,9 @@ class NotifyView(APIView):
 
         item = get_object_or_404(Item, iid=pk)
         user = request.user.userprofile
-        Notify.objects.get_or_create(username=user, item=item)
+        n, _ = Notify.objects.get_or_create(username=user, item=item)
+        n.user = request.user
+        n.save()
         return Response(status=201)
 
     def put(self, request, pk):
@@ -233,7 +235,9 @@ class NotifyView(APIView):
 
         item = get_object_or_404(Item, iid=pk)
         user = request.user.userprofile
-        Notify.objects.get_or_create(username=user, item=item)
+        n, _ = Notify.objects.get_or_create(username=user, item=item)
+        n.user = request.user
+        n.save()
         return Response(status=201)
 
 
@@ -274,6 +278,7 @@ class AddTrackerView(View):
             milestone=milestone,
             type='action item',
             owner=user, assigned_to=user,
+            owner_user=user.user, assigned_user=user.user,
             title=task, status='VERIFIED',
             priority=1, target_date=milestone.target_date,
             last_mod=datetime.now(),

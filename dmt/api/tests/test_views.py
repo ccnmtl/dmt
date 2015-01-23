@@ -340,7 +340,8 @@ class NotifyTests(APITestCase):
         self.assertEqual(r.status_code, 201)
 
         user = self.u.userprofile
-        notify = Notify.objects.get(item=self.item, username=user)
+        notify = Notify.objects.get(item=self.item, username=user,
+                                    user=user.user)
         self.assertIsInstance(notify, Notify)
 
     def test_post_not_logged_in(self):
@@ -353,7 +354,8 @@ class NotifyTests(APITestCase):
         self.assertEqual(r.status_code, 201)
 
         user = self.u.userprofile
-        notify = Notify.objects.get(item=self.item, username=user)
+        notify = Notify.objects.get(item=self.item, username=user,
+                                    user=user.user)
         self.assertIsInstance(notify, Notify)
 
     def test_put_not_logged_in(self):
