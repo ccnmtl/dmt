@@ -107,6 +107,7 @@ class TestClientViews(TestCase):
         self.assertEqual(c.school, "testschool")
         self.assertEqual(c.status, "active")
         self.assertEqual(c.contact, self.u.userprofile)
+        self.assertEqual(c.user, self.u)
 
 
 class TestProjectViews(TestCase):

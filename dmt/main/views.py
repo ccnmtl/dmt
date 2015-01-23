@@ -384,6 +384,7 @@ class AddClientView(LoggedInMixin, CreateView):
     def form_valid(self, form):
         current_user = self.request.user.userprofile
         form.instance.contact = current_user
+        form.instance.user = self.request.user
         form.instance.status = 'active'
         form.instance.save()
         return super(AddClientView, self).form_valid(form)
