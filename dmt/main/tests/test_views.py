@@ -1110,6 +1110,7 @@ class UserTest(TestCase):
         # refetch and check
         p = Project.objects.get(pid=p.pid)
         self.assertEqual(p.caretaker, self.u.userprofile)
+        self.assertEqual(p.caretaker_user, self.u)
 
         assigned = Item.objects.get(iid=assigned.iid)
         self.assertEqual(assigned.assigned_to, self.u.userprofile)
