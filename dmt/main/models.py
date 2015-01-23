@@ -428,7 +428,8 @@ class Project(models.Model):
     def add_personnel(self, user, auth='guest'):
         # make sure we don't duplicate any
         WorksOn.objects.filter(project=self, username=user).delete()
-        WorksOn.objects.create(username=user, project=self, auth=auth)
+        WorksOn.objects.create(username=user, project=self, auth=auth,
+                               user=user.user)
 
     def set_personnel(self, users, auth='guest'):
         WorksOn.objects.filter(project=self, auth=auth).delete()
