@@ -1077,9 +1077,14 @@ class Item(models.Model):
         if user.status == "inactive":
             # don't bother with inactive users
             return
-        Notify.objects.get_or_create(
+        n, _ = Notify.objects.get_or_create(
             item=self,
             username=user)
+        # if we just added 'user' into the above, it could
+        # result in duplicate entries since the user field
+        # is currently empty for these.
+        n.user = user.user
+        n.save()
 
     def update_email(self, comment, user):
         body = comment.replace(

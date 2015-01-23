@@ -224,7 +224,9 @@ class NotifyView(APIView):
 
         item = get_object_or_404(Item, iid=pk)
         user = request.user.userprofile
-        Notify.objects.get_or_create(username=user, item=item)
+        n, _ = Notify.objects.get_or_create(username=user, item=item)
+        n.user = request.user
+        n.save()
         return Response(status=201)
 
     def put(self, request, pk):
@@ -233,7 +235,9 @@ class NotifyView(APIView):
 
         item = get_object_or_404(Item, iid=pk)
         user = request.user.userprofile
-        Notify.objects.get_or_create(username=user, item=item)
+        n, _ = Notify.objects.get_or_create(username=user, item=item)
+        n.user = request.user
+        n.save()
         return Response(status=201)
 
 
