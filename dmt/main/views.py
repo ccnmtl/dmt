@@ -1128,6 +1128,7 @@ class ItemAddAttachmentView(LoggedInMixin, View):
         Attachment.objects.create(
             item=item,
             author=user,
+            user=request.user,
             url=url,
             title=title,
             description=description,
