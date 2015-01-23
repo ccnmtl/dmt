@@ -502,7 +502,9 @@ class Project(models.Model):
             milestone=milestone,
             type=type,
             owner=owner,
+            owner_user=owner.user,
             assigned_to=assigned_to,
+            assigned_user=assigned_to.user,
             title=title,
             priority=priority,
             status=status,
@@ -1012,6 +1014,7 @@ class Item(models.Model):
 
     def reassign(self, user, assigned_to, comment):
         self.assigned_to = assigned_to
+        self.assigned_user = assigned_to.user
         self.save()
         e = Events.objects.create(
             status="OPEN",
@@ -1027,6 +1030,7 @@ class Item(models.Model):
 
     def change_owner(self, user, owner, comment):
         self.owner = owner
+        self.owner_user = owner.user
         self.save()
         e = Events.objects.create(
             status="OPEN",
@@ -1125,7 +1129,9 @@ Please do not reply to this message.
         new_item = Item.objects.create(
             type=self.type,
             owner=self.owner,
+            owner_user=self.owner.user,
             assigned_to=self.assigned_to,
+            assigned_user=self.assigned_to.user,
             title=new_title,
             milestone=self.milestone,
             status='OPEN',
