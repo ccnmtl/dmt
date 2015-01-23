@@ -32,11 +32,7 @@ class ProjectFilter(FilterSet):
 
 
 class UserFilter(FilterSet):
-    username = CharFilter(lookup_type='icontains')
-    fullname = CharFilter(label='Full Name', lookup_type='icontains')
-    email = CharFilter(lookup_type='icontains')
-    phone = CharFilter(label='Phone Number', lookup_type='icontains')
-    title = CharFilter(lookup_type='icontains')
-    bio = CharFilter(lookup_type='icontains')
-    status = ChoiceFilter(choices=[("active", "active"),
-                                   ("inactive", "inactive")])
+    fullname = CharFilter(label='Full name', lookup_type='icontains')
+    status = ChoiceFilter(choices=[("", "All statuses"),
+                                   ("active", "Active"),
+                                   ("inactive", "Inactive")])
