@@ -59,7 +59,7 @@ class ProjectCreateForm(ModelForm):
 class ProjectUpdateForm(ModelForm):
     class Meta:
         model = Project
-        exclude = ['pid', ]
+        exclude = ['pid', 'caretaker_user']
 
 
 class MilestoneUpdateForm(ModelForm):
@@ -80,6 +80,6 @@ class ItemUpdateForm(ModelForm):
 
     class Meta:
         model = Item
-        exclude = ['iid', 'owner',
+        exclude = ['iid', 'owner', 'owner_user', 'assigned_user',
                    'assigned_to', 'status', 'r_status', 'last_mod',
                    'tags', 'priority']
