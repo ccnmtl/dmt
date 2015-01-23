@@ -928,6 +928,7 @@ class Item(models.Model):
         ActualTime.objects.create(
             item=self,
             resolver=user,
+            user=user.user,
             actual_time=time,
             completed=completed)
 
