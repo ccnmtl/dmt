@@ -316,8 +316,18 @@
 				<div class="form-group">
 					<div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
           For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
-					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
+					<textarea name="comment" class="form-control"
+                              id="dmt-project-item-resolve-comment"
+                              rows="5" placeholder="Comment..."></textarea>
 				</div>
+
+                <div class="form-group">
+                    <div class="instructions">
+                        Comment preview:
+                    </div>
+                    <div class="dmt-markdown-project-item-resolve-preview dmt-markdown-preview"
+                         >Comment</div>
+                </div>
 
 				<div class="form-group">
 					<label for="resolve-time-input">Time</label>
@@ -349,8 +359,17 @@
       <div class="modal-body">
           <div class="form-group">
             <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-                        For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
-              <textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
+                For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
+            <textarea name="comment" class="form-control"
+                      id="dmt-project-item-inprogress-comment"
+                      rows="5" placeholder="Comment..."></textarea>
+          </div>
+          <div class="form-group">
+              <div class="instructions">
+                  Comment preview:
+              </div>
+              <div class="dmt-markdown-project-item-inprogress-preview dmt-markdown-preview"
+                   >Comment</div>
           </div>
           <div class="form-group">
               <label for="progress-time-input">Time</label>

@@ -49,6 +49,7 @@ require([
     'forms/add_tracker_form',
     'forms/project_add_action_item_form',
     'forms/project_add_bug_form',
+    'forms/project_action_item_modals',
     'item'
 ], function($) {
     var csrftoken = $.cookie('csrftoken');
