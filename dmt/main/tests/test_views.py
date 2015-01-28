@@ -474,13 +474,10 @@ class TestMilestoneViews(TestCase):
         self.assertFalse(m.name in r.content)
 
 
-class TestItemViews(TestCase):
+class TestItemViews(LoggedInTestMixin, TestCase):
     def setUp(self):
+        super(TestItemViews, self).setUp()
         self.c = self.client
-        self.u = UserFactory(username="testuser")
-        self.u.set_password("test")
-        self.u.save()
-        self.c.login(username="testuser", password="test")
 
     def test_item_view(self):
         i = ItemFactory()
@@ -491,13 +488,14 @@ class TestItemViews(TestCase):
     def test_item_view_notification_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
         i = ItemFactory(assigned_to=self.u.userprofile)
-        NotifyFactory(item=i, username=self.u.userprofile)
+        n = NotifyFactory(item=i, username=self.u.userprofile)
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue("input_notification" in r.content)
         self.assertTrue(r.context['assigned_to_current_user'])
         self.assertTrue(
             r.context['notifications_enabled_for_current_user'])
+        self.assertItemsEqual(r.context['notified_users'], [n])
 
     def test_item_view_notification_not_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
@@ -508,6 +506,7 @@ class TestItemViews(TestCase):
         self.assertFalse(r.context['assigned_to_current_user'])
         self.assertFalse(
             r.context['notifications_enabled_for_current_user'])
+        self.assertEqual(len(r.context['notified_users']), 0)
 
     def test_milestone_view(self):
         i = ItemFactory()

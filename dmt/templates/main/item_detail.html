@@ -213,6 +213,20 @@
       </label>
       </div>
       </dd>
+
+      <dt>Subscribers</dt>
+      <dd>
+          <ul>
+              {% for notify in notified_users %}
+              {% with userprofile=notify.username %}
+              <li>
+                  <a href="{% url 'user_detail' userprofile.username %}"
+                     >{{userprofile.fullname}}</a>
+              </li>
+              {% endwith %}
+              {% endfor %}
+          </ul>
+      </dd>
       
       <script type="text/template" id="item-template">
       </script>

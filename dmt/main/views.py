@@ -353,12 +353,18 @@ class ItemDetailView(LoggedInMixin, DetailView):
             context['assigned_to_current_user'] = \
                 (context['item'].assigned_to.username == current_username)
 
-            notification = Notify.objects.filter(
-                item=context['item'].iid, username=current_username
-            ).first()
+            all_notifies = Notify.objects.filter(
+                item=context['item'].iid).order_by(
+                    # 'username' is actually userprofile
+                    'username__fullname')
+
+            current_user_notification = all_notifies.filter(
+                username=current_username).first()
 
             context['notifications_enabled_for_current_user'] = \
-                True if notification else False
+                True if current_user_notification else False
+
+            context['notified_users'] = all_notifies
 
         iid = context['object'].iid
         context['clients'] = Client.objects.filter(
