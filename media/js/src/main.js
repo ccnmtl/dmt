@@ -122,15 +122,15 @@ require([
             todayHighlight: true
         });
 
-        $('#project-input').typeahead(null, {
+        $('#project-input').typeahead({
+            highlight: true
+        }, {
             name: 'results',
             displayKey: 'name',
             source: projects.ttAdapter()
         });
-        $('#project-input').on(
-            'typeahead:selected',
-            function(object, datum) {
-                $('#tracker-pid-input').val(datum.pid);
-            });
+        $('#project-input').on('typeahead:selected', function(object, datum) {
+            $('#tracker-pid-input').val(datum.pid);
+        });
     });
 });
