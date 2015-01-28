@@ -6,21 +6,41 @@ require.config({
         backbone: '../libs/backbone/backbone-min',
 
         // Require.js plugins
-        text: '../libs/require/text'
+        text: '../libs/require/text',
+
+        'bootstrap-datepicker':
+            '../libs/bootstrap-datepicker/bootstrap-datepicker.min',
+
+        typeahead: '../libs/typeahead/typeahead.jquery.min'
+    },
+    shim: {
+        'bootstrap-datepicker': {
+            'deps': ['jquery']
+        },
+        typeahead: {
+            'deps': ['jquery']
+        },
+        backbone: {
+            'deps': ['underscore', 'jquery'],
+            'exports': 'Backbone'
+        },
+        underscore: {
+            'exports': '_'
+        }
     },
     urlArgs: 'bust=' +  (new Date()).getTime()
 });
 
 require([
     // libs
-    '../libs/jquery/jquery-min',
+    'jquery',
     '../libs/jquery.cookie.min',
-    '../libs/underscore/underscore-min',
-    '../libs/backbone/backbone-min',
-    '../libs/bootstrap-datepicker/bootstrap-datepicker.min',
+    'underscore',
+    'backbone',
+    'bootstrap-datepicker',
     '../libs/remarkable/remarkable',
     '../libs/typeahead/bloodhound.min',
-    '../libs/typeahead/typeahead.jquery.min',
+    'typeahead',
 
     // src
     'utils/markdown_preview',
@@ -30,7 +50,7 @@ require([
     'forms/project_add_action_item_form',
     'forms/project_add_bug_form',
     'item'
-], function() {
+], function($) {
     var csrftoken = $.cookie('csrftoken');
 
     // The following is from
@@ -96,25 +116,21 @@ require([
     projects.initialize();
 
     $(document).ready(function() {
-        if (typeof $().datepicker === 'function') {
-            $('input[name=target_date]').datepicker({
-                autoclose: true,
-                format: 'yyyy-mm-dd',
-                todayHighlight: true
-            });
-        }
+        $('input[name=target_date]').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            todayHighlight: true
+        });
 
-        if (typeof $().typeahead === 'function') {
-            $('#project-input').typeahead(null, {
-                name: 'results',
-                displayKey: 'name',
-                source: projects.ttAdapter()
+        $('#project-input').typeahead(null, {
+            name: 'results',
+            displayKey: 'name',
+            source: projects.ttAdapter()
+        });
+        $('#project-input').on(
+            'typeahead:selected',
+            function(object, datum) {
+                $('#tracker-pid-input').val(datum.pid);
             });
-            $('#project-input').on(
-                'typeahead:selected',
-                function(object, datum) {
-                    $('#tracker-pid-input').val(datum.pid);
-                });
-        }
     });
 });
