@@ -1,9 +1,10 @@
 require([
-    '../libs/bootstrap-datepicker/bootstrap-datepicker.min',
+    'jquery',
+    'bootstrap-datepicker',
 
     'utils/markdown_preview',
     'forms/utils'
-], function(datepicker, MarkdownPreview, formUtils) {
+], function($, datepicker, MarkdownPreview, formUtils) {
     function setupDateSwitcher() {
         var $selectEl = $('#add-action-item-form #action_item-milestone');
 
