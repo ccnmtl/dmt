@@ -3,8 +3,9 @@
  * "Mark as In Progress" and "Resolve Item" modals.
  */
 require([
+    'jquery',
     'utils/markdown_preview'
-], function(MarkdownPreview) {
+], function($, MarkdownPreview) {
     $(document).ready(function() {
         var preview = new MarkdownPreview(
             $('textarea#dmt-project-item-resolve-comment'),

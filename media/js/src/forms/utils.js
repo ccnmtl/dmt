@@ -1,4 +1,8 @@
-define(['underscore'], function(_) {
+define([
+    'jquery',
+    'underscore',
+    'bootstrap-datepicker'
+], function($, _) {
     var FormUtils = function() {};
 
     FormUtils.prototype.refreshTargetDate = function($selectEl, targetDates) {

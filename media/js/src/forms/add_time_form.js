@@ -1,6 +1,7 @@
 require([
+    'jquery',
     'forms/utils'
-], function(formUtils) {
+], function($, formUtils) {
     $(document).ready(function() {
         $('#add-time-form').submit(function(event) {
             var $form = $(event.target);
