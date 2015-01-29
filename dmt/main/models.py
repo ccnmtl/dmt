@@ -5,6 +5,7 @@ from django.db.models.aggregates import Sum
 from django.db.models.signals import post_save
 from django.conf import settings
 from datetime import timedelta, datetime
+from dateutil import parser
 from interval.fields import IntervalField
 from taggit.managers import TaggableManager
 from django.core.mail import send_mail
@@ -499,6 +500,15 @@ class Project(models.Model):
         except InvalidDuration:
             d = Duration("0 minutes")
         td = d.timedelta()
+
+        try:
+            # Attempt to parse the date.
+            target_date = parser.parse(target_date).date()
+        except AttributeError:
+            # If we can't parse it, it must be a datetime object, so let it
+            # through.
+            pass
+
         item = Item.objects.create(
             milestone=milestone,
             type=type,
