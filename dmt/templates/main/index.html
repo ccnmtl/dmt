@@ -107,11 +107,23 @@
   <ul class="nav nav-tabs project-tabs">
     {% if overdue_milestones %}
       <li class="active"><a href="#overdue-milestones" data-toggle="tab">Overdue Milestones</a></li>
-      <li><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
+    <li>
+        <a href="#outstanding-items" data-toggle="tab"
+           >Outstanding Items
+            (<strong>{{ pmt_user.items|length }}</strong>)</a>
+    </li>
     {% else %}
-      <li class="active"><a href="#outstanding-items" data-toggle="tab">Outstanding Items</a></li>
+    <li class="active">
+        <a href="#outstanding-items" data-toggle="tab"
+           >Outstanding Items
+            (<strong>{{ pmt_user.items|length }}</strong>)</a>
+    </li>
     {% endif %}
-      <li><a href="#owned-items" data-toggle="tab">Owned Items</a></li>
+    <li>
+        <a href="#owned-items" data-toggle="tab"
+           >Owned Items
+            (<strong>{{ pmt_user.open_owned_items|length }}</strong>)</a>
+    </li>
   </ul>
 
 <div class="tab-content">
