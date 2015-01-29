@@ -382,11 +382,16 @@ footer.page-footer {
   background: transparent url('/media/img/bg-item-action-set.png') left top repeat-y;
 }
 
-.dashboard .object-action-set {
+.dashboard .object-action-set,
+.user-profile-page .object-action-set {
   margin: 30px 0 10px 0;
   padding: 0;
   float: none;
   background-image: none;
+}
+
+.user-profile-page .object-action-set {
+  margin-top: 0;
 }
 
 .object-action-set ul,
@@ -407,8 +412,8 @@ footer.page-footer {
   /*text-align: center;*/
   vertical-align: center;
 }
-
-.dashboard .object-action {
+.dashboard .object-action,
+.user-profile-page .object-action {
   margin-left: 0;
   margin-right: 10px;
   border: 0;
@@ -433,7 +438,8 @@ span.item-action-text {
   height: 16px;
 }
 
-.dashboard span.object-action-text {
+.dashboard span.object-action-text,
+.user-profile-page span.object-action-text {
   width: auto;
   margin: 0;
 }
@@ -444,7 +450,8 @@ span.item-action-text {
   border-left: 4px solid #b2cbea;
 }
 
-.dashboard .object-action:hover {
+.dashboard .object-action:hover,
+.user-profile-page .object-action:hover {
   color: #ff9900;
   border: 0;
   border-bottom: 4px solid #b2cbea;
@@ -460,7 +467,8 @@ span.item-action-text {
   text-decoration: none;
 }
 
-.dashboard .object-action a {
+.dashboard .object-action a,
+.user-profile-page .object-action a {
   padding-top: 4px;
   padding-bottom: 4px;
 }
@@ -485,6 +493,22 @@ span.item-action-text {
 .object-action a:hover .icon-rss,
 .item-action a:hover .icon-rss {
   background: transparent url('/media/img/icon-rss-feed-hover.png') left top no-repeat;
+}
+
+.icon-timeline {
+  margin: 0;
+  padding: 0;
+  width: 17px;
+  height: 16px;
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  line-height: 1;
+  background: transparent url('/media/img/icon-timeline.png') left top no-repeat;
+}
+
+.object-action a:hover .icon-timeline {
+  background: transparent url('/media/img/icon-timeline-hover.png') left top no-repeat;
 }
 
 .icon-add-bug {
@@ -1298,6 +1322,22 @@ padding: 5px;
 .pagination-nav {
   margin: auto;
   text-align: center;
+}
+
+
+/* User Profile (Detail) page */
+
+.user-profile-detail .thumbnail img {
+  width: 120px;
+}
+
+.user-profile-detail dt {
+  width: auto;
+}
+
+.user-profile-detail dd {
+  float: left;
+  margin-left: 10px;
 }
 
 /* Tablesort/tablecloth override */
