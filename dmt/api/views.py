@@ -55,6 +55,12 @@ class ExternalAddItemView(APIView):
     authentication_classes = (SafeOriginAuthentication,)
     permission_classes = (SafeOriginPermission,)
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(ExternalAddItemView, self).dispatch(*args, **kwargs)
+
+    # This method was created just to reduce the cyclomatic complexity
+    # of the post() method.
     def redirect_or_return_item(self, request, item, redirect_url, append_iid):
         if redirect_url:
             if append_iid:
@@ -64,7 +70,6 @@ class ExternalAddItemView(APIView):
             data = ItemSerializer(item, context={'request': request}).data
             return Response(data)
 
-    @method_decorator(csrf_exempt)
     def post(self, request, format=None):
         pid = request.data.get('pid')
         mid = request.data.get('mid')
@@ -263,6 +268,9 @@ def process_completed(completed=None):
 
 class AddTrackerView(View):
     @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(AddTrackerView, self).dispatch(*args, **kwargs)
+
     def post(self, request):
         pid = request.POST.get('pid', None)
         task = request.POST.get('task', None)
