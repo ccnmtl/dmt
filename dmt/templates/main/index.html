@@ -116,13 +116,13 @@
     <li class="active">
         <a href="#outstanding-items" data-toggle="tab"
            >Outstanding Items
-            (<strong>{{ pmt_user.items|length }}</strong>)</a>
+            ({{ pmt_user.items|length }})</a>
     </li>
     {% endif %}
     <li>
         <a href="#owned-items" data-toggle="tab"
            >Owned Items
-            (<strong>{{ pmt_user.open_owned_items|length }}</strong>)</a>
+            ({{ pmt_user.open_owned_items|length }})</a>
     </li>
   </ul>
 

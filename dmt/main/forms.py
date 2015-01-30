@@ -20,8 +20,7 @@ class UserUpdateForm(ModelForm):
     class Meta:
         model = UserProfile
         fields = ["fullname", "email", "type", "title", "phone",
-                  "bio", "photo_url", "photo_width", "photo_height",
-                  "campus", "building", "room"]
+                  "bio", "photo_url", "campus", "building", "room"]
         widgets = {
             "type": TextInput(),
             "title": TextInput(),
