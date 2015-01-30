@@ -1340,6 +1340,37 @@ padding: 5px;
   margin-left: 10px;
 }
 
+.user-projects-set {
+  margin-bottom: 20px;
+  border: 1px solid #e2ebf5;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+
+}
+
+.user-projects-set .user-projects-header {
+  margin: 0;
+  padding: 5px 10px;
+  background-color: #e2ebf5;
+  -webkit-border-top-left-radius: 5px;
+     -moz-border-top-left-radius: 5px;
+          border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+     -moz-border-top-right-radius: 5px;
+          border-top-right-radius: 5px;
+}
+
+.user-projects-header>h4 {
+  margin: 0;
+  padding: 0;
+  float: left;
+}
+
+.user-projects-set table {
+  margin-bottom: 0;
+}
+
 /* Tablesort/tablecloth override */
 
 .headerSortUp,

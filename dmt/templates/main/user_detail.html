@@ -164,37 +164,81 @@
 {% endif %}
 	</div>
   <div class="tab-pane fade" id="projects">
-{% if object.project_set.count %}
-		<ul>Caretaker for the following projects</ul>
-{% for project in object.project_set.all %}
-		<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
-{% endfor %}
-		</ul>
-{% endif %}
+  {% if object.project_set.count %}
+    <div class="user-projects-set">
+      <div class="user-projects-header clearfix">
+        <h4>
+          Caretaker for:
+        </h4>
+      </div>
+      <table class="table table-condensed table-striped">
+      <tbody>
+        {% for project in object.project_set.all %}
+        <tr>
+          <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+    </div><!-- ./user-projects-set -->
+  {% endif %}
 
-{% if object.manager_on %}
-		<ul>Manager for the following projects</ul>
-{% for project in object.manager_on %}
-		<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
-{% endfor %}
-		</ul>
-{% endif %}
+  {% if object.manager_on %}
+    <div class="user-projects-set">
+      <div class="user-projects-header clearfix">
+        <h4>
+          Manager for:
+        </h4>
+      </div>
+      <table class="table table-condensed table-striped">
+      <tbody>
+        {% for project in object.manager_on %}
+        <tr>
+          <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+    </div><!-- ./user-projects-set -->
+  {% endif %}
 
-{% if object.developer_on %}
-		<ul>Developer on the following projects</ul>
-{% for project in object.developer_on %}
-		<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
-{% endfor %}
-		</ul>
-{% endif %}
+  {% if object.developer_on %}
+    <div class="user-projects-set">
+      <div class="user-projects-header clearfix">
+        <h4>
+          Developer for:
+        </h4>
+      </div>
+      <table class="table table-condensed table-striped">
+      <tbody>
+        {% for project in object.developer_on %}
+        <tr>
+          <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+    </div><!-- ./user-projects-set -->
+  {% endif %}
 
-{% if object.guest_on %}
-		<ul>Guest on the following projects</ul>
-{% for project in object.guest_on %}
-		<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
-{% endfor %}
-		</ul>
-{% endif %}
+  {% if object.guest_on %}
+    <div class="user-projects-set">
+      <div class="user-projects-header clearfix">
+        <h4>
+          Guest on:
+        </h4>
+      </div>
+      <table class="table table-condensed table-striped">
+      <tbody>
+        {% for project in object.guest_on %}
+        <tr>
+          <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+    </div><!-- ./user-projects-set -->
+  {% endif %}
 
 	</div>
 	<div class="tab-pane fade" id="forum">
