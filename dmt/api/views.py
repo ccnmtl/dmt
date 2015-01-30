@@ -128,6 +128,9 @@ def normalize_email(email):
 
 class GitUpdateView(View):
     @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(GitUpdateView, self).dispatch(*args, **kwargs)
+
     def post(self, request):
         iid = request.POST.get('iid', None)
         item = get_object_or_404(Item, iid=iid)
