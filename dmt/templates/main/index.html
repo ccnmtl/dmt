@@ -106,11 +106,11 @@
 
   <ul class="nav nav-tabs project-tabs">
     {% if overdue_milestones %}
-      <li class="active"><a href="#overdue-milestones" data-toggle="tab">Overdue Milestones</a></li>
+      <li class="active"><a href="#overdue-milestones" data-toggle="tab">Overdue Milestones ({{overdue_milestones|length }})</a></li>
     <li>
         <a href="#outstanding-items" data-toggle="tab"
            >Outstanding Items
-            (<strong>{{ pmt_user.items|length }}</strong>)</a>
+            ({{ pmt_user.items|length }})</a>
     </li>
     {% else %}
     <li class="active">
