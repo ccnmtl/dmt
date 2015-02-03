@@ -684,68 +684,46 @@
 {% if item.attachment_set.all.count %}
 <h4 class="attachment-header">Attachments</h4>
 
-<table class="table table-condensed item-attachment">
-	<tbody>
-	{% for attachment in item.attachment_set.all %}
-	<tr>
-		<td class="attachment-thumbnail">
-		{% if attachment.image %}
-		  {% if attachment.url %}
-		  <img src="{{attachment.url}}" />
-		  {% else %}
-		  <img src="{{attachment.src}}" />
-		  {% endif %}
-		{% else %}
-		  <img src="/media/img/icon-document.png" />
-		{% endif %}
-		</td>
-		<td>
-      <table class="table table-condensed">
-        <thead>
-        <tr>
-          <th>Title</th>
-          <th>Uploaded by</th>
-          <th>Date</th>
-        </tr>
-        </thead>
-	      <tbody>
-        <tr>
-          <td>{{attachment.title|default:attachment.filename}}</td>
-          <td>{{attachment.author.fullname}}</td>
-          <td>{{attachment.last_mod}}</td>
-        </tr>
-	      </tbody>
-      </table>
-      <ul class="attachment-action-set clearfix">
-        <li class="attachment-action">
-        {% if attachment.image %}
-          {% if attachment.url %}
-          <a href="{{attachment.url}}" class="btn btn-default btn-sm">        <span class="glyphicon glyphicon-download"></span> <span class="attachment-action-text">Download</span></a>
-          {% else %}
-          <a href="{{attachment.src}}" class="btn btn-default btn-sm">        <span class="glyphicon glyphicon-download"></span> <span class="attachment-action-text">Download</span></a>
-          {% endif %}
-        {% else %}
-          {% if attachment.url %}
-          <a href="{{attachment.url}}" class="btn btn-default btn-sm">        <span class="glyphicon glyphicon-download"></span> <span class="attachment-action-text">Download</span></a>
-          {% endif %}
-        {% endif %}
-        </li>
-        <li class="attachment-action">
-        <a href="{% url 'delete_attachment' attachment.id %}" class="btn btn-default btn-sm" title="delete attachment"><span class="glyphicon glyphicon-trash"></span> <span class="attachment-action-text">Delete</span></a>
-        </li>
-      </ul>
-      {% if attachment.url %}
-      {% else %}
-      <div class="alert alert-warning">sorry, DMT does not yet support the old PMT attachments. For now, to view/download this one, you will need to <a href="http://pmt.ccnmtl.columbia.edu/item/{{object.iid}}/">go back to the PMT</a></div>
-      {% endif %}
-      <div class="attachment-description">
-      {{attachment.description|markdown|emoji_replace}}
-      </div>
-    </td>
-	</tr>
-  {% endfor %}
-	</tbody>
-</table>
+{% for attachment in item.attachment_set.all %}
+<div class="row">
+    <div class="col-sm-6">
+        <div class="attachment-thumbnail">
+            {% if attachment.image %}
+            {% if attachment.url %}
+            <a href="{{attachment.url}}"><img src="{{attachment.url}}" /></a>
+            {% else %}
+            <a href="{{attachment.src}}"><img src="{{attachment.src}}" /></a>
+            {% endif %}
+            {% else %}
+            <img src="/media/img/icon-document.png" />
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="attachment-description">
+            {{attachment.description|markdown|emoji_replace}}
+        </div>
+        <div class="attachment-metadata">
+            Uploaded by
+            <a href="{% url 'user_detail' attachment.author.username %}"
+               >{{attachment.author.fullname}}</a>
+            on {{attachment.last_mod}}
+        </div>
+        <ul class="attachment-action-set clearfix">
+            <li class="attachment-action">
+                <a href="{% url 'delete_attachment' attachment.id %}"
+                   class="btn btn-default btn-sm"
+                   title="delete attachment"
+                   ><span class="glyphicon glyphicon-trash"></span>
+                    <span class="attachment-action-text">Delete</span></a>
+            </li>
+        </ul>
+    </div>
+</div>
+<hr />
+{% endfor %}
+
+
 {% endif %}
 
 

@@ -461,7 +461,10 @@ span.item-action-text {
 }
 
 .attachment-thumbnail { width: 120px; }
-.attachment-thumbnail img { width: 100px; }
+.attachment-thumbnail img {
+    max-width: 300px;
+    max-height: 300px;
+}
 
 .attachment-action-set {
     margin: 5px 0 10px 0;
@@ -477,6 +480,10 @@ span.item-action-text {
     padding: 0;
     color: #999;
     vertical-align: center;
+}
+
+.attachment-metadata {
+    font-style: italic;
 }
 
 span.attachment-action-text {
