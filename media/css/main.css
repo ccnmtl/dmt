@@ -460,10 +460,26 @@ span.item-action-text {
     background-color: #ebf0f5;
 }
 
-.attachment-thumbnail { width: 120px; }
-.attachment-thumbnail img {
-    max-width: 300px;
-    max-height: 300px;
+.attachment-image {
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+}
+
+.attachment-document {
+    width: 100%;
+    max-width: 100px;
+}
+
+.attachment-title {
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+
+.attachment-byline {
+    margin: 0 0 10px 0;
+    padding: 0;
+    font-size: 12px;
 }
 
 .attachment-action-set {
