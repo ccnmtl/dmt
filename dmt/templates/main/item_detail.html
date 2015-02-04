@@ -686,28 +686,28 @@
 
 {% for attachment in item.attachment_set.all %}
 <div class="row">
-    <div class="col-sm-6">
-        <div class="attachment-thumbnail">
-            {% if attachment.image %}
-            {% if attachment.url %}
-            <a href="{{attachment.url}}"><img src="{{attachment.url}}" /></a>
-            {% else %}
-            <a href="{{attachment.src}}"><img src="{{attachment.src}}" /></a>
-            {% endif %}
-            {% else %}
-            <img src="/media/img/icon-document.png" />
-            {% endif %}
+    <div class="col-sm-2" class="attachment-thumbnail">
+    {% if attachment.image %}
+        {% if attachment.url %}
+        <a href="{{attachment.url}}"><img src="{{attachment.url}}" class="attachment-image" /></a>
+        {% else %}
+        <a href="{{attachment.src}}"><img src="{{attachment.src}}" class="attachment-image" /></a>
+        {% endif %}
+    {% else %}
+        <a href="{{attachment.url}}"><img src="/media/img/icon-document.png" class="attachment-document" /></a>
+    {% endif %}
+    </div><!-- attachment thumbnail -->
+    <div class="col-sm-10">
+        <div class="attachment-title">
+        <h4>{{attachment.title|default:attachment.filename}}</h4>
         </div>
-    </div>
-    <div class="col-sm-6">
+        
+        <div class="attachment-byline text-muted">
+        Uploaded by <a href="{% url 'user_detail' attachment.author.username %}">{{attachment.author.fullname}}</a>
+        on {{attachment.last_mod}}
+        </div>
         <div class="attachment-description">
             {{attachment.description|markdown|emoji_replace}}
-        </div>
-        <div class="attachment-metadata">
-            Uploaded by
-            <a href="{% url 'user_detail' attachment.author.username %}"
-               >{{attachment.author.fullname}}</a>
-            on {{attachment.last_mod}}
         </div>
         <ul class="attachment-action-set clearfix">
             <li class="attachment-action">
@@ -718,12 +718,9 @@
                     <span class="attachment-action-text">Delete</span></a>
             </li>
         </ul>
-    </div>
-</div>
-<hr />
+    </div><!-- attachment details -->
+</div><!-- /.row -->
 {% endfor %}
-
-
 {% endif %}
 
 
