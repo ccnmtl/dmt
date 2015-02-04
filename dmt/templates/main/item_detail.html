@@ -689,17 +689,23 @@
     <div class="col-sm-2" class="attachment-thumbnail">
     {% if attachment.image %}
         {% if attachment.url %}
-        <a href="{{attachment.url}}"><img src="{{attachment.url}}" class="attachment-image" /></a>
+        <a href="{{attachment.url}}" title="Download this attachment"><img src="{{attachment.url}}" class="attachment-image" /></a>
         {% else %}
-        <a href="{{attachment.src}}"><img src="{{attachment.src}}" class="attachment-image" /></a>
+        <a href="{{attachment.src}}" title="Download this attachment"><img src="{{attachment.src}}" class="attachment-image" /></a>
         {% endif %}
     {% else %}
-        <a href="{{attachment.url}}"><img src="/media/img/icon-document.png" class="attachment-document" /></a>
+        <a href="{{attachment.url}}" title="Download this attachment"><img src="/media/img/icon-document.png" class="attachment-document" /></a>
     {% endif %}
     </div><!-- attachment thumbnail -->
     <div class="col-sm-10">
         <div class="attachment-title">
-        <h4>{{attachment.title|default:attachment.filename}}</h4>
+        {% if attachment.url %}
+        <h4><a href="{{attachment.url}}" title="Download this attachment">{{attachment.title|default:attachment.filename}}</a></h4>
+        {% else %}
+        <h4><a href="{{attachment.src}}" title="Download this attachment">{{attachment.title|default:attachment.filename}}</a></h4>
+        {% endif %}
+
+        
         </div>
         
         <div class="attachment-byline text-muted">
@@ -720,6 +726,9 @@
         </ul>
     </div><!-- attachment details -->
 </div><!-- /.row -->
+
+<hr />
+
 {% endfor %}
 {% endif %}
 
