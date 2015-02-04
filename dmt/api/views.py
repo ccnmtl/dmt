@@ -32,6 +32,9 @@ class ClientViewSet(viewsets.ModelViewSet):
 
 class ItemHoursView(View):
     @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ItemHoursView, self).dispatch(*args, **kwargs)
+
     def post(self, request, pk):
         item = get_object_or_404(Item, iid=pk)
         user = request.user.userprofile
