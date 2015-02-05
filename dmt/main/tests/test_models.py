@@ -10,7 +10,7 @@ from .factories import (
 from datetime import datetime, timedelta
 from simpleduration import Duration
 from dmt.main.models import (
-    ActualTime, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
+    ActualTime, Events, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
     truncate_string, HistoryEvent
 )
 
@@ -179,6 +179,21 @@ class ItemTest(TestCase):
     def test_priority_label(self):
         i = ItemFactory()
         self.assertEqual(i.priority_label(), 'LOW')
+
+    def test_resolve(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserProfileFactory()
+        p.add_item(
+            type='action item', title='new item',
+            assigned_to=u, owner=u, milestone=m,
+            priority=1, description='',
+            estimated_time='1hr',
+            status='OPEN', r_status='')
+        i = m.item_set.first()
+        i.resolve(u, 'FIXED', 'test comment')
+        self.assertEqual(
+            Events.objects.filter(item=i, status='RESOLVED').count(), 1)
 
     def test_status_display(self):
         i = ItemFactory()
