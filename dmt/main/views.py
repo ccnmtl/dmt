@@ -9,6 +9,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
@@ -1284,3 +1286,10 @@ class AddTrackersView(LoggedInMixin, TemplateView):
             messages.error(
                 request,
                 self.error_message % dict(error_text=e))
+
+
+def server_error(request, template_name='500.html'):
+    return render_to_response(
+        template_name,
+        context_instance=RequestContext(request),
+    )
