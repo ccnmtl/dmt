@@ -170,3 +170,5 @@ urlpatterns = patterns(
     (r'^uploads/(?P<path>.*)$',
      'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 )
+
+handler500 = 'dmt.main.views.server_error'
