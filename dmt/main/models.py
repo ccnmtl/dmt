@@ -581,7 +581,9 @@ to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
 
     def personnel_in_project(self):
         return [
-            w.username for w in WorksOn.objects.filter(project=self)
+            w.username for w in WorksOn.objects.filter(
+                project=self
+            ).select_related('username')
             if w.username.status == 'active']
 
     def all_personnel_in_project(self):
