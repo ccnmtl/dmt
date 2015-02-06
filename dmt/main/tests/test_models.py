@@ -6,7 +6,7 @@ import unittest
 from .factories import (
     UserProfileFactory, ItemFactory, NodeFactory, ProjectFactory,
     AttachmentFactory, ClientFactory, StatusUpdateFactory,
-    ActualTimeFactory, MilestoneFactory)
+    ActualTimeFactory, MilestoneFactory, NotifyFactory)
 from datetime import datetime, timedelta
 from simpleduration import Duration
 from dmt.main.models import (
@@ -299,6 +299,13 @@ class ItemTest(TestCase):
         resolve_time = i.get_resolve_time()
         self.assertEqual(resolve_time, timedelta(0, 7200))
 
+    def test_update_email(self):
+        i = ItemFactory(title="\r\n \r\n linebreaks")
+        u2 = UserProfileFactory(status='active')
+        NotifyFactory(item=i, username=u2)
+        i.update_email("a comment", i.owner)
+        self.assertEqual(len(mail.outbox), 1)
+
 
 class HistoryItemTest(TestCase):
     def test_status(self):
@@ -357,6 +364,18 @@ class NodeTest(TestCase):
 
         class DummyReply(object):
             subject = "a subject"
+        n.email_reply("", u, DummyReply())
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_email_reply_with_bad_header(self):
+        n = NodeFactory()
+        p = ProjectFactory()
+        n.project = p
+        u = UserProfileFactory()
+        n.save()
+
+        class DummyReply(object):
+            subject = "a subject\r\nfoo"
         n.email_reply("", u, DummyReply())
         self.assertEqual(len(mail.outbox), 1)
 
@@ -533,6 +552,14 @@ class ProjectTest(TestCase):
                    status='OPEN', r_status='')
         t = p.timeline()
         self.assertEqual(len(t), 1)
+
+    def test_email_post(self):
+        p = ProjectFactory()
+        n = NodeFactory(subject="\r\n \r\n linebreaks", project=p)
+        u2 = UserProfileFactory(status='active')
+        p.add_manager(u2)
+        p.email_post(n, "a body", n.author)
+        self.assertEqual(len(mail.outbox), 1)
 
 
 class TestAttachment(TestCase):
