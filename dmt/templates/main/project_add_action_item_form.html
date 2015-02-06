@@ -30,7 +30,7 @@
                             {% for milestone in object.milestone_set.all %}
                             <option
                                  value="{{milestone.mid}}"
-                                 {% ifequal milestone.mid object.upcoming_milestone.mid %}
+                                 {% ifequal milestone.mid upcoming_milestone.mid %}
                                  selected="selected"
                                  {% endifequal %}
                                  >

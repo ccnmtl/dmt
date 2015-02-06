@@ -541,11 +541,14 @@ class ProjectDetailView(LoggedInMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectDetailView, self).get_context_data(**kwargs)
+        unverified_items = Item.objects.filter(
+            milestone__project=self.object).filter(
+                ~Q(status='VERIFIED')
+        ).select_related('milestone')
+        m_set = set([i.milestone for i in unverified_items])
         ctx['milestones'] = [
             m for m in self.object.milestones()
-            if Item.objects.filter(milestone=m).filter(
-                ~Q(status='VERIFIED')
-            ).count() > 0]
+            if m in m_set]
         return ctx
 
 

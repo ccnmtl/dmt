@@ -455,8 +455,10 @@ class Project(models.Model):
         WorksOn.objects.filter(project=self, username=user).delete()
 
     def all_users_not_in_project(self):
-        already_in = set([w.username
-                          for w in WorksOn.objects.filter(project=self)])
+        already_in = set(
+            [w.username
+             for w in WorksOn.objects.filter(
+                 project=self).select_related('username')])
         all_users = set(UserProfile.objects.filter(status='active'))
         return sorted(list(all_users - already_in),
                       key=lambda x: x.fullname.lower())
@@ -464,6 +466,10 @@ class Project(models.Model):
     def upcoming_milestone(self):
         # ideally, we want a milestone that is open, in the future,
         # and as close to today as possible
+
+        if not self.milestone_set.exists():
+            # there are no milestones, nothing we can do
+            return None
 
         r = self.milestone_set.filter(
             status='OPEN',
@@ -581,7 +587,9 @@ to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
 
     def personnel_in_project(self):
         return [
-            w.username for w in WorksOn.objects.filter(project=self)
+            w.username for w in WorksOn.objects.filter(
+                project=self
+            ).select_related('username')
             if w.username.status == 'active']
 
     def all_personnel_in_project(self):
@@ -784,7 +792,8 @@ class Milestone(models.Model):
     def active_items(self):
         return Item.objects.filter(
             milestone=self,
-            status__in=['OPEN', 'RESOLVED', 'INPROGRESS'])
+            status__in=['OPEN', 'RESOLVED', 'INPROGRESS']
+        ).select_related('owner_user', 'assigned_user')
 
     def get_absolute_url(self):
         return "/milestone/%d/" % self.mid
@@ -874,9 +883,10 @@ class Item(models.Model):
                                       db_column='assigned_user',
                                       related_name='assigned_to')
     title = models.CharField(max_length=255)
-    milestone = models.ForeignKey(Milestone, db_column='mid')
+    milestone = models.ForeignKey(Milestone, db_column='mid', db_index=True)
     status = models.CharField(
         max_length=16,
+        db_index=True,
         choices=[
             ('OPEN', 'OPEN'),
             ('INPROGRESS', 'IN PROGRESS'),
