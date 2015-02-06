@@ -121,8 +121,10 @@
 </div><!-- /.modal -->
 </form>
 
+{% with upcoming_milestone=object.upcoming_milestone %}
 {% include 'main/project_add_bug_form.html' %}
 {% include 'main/project_add_action_item_form.html' %}
+{% endwith %}
 {% include 'main/project_add_tracker_form.html' %}
 {% include 'main/project_add_todo_form.html' %}
 {% include 'main/project_add_node_form.html' %}

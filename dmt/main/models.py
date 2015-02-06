@@ -465,6 +465,10 @@ class Project(models.Model):
         # ideally, we want a milestone that is open, in the future,
         # and as close to today as possible
 
+        if not self.milestone_set.all().exists():
+            # there are no milestones, nothing we can do
+            return None
+
         r = self.milestone_set.filter(
             status='OPEN',
             target_date__gte=datetime.today())
