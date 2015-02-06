@@ -455,8 +455,10 @@ class Project(models.Model):
         WorksOn.objects.filter(project=self, username=user).delete()
 
     def all_users_not_in_project(self):
-        already_in = set([w.username
-                          for w in WorksOn.objects.filter(project=self)])
+        already_in = set(
+            [w.username
+             for w in WorksOn.objects.filter(
+                 project=self).select_related('username')])
         all_users = set(UserProfile.objects.filter(status='active'))
         return sorted(list(all_users - already_in),
                       key=lambda x: x.fullname.lower())
