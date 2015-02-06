@@ -56,6 +56,11 @@ class ProjectCreateForm(ModelForm):
 
 
 class ProjectUpdateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProjectUpdateForm, self).__init__(*args, **kwargs)
+        active_users = UserProfile.objects.filter(status='active')
+        self.fields['caretaker'].queryset = active_users
+
     class Meta:
         model = Project
         exclude = ['pid', 'caretaker_user']
