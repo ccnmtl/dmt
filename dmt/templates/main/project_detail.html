@@ -121,8 +121,10 @@
 </div><!-- /.modal -->
 </form>
 
+{% with upcoming_milestone=object.upcoming_milestone %}
 {% include 'main/project_add_bug_form.html' %}
 {% include 'main/project_add_action_item_form.html' %}
+{% endwith %}
 {% include 'main/project_add_tracker_form.html' %}
 {% include 'main/project_add_todo_form.html' %}
 {% include 'main/project_add_node_form.html' %}
@@ -185,8 +187,8 @@
       <td class="{{item.status_class}}">{{item.status}} {{item.r_status|default:""}}</td>
       <td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
       <td class="hidden-xs">{{item.target_date|date:"Y-m-d"}}</td>
-      <td class="hidden-sm hidden-xs"><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
-      <td class="hidden-xs"><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to}}</a></td>
+      <td class="hidden-sm hidden-xs"><a href="{{item.owner_user.profile.get_absolute_url}}">{{item.owner_user.profile.fullname}}</a></td>
+      <td class="hidden-xs"><a href="{{item.assigned_to_user.profile.get_absolute_url}}">{{item.assigned_to_user.profile.fullname}}</a></td>
       <td class="hidden-sm hidden-xs">{{item.last_mod|date:"Y-m-d"}}</td>
     </tr>
     {% endfor %}
