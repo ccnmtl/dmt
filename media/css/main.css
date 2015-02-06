@@ -1164,7 +1164,84 @@ padding: 4px;
     text-align: center;
 }
 
-.pmt-timeline-item { border-top: 1px solid #f1f1f1; }
+/* ------ PMT Timeline ------ */
+
+.pmt-timeline-week {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: url('/media/img/bg-timeline-stripe.png') 0 0 repeat-y;
+}
+
+.pmt-timeline-day {
+    position: relative;
+    margin: 0 0 30px 0;
+    padding: 0;
+    border: 0;
+    background: url('/media/img/bg-timeline-dot.png') 0 10px no-repeat;
+}
+
+.pmt-timeline-arrow {
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    width: 11px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: url('/media/img/bg-timeline-arrow.png') 0 0 no-repeat;
+}
+
+.pmt-timeline-item {
+    margin: 0 0 0 40px;
+    padding: 10px 10px 0 10px;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    box-shadow: 0px 0px 5px #ccc;
+}
+
+.pmt-timeline-timestamp {
+    margin: 0;
+    padding: 0 0 10px 0;
+    border: 0;
+    font-size: 16px;
+    color: #c90;
+}
+
+.pmt-timeline-item-row {
+    margin: 0;
+    padding: 10px;
+    border: 0;
+    border-top: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+.pmt-timeline-item-row>.glyphicon {
+	font-size: 16px;
+	margin-right: 10px;
+}
+
+.event-body, .status-body { display: inline; }
+.event-body>p {
+	display: none;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}.event-body p:first-child { display: inline-block; }
+.event-body p:first-child b { font-weight: normal !important; }
+
+.status-body>p {
+    display: inline;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-style: italic;
+}
+
+/* .pmt-timeline-item { border-top: 1px solid #f1f1f1; } */
 button.pmt-report-submit { margin-top: 25px; }
 .emoji { height: 1.5em; }
 
