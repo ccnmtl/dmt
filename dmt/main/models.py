@@ -352,6 +352,11 @@ def interval_sum(intervals):
     return total
 
 
+# Avoid BadHeaderError - The subject can't contain newlines.
+def clean_subject(s):
+    return s.replace('\n', ' ').replace('\r', '')
+
+
 class Project(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField("Project name", max_length=255)
@@ -569,8 +574,9 @@ to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
             u.email for u in self.all_personnel_in_project()
             if u != user]
         subject = "[PMT Forum %s]: %s" % (self.name, node.subject)
+
         statsd.incr('main.email_sent')
-        send_mail(subject, body, user.email,
+        send_mail(clean_subject(subject), body, user.email,
                   addresses, fail_silently=settings.DEBUG)
 
     def personnel_in_project(self):
@@ -1126,7 +1132,8 @@ Please do not reply to this message.
             body, self.type, self.get_absolute_url()
         )
         addresses = [u.email for u in self.users_to_email(user)]
-        send_mail(email_subj, email_body, user.email,
+
+        send_mail(clean_subject(email_subj), email_body, user.email,
                   addresses, fail_silently=settings.DEBUG)
         statsd.incr('main.email_sent')
 
@@ -1360,7 +1367,8 @@ class Node(models.Model):
             "\n\n-- \nthis message sent automatically by the PMT forum.\n"
             "to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n" % (
                 self.get_absolute_url()))
-        send_mail(subject, body, user.email,
+
+        send_mail(clean_subject(subject), body, user.email,
                   [self.author.email], fail_silently=settings.DEBUG)
         statsd.incr('main.email_sent')
 
