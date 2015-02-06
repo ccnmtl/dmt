@@ -467,7 +467,7 @@ class Project(models.Model):
         # ideally, we want a milestone that is open, in the future,
         # and as close to today as possible
 
-        if not self.milestone_set.all().exists():
+        if not self.milestone_set.exists():
             # there are no milestones, nothing we can do
             return None
 
