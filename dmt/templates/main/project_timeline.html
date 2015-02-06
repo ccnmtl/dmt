@@ -3,9 +3,9 @@
 {% load waffle_tags %}
 {% load emoji_tags %}
 
-{% block title %}Project: {{object.name}}{% endblock %}
+{% block title %}Project Timeline: {{object.name}}{% endblock %}
 
-{% block extraclass %} class="project-page"{% endblock %}
+{% block extraclass %} class="timeline-page"{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
@@ -23,65 +23,123 @@
 <h1 class="page-title">Project Timeline &#8226; {{object.name}}</h1>
 
 
-<ul class="pager">
-  <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}">previous week</a></li>
-  <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>
-</ul>
+
+<div class="pagination-nav">
+  <ul class="pagination">
+    <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}" title="Previous week"><span aria-hidden="true"><b>&lt;</b></span><span class="sr-only">Previous</span></a></li>
+
+    <li class="disabled"><span class="page-current">
+     Week of {{week_start|date:"F jS"}} &ndash; {{week_end|date:"F jS"}} 
+    </span></li>
+
+      <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}" title="Next week"><span aria-hidden="true"><b>&gt;</b></span><span class="sr-only">Next</span></a></li>
+  </ul>
+</div>
+
+
 
 {% if timeline %}
-{% for i in timeline %}
-{% with i.timestamp|date:"Y-m-d" as date %}
-{% ifchanged date %}
-<hr />
-<h3 class="text-muted">{{i.timestamp|date:"D, F jS Y"}}</h3>
-{% endifchanged %}
+<div class="pmt-timeline-week">
+    {% for i in timeline %}
+    {% with i.timestamp|date:"Y-m-d" as date %}
+    {% ifchanged date %}
+    {% if not forloop.first %}
+        </div><!-- /.pmt-timeline-item -->
+    </div><!-- /.pmt-timeline-day -->
+    {% endif %}
+    <div class="pmt-timeline-day">
+        <div class="pmt-timeline-arrow">
+        </div><!-- /.pmt-timeline-arrow -->
+        <div class="pmt-timeline-item">
+            <h3 class="text-muted pmt-timeline-timestamp">{{i.timestamp|date:"D, F jS Y"}}</h3>
+    {% endifchanged %}
+            <div class="pmt-timeline-item-row">
+            {% ifequal i.event_type "event" %}
+                <span class="glyphicon glyphicon-check text-muted"></span>
+            {% if i.body %}
+                <div class="event-body">{{i.body|markdown|emoji_replace}}</div>
+            {% endif %}
+            by
+            {% if i.user %}
+            <a class="text-primary"
+               href="{% url 'user_detail' i.user.username %}"
+               >{{i.user.fullname}}</a>, 
+            {% endif %}
+            item 
+            “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
+            {% endifequal %}
+            
+            {% ifequal i.event_type "comment" %}
+                <span class="glyphicon glyphicon-comment text-muted"></span>
+            {% if i.user %}
+            <a class="text-primary"
+               href="{% url 'user_detail' i.user.username %}"
+               >{{i.user.fullname}}</a>
+            {% endif %}
+            commented on item 
+            “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
+            {% endifequal %}
+            
+            {% ifequal i.event_type "actual_time" %}
+                <span class="glyphicon glyphicon-time text-muted"></span>
+            {% if i.user %}
+            <a class="text-primary"
+               href="{% url 'user_detail' i.user.username %}"
+               >{{i.user.fullname}}</a>
+            {% endif %}
+                logged 
+            {% if i.body %}
+                <div class="event-body">{{i.body|markdown|emoji_replace}}</div>
+            {% endif %}
+                for item
+            “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
+            {% endifequal %}
+            
+            {% ifequal i.event_type "status_update" %}
+                <span class="glyphicon glyphicon-info-sign text-muted"></span>
+            {% if i.user %}
+            <a class="text-primary"
+               href="{% url 'user_detail' i.user.username %}"
+               >{{i.user.fullname}}</a>
+            {% endif %}
+                added status update
+            {% if i.body %}
+                <div class="status-body">“{{i.body|markdown|emoji_replace}}”</div>
+            {% endif %}
+            {% endifequal %}
+            
+            {% ifequal i.event_type "forum_post" %}
+                <span class="glyphicon glyphicon-comment text-muted"></span>
+            {% if i.user %}
+            <a class="text-primary"
+               href="{% url 'user_detail' i.user.username %}"
+               >{{i.user.fullname}}</a>
+            {% endif %}
+                posted a forum 
+             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
+           {% endifequal %}
 
-<div class="pmt-timeline-item">
-<div class="row">
-<div class="col-sm-3">
-<h4>
-{% ifequal i.event_type "event" %}
-		<span class="glyphicon glyphicon-star"></span>
-{% endifequal %}
-{% ifequal i.event_type "comment" %}
-		<span class="glyphicon glyphicon-comment"></span>
-{% endifequal %}
-{% ifequal i.event_type "actual_time" %}
-		<span class="glyphicon glyphicon-time"></span>
-{% endifequal %}
-{% ifequal i.event_type "status_update" %}
-		<span class="glyphicon glyphicon-info-sign"></span>
-{% endifequal %}
-{% ifequal i.event_type "forum_post" %}
-		<span class="glyphicon glyphicon-bullhorn"></span>
-{% endifequal %}
-{% ifequal i.event_type "milestone" %}
-		<span class="glyphicon glyphicon-exclamation-sign"></span>
-{% endifequal %}
-{% if i.label %}{{i.label}}{% endif %}</h4></div>
-<div class="col-sm-9">
-		<h4>{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}</h4>
-</div>
-</div>
+            {% ifequal i.event_type "milestone" %}
+                    <span class="glyphicon glyphicon-alert text-muted"></span>
+                Milestone
+            “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
+                is overdue
+            {% endifequal %}
+            
+            in <a href="{{i.project.get_absolute_url}}">{{i.project.name}}</a>
+    
+            </div>
+    {% if forloop.last %}
+        </div><!-- /.pmt-timeline-item -->
+    </div><!-- /.pmt-timeline-day -->
+    {% endif %}
+    {% endwith %}
+    {% endfor %}
+</div><!-- /.pmt-timeline-week -->
 
-<div class="row">
-	<div class="col-sm-11 col-sm-offset-1">
-{% if i.user %}
-<a class="text-primary"
-   href="{% url 'user_detail' i.user.username %}"
-   >{{i.user.fullname}}</a>
-{% endif %}
-		{% if i.body %}
-		{{i.body|markdown|emoji_replace}}
-		{% endif %}
-	</div>
-</div>
-{% endwith %}
-</div> <!-- end .pmt-timeline-item -->
-
-{% endfor %}
 {% else %}
-<p>No activity between {{week_start}} and {{week_end}}</p>
+<h4 class="text-muted">There are no activities between {{week_start}} and {{week_end}} for {{object.name}}.</h4>
+
 {% endif %}
 
 {% endblock %}
