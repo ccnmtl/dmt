@@ -880,9 +880,10 @@ class Item(models.Model):
                                       db_column='assigned_user',
                                       related_name='assigned_to')
     title = models.CharField(max_length=255)
-    milestone = models.ForeignKey(Milestone, db_column='mid')
+    milestone = models.ForeignKey(Milestone, db_column='mid', db_index=True)
     status = models.CharField(
         max_length=16,
+        db_index=True,
         choices=[
             ('OPEN', 'OPEN'),
             ('INPROGRESS', 'IN PROGRESS'),
