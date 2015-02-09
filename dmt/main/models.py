@@ -793,7 +793,9 @@ class Milestone(models.Model):
         return Item.objects.filter(
             milestone=self,
             status__in=['OPEN', 'RESOLVED', 'INPROGRESS']
-        ).select_related('owner_user', 'assigned_user')
+        ).select_related(
+            'owner_user', 'assigned_user',
+            'owner_user__userprofile', 'assigned_user__userprofile')
 
     def get_absolute_url(self):
         return "/milestone/%d/" % self.mid
