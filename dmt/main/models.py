@@ -133,7 +133,7 @@ class UserProfile(models.Model):
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS']
             ).exclude(
             milestone__name='Someday/Maybe').select_related(
-            'milestone', 'milestone__project')
+                'milestone', 'milestone__project', 'owner', 'assigned_to')
 
     def open_owned_items(self):
         """ for the 'owned items' page. """
@@ -141,14 +141,14 @@ class UserProfile(models.Model):
             owner=self,
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS', 'RESOLVED']
         ).order_by('-priority', '-target_date').select_related(
-            'milestone', 'milestone__project')
+            'milestone', 'milestone__project', 'owner', 'assigned_to')
 
     def resolved_owned_items(self):
         return Item.objects.filter(
             owner=self,
             status='RESOLVED'
             ).select_related(
-            'milestone', 'milestone__project')
+                'milestone', 'milestone__project', 'owner', 'assigned_to')
 
     def non_verified_owned_items(self):
         """ all items that this user owns that
@@ -261,7 +261,7 @@ class UserProfile(models.Model):
 
         events = Comment.objects.filter(
             username=self.username,
-            add_date_time__gt=start,
+            add_date_time__gte=start.date(),
             add_date_time__lte=end,
         ).exclude(event=None).select_related(
             'event_item', 'event_item__milestone',
@@ -272,28 +272,28 @@ class UserProfile(models.Model):
         comments = Comment.objects.filter(
             username=self.username,
             event=None,
-            add_date_time__gt=start,
+            add_date_time__gte=start.date(),
             add_date_time__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project')
         all_events.extend([TimeLineComment(c) for c in comments])
 
         actual_times = ActualTime.objects.filter(
             resolver=self,
-            completed__gt=start,
+            completed__gte=start.date(),
             completed__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project')
         all_events.extend([TimeLineActualTime(a) for a in actual_times])
 
         statuses = StatusUpdate.objects.filter(
             user=self,
-            added__gt=start,
+            added__gte=start.date(),
             added__lte=end,
         ).select_related('project')
         all_events.extend([TimeLineStatus(s) for s in statuses])
 
         posts = Node.objects.filter(
             author=self,
-            added__gt=start,
+            added__gte=start.date(),
             added__lte=end,
         ).select_related('project')
         all_events.extend([TimeLinePost(p) for p in posts])
@@ -307,7 +307,7 @@ class UserProfile(models.Model):
             project__caretaker=self,
             status='OPEN',
             target_date__lt=datetime.now(),
-        ).order_by('target_date')
+        ).order_by('target_date').select_related('project')
 
 
 def create_user_profile(sender, instance, created, **kwargs):
@@ -711,7 +711,7 @@ ORDER BY hours_logged DESC;
 
         events = Comment.objects.filter(
             event__item__milestone__project=self,
-            add_date_time__gt=start,
+            add_date_time__gte=start.date(),
             add_date_time__lte=end,
         ).select_related('event_item', 'event_item__milestone',
                          'event_item__milestone__project',
@@ -720,7 +720,7 @@ ORDER BY hours_logged DESC;
 
         comments = Comment.objects.filter(
             item__milestone__project=self,
-            add_date_time__gt=start,
+            add_date_time__gte=start.date(),
             add_date_time__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project',
                          'user')
@@ -728,7 +728,7 @@ ORDER BY hours_logged DESC;
 
         actual_times = ActualTime.objects.filter(
             item__milestone__project=self,
-            completed__gt=start,
+            completed__gte=start.date(),
             completed__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project',
                          'resolver')
@@ -736,21 +736,21 @@ ORDER BY hours_logged DESC;
 
         statuses = StatusUpdate.objects.filter(
             project=self,
-            added__gt=start,
+            added__gte=start.date(),
             added__lte=end,
         ).select_related('project', 'user')
         all_events.extend([TimeLineStatus(s) for s in statuses])
 
         posts = Node.objects.filter(
             project=self,
-            added__gt=start,
+            added__gte=start.date(),
             added__lte=end,
         ).select_related('project', 'author')
         all_events.extend([TimeLinePost(p) for p in posts])
 
         milestones = Milestone.objects.filter(
             project=self,
-            target_date__gt=start,
+            target_date__gte=start.date(),
             target_date__lte=end,
         )
         all_events.extend(TimeLineMilestone(m) for m in milestones)
@@ -793,7 +793,9 @@ class Milestone(models.Model):
         return Item.objects.filter(
             milestone=self,
             status__in=['OPEN', 'RESOLVED', 'INPROGRESS']
-        ).select_related('owner_user', 'assigned_user')
+        ).select_related(
+            'owner_user', 'assigned_user',
+            'owner_user__userprofile', 'assigned_user__userprofile')
 
     def get_absolute_url(self):
         return "/milestone/%d/" % self.mid

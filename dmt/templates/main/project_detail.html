@@ -187,8 +187,8 @@
       <td class="{{item.status_class}}">{{item.status}} {{item.r_status|default:""}}</td>
       <td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
       <td class="hidden-xs">{{item.target_date|date:"Y-m-d"}}</td>
-      <td class="hidden-sm hidden-xs"><a href="{{item.owner_user.profile.get_absolute_url}}">{{item.owner_user.profile.fullname}}</a></td>
-      <td class="hidden-xs"><a href="{{item.assigned_to_user.profile.get_absolute_url}}">{{item.assigned_to_user.profile.fullname}}</a></td>
+      <td class="hidden-sm hidden-xs"><a href="{{item.owner_user.userprofile.get_absolute_url}}">{{item.owner_user.userprofile.fullname}}</a></td>
+      <td class="hidden-xs"><a href="{{item.assigned_user.userprofile.get_absolute_url}}">{{item.assigned_user.userprofile.fullname}}</a></td>
       <td class="hidden-sm hidden-xs">{{item.last_mod|date:"Y-m-d"}}</td>
     </tr>
     {% endfor %}

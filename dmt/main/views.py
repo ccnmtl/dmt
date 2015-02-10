@@ -1176,13 +1176,16 @@ class GroupDetailView(LoggedInMixin, ListView):
         return self.members(group_name)
 
     def members(self, group_name):
-        group_memberships = InGroup.objects.filter(grp__username=group_name)
+        group_memberships = InGroup.objects.filter(
+            grp__username=group_name).order_by('username__fullname')
         return [x.username for x in group_memberships]
 
     def eligible_users(self, group_name):
         active_users = set(UserProfile.objects.filter(status='active'))
         members = set(self.members(group_name))
-        return sorted(active_users - members, key=lambda x: x.fullname.lower())
+        users = sorted(active_users - members,
+                       key=lambda x: x.fullname.lower())
+        return users
 
 
 class RemoveUserFromGroupView(LoggedInMixin, View):
