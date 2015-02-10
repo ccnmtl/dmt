@@ -133,7 +133,7 @@ class UserProfile(models.Model):
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS']
             ).exclude(
             milestone__name='Someday/Maybe').select_related(
-            'milestone', 'milestone__project')
+                'milestone', 'milestone__project', 'owner', 'assigned_to')
 
     def open_owned_items(self):
         """ for the 'owned items' page. """
@@ -141,14 +141,14 @@ class UserProfile(models.Model):
             owner=self,
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS', 'RESOLVED']
         ).order_by('-priority', '-target_date').select_related(
-            'milestone', 'milestone__project')
+            'milestone', 'milestone__project', 'owner', 'assigned_to')
 
     def resolved_owned_items(self):
         return Item.objects.filter(
             owner=self,
             status='RESOLVED'
             ).select_related(
-            'milestone', 'milestone__project')
+                'milestone', 'milestone__project', 'owner', 'assigned_to')
 
     def non_verified_owned_items(self):
         """ all items that this user owns that
@@ -307,7 +307,7 @@ class UserProfile(models.Model):
             project__caretaker=self,
             status='OPEN',
             target_date__lt=datetime.now(),
-        ).order_by('target_date')
+        ).order_by('target_date').select_related('project')
 
 
 def create_user_profile(sender, instance, created, **kwargs):
