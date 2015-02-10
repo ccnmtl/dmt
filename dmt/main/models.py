@@ -574,7 +574,7 @@ author: %s
 %s
 
 -- \nthis message sent automatically by the PMT forum.
-to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n"
+to reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n"
         """ % (self.name, user.fullname, body, node.get_absolute_url())
         addresses = [
             u.email for u in self.all_personnel_in_project()
@@ -1134,7 +1134,7 @@ title:\t\t%s
 
 %s
 
-%s URL: https://dmt.ccnmtl.columbia.edu%s
+%s URL: https://pmt.ccnmtl.columbia.edu%s
 
 Please do not reply to this message.
 """ % (
@@ -1377,7 +1377,7 @@ class Node(models.Model):
                 self.project.name, user.fullname, body)
         body += (
             "\n\n-- \nthis message sent automatically by the PMT forum.\n"
-            "to reply, please visit <https://dmt.ccnmtl.columbia.edu%s>\n" % (
+            "to reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n" % (
                 self.get_absolute_url()))
 
         send_mail(clean_subject(subject), body, user.email,
