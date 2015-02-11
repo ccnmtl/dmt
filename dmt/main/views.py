@@ -1108,7 +1108,12 @@ class SignS3View(LoggedInMixin, View):
 
         signature = base64.encodestring(
             hmac.new(AWS_SECRET_KEY, put_request, sha1).digest())
+
         signature = urllib.quote_plus(signature.strip())
+
+        # Encode the plus symbols
+        # https://pmt.ccnmtl.columbia.edu/item/95796/
+        signature = urllib.quote(signature)
 
         url = 'https://s3.amazonaws.com/%s/%s' % (S3_BUCKET, object_name)
         signed_request = '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (
