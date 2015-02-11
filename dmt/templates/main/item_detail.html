@@ -15,9 +15,9 @@
 {% block content %}
 
 <p class="project-breadcrumb">
-  <a href="{{object.milestone.project.get_absolute_url }}" class="project breadcrumb-item" data-toggle="tooltip" data-placement="bottom" title="View this project">{{object.milestone.project.name}}</a>
+  <a href="{{object.milestone.project.get_absolute_url }}" class="project breadcrumb-item" title="View this project">{{object.milestone.project.name}}</a>
   &nbsp;|&nbsp;
-  <a href="{{object.milestone.get_absolute_url }}" class="milestone breadcrumb-item" data-toggle="tooltip" data-placement="bottom" title="View this milestone">{{object.milestone.name}}</a>
+  <a href="{{object.milestone.get_absolute_url }}" class="milestone breadcrumb-item" title="View this milestone">{{object.milestone.name}}</a>
 </p>
 
 
@@ -805,11 +805,6 @@ function s3_upload() {
         }
     });
 }
-</script>
-<script>
-jQuery(document).ready(function() {
-    jQuery('.breadcrumb-item').tooltip();
-});
 </script>
 
 {% endflag %}
