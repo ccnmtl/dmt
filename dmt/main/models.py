@@ -496,7 +496,7 @@ class Project(models.Model):
             target_date=milestone.target_date,
             last_mod=datetime.now(),
             description='')
-        item.add_event('OPEN', user, "<b>action item added</b>")
+        item.add_event('OPEN', user, "<b>Action item added</b>")
         if tags:
             item.tags.add(*tags)
         milestone.update_milestone()
@@ -535,12 +535,14 @@ class Project(models.Model):
             target_date=target_date,
             last_mod=datetime.now(),
             description=description)
-        item.add_event('OPEN', owner, "<b>%s added</b>" % type)
+        item.add_event('OPEN', owner, "<b>%s added</b>" % type.capitalize())
         if tags:
             item.tags.add(*tags)
         item.setup_default_notification()
         item.add_project_notification()
-        item.update_email("%s added\n\n%s" % (type, description), owner)
+        item.update_email(
+            "%s added\n----\n%s"
+            % (type.capitalize(), description), owner)
         milestone.update_milestone()
         return item
 
@@ -1127,21 +1129,30 @@ class Item(models.Model):
             self.assigned_to.fullname,
             truncate_string(self.title))
         email_body = """
-project:\t%s
-by:\t\t%s
-%s:\t%d
-title:\t\t%s
+Item:\t%s
+By:\t%s
+
+Target date:\t%s
+Assigned to:\t%s
+Project:\t%s
+Milestone:\t%s
+URL:\thttps://pmt.ccnmtl.columbia.edu%s
 
 %s
 
-%s URL: https://pmt.ccnmtl.columbia.edu%s
+
 
 Please do not reply to this message.
+
 """ % (
-            self.milestone.project.name,
+            self.title,
             user.fullname,
-            self.type, self.iid, self.title,
-            body, self.type, self.get_absolute_url()
+            self.target_date,
+            self.assigned_to.fullname,
+            self.milestone.project.name,
+            self.milestone.name,
+            self.get_absolute_url(),
+            body
         )
         addresses = [u.email for u in self.users_to_email(user)]
 
