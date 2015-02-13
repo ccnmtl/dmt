@@ -589,7 +589,7 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
         addresses = [
             u.email for u in self.all_personnel_in_project()
             if u != user]
-        subject = "[PMT: %s] Forum: %s" % (self.name, node.subject)
+        subject = "[PMT Forum: %s] %s" % (self.name, node.subject)
 
         statsd.incr('main.email_sent')
         send_mail(clean_subject(subject), body, user.email,
@@ -1132,7 +1132,7 @@ class Item(models.Model):
             "<b>", "").replace("</b>", "").replace("<br />", "\n")
         body = textwrap.fill(body, replace_whitespace=False)
         # TODO: handle no user specified
-        email_subj = "[PMT:%s] Attn:%s-%s" % (
+        email_subj = "[PMT Item: %s] Attn: %s - %s" % (
             truncate_string(self.milestone.project.name),
             self.assigned_to.fullname,
             truncate_string(self.title))
@@ -1391,12 +1391,12 @@ class Node(models.Model):
         subject = "[PMT Forum] %s" % reply.subject
         if self.project_id != 0 and self.project:
             subject = "[PMT Forum: %s] %s" % (self.project.name, reply.subject)
-            body = "project: %s\nauthor: %s\n\n--\n%s" % (
-                self.project.name, user.fullname, body)
+            body = "Project: %s\nAuthor: %s\nForum title: %s\n\n%s" % (
+                self.project.name, user.fullname, reply.subject, body)
         body += (
-            "\n\n-- \nthis message sent automatically by the PMT forum.\n"
-            "to reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n" % (
-                self.get_absolute_url()))
+            "\n\n\n-- \nThis message sent automatically by the PMT forum.\n"
+            "To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n\r"
+            % (self.get_absolute_url()))
 
         send_mail(clean_subject(subject), body, user.email,
                   [self.author.email], fail_silently=settings.DEBUG)
