@@ -571,13 +571,20 @@ class Project(models.Model):
     def email_post(self, node, body, user):
         body = textwrap.fill(body, replace_whitespace=False)
         body = """
-project: %s
-author: %s
+Project: %s
+Author: %s
+Forum title: %s
+
 %s
 
--- \nthis message sent automatically by the PMT forum.
-to reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n"
-        """ % (self.name, user.fullname, body, node.get_absolute_url())
+-- \nThis message sent automatically by the PMT forum.
+To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
+        """ % (
+            self.name,
+            user.fullname,
+            node.subject,
+            body,
+            node.get_absolute_url())
         addresses = [
             u.email for u in self.all_personnel_in_project()
             if u != user]
