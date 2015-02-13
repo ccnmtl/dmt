@@ -577,6 +577,7 @@ Forum title: %s
 
 %s
 
+
 -- \nThis message sent automatically by the PMT forum.
 To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
         """ % (
@@ -588,7 +589,7 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
         addresses = [
             u.email for u in self.all_personnel_in_project()
             if u != user]
-        subject = "[PMT Forum %s]: %s" % (self.name, node.subject)
+        subject = "[PMT: %s] Forum: %s" % (self.name, node.subject)
 
         statsd.incr('main.email_sent')
         send_mail(clean_subject(subject), body, user.email,
@@ -1146,7 +1147,6 @@ Milestone:\t%s
 URL:\thttps://pmt.ccnmtl.columbia.edu%s
 
 %s
-
 
 
 Please do not reply to this message.
