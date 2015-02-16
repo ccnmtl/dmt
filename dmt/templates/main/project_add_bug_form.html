@@ -18,10 +18,10 @@
                                 class="form-control">
                             {% for user in object.all_personnel_in_project %}
                             <option value="{{user.username}}"
-                                    {% ifequal user.username object.caretaker.username %}
+                                    {% ifequal user.user.id object.caretaker_user.id %}
                                     selected="selected"
                                     {% endifequal %}
-                                    >{{user.fullname}}{% ifequal user.username object.caretaker.username %}
+                                    >{{user.fullname}}{% ifequal user.user.id object.caretaker_user.id %}
                                     *
                                     {% endifequal %}</option>
                             {% endfor %}

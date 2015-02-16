@@ -59,10 +59,11 @@ class BasicTest(TestCase):
 
 class TestClientViews(TestCase):
     def setUp(self):
-        self.u = User.objects.create(username="testuser")
+        up = UserProfileFactory(username="testuser")
+        self.u = up.user
         self.u.set_password("test")
         self.u.save()
-        self.client.login(username="testuser", password="test")
+        self.client.login(username=self.u.username, password="test")
         self.client_mock = ClientFactory()
 
     def test_client_detail_page(self):
@@ -113,10 +114,11 @@ class TestClientViews(TestCase):
 class TestProjectViews(TestCase):
     def setUp(self):
         self.c = self.client
-        self.u = User.objects.create(username="testuser")
+        up = UserProfileFactory(username='testuser', status='active')
+        self.u = up.user
         self.u.set_password("test")
         self.u.save()
-        self.c.login(username="testuser", password="test")
+        self.c.login(username=self.u.username, password="test")
 
     def test_all_projects_page(self):
         p = ProjectFactory()

@@ -76,8 +76,8 @@
             <td>{{p.last_worked_on}}</td>
             <td>{{p.status}}</td>
             <td>
-                <a href="{% url 'user_detail' p.caretaker_username %}">
-                    {{p.caretaker}}
+                <a href="{% url 'user_detail' p.caretaker_user.userprofile.username %}">
+                    {{p.caretaker_user.get_full_name}}
                 </a>
             </td>
             <td>{{p.hours_logged|interval_to_hours}}</td>
