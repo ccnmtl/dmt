@@ -304,7 +304,7 @@ class UserProfile(models.Model):
 
     def passed_open_milestones(self):
         return Milestone.objects.filter(
-            project__caretaker=self,
+            project__caretaker_user=self.user,
             status='OPEN',
             target_date__lt=datetime.now(),
         ).order_by('target_date').select_related('project')
@@ -678,8 +678,6 @@ SELECT
     p.projnum,
     date(tempalias.max) AS last_worked_on,
     p.status AS project_status,
-    u.fullname AS caretaker_fullname,
-    u.username AS caretaker_username,
     tempalias.sum AS hours_logged
 FROM
     (
@@ -691,9 +689,8 @@ FROM
         AND a.completed >= %s
         AND a.completed <= %s
     GROUP BY p.pid
-    ) AS tempalias, projects p, users u
+    ) AS tempalias, projects p
 WHERE tempalias.pid = p.pid
-    AND p.caretaker = u.username
 ORDER BY hours_logged DESC;
         """, [start, end])
         return projects
