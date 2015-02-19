@@ -103,6 +103,7 @@
 
 
   {% with pmt_user.passed_open_milestones as overdue_milestones %}
+  {% with pmt_user.open_owned_items as owned_items %}
 
   <ul class="nav nav-tabs project-tabs">
     {% if overdue_milestones %}
@@ -122,7 +123,7 @@
     <li>
         <a href="#owned-items" data-toggle="tab"
            >Owned Items
-            ({{ pmt_user.open_owned_items|length }})</a>
+            ({{ owned_items|length }})</a>
     </li>
   </ul>
 
@@ -267,7 +268,7 @@
 
 <div class="tab-pane fade" id="owned-items">
 {% if pmt_user.username %}
-{% if pmt_user.open_owned_items %}
+{% if owned_items %}
 <table class="table table-condensed table-striped tablesorter table-items" id="owned-items">
 	<thead>
 		<tr>
@@ -280,7 +281,7 @@
 		</tr>
 	</thead>
 	<tbody>
-{% for item in pmt_user.open_owned_items %}
+{% for item in owned_items %}
 <tr>
 	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
 	width="14" height="14"/> {% endif %}<a href="{% url 'item_detail' item.iid %}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
@@ -312,6 +313,7 @@
 
 {% endwith %}
 {% comment %}overdue_milestones{% endcomment %}
+{% endwith %}
 {% endwith %}
 {% endif %}
 {% comment %}request.user.is_anonymous{% endcomment %}

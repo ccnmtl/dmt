@@ -143,7 +143,7 @@ class UserProfile(models.Model):
         ).exclude(
             assigned_to=self
         ).order_by('-priority', '-target_date').select_related(
-            'milestone', 'milestone__project', 'owner', 'assigned_to')
+            'milestone', 'milestone__project', 'assigned_to')
 
     def resolved_owned_items(self):
         return Item.objects.filter(
