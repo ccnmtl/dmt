@@ -140,6 +140,8 @@ class UserProfile(models.Model):
         return Item.objects.filter(
             owner=self,
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS', 'RESOLVED']
+        ).exclude(
+            assigned_to=self
         ).order_by('-priority', '-target_date').select_related(
             'milestone', 'milestone__project', 'owner', 'assigned_to')
 
