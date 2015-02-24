@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Project management tool",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start"
+    "test": "./node_modules/karma/bin/karma start --browsers Firefox --single-run"
   },
   "devDependencies": {
     "casperjs": "~1.1.0-beta3",
