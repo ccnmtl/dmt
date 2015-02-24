@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "description": "Project management tool",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start"
+    "test": "./node_modules/karma/bin/karma start --browsers Firefox --single-run"
   },
   "devDependencies": {
     "casperjs": "~1.1.0-beta3",
     "karma": "~0.12.24",
     "karma-html2js-preprocessor": "~0.1.0",
     "karma-phantomjs-launcher": "~0.1.4",
+    "karma-firefox-launcher": "~0.1.4",
     "karma-qunit": "~0.1.4",
     "karma-requirejs": "~0.2.2",
     "karma-sinon": "~1.0.3",
