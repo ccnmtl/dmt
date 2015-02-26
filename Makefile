@@ -15,6 +15,8 @@ jshint: node_modules/jshint/bin/jshint
 jscs: node_modules/jscs/bin/jscs
 	./node_modules/jscs/bin/jscs media/js/src/ media/js/tests
 
+behave: ./ve/bin/python check
+	$(MANAGE) test bdd_tests --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
 
 node_modules/jshint/bin/jshint:
 	npm install jshint --prefix .
@@ -33,7 +35,7 @@ integration: ./ve/bin/python
 	npm test
 
 flake8: ./ve/bin/python
-	$(FLAKE8) $(APP) --exclude=migrations --max-complexity=7
+	$(FLAKE8) $(APP) bdd_tests --exclude=migrations --max-complexity=7
 
 runserver: ./ve/bin/python check
 	$(MANAGE) runserver

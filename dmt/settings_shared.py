@@ -139,6 +139,8 @@ INSTALLED_APPS = [
     'dmt.main',
     'dmt.report',
     'dmt.api',
+    'bdd_tests',
+    'django_behave',
 ]
 
 if 'jenkins' in sys.argv:
