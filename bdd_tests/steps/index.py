@@ -30,6 +30,8 @@ def logged_in(context):
     # so, in case this is the very first step to run,
     # we have to visit some page on the site first
     context.browser.visit(context.browser_url("/"))
+    # make sure page has loaded before touching the db directly
+    context.browser.is_element_present_by_tag('body', wait_time=2)
     user, s = create_pre_authenticated_session()
     context.browser.cookies.add({settings.SESSION_COOKIE_NAME: s})
     context.user = user
