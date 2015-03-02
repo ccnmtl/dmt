@@ -1,6 +1,7 @@
 import urlparse
 from splinter import Browser
 
+
 # change this to True and you will get dumped into
 # an ipdb shell when a step fails. Good for debugging.
 # remember to set it back to False before this goes to travis

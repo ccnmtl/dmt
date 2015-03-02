@@ -6,24 +6,33 @@ from dmt.main.tests.factories import UserFactory
 
 
 def create_pre_authenticated_session():
-    user = UserFactory()
+    user = UserFactory(userprofile__status="active")
     engine = import_module(settings.SESSION_ENGINE)
     session = engine.SessionStore()
     session[SESSION_KEY] = user.pk
     session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
     session.save()
-    return session.session_key
+    return user, session.session_key
 
 
 @given(u'I am not logged in')
 def not_logged_in(context):
     context.browser.cookies.delete(settings.SESSION_COOKIE_NAME)
+    context.user = None
 
 
 @given(u'I am logged in')
 def logged_in(context):
-    s = create_pre_authenticated_session()
+    if hasattr(context, 'user') and context.user is not None:
+        # already logged in
+        return
+    # can only set a cookie for the domain we are on
+    # so, in case this is the very first step to run,
+    # we have to visit some page on the site first
+    context.browser.visit(context.browser_url("/"))
+    user, s = create_pre_authenticated_session()
     context.browser.cookies.add({settings.SESSION_COOKIE_NAME: s})
+    context.user = user
 
 
 @when(u'I access the url "{url}"')
