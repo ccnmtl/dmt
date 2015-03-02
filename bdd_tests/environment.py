@@ -1,5 +1,6 @@
 import urlparse
-from splinter import Browser
+from selenium import webdriver
+
 
 # change this to True and you will get dumped into
 # an ipdb shell when a step fails. Good for debugging.
@@ -11,7 +12,8 @@ BEHAVE_DEBUG_ON_ERROR = False
 def before_all(context):
     host = context.host = 'localhost'
     port = context.port = 8081
-    context.browser = Browser(context.config.browser or 'firefox')
+    context.browser = webdriver.Firefox()
+    context.browser.implicitly_wait(5)
 
     def browser_url(url):
         return urlparse.urljoin('http://%s:%d/' % (host, port), url)

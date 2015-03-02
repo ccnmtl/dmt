@@ -19,7 +19,7 @@ behave: ./ve/bin/python check
 	$(MANAGE) test bdd_tests --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
 
 behave-wip: ./ve/bin/python check
-	$(MANAGE) test bdd_tests --behave_tags @wip --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
+	$(MANAGE) test bdd_tests --behave_no-capture --behave_tags @wip --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
 
 node_modules/jshint/bin/jshint:
 	npm install jshint --prefix .
