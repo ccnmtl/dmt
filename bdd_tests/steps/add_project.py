@@ -1,34 +1,33 @@
 from behave import when, then
-from selenium.common.exceptions import StaleElementReferenceException
 import time
-
-
-def retry_action(f):
-    end_time = time.time() + 2
-    while time.time() < end_time:
-        try:
-            f()
-            return
-        except StaleElementReferenceException:
-            pass
 
 
 @when(u'I create a new project')
 def i_create_a_new_project(context):
-    context.browser.visit(context.browser_url("/project/create/"))
-    context.browser.fill('name', 'new project')
-    retry_action(lambda: context.browser.choose('pub_view', 'true'))
-    context.browser.fill('target_date', '2020-12-31')
-    context.browser.find_by_value('Save project').first.click()
-    context.project_url = context.browser.url
+    b = context.browser
+    b.get(context.browser_url("/project/create/"))
+    e = b.find_element_by_xpath("//input[@name='name']")
+    e.send_keys('new project')
+    choices = b.find_elements_by_xpath("//input[@name='pub_view']")
+    for c in choices:
+        if c.get_attribute('value') == 'true':
+            c.click()
+    e = b.find_element_by_xpath("//input[@name='target_date']")
+    e.send_keys('2020-12-31')
+    e.submit()
+    context.project_url = b.current_url
 
 
 @then(u'I am on the list of personnel for the project')
 def i_am_on_the_personnel_for_the_project(context):
     """ expects 'project_url' and 'user' in context """
-    context.browser.visit(context.project_url)
-    context.browser.find_link_by_text("Personnel").first.click()
-    for a in context.browser.find_by_css("ul li span.personnel a"):
+    b = context.browser
+    assert b.current_url == context.project_url
+    e = b.find_element_by_xpath("//a[@href='#personnel']")
+    e.click()
+
+    for a in b.find_elements_by_css_selector(
+            "ul li span.personnel a"):
         if a.text == context.user.get_full_name():
             return
     else:
@@ -39,13 +38,17 @@ def i_am_on_the_personnel_for_the_project(context):
 @then(u'the project has a milestone named "{name}"')
 def the_project_has_a_milestone_named(context, name):
     """ expects 'project_url' in context """
-    context.browser.visit(context.project_url)
-    context.browser.find_link_by_text("Milestones").first.click()
-    for tr in context.browser.find_by_css("#milestone-table tr"):
-        for link in tr.find_by_tag('a'):
-            if link.html == name or link.text == name:
+    b = context.browser
+    assert b.current_url == context.project_url
+    e = b.find_element_by_xpath("//a[@href='#milestones']")
+    e.click()
+    time.sleep(2)  # wait for jquery fade in
+    for tr in b.find_elements_by_css_selector("#milestone-table tr")[1:]:
+        for link in tr.find_elements_by_tag_name("a"):
+            if link.text == name:
                 context.milestone_tr = tr
                 return
+
     # didn't find our milestone
     assert False
 
@@ -53,14 +56,24 @@ def the_project_has_a_milestone_named(context, name):
 @then(u'the milestone has target date "{date}"')
 def the_milestone_has_a_target_date(context, date):
     tr = context.milestone_tr
-    assert "<td>" + date + "</td>" in tr.html
+    for td in tr.find_elements_by_tag_name('td'):
+        if td.text == date:
+            return
+
+    assert False
 
 
 @when(u'I create a new project with final release date "{date}"')
 def i_create_a_new_project_with_date(context, date):
-    context.browser.visit(context.browser_url("/project/create/"))
-    context.browser.fill('name', 'new project')
-    retry_action(lambda: context.browser.choose('pub_view', 'true'))
-    context.browser.fill('target_date', date)
-    context.browser.find_by_value('Save project').first.click()
-    context.project_url = context.browser.url
+    b = context.browser
+    b.get(context.browser_url("/project/create/"))
+    e = b.find_element_by_xpath("//input[@name='name']")
+    e.send_keys('new project')
+    choices = b.find_elements_by_xpath("//input[@name='pub_view']")
+    for c in choices:
+        if c.get_attribute('value') == 'true':
+            c.click()
+    e = b.find_element_by_xpath("//input[@name='target_date']")
+    e.send_keys(date)
+    e.submit()
+    context.project_url = b.current_url
