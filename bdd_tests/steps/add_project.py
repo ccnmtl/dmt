@@ -8,10 +8,7 @@ def i_create_a_new_project(context):
     b.get(context.browser_url("/project/create/"))
     e = b.find_element_by_xpath("//input[@name='name']")
     e.send_keys('new project')
-    choices = b.find_elements_by_xpath("//input[@name='pub_view']")
-    for c in choices:
-        if c.get_attribute('value') == 'true':
-            c.click()
+    b.find_element_by_id("id_pub_view_0").click()
     e = b.find_element_by_xpath("//input[@name='target_date']")
     e.send_keys('2020-12-31')
     e.submit()
@@ -69,10 +66,7 @@ def i_create_a_new_project_with_date(context, date):
     b.get(context.browser_url("/project/create/"))
     e = b.find_element_by_xpath("//input[@name='name']")
     e.send_keys('new project')
-    choices = b.find_elements_by_xpath("//input[@name='pub_view']")
-    for c in choices:
-        if c.get_attribute('value') == 'true':
-            c.click()
+    b.find_element_by_id("id_pub_view_0").click()
     e = b.find_element_by_xpath("//input[@name='target_date']")
     e.send_keys(date)
     e.submit()
