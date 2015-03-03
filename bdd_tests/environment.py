@@ -6,7 +6,7 @@ from selenium import webdriver
 # an ipdb shell when a step fails. Good for debugging.
 # remember to set it back to False before this goes to travis
 # though...
-BEHAVE_DEBUG_ON_ERROR = False
+BEHAVE_DEBUG_ON_ERROR = True
 
 
 def before_all(context):
