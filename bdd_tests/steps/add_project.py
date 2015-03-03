@@ -1,11 +1,23 @@
 from behave import when, then
+from selenium.common.exceptions import StaleElementReferenceException
+import time
+
+
+def retry_action(f):
+    end_time = time.time() + 2
+    while time.time() < end_time:
+        try:
+            f()
+            return
+        except StaleElementReferenceException:
+            pass
 
 
 @when(u'I create a new project')
 def i_create_a_new_project(context):
     context.browser.visit(context.browser_url("/project/create/"))
     context.browser.fill('name', 'new project')
-    context.browser.choose('pub_view', 'true')
+    retry_action(lambda: context.browser.choose('pub_view', 'true'))
     context.browser.fill('target_date', '2020-12-31')
     context.browser.find_by_value('Save project').first.click()
     context.project_url = context.browser.url
@@ -48,7 +60,7 @@ def the_milestone_has_a_target_date(context, date):
 def i_create_a_new_project_with_date(context, date):
     context.browser.visit(context.browser_url("/project/create/"))
     context.browser.fill('name', 'new project')
-    context.browser.choose('pub_view', 'true')
+    retry_action(lambda: context.browser.choose('pub_view', 'true'))
     context.browser.fill('target_date', date)
     context.browser.find_by_value('Save project').first.click()
     context.project_url = context.browser.url
