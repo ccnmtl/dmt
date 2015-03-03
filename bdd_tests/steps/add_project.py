@@ -4,7 +4,6 @@ from behave import when, then
 @when(u'I create a new project')
 def i_create_a_new_project(context):
     context.browser.visit(context.browser_url("/project/create/"))
-    context.browser.is_element_present_by_tag('body', wait_time=2)
     context.browser.fill('name', 'new project')
     context.browser.choose('pub_view', 'true')
     context.browser.fill('target_date', '2020-12-31')
@@ -16,7 +15,6 @@ def i_create_a_new_project(context):
 def i_am_on_the_personnel_for_the_project(context):
     """ expects 'project_url' and 'user' in context """
     context.browser.visit(context.project_url)
-    context.browser.is_element_present_by_tag('body', wait_time=2)
     context.browser.find_link_by_text("Personnel").first.click()
     for a in context.browser.find_by_css("ul li span.personnel a"):
         if a.text == context.user.get_full_name():
@@ -30,7 +28,6 @@ def i_am_on_the_personnel_for_the_project(context):
 def the_project_has_a_milestone_named(context, name):
     """ expects 'project_url' in context """
     context.browser.visit(context.project_url)
-    context.browser.is_element_present_by_tag('body', wait_time=2)
     context.browser.find_link_by_text("Milestones").first.click()
     for tr in context.browser.find_by_css("#milestone-table tr"):
         for link in tr.find_by_tag('a'):
@@ -50,7 +47,6 @@ def the_milestone_has_a_target_date(context, date):
 @when(u'I create a new project with final release date "{date}"')
 def i_create_a_new_project_with_date(context, date):
     context.browser.visit(context.browser_url("/project/create/"))
-    context.browser.is_element_present_by_tag('body', wait_time=2)
     context.browser.fill('name', 'new project')
     context.browser.choose('pub_view', 'true')
     context.browser.fill('target_date', date)
