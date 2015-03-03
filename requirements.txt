@@ -23,7 +23,7 @@ ipdb==0.8
 isodate==0.5.0
 SPARQLWrapper==1.6.4
 rdflib==4.1.2
-selenium==2.44.0
+selenium==2.45.0
 coverage==3.7.1
 requests==2.4.3
 logilab-common==0.62.1
