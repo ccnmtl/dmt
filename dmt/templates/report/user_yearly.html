@@ -39,7 +39,7 @@
 		{% for project in active_projects %}
 		<tr>
 			<td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
-			<td>{{project.time}}</td>
+			<td>{{project.time|interval_to_hours}} hours</td>
 		</tr>
 		{% endfor %}
 	</tbody>
