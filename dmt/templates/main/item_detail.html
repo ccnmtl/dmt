@@ -79,31 +79,31 @@
     <div class="item-description">{{object.description|markdown|emoji_replace}}</div>
 
     <dl class="dl-horizontal">
-      <dt>Mark item as</dt>
+      <dt>Change status</dt>
       <dd>
         <div class="btn-group">
         {% if object.resolvable %}
         <a class="btn btn-primary btn-xs btn-resolved" href="#" data-toggle="modal"
         data-target="#resolve"><span class="glyphicon
-        glyphicon-ok"></span> Resolved</a>
+        glyphicon-ok"></span> Resolve</a>
         {% endif %}
         
         {% if object.inprogressable %}
         <a class="btn btn-default btn-xs btn-inprogress" href="#" data-toggle="modal"
         data-target="#mark-in-progress"><span class="glyphicon
-        glyphicon-record"></span> In-progress</a>
+        glyphicon-record"></span> Mark as in-progress</a>
         {% endif %}
         
         {% if object.verifiable %}
         <a class="btn btn-success btn-xs btn-verify" href="#" data-toggle="modal"
         data-target="#verify"><span class="glyphicon
-        glyphicon-ok"></span> Verified</a>
+        glyphicon-ok"></span> Verify</a>
         {% endif %}
         
         {% if object.reopenable %}
         <a class="btn btn-danger btn-xs" href="#" data-toggle="modal"
         data-target="#reopen"><span class="glyphicon
-        glyphicon-repeat"></span> Reopened</a>
+        glyphicon-repeat"></span> Reopen</a>
         {% endif %}
         </div>
       </dd>
