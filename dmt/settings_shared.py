@@ -142,6 +142,8 @@ INSTALLED_APPS = [
     'dmt.api',
     'bdd_tests',
     'django_behave',
+    'provider',
+    'provider.oauth2',
 ]
 
 if 'jenkins' in sys.argv:
