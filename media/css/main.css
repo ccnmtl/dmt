@@ -1203,6 +1203,21 @@ padding: 4px;
     box-shadow: 0px 0px 5px #ccc;
 }
 
+.pmt-item-timestamp {
+    white-space: nowrap;
+}
+
+.pmt-item-timestamp a {
+    color: inherit;
+}
+
+.pmt-anchor {
+    display: block;
+    height: 95px;
+    margin-top: -95px;
+    visibility: hidden;
+}
+
 .pmt-timeline-timestamp {
     margin: 0;
     padding: 0 0 10px 0;
