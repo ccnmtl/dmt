@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
-from waffle import Flag
+from waffle.models import Flag
 from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import (
     Attachment, Comment, Item, ItemClient, Milestone, Project,
