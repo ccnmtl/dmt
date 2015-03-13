@@ -738,6 +738,7 @@
 <div class="item-history">
     {% for history_item in object.history %}
     <hr />
+    <span class="pmt-anchor" id="event-{{forloop.counter}}"></span>
     <div class="row">
         <div class="col-md-2 {{history_item.status_class}}">
             {{history_item.status}}
@@ -746,7 +747,14 @@
             by <a href="{{history_item.user.get_absolute_url}}">
                 {{history_item.user.fullname}}</a>
             <br />
-            <nobr>on {{history_item.timestamp}}</nobr>
+            <div class="pmt-item-timestamp">
+                on
+                <a href="#event-{{forloop.counter}}">
+                    <time title="{{history_item.timestamp}}">
+                        {{history_item.timestamp}}
+                    </time>
+                </a>
+            </div>
         </div>
         <div class="col-md-7 item-comment">
 
