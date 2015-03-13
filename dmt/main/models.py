@@ -1255,10 +1255,7 @@ class HistoryEvent(HistoryItem):
         return self.event.status_class()
 
     def _get_comment(self):
-        r = self.event.comment_set.all()
-        if r.exists():
-            return r[0]
-        return None
+        return self.event.comment_set.first()
 
     def comment(self):
         return self._get_comment().comment
