@@ -51,7 +51,7 @@ wsgi_intercept==0.8.1
 mechanize==0.2.5
 recordtype==1.1
 urlparse2==1.1.1
-sqlparse==0.1.13
+sqlparse==0.1.14
 whitelistaffilmapper==0.1.0
 boto==2.34.0
 unicodecsv==0.9.4
