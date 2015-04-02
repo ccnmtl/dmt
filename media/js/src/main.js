@@ -123,7 +123,8 @@ require([
             todayHighlight: true
         });
 
-        $('#project-input').typeahead({
+        $('#project-input,#add-trackers-form .field-project input').typeahead({
+            hint: false,
             highlight: true
         }, {
             name: 'results',
@@ -133,5 +134,15 @@ require([
         $('#project-input').on('typeahead:selected', function(object, datum) {
             $('#tracker-pid-input').val(datum.pid);
         });
+        $('#add-trackers-form .field-project input').on(
+            'typeahead:selected',
+            function(e, datum) {
+                var pid = datum.pid;
+                var $input = $(e.target);
+                var name = $input.attr('name');
+                var $pidInput = $input.closest('tr')
+                    .find('input[name="' + name + '_pid"]').first();
+                $pidInput.val(pid);
+            });
     });
 });

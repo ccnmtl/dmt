@@ -4,6 +4,14 @@ from django.forms import ModelForm, TextInput
 from .models import StatusUpdate, Node, UserProfile, Project, Milestone, Item
 
 
+class AddTrackerForm(forms.Form):
+    project = forms.CharField()
+    project_pid = forms.IntegerField(widget=forms.HiddenInput())
+    task = forms.CharField()
+    time = forms.CharField()
+    client_uni = forms.CharField(required=False)
+
+
 class StatusUpdateForm(ModelForm):
     class Meta:
         model = StatusUpdate

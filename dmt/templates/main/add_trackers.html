@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 {% block title %}Add Trackers{% endblock %}
 
 {% block content %}
-
 <h1 class="page-title">Add Trackers</h1>
 
-<p class="instructions"><a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Help_and_Tutorial#Trackers" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> Need help?</a></p>
-
+<p class="instructions">
+    <a href="http://wiki.ccnmtl.columbia.edu/index.php/PMT_Help_and_Tutorial#Trackers"
+       target="_blank">
+        <span class="glyphicon glyphicon-question-sign"></span> Need help?
+    </a>
+</p>
 <br />
-<form role="form" id="add-trackers-form" method="post">{% csrf_token %}
 
-    <table class="table table-striped">
+<form method="post" id="add-trackers-form" action="">{% csrf_token %}
+    {{ formset.management_form }}
+    <table class="table table-condensed">
         <thead>
             <th>Project</th>
             <th>Task</th>
@@ -19,38 +23,24 @@
             <th>Client UNI</th>
         </thead>
         <tbody>
-            {% for tracker in trackers %}
+            {% for form in formset %}
             <tr>
-                <td>
-                    <select name="project-{{tracker}}"
-                            class="form-control input-sm">
-                        <option></option>
-                        {% for project in projects %}
-                        <option value="{{ project.pid }}">{{ project }}</option>
-                        {% endfor %}
-                    </select>
+                {% for field in form %}
+
+                {% if field.name != 'project_pid' %}
+                <td class="field-{{ field.name }}">
+                    {% bootstrap_field field layout='inline' %}
                 </td>
-                <td>
-                    <input name="task-{{tracker}}"
-                           type="text"
-                           class="form-control input-sm" />
-                </td>
-                <td>
-                    <input name="time-{{tracker}}"
-                           type="text"
-                           class="form-control input-sm" />
-                </td>
-                <td>
-                    <input name="client-uni-{{tracker}}"
-                           type="text"
-                           class="form-control input-sm" />
-                </td>
+                {% else %}
+                {# Render the hidden 'project_pid' input normally #}
+                {{ field }}
+                {% endif %}
+
+                {% endfor %}
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
     <button type="submit" class="btn btn-primary">Add Trackers</button>
 </form>
-
 {% endblock %}

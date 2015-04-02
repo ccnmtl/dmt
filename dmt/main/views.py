@@ -18,6 +18,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
 from django_statsd.clients import statsd
+from extra_views import FormSetView
 from taggit.models import Tag
 from taggit.utils import parse_tags
 import markdown
@@ -28,7 +29,7 @@ from dmt.main.models import (
 from dmt.main.models import interval_sum
 from dmt.main.filters import ClientFilter, ProjectFilter, UserFilter
 from dmt.main.forms import (
-    ItemUpdateForm,
+    AddTrackerForm, ItemUpdateForm,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm)
 from .utils import new_duration, safe_basename
@@ -1223,8 +1224,10 @@ class GroupListView(LoggedInMixin, ListView):
         return group_list
 
 
-class AddTrackersView(LoggedInMixin, TemplateView):
+class AddTrackersView(LoggedInMixin, FormSetView):
     template_name = "main/add_trackers.html"
+    form_class = AddTrackerForm
+    extra = 10
     success_message = 'Tracker added for project: ' + \
                       '<strong>' + \
                       '<a href="%(project_link)s">%(project_name)s</a>' + \
@@ -1232,71 +1235,50 @@ class AddTrackersView(LoggedInMixin, TemplateView):
     error_message = 'Error adding tracker: ' + \
                     '<strong>%(error_text)s</strong>'
 
-    def get_context_data(self, **kwargs):
-        ctx = super(AddTrackersView, self).get_context_data(**kwargs)
-        current_user = self.request.user.userprofile
-        ctx['trackers'] = range(10)
-        ctx['projects'] = current_user.recent_active_projects()
-        return ctx
+    def formset_valid(self, formset):
+        for form in formset.forms:
+            if form.cleaned_data == {}:
+                continue
 
-    def post(self, request):
-        user = request.user.userprofile
+            self.handle_formset_row(form, self.request.user)
 
-        for i in range(10):
-            self.handle_form_row(i, request, user)
+        return super(AddTrackersView, self).formset_valid(formset)
 
-        return HttpResponseRedirect(reverse('add_trackers'))
+    def handle_formset_row(self, form, user):
+        project_pid = form.cleaned_data.get('project_pid')
+        task = form.cleaned_data.get('task')
+        time = form.cleaned_data.get('time', '1 hour')
+        client_uni = form.cleaned_data.get('client_uni')
 
-    def handle_form_row(self, i, request, user):
-        str_i = str(i)
-        project_key = 'project-' + str_i
-        task_key = 'task-' + str_i
-        time_key = 'time-' + str_i
-        client_uni_key = 'client-uni-' + str_i
-
-        pid = request.POST.get(project_key, None)
-        task = request.POST.get(task_key, None)
-        timestr = request.POST.get(time_key, '1 hour') or '0h'
-        client_uni = request.POST.get(client_uni_key, None)
-
-        # Find out which trackers the user actually entered
-        if (not pid) or (not task):
-            return
-
-        d = new_duration(timestr)
+        d = new_duration(time)
         td = d.timedelta()
 
-        try:
-            project = get_object_or_404(Project, pid=pid)
-            milestone = project.upcoming_milestone()
-            item = Item.objects.create(
-                milestone=milestone,
-                type='action item',
-                owner=user, assigned_to=user,
-                owner_user=user.user, assigned_user=user.user,
-                title=task, status='VERIFIED',
-                priority=1, target_date=milestone.target_date,
-                last_mod=datetime.now(),
-                estimated_time=td)
+        project = get_object_or_404(Project, pid=project_pid)
+        milestone = project.upcoming_milestone()
+        item = Item.objects.create(
+            milestone=milestone,
+            type='action item',
+            owner=user.userprofile, assigned_to=user.userprofile,
+            owner_user=user, assigned_user=user,
+            title=task, status='VERIFIED',
+            priority=1, target_date=milestone.target_date,
+            last_mod=datetime.now(),
+            estimated_time=td)
 
-            if client_uni:
-                r = Client.objects.filter(
-                    email=client_uni + "@columbia.edu")
-                if r.count() > 0:
-                    item.add_clients([r[0]])
+        if client_uni:
+            r = Client.objects.filter(email=client_uni + "@columbia.edu")
+            if r.exists():
+                item.add_clients([r.first()])
 
-            item.add_resolve_time(user, td)
+        item.add_resolve_time(user.userprofile, td)
 
-            messages.success(
-                request,
-                self.success_message % dict(
-                    project_link=reverse('project_detail', args=(pid,)),
-                    project_name=project.name)
-            )
-        except Exception, e:
-            messages.error(
-                request,
-                self.error_message % dict(error_text=e))
+        messages.success(
+            self.request,
+            self.success_message % dict(
+                project_link=reverse('project_detail',
+                                     args=(project_pid,)),
+                project_name=project.name)
+        )
 
 
 def server_error(request, template_name='500.html'):
