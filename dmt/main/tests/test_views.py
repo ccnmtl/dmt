@@ -1136,7 +1136,13 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
 
     def test_add_trackers_post_empty(self):
-        r = self.client.post(reverse('add_trackers'), {})
+        r = self.client.post(reverse('add_trackers'), {
+            # Formset's management form
+            'form-TOTAL_FORMS': 10,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+        })
         self.assertEqual(r.status_code, 302)
 
     @unittest.skipUnless(
@@ -1147,23 +1153,53 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         p = ProjectFactory(caretaker=self.u.userprofile)
         MilestoneFactory(project=p)
         r = self.client.post(
-            reverse('add_trackers'),
-            {
-                'project-0': p.pid,
-                'task-0': 'test',
-                'time-0': '1hr',
-                'client-uni': ''
-            }
-        )
+            reverse('add_trackers'), {
+                # Formset's management form
+                'form-TOTAL_FORMS': 10,
+                'form-INITIAL_FORMS': 0,
+                'form-MIN_NUM_FORMS': 0,
+                'form-MAX_NUM_FORMS': 1000,
+
+                'form-0-project': p.name,
+                'form-0-project_pid': p.pid,
+                'form-0-task': 'test',
+                'form-0-time': '3hr',
+                'form-0-client-uni': '',
+            })
         self.assertEqual(r.status_code, 302)
 
         r = self.client.get(r.url)
-        self.assertTrue('Tracker added' in r.content)
-        self.assertTrue(p.name in r.content)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'Tracker added')
+        self.assertContains(r, p.name)
 
         i = Item.objects.last()
         resolve_time = i.get_resolve_time()
-        self.assertEqual(resolve_time, timedelta(0, 3600))
+        self.assertEqual(resolve_time, timedelta(0, 3600 * 3))
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_add_trackers_post_tracker_invalid(self):
+        r = self.client.post(
+            reverse('add_trackers'), {
+                # Formset's management form
+                'form-TOTAL_FORMS': 10,
+                'form-INITIAL_FORMS': 0,
+                'form-MIN_NUM_FORMS': 0,
+                'form-MAX_NUM_FORMS': 1000,
+
+                'form-0-project': '',
+                'form-0-project_pid': '',
+                'form-0-task': 'test',
+                'form-0-time': '',
+                'form-0-client-uni': '',
+            })
+        self.assertEqual(r.status_code, 200)
+
+        r = self.client.get(reverse('add_trackers'))
+        self.assertNotContains(r, 'Tracker added')
 
 
 class TestUserViews(LoggedInTestMixin, TestCase):

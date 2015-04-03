@@ -1,6 +1,7 @@
 # Django settings for dmt project.
 import os.path
 import sys
+from django.contrib import messages
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -234,3 +235,7 @@ REST_FRAMEWORK = {
 }
 
 GRAPHITE_BASE = "https://nanny-render.cul.columbia.edu/render/"
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}

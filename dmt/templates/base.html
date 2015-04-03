@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="{{STATIC_URL}}css/datepicker3.css">
   <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/dataTables.colVis.min.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}css/typeahead.js-bootstrap.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
   {% endcompress %}
 
   {% block css %}{% endblock %}
@@ -193,13 +195,13 @@
         {% if messages %}
         <div class="dmt-messages">
             {% for message in messages %}
-            <p
+            <div
                  {% if message.tags %}
-                 class="bg-{{message.tags}}"
+                 class="alert alert-{{message.tags}}"
                  {% endif %}
                  >
                 {{ message|safe }}
-            </p>
+            </div>
             {% endfor %}
         </div>
         {% endif %}
