@@ -1,6 +1,19 @@
 import ntpath
 import re
+from django.utils.encoding import smart_str
+import CommonMark
 from simpleduration import Duration, InvalidDuration
+
+
+def commonmark_render(text):
+    """Render a string of commonmark text to html.
+
+    :rtype: str
+    """
+    parser = CommonMark.DocParser()
+    renderer = CommonMark.HTMLRenderer()
+    ast = parser.parse(text)
+    return smart_str(renderer.render(ast))
 
 
 def new_duration(timestr):

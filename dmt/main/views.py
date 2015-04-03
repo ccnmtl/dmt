@@ -21,7 +21,6 @@ from django_statsd.clients import statsd
 from extra_views import FormSetView
 from taggit.models import Tag
 from taggit.utils import parse_tags
-import markdown
 from dmt.main.models import (
     Comment, Project, Milestone, Item, InGroup, Node, UserProfile, Client,
     StatusUpdate, ActualTime, Notify, Attachment
@@ -32,7 +31,7 @@ from dmt.main.forms import (
     AddTrackerForm, ItemUpdateForm,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm)
-from .utils import new_duration, safe_basename
+from dmt.main.utils import commonmark_render, new_duration, safe_basename
 from dmt.report.mixins import PrevNextWeekMixin
 
 from datetime import datetime, timedelta
@@ -126,7 +125,8 @@ class AddCommentView(LoggedInMixin, View):
         body = request.POST.get('comment', u'')
         if body == '':
             return HttpResponseRedirect(item.get_absolute_url())
-        item.add_comment(user, markdown.markdown(body))
+
+        item.add_comment(user, commonmark_render(body))
         item.touch()
         item.update_email(body, user)
         log_time(item, user, request)
@@ -168,7 +168,7 @@ class ResolveItemView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
         r_status = request.POST.get('r_status', u'FIXED')
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = commonmark_render(request.POST.get('comment', u''))
         if (item.assigned_to.username == item.owner.username and
                 item.owner.username == user.username):
             # streamline self-assigned item verification
@@ -188,7 +188,7 @@ class InProgressItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = commonmark_render(request.POST.get('comment', u''))
         item.mark_in_progress(user, comment)
         item.touch()
         item.update_email("Marked as in-progress\n----\n"
@@ -203,7 +203,7 @@ class VerifyItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = commonmark_render(request.POST.get('comment', u''))
         item.verify(user, comment)
         item.touch()
         item.update_email("Verified\n-----\n"
@@ -218,7 +218,7 @@ class ReopenItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = commonmark_render(request.POST.get('comment', u''))
         item.reopen(user, comment)
         item.touch()
         item.update_email("Reopened\n-----\n"
@@ -236,7 +236,7 @@ class ReassignItemView(LoggedInMixin, View):
         assigned_to = get_object_or_404(
             UserProfile,
             username=request.POST.get('assigned_to', ''))
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = commonmark_render(request.POST.get('comment', u''))
         item.reassign(user, assigned_to, comment)
         item.touch()
         item.update_email("Reassigned\n----\n"
@@ -253,7 +253,7 @@ class ChangeOwnerItemView(LoggedInMixin, View):
         owner = get_object_or_404(
             UserProfile,
             username=request.POST.get('owner', ''))
-        comment = markdown.markdown(request.POST.get('comment', u''))
+        comment = commonmark_render(request.POST.get('comment', u''))
         item.change_owner(user, owner, comment)
         item.touch()
         item.update_email("Owner changed\n-----\n"
