@@ -53,7 +53,7 @@ recordtype==1.1
 urlparse2==1.1.1
 sqlparse==0.1.14
 whitelistaffilmapper==0.1.0
-boto==2.34.0
+boto==2.36.0
 unicodecsv==0.9.4
 XlsxWriter==0.6.1
 splinter==0.7.0
