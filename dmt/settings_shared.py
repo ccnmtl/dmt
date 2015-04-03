@@ -135,7 +135,6 @@ INSTALLED_APPS = [
     'taggit',
     'taggit_templatetags',
     'djcelery',
-    'django_markwhat',
     'bootstrap3',
     'emoji',
     'dmt.main',
