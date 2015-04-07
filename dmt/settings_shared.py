@@ -33,6 +33,8 @@ if 'jenkins' in sys.argv:
             'ATOMIC_REQUESTS': True,
         }
     }
+
+if 'test' in sys.argv or 'jenkins' in sys.argv:
     CELERY_ALWAYS_EAGER = True
 
     WHITELIST_ORIGIN_IPS = (
