@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load dmttags %}
+{% load markup %}
 {% load waffle_tags %}
 {% load emoji_tags %}
 
@@ -76,7 +76,7 @@
   </div><!-- ./item-action-set -->
 
   <div class="item-details">
-    <div class="item-description">{{object.description|markdown|emoji_replace}}</div>
+    <div class="item-description">{{object.description|commonmark|emoji_replace}}</div>
 
     <dl class="dl-horizontal">
       <dt>Change status</dt>
@@ -713,7 +713,7 @@
         on {{attachment.last_mod}}
         </div>
         <div class="attachment-description">
-            {{attachment.description|markdown|emoji_replace}}
+            {{attachment.description|commonmark|emoji_replace}}
         </div>
         <ul class="attachment-action-set clearfix">
             <li class="attachment-action">
@@ -773,7 +773,7 @@
             {% endif %}
             {% endif %}
 
-            {{history_item.comment|markdown|emoji_replace}}
+            {{history_item.comment|commonmark|emoji_replace}}
         </div>
     </div>
     {% endfor %}

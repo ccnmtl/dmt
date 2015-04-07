@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load dmttags %}
+{% load markup %}
 {% load emoji_tags %}
 
 {% block title %}Milestone&ndash;{{object.name}}{% endblock %}
@@ -43,7 +43,7 @@
   </div><!-- ./object-action-set -->
 
   <div class="object-details">
-    <div class="object-description">{{object.description|markdown|emoji_replace}}</div>
+    <div class="object-description">{{object.description|commonmark|emoji_replace}}</div>
     
     <dl class="dl-horizontal">
       <dt>Status</dt>

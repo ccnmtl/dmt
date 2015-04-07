@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load dmttags %}
+{% load markup %}
 {% load emoji_tags %}
 
 {% block content %}
@@ -91,7 +91,7 @@
 <div class="col-md-3">
 <a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a></div>
 <div class="col-md-6">
- {{su.body|markdown|emoji_replace}}
+ {{su.body|commonmark|emoji_replace}}
 </div>
 <div class="col-md-3">
  &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>
