@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load dmttags %}
+{% load markup %}
 {% load waffle_tags %}
 {% load emoji_tags %}
 
@@ -57,7 +57,7 @@
             {% ifequal i.event_type "event" %}
                 <span class="glyphicon glyphicon-check text-muted"></span>
             {% if i.body %}
-                <div class="event-body">{{i.body|markdown|emoji_replace}}</div>
+                <div class="event-body">{{i.body|commonmark|emoji_replace}}</div>
             {% endif %}
             item 
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
@@ -73,7 +73,7 @@
                 <span class="glyphicon glyphicon-time text-muted"></span>
                 Logged 
             {% if i.body %}
-                <div class="event-body">{{i.body|markdown|emoji_replace}}</div>
+                <div class="event-body">{{i.body|commonmark|emoji_replace}}</div>
             {% endif %}
                 for item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
@@ -83,7 +83,7 @@
                 <span class="glyphicon glyphicon-info-sign text-muted"></span>
                 Added status update
             {% if i.body %}
-                <div class="status-body">“{{i.body|markdown|emoji_replace}}”</div>
+                <div class="status-body">“{{i.body|commonmark|emoji_replace}}”</div>
             {% endif %}
             {% endifequal %}
             

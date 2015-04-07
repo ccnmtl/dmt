@@ -121,6 +121,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'compressor',
+    'django_markwhat',
     'django_nose',
     'django_statsd',
     'bootstrapform',
