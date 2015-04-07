@@ -134,63 +134,79 @@ class TestClientViews(TestCase):
         self.assertEqual(c.user, self.u)
 
 
-class TestProjectViews(TestCase):
+class TestProjectViews(LoggedInTestMixin, TestCase):
     def setUp(self):
+        super(TestProjectViews, self).setUp()
         self.c = self.client
-        up = UserProfileFactory(username='testuser', status='active')
-        self.u = up.user
-        self.u.set_password("test")
-        self.u.save()
-        self.c.login(username=self.u.username, password="test")
+        self.p = ProjectFactory()
 
     def test_all_projects_page(self):
-        p = ProjectFactory()
         r = self.c.get(reverse('project_list'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(p.name in r.content)
-        self.assertTrue(p.get_absolute_url() in r.content)
+        self.assertTrue(self.p.name in r.content)
+        self.assertTrue(self.p.get_absolute_url() in r.content)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_project_page(self):
-        p = ProjectFactory()
-        r = self.c.get(p.get_absolute_url())
+        r = self.c.get(self.p.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(p.name in r.content)
+        self.assertContains(r, self.p.name)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
+    def test_project_report_page(self):
+        r = self.c.get(self.p.get_absolute_url() + '#reports')
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, self.p.name)
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_node(self):
-        p = ProjectFactory()
         r = self.c.post(
-            p.get_absolute_url() + "add_node/",
+            self.p.get_absolute_url() + "add_node/",
             dict(subject='node subject', body="this is the body"))
         self.assertEqual(r.status_code, 302)
-        r = self.c.get(p.get_absolute_url())
+        r = self.c.get(self.p.get_absolute_url())
         self.assertTrue("node subject" in r.content)
         self.assertTrue("this is the body" in r.content)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_node_with_tags(self):
-        p = ProjectFactory()
         r = self.c.post(
-            p.get_absolute_url() + "add_node/",
+            self.p.get_absolute_url() + "add_node/",
             dict(subject='node subject', body="this is the body",
                  tags="tagone, tagtwo"))
         self.assertEqual(r.status_code, 302)
-        r = self.c.get(p.get_absolute_url())
+        r = self.c.get(self.p.get_absolute_url())
         self.assertTrue("node subject" in r.content)
         self.assertTrue("this is the body" in r.content)
 
     def test_add_node_empty_body(self):
-        p = ProjectFactory()
         r = self.c.post(
-            p.get_absolute_url() + "add_node/",
+            self.p.get_absolute_url() + "add_node/",
             dict(subject='node subject', body=""))
         self.assertEqual(r.status_code, 302)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_status_update(self):
-        p = ProjectFactory()
         r = self.c.post(
-            p.get_absolute_url() + "add_update/",
+            self.p.get_absolute_url() + "add_update/",
             dict(body="xyzzy"))
         self.assertEqual(r.status_code, 302)
-        r = self.c.get(p.get_absolute_url())
+        r = self.c.get(self.p.get_absolute_url())
         self.assertTrue("xyzzy" in r.content)
 
         r = self.c.get(self.u.userprofile.get_absolute_url())
@@ -200,9 +216,8 @@ class TestProjectViews(TestCase):
         self.assertTrue("xyzzy" in r.content)
 
     def test_add_status_empty_body(self):
-        p = ProjectFactory()
         r = self.c.post(
-            p.get_absolute_url() + "add_update/",
+            self.p.get_absolute_url() + "add_update/",
             dict(body=""))
         self.assertEqual(r.status_code, 302)
 
@@ -216,52 +231,60 @@ class TestProjectViews(TestCase):
         self.assertTrue("xyzzy" in r.content)
 
     def test_remove_user(self):
-        p = ProjectFactory()
         u = UserProfileFactory()
-        p.add_manager(u)
-        r = self.c.get(p.get_absolute_url() + "remove_user/%s/" % u.username)
+        self.p.add_manager(u)
+        r = self.c.get(
+            self.p.get_absolute_url() + "remove_user/%s/" % u.username)
         self.assertTrue(u.fullname in r.content)
-        self.assertTrue(u in p.managers())
-        self.c.post(p.get_absolute_url() + "remove_user/%s/" % u.username)
-        self.assertTrue(u not in p.managers())
+        self.assertTrue(u in self.p.managers())
+        self.c.post(
+            self.p.get_absolute_url() + "remove_user/%s/" % u.username)
+        self.assertTrue(u not in self.p.managers())
 
     def test_add_user(self):
-        p = ProjectFactory()
         u = UserProfileFactory(status='active')
-        r = self.c.post(p.get_absolute_url() + "add_user/",
+        r = self.c.post(self.p.get_absolute_url() + "add_user/",
                         dict(username=u.username))
         self.assertEqual(r.status_code, 302)
-        self.assertTrue(u in p.all_personnel_in_project())
+        self.assertTrue(u in self.p.all_personnel_in_project())
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_milestone(self):
-        p = ProjectFactory()
-        r = self.c.post(p.get_absolute_url() + "add_milestone/",
+        r = self.c.post(self.p.get_absolute_url() + "add_milestone/",
                         dict(name="NEW TEST MILESTONE",
                              target_date="2020-01-01"))
         self.assertEqual(r.status_code, 302)
-        r = self.c.get(p.get_absolute_url())
+        r = self.c.get(self.p.get_absolute_url())
         self.assertTrue("NEW TEST MILESTONE" in r.content)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_milestone_empty_title(self):
-        p = ProjectFactory()
-        r = self.c.post(p.get_absolute_url() + "add_milestone/",
+        r = self.c.post(self.p.get_absolute_url() + "add_milestone/",
                         dict(name="",
                              target_date="2020-01-01"))
         self.assertEqual(r.status_code, 302)
-        r = self.c.get(p.get_absolute_url())
+        r = self.c.get(self.p.get_absolute_url())
         self.assertTrue("Untitled milestone" in r.content)
 
     def test_add_action_item_empty_request(self):
-        p = ProjectFactory()
-        r = self.c.post(p.get_absolute_url() + "add_action_item/",
+        r = self.c.post(self.p.get_absolute_url() + "add_action_item/",
                         dict())
         self.assertEquals(r.status_code, 404)
 
     def test_timeline(self):
-        p = ProjectFactory()
-        r = self.c.get(reverse("project_timeline", args=[p.pid]))
+        r = self.c.get(reverse("project_timeline", args=[self.p.pid]))
         self.assertEqual(r.status_code, 200)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_action_item_form_owner(self):
         milestone = MilestoneFactory()
         milestone.project.add_personnel(self.u.userprofile, auth='manager')
@@ -325,6 +348,10 @@ class TestProjectViews(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue('Create new project' in r.content)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_create_project_post(self):
         test_name = 'Test project'
         test_desc = 'Description for the test project'
@@ -467,6 +494,10 @@ class TestMilestoneViews(TestCase):
         self.u.save()
         self.c.login(username="testuser", password="test")
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_project_page(self):
         m = MilestoneFactory()
         r = self.c.get(m.project.get_absolute_url())
@@ -489,6 +520,10 @@ class TestMilestoneViews(TestCase):
         r = self.c.get(reverse('delete_milestone', args=(m.mid,)))
         self.assertEqual(r.status_code, 200)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_milestone_delete(self):
         m = MilestoneFactory()
         p = m.project
@@ -796,6 +831,10 @@ class TestItemWorkflow(TestCase):
                  other_param="sub item two"))
         self.assertEqual(r.status_code, 302)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_todos(self):
         i = ItemFactory()
         project = i.milestone.project
@@ -818,6 +857,10 @@ class TestItemWorkflow(TestCase):
                  title_1=""))
         self.assertEqual(r.status_code, 302)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_bug(self):
         i = ItemFactory()
         project = i.milestone.project
@@ -830,6 +873,10 @@ class TestItemWorkflow(TestCase):
         r = self.c.get(project.get_absolute_url())
         self.assertTrue("test bug" in r.content)
 
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        'This test requires PostgreSQL')
     def test_add_bug_no_tags(self):
         i = ItemFactory()
         project = i.milestone.project

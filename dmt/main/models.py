@@ -710,6 +710,31 @@ ORDER BY hours_logged DESC;
             item__milestone__project=self,
         ).order_by('completed')
 
+    def users_active_between(self, start, end):
+        """Returns a project report that lists user stats."""
+        users = User.objects.raw("""
+SELECT
+    u.id,
+    date(tempalias.max) AS last_worked_on,
+    tempalias.sum AS hours_logged
+FROM
+    (
+    SELECT u.id, max(completed), sum(a.actual_time)
+    FROM projects p, milestones m, items i, actual_times a, auth_user u
+    WHERE p.pid = %s
+        AND p.pid = m.pid
+        AND m.mid = i.mid
+        AND i.iid = a.iid
+        AND a.user_id = u.id
+        AND a.completed >= %s
+        AND a.completed <= %s
+    GROUP BY u.id
+    ) AS tempalias, auth_user u
+WHERE tempalias.id = u.id
+ORDER BY hours_logged DESC;
+        """, [self.pid, start, end])
+        return users
+
     def timeline(self, start=None, end=None):
         all_events = []
         if end is None:

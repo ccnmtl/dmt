@@ -128,11 +128,11 @@
 {% include 'main/project_add_update_form.html' %}
 
 <ul class="nav nav-tabs project-tabs">
-  <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
-  <li><a href="#details" data-toggle="tab">Details</a></li>
+    <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
+    <li><a href="#details" data-toggle="tab">Details</a></li>
 	<li><a href="#personnel" data-toggle="tab">Personnel</a></li>
-  <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
-  <li><a href="#reports" data-toggle="tab">Reports</a></li>
+    <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
+    <li><a href="#reports" data-toggle="tab">Reports</a></li>
 	<li><a href="#forum" data-toggle="tab">Forum</a></li>
 	<li><a href="#updates" data-toggle="tab">Status</a></li>
 </ul>
@@ -325,17 +325,7 @@
   </div>
   
   <div class="tab-pane fade" id="reports">
-  
-  <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
-     width="100%" />
-
-	<ul>
-		<li>Export project hours logged:
-			<a href="{% url 'project-hours-report' project.pid %}?format=csv">CSV</a>
-			or
-			<a href="{% url 'project-hours-report' project.pid %}?format=xls">XLS</a>
-	</ul>
-  
+      {% include 'main/project_detail_report.html' %}
   </div>
   
   <div class="tab-pane fade" id="forum">
@@ -397,27 +387,39 @@
     </div><!-- /.status-update -->
     {% endfor %}
   </div>
-  
 </div>
 {% endblock %}
 
 {% block js %}
 <script>
-$(document).ready(function() 
-    { 
-        {% for milestone in milestones %}
-        {% if object.active_items %}
-            $("#project-items-{{milestone.mid}}").tablesorter({sortList: [[3,1]]});
-        {% endif %}
-        {% endfor %}
+$(document).ready(function() {
+    var hash = window.location.hash;
+    hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+    $('.nav-tabs a').click(function (e) {
+        $(this).tab('show');
+        window.location.hash = this.hash;
+        $(window).scrollTop(0);
+    });
+
+    {% for milestone in milestones %}
+    {% if object.active_items %}
+        $("#project-items-{{milestone.mid}}").tablesorter({
+            sortList: [[3,1]]
+        });
+    {% endif %}
+    {% endfor %}
         
-        {% if object.milestone_set.count %}
-            $("#milestone-table").tablesorter({
-               sortList: [[1,1], [1,0]],
-               headers: { 4: { sorter: false}}});
-        {% endif %}
-    } 
-);
+    {% if object.milestone_set.count %}
+        $("#milestone-table").tablesorter({
+           sortList: [[1,1], [1,0]],
+           headers: { 4: { sorter: false } }
+        });
+    {% endif %}
+
+    $('#project-report').tablesorter({
+        sortList: [[1, 1]]
+    });
+});
 </script>
 
 {% endblock %}

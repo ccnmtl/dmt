@@ -1,0 +1,35 @@
+{% load dmttags %}
+
+{% include 'report/range_offset_form.html' %}
+
+<table id="project-report"
+       class="table table-bordered table-striped tablesorter">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Hours logged</th>
+            <th>Last worked on</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users_active_in_range %}
+        <tr>
+            <td>{{ u.userprofile.fullname }}</td>
+            <td>{{ u.hours_logged|interval_to_hours }}</td>
+            <td>{{ u.last_worked_on }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
+     width="100%" />
+
+<ul>
+    <li>
+        Export project hours logged:
+        <a href="{% url 'project-hours-report' project.pid %}?format=csv">CSV</a>
+        or
+        <a href="{% url 'project-hours-report' project.pid %}?format=xls">XLS</a>
+    </li>
+</ul>
