@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% load dmttags %}
 
-{% block css %}
-<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
-{% endblock %}
-
 {% block title %}Staff Report{% endblock %}
 
 {% block primarynavtabs %}
@@ -34,7 +30,7 @@
     </div>
 </div>
 
-<table class="table table-striped table-condensed tablesorter" id="staff-report">
+<table class="table table-striped table-condensed tablesorter tablesorter-default" id="staff-report">
     <thead>
         <th>Staff Member</th>
         <th>Group</th>
@@ -62,8 +58,6 @@
 {% endblock %}
 
 {% block js %}
-  <script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
-
 <script>
 $(document).ready(function() {
     $("#staff-report").tablesorter({sortList: [[0,0]]});

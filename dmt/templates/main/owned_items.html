@@ -2,18 +2,14 @@
 
 {% block title %}Owned Items for {{user.first_name }} {{user.last_name}}{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
-{% endblock %}
-
-
 {% block content %}
 <h1 class="page-title">Owned Items for {{user.first_name }} {{user.last_name}}</h1>
 
 <br />
 
 {% if object.open_owned_items %}
-<table class="table table-condensed table-striped tablesorter" id="user-items">
+<table class="table table-condensed table-striped tablesorter tablesorter-default"
+       id="user-items">
 	<thead>
 		<tr>
 			<th>Item</th>
@@ -48,8 +44,6 @@
 
 
 {% block js %}
-    <script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
-
     <script>
         $(document).ready(function()  { 
                $("table.tablesorter").tablesorter({sortList: [[1,0], [3,1]]}); 

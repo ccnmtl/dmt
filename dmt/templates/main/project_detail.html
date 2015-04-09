@@ -7,10 +7,6 @@
 
 {% block extraclass %} class="project-page"{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
-{% endblock %}
-
 {% block primarynavtabs %}
 {% endblock %}
 
@@ -165,7 +161,8 @@
       </div>
     </div>
   {% if milestone.active_items %}
-  <table class="table table-condensed table-striped tablesorter" id="project-items-{{ milestone.mid }}">
+    <table class="table table-condensed table-striped tablesorter tablesorter-default"
+           id="project-items-{{ milestone.mid }}">
   <thead>
     <tr>
       <th>Title</th>
@@ -297,7 +294,8 @@
     Add New Milestone</a></p>
   
   {% if object.milestone_set.count %}
-  <table class="table table-condensed table-striped tablesorter" id="milestone-table">
+  <table class="table table-condensed table-striped tablesorter tablesorter-default"
+         id="milestone-table">
   <thead>
     <tr>
       <th>Name</th>
@@ -403,8 +401,6 @@
 {% endblock %}
 
 {% block js %}
-<script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
-
 <script>
 $(document).ready(function() 
     { 

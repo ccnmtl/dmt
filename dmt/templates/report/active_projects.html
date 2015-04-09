@@ -4,10 +4,6 @@
 
 {% load dmttags %}
 
-{% block css %}
-<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
-{% endblock %}
-
 {% block content %}
 <ul class="breadcrumb">
     <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
@@ -41,7 +37,7 @@
     </div>
 </div>
 
-<table id="active-projects-report" class="table table-bordered table-striped tablesorter">
+<table id="active-projects-report" class="table table-bordered table-striped tablesorter tablesorter-default">
     <thead>
         <tr>
             <th>ID</th>
@@ -89,8 +85,6 @@
 {% endblock %}
 
 {% block js %}
-<script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
-
 <script>
 $(document).ready(function() {
     $('#active-projects-report').tablesorter({sortList: [[6,1]]});

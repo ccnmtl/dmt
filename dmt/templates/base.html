@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/dataTables.colVis.min.css">
   <link rel="stylesheet" href="{{STATIC_URL}}css/typeahead.js-bootstrap.css">
-  <link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}css/theme.tablesorter.default.css">
   {% endcompress %}
 
   {% block css %}{% endblock %}
@@ -30,6 +30,7 @@
 
 
   <script src="{{STATIC_URL}}js/libs/jquery/jquery-min.js"></script>
+  <script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
 
   <!-- jquery.dataTables -->
   <script src="{{STATIC_URL}}js/libs/datatables/jquery.dataTables.min.js"></script>
@@ -221,7 +222,6 @@
 
 <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 <script src="{% bootstrap_javascript_url %}"></script>
-
 <script src="//cdn.ravenjs.com/1.1.18/jquery,native,require/raven.min.js"></script>
 <script>
 Raven.config('https://416166385bf0416f8156c63fd3aebb95@sentry.ccnmtl.columbia.edu/2', {

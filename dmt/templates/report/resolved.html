@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 
-{% block css %}
-<link rel="stylesheet" href="{{STATIC_URL}}css/tablecloth.css">
-{% endblock %}
-
 {% block content %}
 <ul class="breadcrumb">
   <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
@@ -11,13 +7,13 @@
         <li class="active">Resolved Items</li>
 </ul>
 
-
 <h1>Resolved Items</h1>
 
 <p>These are all the items across all projects that have been resolved
 but not verified.</p>
 
-<table class="table table-striped table-condensed tablesorter" id="resolved-items">
+<table class="table table-striped table-condensed tablesorter tablesorter-default"
+       id="resolved-items">
         <thead>
                 <tr>
                         <th>Item</th>
@@ -45,13 +41,9 @@ but not verified.</p>
 {% endblock %}
 
 {% block js %}
-  <script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
-
 <script>
-$(document).ready(function() 
-    { 
-        $("#resolved-items").tablesorter({sortList: [[5,0]]}); 
-    } 
-);
+$(document).ready(function() {
+    $("#resolved-items").tablesorter({sortList: [[5,0]]});
+});
 </script>
 {% endblock %}
