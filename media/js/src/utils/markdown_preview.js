@@ -2,7 +2,7 @@ define([
     '../../libs/remarkable/remarkable'
 ], function(Remarkable) {
     var MarkdownPreview = function($textarea, $previewArea) {
-        this.md = new Remarkable();
+        this.md = new Remarkable('commonmark');
         this.$textarea = $textarea;
         this.$previewArea = $previewArea;
     };
