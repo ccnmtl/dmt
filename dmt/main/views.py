@@ -68,6 +68,16 @@ class SearchView(LoggedInMixin, TemplateView):
             return dict(
                 error="bad input",
                 q=q)
+
+        item_id = ''
+        try:
+            # Parse the item id if someone searched for, e.g. #9876
+            match = re.match(r'^#(\d+)$', q)
+            if match:
+                item_id = match.groups()[0]
+        except:
+            pass
+
         return dict(
             q=q,
             users=UserProfile.objects.filter(
@@ -95,7 +105,8 @@ class SearchView(LoggedInMixin, TemplateView):
             # TODO: comments/events for items should also be searched
             # and merged in.
             items=Item.objects.filter(
-                Q(title__icontains=q) |
+                Q(iid__iexact=q) |
+                Q(iid__iexact=item_id) |
                 Q(description__icontains=q)
             ),
             nodes=Node.objects.filter(

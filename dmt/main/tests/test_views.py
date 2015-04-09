@@ -1,3 +1,7 @@
+import json
+import unittest
+import urllib
+
 from .factories import (
     ClientFactory, ProjectFactory, MilestoneFactory,
     ItemFactory, NodeFactory, EventFactory, CommentFactory,
@@ -8,6 +12,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
+from factory.fuzzy import FuzzyInteger
 from waffle.models import Flag
 from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import (
@@ -16,8 +21,6 @@ from dmt.main.models import (
 )
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 from datetime import timedelta
-import json
-import unittest
 
 
 class BasicTest(TestCase):
@@ -40,6 +43,26 @@ class BasicTest(TestCase):
     def test_search(self):
         response = self.c.get("/search/?q=foo")
         self.assertEquals(response.status_code, 200)
+
+    def test_search_item(self):
+        # Search terms need to be at least 3 characters long, so only
+        # test this on items that have a sufficiently long ID.
+        item = ItemFactory(iid=FuzzyInteger(100, 999999))
+        params = urllib.urlencode({'q': item.iid})
+        response = self.c.get('/search/?%s' % params)
+        self.assertEquals(response.status_code, 200)
+        self.assertContains(response, 'Search for "%d"' % item.iid)
+        self.assertContains(response, item.title)
+        self.assertContains(response, item.get_absolute_url())
+
+    def test_search_item2(self):
+        item = ItemFactory(iid=FuzzyInteger(100, 999999))
+        params = urllib.urlencode({'q': '#%d' % item.iid})
+        response = self.c.get('/search/?%s' % params)
+        self.assertEquals(response.status_code, 200)
+        self.assertContains(response, 'Search for "#%d"' % item.iid)
+        self.assertContains(response, item.title)
+        self.assertContains(response, item.get_absolute_url())
 
     def test_search_empty(self):
         response = self.c.get("/search/?q=")
