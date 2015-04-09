@@ -31,8 +31,6 @@ STATICFILES_DIRS = ()
 STATIC_ROOT = "/var/www/dmt/dmt/media/"
 
 STATSD_PREFIX = 'dmt-staging'
-SENTRY_SITE = 'dmt-staging'
-SENTRY_SERVERS = ['http://sentry.ccnmtl.columbia.edu/sentry/store/']
 STATSD_PATCHES.append('django_statsd.patches.db')
 
 if 'migrate' not in sys.argv:
