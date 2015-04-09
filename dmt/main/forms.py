@@ -27,8 +27,10 @@ class NodeUpdateForm(ModelForm):
 class UserUpdateForm(ModelForm):
     class Meta:
         model = UserProfile
-        fields = ["fullname", "email", "type", "title", "phone",
-                  "bio", "photo_url", "campus", "building", "room"]
+        fields = [
+            "fullname", "email", "type", "title", "primary_group",
+            "phone", "bio", "photo_url", "campus", "building", "room"
+        ]
         widgets = {
             "type": TextInput(),
             "title": TextInput(),
