@@ -11,6 +11,7 @@
 <div class="object-box clearfix">
 {% if object.active %}
 {% if request.user.is_superuser %}
+{% if request.user != object.user %}
   <div class="object-action-set clearfix" style="margin-top: 0;">
     <ul>
       <li class="object-action" title="Deactivate user">
@@ -19,6 +20,7 @@
       </li>
     </ul>
   </div><!-- ./object-action-set -->
+{% endif %}
 {% endif %}
 {% endif %}
 
