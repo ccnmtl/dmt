@@ -228,12 +228,12 @@ Raven.config('https://416166385bf0416f8156c63fd3aebb95@sentry.ccnmtl.columbia.ed
     whitelistUrls: [/pmt\.ccnmtl\.columbia\.edu/]
 }).install();
 {% if not request.user.is_anonymous %}
-Raven.setUser({
+Raven.setUserContext({
     email: '{{request.user.email}}',
     id: '{{request.user.username}}'
 });
 {% else %}
-Raven.setUser({
+Raven.setUserContext({
     email: 'none',
     id: 'anonymous'
 });
