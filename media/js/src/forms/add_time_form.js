@@ -1,8 +1,9 @@
 require([
+    'domReady',
     'jquery',
     'forms/utils'
-], function($, formUtils) {
-    $(document).ready(function() {
+], function(domReady, $, formUtils) {
+    domReady(function() {
         $('#add-time-form').submit(function(event) {
             var $form = $(event.target);
             var time = $form.find('#tracker-time-input').val();

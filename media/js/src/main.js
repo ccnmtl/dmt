@@ -7,6 +7,7 @@ require.config({
 
         // Require.js plugins
         text: '../libs/require/text',
+        domReady: '../libs/require/domReady',
 
         'bootstrap-datepicker':
             '../libs/bootstrap-datepicker/bootstrap-datepicker.min',
