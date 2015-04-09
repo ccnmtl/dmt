@@ -263,7 +263,8 @@
 <div class="tab-pane fade" id="owned-items">
 {% if pmt_user.username %}
 {% if owned_items %}
-<table class="table table-condensed table-striped tablesorter table-items" id="owned-items">
+<table class="table table-condensed table-striped tablesorter tablesorter-default table-items"
+       id="owned-items">
 	<thead>
 		<tr>
 			<th>Item</th>
@@ -315,7 +316,6 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{{STATIC_URL}}js/libs/jquery.tablesorter.min.js"></script>
 <script>
 $(document).ready(function() {
     {% with pmt_user=request.user.userprofile %}
