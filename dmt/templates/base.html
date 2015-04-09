@@ -246,7 +246,7 @@ Raven.setUserContext({
 {% block js %}{% endblock %}
 
 {% if STAGING_ENV %}
-<div class="alert alert-error" style="position: fixed; bottom: 0px;">
+<div class="alert alert-danger" style="position: fixed; bottom: 0px;">
 <h4>Warning: Staging Site</h4>
 <p>You are viewing a staging version of this site, not the production site.</p>
 <p>This site was last updated on: <b>{{STAGING_DEPLOY_TIME}}</b></p>
@@ -254,7 +254,7 @@ Raven.setUserContext({
 {% endif %}
 
 {% if request.user.is_impersonate %}
-<div class="alert alert-error" style="position: fixed; left: 0px; top: 75px">
+<div class="alert alert-danger" style="position: fixed; left: 0px; top: 75px">
 You are impersonating.<br />
 <a class="btn" href="{% url 'impersonate-stop' %}">stop</a>
 </div>

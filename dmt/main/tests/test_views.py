@@ -44,7 +44,7 @@ class BasicTest(TestCase):
     def test_search_empty(self):
         response = self.c.get("/search/?q=")
         self.assertEquals(response.status_code, 200)
-        self.assertTrue("alert-error" in response.content)
+        self.assertTrue("alert-danger" in response.content)
 
     def test_dashboard(self):
         response = self.c.get("/dashboard/")
