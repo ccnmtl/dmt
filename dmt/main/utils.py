@@ -1,6 +1,6 @@
 import ntpath
 import re
-from django.utils.encoding import smart_str
+from django.utils.encoding import force_text, smart_str
 import CommonMark
 from simpleduration import Duration, InvalidDuration
 
@@ -12,7 +12,7 @@ def commonmark_render(text):
     """
     parser = CommonMark.DocParser()
     renderer = CommonMark.HTMLRenderer()
-    ast = parser.parse(text)
+    ast = parser.parse(force_text(text))
     return smart_str(renderer.render(ast))
 
 
