@@ -2,7 +2,13 @@ define([
     '../../libs/remarkable/remarkable'
 ], function(Remarkable) {
     var MarkdownPreview = function($textarea, $previewArea) {
-        this.md = new Remarkable('commonmark');
+        // Strict CommonMark mode doesn't yet support linkify in Remarkable.js
+        //   (https://github.com/jonschlinkert/remarkable/issues/149)
+        // so just use the normal mode for now since I haven't seen any
+        // differences between that and CommonMark.
+        this.md = new Remarkable({
+            linkify: true
+        });
         this.$textarea = $textarea;
         this.$previewArea = $previewArea;
     };

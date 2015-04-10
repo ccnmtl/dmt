@@ -662,6 +662,17 @@ class TestItemWorkflow(TestCase):
         r = self.c.get(i.get_absolute_url())
         self.assertTrue("this is a comment" in r.content)
 
+    def test_add_comment_markdown(self):
+        i = ItemFactory()
+        comment = '# testing\n\nhttp://example.com'
+        r = self.c.post(
+            i.get_absolute_url() + "comment/",
+            dict(comment=comment))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(i.get_absolute_url())
+        self.assertContains(r, '<h1>testing</h1>')
+        self.assertContains(r, '<a href="http://example.com"')
+
     def test_add_comment_empty(self):
         i = ItemFactory()
         r = self.c.post(

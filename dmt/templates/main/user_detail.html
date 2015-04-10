@@ -2,6 +2,7 @@
 {% load markup %}
 {% load waffle_tags %}
 {% load emoji_tags %}
+{% load dmttags %}
 
 {% block title %}User: {{object.fullname}}{% endblock %}
 {% block extraclass %} class="user-profile-page"{% endblock %}
@@ -267,7 +268,7 @@
       </dl><!-- /.forum-tags -->
       {% endif %}
       <div class="forum-body">
-      {{n.body|commonmark|emoji_replace}}  
+      {{n.body|commonmark|linkify|emoji_replace}}
       </div>    
     </div><!-- /.forum-entry -->
     {% endfor %}
@@ -285,7 +286,7 @@
         {{n.added.date}}
       </div><!-- /.status-update-byline -->
       <div class="status-update-body">
-        {{n.body|commonmark|emoji_replace}}
+        {{n.body|commonmark|linkify|emoji_replace}}
       </div><!-- /.status-update-body -->
     </div><!-- /.status-update -->
     

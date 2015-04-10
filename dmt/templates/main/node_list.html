@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load emoji_tags %}
+{% load dmttags %}
 
 {% block title %}Forum Posts{% endblock %}
 
@@ -75,7 +76,7 @@
   {% endif %}
   
   <div class="forum-body">
-  {{n.body|commonmark|emoji_replace}}  
+  {{n.body|commonmark|linkify|emoji_replace}}
   </div>
 
 

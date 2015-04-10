@@ -31,9 +31,11 @@ from dmt.main.forms import (
     AddTrackerForm, ItemUpdateForm,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm)
-from dmt.main.utils import commonmark_render, new_duration, safe_basename
+from dmt.main.templatetags.dmttags import linkify
+from dmt.main.utils import new_duration, safe_basename
 from dmt.report.mixins import PrevNextWeekMixin
 
+from django_markwhat.templatetags.markup import commonmark
 from datetime import datetime, timedelta
 from simpleduration import Duration, InvalidDuration
 from hashlib import sha1
@@ -137,7 +139,7 @@ class AddCommentView(LoggedInMixin, View):
         if body == '':
             return HttpResponseRedirect(item.get_absolute_url())
 
-        item.add_comment(user, commonmark_render(body))
+        item.add_comment(user, linkify(commonmark(body)))
         item.touch()
         item.update_email(body, user)
         log_time(item, user, request)
@@ -179,7 +181,7 @@ class ResolveItemView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
         r_status = request.POST.get('r_status', u'FIXED')
-        comment = commonmark_render(request.POST.get('comment', u''))
+        comment = linkify(commonmark(request.POST.get('comment', u'')))
         if (item.assigned_to.username == item.owner.username and
                 item.owner.username == user.username):
             # streamline self-assigned item verification
@@ -199,7 +201,7 @@ class InProgressItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
-        comment = commonmark_render(request.POST.get('comment', u''))
+        comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.mark_in_progress(user, comment)
         item.touch()
         item.update_email("Marked as in-progress\n----\n"
@@ -214,7 +216,7 @@ class VerifyItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
-        comment = commonmark_render(request.POST.get('comment', u''))
+        comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.verify(user, comment)
         item.touch()
         item.update_email("Verified\n-----\n"
@@ -229,7 +231,7 @@ class ReopenItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
-        comment = commonmark_render(request.POST.get('comment', u''))
+        comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.reopen(user, comment)
         item.touch()
         item.update_email("Reopened\n-----\n"
@@ -247,7 +249,7 @@ class ReassignItemView(LoggedInMixin, View):
         assigned_to = get_object_or_404(
             UserProfile,
             username=request.POST.get('assigned_to', ''))
-        comment = commonmark_render(request.POST.get('comment', u''))
+        comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.reassign(user, assigned_to, comment)
         item.touch()
         item.update_email("Reassigned\n----\n"
@@ -264,7 +266,7 @@ class ChangeOwnerItemView(LoggedInMixin, View):
         owner = get_object_or_404(
             UserProfile,
             username=request.POST.get('owner', ''))
-        comment = commonmark_render(request.POST.get('comment', u''))
+        comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.change_owner(user, owner, comment)
         item.touch()
         item.update_email("Owner changed\n-----\n"
