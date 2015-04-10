@@ -2,6 +2,7 @@ import json
 import unittest
 import urllib
 
+from simpleduration import Duration
 from .factories import (
     ClientFactory, ProjectFactory, MilestoneFactory,
     ItemFactory, NodeFactory, EventFactory, CommentFactory,
@@ -20,7 +21,6 @@ from dmt.main.models import (
     Client
 )
 from dmt.main.tests.support.mixins import LoggedInTestMixin
-from datetime import timedelta
 
 
 class BasicTest(TestCase):
@@ -1154,6 +1154,41 @@ class UserTest(TestCase):
 
 
 class TestAddTrackersView(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(TestAddTrackersView, self).setUp()
+
+        self.project = ProjectFactory(caretaker=self.u.userprofile)
+        self.project2 = ProjectFactory(caretaker=self.u.userprofile)
+        self.project3 = ProjectFactory(caretaker=self.u.userprofile)
+        MilestoneFactory(project=self.project)
+        MilestoneFactory(project=self.project2)
+        MilestoneFactory(project=self.project3)
+        self.valid_post_data = {
+            # Formset's management form
+            'form-TOTAL_FORMS': 10,
+            'form-INITIAL_FORMS': 0,
+            'form-MIN_NUM_FORMS': 0,
+            'form-MAX_NUM_FORMS': 1000,
+
+            'form-0-project': self.project.name,
+            'form-0-project_pid': self.project.pid,
+            'form-0-task': 'test',
+            'form-0-time': '3hr',
+            'form-0-client-uni': '',
+
+            'form-1-project': self.project2.name,
+            'form-1-project_pid': self.project2.pid,
+            'form-1-task': 'test project 2',
+            'form-1-time': '2hr',
+            'form-1-client-uni': '',
+
+            'form-2-project': self.project3.name,
+            'form-2-project_pid': self.project3.pid,
+            'form-2-task': 'test project 3',
+            'form-2-time': '15m',
+            'form-2-client-uni': '',
+        }
+
     def test_add_trackers_view(self):
         r = self.client.get(reverse('add_trackers'))
         self.assertEqual(r.status_code, 200)
@@ -1172,53 +1207,88 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         settings.DATABASES['default']['ENGINE'] ==
         'django.db.backends.postgresql_psycopg2',
         "This test requires PostgreSQL")
-    def test_add_trackers_post_tracker(self):
-        p = ProjectFactory(caretaker=self.u.userprofile)
-        MilestoneFactory(project=p)
-        r = self.client.post(
-            reverse('add_trackers'), {
-                # Formset's management form
-                'form-TOTAL_FORMS': 10,
-                'form-INITIAL_FORMS': 0,
-                'form-MIN_NUM_FORMS': 0,
-                'form-MAX_NUM_FORMS': 1000,
+    def test_add_trackers_post_multiple(self):
+        r = self.client.post(reverse('add_trackers'), self.valid_post_data)
 
-                'form-0-project': p.name,
-                'form-0-project_pid': p.pid,
-                'form-0-task': 'test',
-                'form-0-time': '3hr',
-                'form-0-client-uni': '',
-            })
         self.assertEqual(r.status_code, 302)
 
         r = self.client.get(r.url)
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, 'Tracker added')
-        self.assertContains(r, p.name)
+        self.assertContains(r, self.project.name)
+
+        items = Item.objects.reverse()[:3]
+
+        for i in range(3):
+            self.assertEqual(
+                items[i].title,
+                self.valid_post_data['form-%d-task' % i])
+            self.assertEqual(
+                items[i].milestone.project.pk,
+                self.valid_post_data['form-%d-project_pid' % i])
+            self.assertEqual(
+                items[i].get_resolve_time(),
+                Duration(self.valid_post_data['form-%d-time' % i]).timedelta())
+
+    @unittest.skipUnless(
+        settings.DATABASES['default']['ENGINE'] ==
+        'django.db.backends.postgresql_psycopg2',
+        "This test requires PostgreSQL")
+    def test_add_trackers_post_single(self):
+        params = self.valid_post_data.copy()
+        params.update({
+            'form-1-project': '',
+            'form-1-project_pid': '',
+            'form-1-task': '',
+            'form-1-time': '',
+            'form-1-client-uni': '',
+
+            'form-2-project': '',
+            'form-2-project_pid': '',
+            'form-2-task': '',
+            'form-2-time': '',
+            'form-2-client-uni': '',
+        })
+
+        r = self.client.post(reverse('add_trackers'), params)
+
+        self.assertEqual(r.status_code, 302)
+
+        r = self.client.get(r.url)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'Tracker added')
+        self.assertContains(r, self.project.name)
 
         i = Item.objects.last()
-        resolve_time = i.get_resolve_time()
-        self.assertEqual(resolve_time, timedelta(0, 3600 * 3))
+        self.assertEqual(i.title, self.valid_post_data['form-0-task'])
+        self.assertEqual(
+            i.milestone.project.pk,
+            self.valid_post_data['form-0-project_pid'])
+        self.assertEqual(
+            i.get_resolve_time(),
+            Duration(self.valid_post_data['form-0-time']).timedelta())
 
     @unittest.skipUnless(
         settings.DATABASES['default']['ENGINE'] ==
         'django.db.backends.postgresql_psycopg2',
         "This test requires PostgreSQL")
     def test_add_trackers_post_tracker_invalid(self):
-        r = self.client.post(
-            reverse('add_trackers'), {
-                # Formset's management form
-                'form-TOTAL_FORMS': 10,
-                'form-INITIAL_FORMS': 0,
-                'form-MIN_NUM_FORMS': 0,
-                'form-MAX_NUM_FORMS': 1000,
+        params = self.valid_post_data.copy()
+        params.update({
+            'form-0-project': '',
+            'form-0-project_pid': '',
+            'form-0-time': '',
 
-                'form-0-project': '',
-                'form-0-project_pid': '',
-                'form-0-task': 'test',
-                'form-0-time': '',
-                'form-0-client-uni': '',
-            })
+            'form-1-project': '',
+            'form-1-project_pid': '',
+            'form-1-time': '',
+
+            'form-2-project': '',
+            'form-2-project_pid': '',
+            'form-2-time': ''
+        })
+
+        r = self.client.post(reverse('add_trackers'), params)
         self.assertEqual(r.status_code, 200)
 
         r = self.client.get(reverse('add_trackers'))
