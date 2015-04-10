@@ -1,10 +1,11 @@
 require([
+    'domReady',
     'jquery',
     'bootstrap-datepicker',
 
     'utils/markdown_preview',
     'forms/utils'
-], function($, datepicker, MarkdownPreview, formUtils) {
+], function(domReady, $, datepicker, MarkdownPreview, formUtils) {
     function setupDateSwitcher() {
         var $selectEl = $('#add-action-item-form #action_item-milestone');
 
@@ -23,7 +24,7 @@ require([
         });
     }
 
-    $(document).ready(function() {
+    domReady(function() {
         if (!$('#add-action-item-form')) {
             return;
         }

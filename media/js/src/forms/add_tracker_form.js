@@ -1,8 +1,9 @@
 require([
+    'domReady',
     'jquery',
     'forms/utils'
-], function($, formUtils) {
-    $(document).ready(function() {
+], function(domReady, $, formUtils) {
+    domReady(function() {
         $('#add-tracker-form').submit(function(event) {
             var $form = $(event.target);
             var pid = $form.find('#tracker-pid-input').val();
