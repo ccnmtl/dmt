@@ -1,3 +1,5 @@
+import json
+
 from datetime import datetime, timedelta
 
 from django.core.urlresolvers import reverse
@@ -368,12 +370,34 @@ class ProjectsTest(APITestCase):
         self.u = User.objects.create(username="testuser")
         self.client.force_authenticate(user=self.u)
 
+        self.project1 = ProjectFactory(name='Project 1')
+        self.project2 = ProjectFactory(name='Test Project 2')
+        self.project3 = ProjectFactory(name='Testing number 3')
+        self.project4 = ProjectFactory(name='abcdefg (project)')
+
     def test_get(self):
         r = self.client.get(reverse("project-list"))
         self.assertEqual(r.status_code, 200)
 
     def test_search(self):
-        url = reverse("project-list")
+        url = reverse('project-list')
         data = {'search': 'test'}
         r = self.client.get(url, data)
         self.assertEqual(r.status_code, 200)
+
+        response = json.loads(r.content)
+        self.assertEqual(response['count'], 2)
+        self.assertEqual(response['results'][0]['name'], self.project2.name)
+        self.assertEqual(response['results'][1]['name'], self.project3.name)
+
+    def test_search_startswith(self):
+        url = reverse('project-list')
+        data = {'search': 'project'}
+        r = self.client.get(url, data)
+        self.assertEqual(r.status_code, 200)
+
+        response = json.loads(r.content)
+        self.assertEqual(response['count'], 3)
+        self.assertEqual(response['results'][0]['name'], self.project1.name)
+        self.assertEqual(response['results'][1]['name'], self.project2.name)
+        self.assertEqual(response['results'][2]['name'], self.project4.name)

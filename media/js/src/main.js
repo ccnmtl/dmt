@@ -34,8 +34,8 @@ require.config({
 require([
     // libs
     'jquery',
-    '../libs/jquery.cookie.min',
     'underscore',
+    '../libs/jquery.cookie.min',
     'backbone',
     'bootstrap-datepicker',
     '../libs/remarkable/remarkable',
@@ -51,7 +51,7 @@ require([
     'forms/project_add_bug_form',
     'forms/project_action_item_modals',
     'item'
-], function($) {
+], function($, _) {
     var csrftoken = $.cookie('csrftoken');
 
     // The following is from
@@ -91,21 +91,10 @@ require([
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         limit: 10,
-        prefetch: {
-            url: '/drf/projects/',
-            filter: function(projects) {
-                return $.map(projects.results, function(data) {
-                    return {
-                        name: data.name,
-                        pid: data.pid
-                    };
-                });
-            }
-        },
         remote: {
             url: '/drf/projects/?search=%QUERY',
             filter: function(projects) {
-                return $.map(projects.results, function(data) {
+                return _.map(projects.results, function(data) {
                     return {
                         name: data.name,
                         pid: data.pid
@@ -131,6 +120,7 @@ require([
             displayKey: 'name',
             source: projects.ttAdapter()
         });
+
         $('#project-input').on('typeahead:selected', function(object, datum) {
             $('#tracker-pid-input').val(datum.pid);
         });

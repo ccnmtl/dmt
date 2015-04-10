@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 
-from rest_framework import filters, generics, viewsets
+from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from simpleduration import Duration, InvalidDuration
@@ -18,6 +18,7 @@ from dmt.main.models import (
 from dmt.main.utils import new_duration
 
 from dmt.api.auth import SafeOriginAuthentication, SafeOriginPermission
+from dmt.api.filters import ProjectSearchFilter
 from dmt.api.serializers import (
     ClientSerializer, ItemSerializer, MilestoneSerializer, NotifySerializer,
     ProjectSerializer, UserSerializer,
@@ -311,8 +312,8 @@ class AddTrackerView(View):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
+    filter_backends = (ProjectSearchFilter,)
+    search_fields = ('^name', 'name',)
     paginate_by = 20
 
 
