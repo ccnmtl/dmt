@@ -1,4 +1,6 @@
+import bleach
 from django import template
+from html5lib.tokenizer import HTMLTokenizer
 import dmt.main.utils as utils
 
 register = template.Library()
@@ -25,3 +27,11 @@ def format_mdy(dt):
 @register.filter
 def interval_to_hours(duration):
     return utils.interval_to_hours(duration)
+
+
+@register.filter(is_safe=True)
+def linkify(value):
+    return bleach.linkify(value,
+                          skip_pre=True,
+                          parse_email=True,
+                          tokenizer=HTMLTokenizer)

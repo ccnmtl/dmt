@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load emoji_tags %}
+{% load dmttags %}
 
 {% block content %}
 <h1>Dashboard</h1>
@@ -91,7 +92,7 @@
 <div class="col-md-3">
 <a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a></div>
 <div class="col-md-6">
- {{su.body|commonmark|emoji_replace}}
+ {{su.body|commonmark|linkify|emoji_replace}}
 </div>
 <div class="col-md-3">
  &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>

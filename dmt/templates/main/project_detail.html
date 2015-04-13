@@ -2,6 +2,7 @@
 {% load markup %}
 {% load waffle_tags %}
 {% load emoji_tags %}
+{% load dmttags %}
 
 {% block title %}Project: {{object.name}}{% endblock %}
 
@@ -208,7 +209,7 @@
       <dd><a href="{% url 'user_detail' object.caretaker_user.userprofile.username %}">{{object.caretaker_user.get_full_name}}</a></dd>
 
       <dt>Description</dt>
-      <dd>{{object.description|commonmark|emoji_replace}}</dd>
+      <dd>{{object.description|commonmark|linkify|emoji_replace}}</dd>
 
       <dt>Project number</dt>
       <dd>{{object.projnum}}</dd>
@@ -375,7 +376,7 @@
   {% endif %}
 
       <div class="forum-body">
-      {{n.body|commonmark|emoji_replace}}
+      {{n.body|commonmark|linkify|emoji_replace}}
       </div>
     </div><!-- /.forum-entry -->
   {% endifequal %}
@@ -391,7 +392,7 @@
         {{n.added.date}}
       </div><!-- /.status-update-byline -->
       <div class="status-update-body">
-        {{n.body|commonmark|emoji_replace}}
+        {{n.body|commonmark|linkify|emoji_replace}}
       </div><!-- /.status-update-body -->
     </div><!-- /.status-update -->
     {% endfor %}

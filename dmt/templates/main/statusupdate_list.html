@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load emoji_tags %}
+{% load dmttags %}
 
 {% block title %}Status Updates of Projects{% endblock %}
 
@@ -41,7 +42,7 @@
     <a href="{{su.get_absolute_url}}"><span class="glyphicon glyphicon-pencil"></span></a>
   </div><!-- /.status-update-byline -->
   <div class="status-update-body">
-    {{su.body|commonmark|emoji_replace}}
+    {{su.body|commonmark|linkify|emoji_replace}}
   </div><!-- /.status-update-body -->
 </div><!-- /.status-update -->
 {% endfor %}

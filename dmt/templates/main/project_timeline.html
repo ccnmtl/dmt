@@ -2,6 +2,7 @@
 {% load markup %}
 {% load waffle_tags %}
 {% load emoji_tags %}
+{% load dmttags %}
 
 {% block title %}Project Timeline: {{object.name}}{% endblock %}
 
@@ -53,7 +54,7 @@
             {% ifequal i.event_type "event" %}
                 <span class="glyphicon glyphicon-check text-muted"></span>
             {% if i.body %}
-                <div class="event-body">{{i.body|commonmark|emoji_replace}}</div>
+                <div class="event-body">{{i.body|commonmark|linkify|emoji_replace}}</div>
             {% endif %}
             by
             {% if i.user %}
@@ -85,7 +86,7 @@
             {% endif %}
                 logged 
             {% if i.body %}
-                <div class="event-body">{{i.body|commonmark|emoji_replace}}</div>
+                <div class="event-body">{{i.body|commonmark|linkify|emoji_replace}}</div>
             {% endif %}
                 for item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
@@ -100,7 +101,7 @@
             {% endif %}
                 added status update
             {% if i.body %}
-                <div class="status-body">“{{i.body|commonmark|emoji_replace}}”</div>
+                <div class="status-body">“{{i.body|commonmark|linkify|emoji_replace}}”</div>
             {% endif %}
             {% endifequal %}
             

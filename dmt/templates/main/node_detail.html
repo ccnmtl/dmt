@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% load emoji_tags %}
-
+{% load dmttags %}
 
 {% block title %}Forum Post: {{object.subject}}{% endblock %}
 
@@ -43,7 +43,7 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
 </dl><!-- /.forum-tags -->
 
 <div class="forum-body">
-   {{object.body|commonmark|emoji_replace}}
+   {{object.body|commonmark|linkify|emoji_replace}}
 </div><!-- /.forum-body -->
 
 <div class="forum-replies">
@@ -70,7 +70,7 @@ by <a href="{{object.author.get_absolute_url}}">{{object.author.fullname}}</a>
         By <a href="{{reply.author.get_absolute_url}}">{{reply.author.fullname}}</a> 
         | {{reply.added}}
         </div><!-- /.forum-byline -->
-        {{reply.body|commonmark|emoji_replace}}
+        {{reply.body|commonmark|linkify|emoji_replace}}
       </div>
       {% endfor %}
     </div><!-- /#replies -->
