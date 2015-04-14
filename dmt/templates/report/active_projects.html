@@ -54,12 +54,12 @@
         {% for p in projects %}
         <tr>
             <td>
-                <a href="{% url 'project_detail' p.pid %}">
+                <a href="{% url 'project_detail' p.pid %}#reports">
                     {{p.pid}}
                 </a>
             </td>
             <td>
-                <a href="{% url 'project_detail' p.pid %}">
+                <a href="{% url 'project_detail' p.pid %}#reports">
                     {{p.name}}
                 </a>
             </td>
