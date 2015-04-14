@@ -14,7 +14,10 @@
     <tbody>
         {% for u in users_active_in_range %}
         <tr>
-            <td>{{ u.userprofile.fullname }}</td>
+            <td>
+                <a href="{% url 'user_detail' u.username %}"
+                   >{{ u.userprofile.fullname }}</a>
+            </td>
             <td>{{ u.actualtime__actual_time__sum|interval_to_hours }}</td>
             <td>{{ u.actualtime__completed__max }}</td>
         </tr>
