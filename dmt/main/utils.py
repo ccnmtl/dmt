@@ -19,7 +19,12 @@ def interval_to_hours(duration):
     """
     Takes a datetime.timedelta and returns the total hours as a
     user-presentable float.
+
+    :rtype: int or float
     """
+    if not hasattr(duration, 'total_seconds'):
+        return 0
+
     seconds = duration.total_seconds()
     hours = seconds / 3600
 

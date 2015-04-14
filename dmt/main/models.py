@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.db import connection, models
-from django.db.models.aggregates import Sum
+from django.db.models import Max, Sum
 from django.db.models.signals import post_save
 from django.conf import settings
 from datetime import timedelta, datetime
@@ -709,6 +709,19 @@ ORDER BY hours_logged DESC;
         return ActualTime.objects.filter(
             item__milestone__project=self,
         ).order_by('completed')
+
+    def users_active_between(self, start, end):
+        """Returns a project report that lists user stats."""
+        active_users = User.objects.filter(
+            actualtime__item__milestone__project=self,
+            actualtime__completed__gt=start,
+            actualtime__completed__lt=end
+        ).distinct().annotate(
+            Max('actualtime__completed'),
+            Sum('actualtime__actual_time')
+        ).order_by('-actualtime__actual_time__sum')
+
+        return active_users
 
     def timeline(self, start=None, end=None):
         all_events = []

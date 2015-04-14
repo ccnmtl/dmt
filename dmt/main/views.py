@@ -33,7 +33,7 @@ from dmt.main.forms import (
     ProjectUpdateForm, MilestoneUpdateForm)
 from dmt.main.templatetags.dmttags import linkify
 from dmt.main.utils import new_duration, safe_basename
-from dmt.report.mixins import PrevNextWeekMixin
+from dmt.report.mixins import PrevNextWeekMixin, RangeOffsetMixin
 
 from django_markwhat.templatetags.markup import commonmark
 from datetime import datetime, timedelta
@@ -550,7 +550,7 @@ class MyProjectListView(LoggedInMixin, ListView):
         return project_list
 
 
-class ProjectDetailView(LoggedInMixin, DetailView):
+class ProjectDetailView(LoggedInMixin, RangeOffsetMixin, DetailView):
     model = Project
 
     def get_context_data(self, **kwargs):
@@ -563,6 +563,8 @@ class ProjectDetailView(LoggedInMixin, DetailView):
         ctx['milestones'] = [
             m for m in self.object.milestones()
             if m in m_set]
+        ctx['users_active_in_range'] = ctx['object'].users_active_between(
+            self.interval_start, self.interval_end)
         return ctx
 
 

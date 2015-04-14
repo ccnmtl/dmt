@@ -1,7 +1,19 @@
 require.config({
+    map: {
+        // This configures jquery to not export the $ and jQuery global
+        // variables.
+        '*': {
+            'jquery': 'jquery-private'
+        },
+        'jquery-private': {
+            'jquery': 'jquery'
+        }
+    },
     paths: {
         // Major libraries
         jquery: '../libs/jquery/jquery-min',
+        'jquery-private': '../libs/jquery/jquery-private',
+
         underscore: '../libs/underscore/underscore-min',
         backbone: '../libs/backbone/backbone-min',
 
