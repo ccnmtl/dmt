@@ -3,7 +3,6 @@ CommonMark==0.5.4
 django-markwhat==1.3
 uuid==1.30
 psycopg2==2.5.4
-nose==1.3.4
 versiontools==1.9.1
 statsd==3.0.1
 pep8==1.5.7
@@ -63,7 +62,6 @@ shortuuid==0.4.2
 djangowind==0.13.2
 django-staticmedia==0.2.2
 django-annoying==0.8.0
-django-nose==1.3
 django-appconf==0.6
 django_compressor==1.4
 django-statsd-mozilla==0.3.14
