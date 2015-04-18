@@ -44,12 +44,7 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
         '.columbia.edu',
     )
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=dmt',
-]
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 JENKINS_TASKS = (
     'django_jenkins.tasks.run_pep8',
@@ -124,7 +119,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'compressor',
     'django_markwhat',
-    'django_nose',
     'django_statsd',
     'bootstrapform',
     'debug_toolbar',
