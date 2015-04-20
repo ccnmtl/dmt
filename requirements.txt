@@ -59,7 +59,7 @@ XlsxWriter==0.6.1
 splinter==0.7.0
 shortuuid==0.4.2
 
-djangowind==0.13.2
+djangowind==0.13.3
 django-staticmedia==0.2.2
 django-annoying==0.8.0
 django-appconf==0.6
