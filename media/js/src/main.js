@@ -46,6 +46,7 @@ require.config({
 
 require([
     // libs
+    'domReady',
     'jquery',
     'underscore',
     '../libs/jquery.cookie.min',
@@ -64,7 +65,7 @@ require([
     'forms/project_add_bug_form',
     'forms/project_action_item_modals',
     'item'
-], function($, _) {
+], function(domReady, $, _) {
     var csrftoken = $.cookie('csrftoken');
 
     // The following is from
@@ -118,7 +119,7 @@ require([
     });
     projects.initialize();
 
-    $(document).ready(function() {
+    domReady(function() {
         $('input[name=target_date]').datepicker({
             autoclose: true,
             format: 'yyyy-mm-dd',
