@@ -555,6 +555,7 @@ class ProjectDetailView(LoggedInMixin, RangeOffsetMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectDetailView, self).get_context_data(**kwargs)
+        self.calc_interval()
         unverified_items = Item.objects.filter(
             milestone__project=self.object).filter(
                 ~Q(status='VERIFIED')

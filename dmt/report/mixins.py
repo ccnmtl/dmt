@@ -55,9 +55,6 @@ class RangeOffsetMixin(object):
     range_days = 31
     offset_days = 0
 
-    def __init__(self):
-        self.calc_interval()
-
     def calc_interval(self):
         self.interval_start = date.today() - timedelta(
             days=(self.range_days + self.offset_days))
