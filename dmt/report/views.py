@@ -45,7 +45,7 @@ class ActiveProjectsView(LoggedInMixin, RangeOffsetMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(ActiveProjectsView, self).get_context_data(
             *args, **kwargs)
-
+        self.calc_interval()
         calc = ActiveProjectsCalculator()
         data = calc.calc(context.get('interval_start'),
                          context.get('interval_end'))
@@ -56,6 +56,7 @@ class ActiveProjectsView(LoggedInMixin, RangeOffsetMixin, TemplateView):
 class ActiveProjectsExportView(LoggedInMixin, RangeOffsetMixin, View):
     def get(self, request, *args, **kwargs):
         calc = ActiveProjectsCalculator()
+        self.calc_interval()
         data = calc.calc(self.interval_start, self.interval_end)
 
         # Find dates for displaying to the user
@@ -130,6 +131,7 @@ class StaffReportView(LoggedInMixin, RangeOffsetMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StaffReportView, self).get_context_data(**kwargs)
+        self.calc_interval()
         calc = StaffReportCalculator(['designers', 'programmers', 'video',
                                       'educationaltechnologists',
                                       'management'])
@@ -143,7 +145,7 @@ class StaffReportView(LoggedInMixin, RangeOffsetMixin, TemplateView):
 class StaffReportExportView(LoggedInMixin, RangeOffsetMixin, View):
     def get(self, request, *args, **kwargs):
         self.get_params()
-
+        self.calc_interval()
         calc = StaffReportCalculator(['designers', 'programmers', 'video',
                                       'educationaltechnologists',
                                       'management'])

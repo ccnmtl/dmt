@@ -30,6 +30,6 @@ class RangeOffsetMixinTests(TestCase):
         self.mixin = RangeOffsetMixin()
 
     def test_calc_interval(self):
-        # calc_interval() should have been called on init
+        self.mixin.calc_interval()
         self.assertEqual(self.mixin.interval_start,
                          date.today() - timedelta(days=31))
