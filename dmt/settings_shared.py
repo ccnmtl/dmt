@@ -234,3 +234,9 @@ GRAPHITE_BASE = "https://nanny-render.cul.columbia.edu/render/"
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+PROVIDER_APPLICATION_MODEL = 'provider.Application'
+
+MIGRATION_MODULES = {
+    'provider': 'dmt.migrations.provider',
+}
