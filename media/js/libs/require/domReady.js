@@ -89,9 +89,7 @@ define(function () {
         //so removing the || document.readyState === "interactive" test.
         //There is still a window.onload binding that should get fired if
         //DOMContentLoaded is missed.
-        if (document.readyState === "interactive" ||
-            document.readyState === "complete"
-           ) {
+        if (document.readyState === "complete") {
             pageLoaded();
         }
     }

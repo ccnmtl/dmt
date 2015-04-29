@@ -15,6 +15,9 @@ jshint: node_modules/jshint/bin/jshint
 jscs: node_modules/jscs/bin/jscs
 	./node_modules/jscs/bin/jscs media/js/src/ media/js/tests
 
+js: node_modules/.bin/r.js
+	./node_modules/.bin/r.js -o build.js
+
 behave: ./ve/bin/python check
 	$(MANAGE) test bdd_tests --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
 
@@ -26,6 +29,9 @@ node_modules/jshint/bin/jshint:
 
 node_modules/jscs/bin/jscs:
 	npm install jscs@1.8.1 --prefix .
+
+node_modules/.bin/r.js:
+	npm install requirejs --prefix .
 
 test: ./ve/bin/python
 	npm install
