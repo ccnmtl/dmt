@@ -1,6 +1,15 @@
 {% load dmttags %}
 
+<h4>{{interval_start|format_mdy}} &ndash; {{interval_end|format_mdy}}</h4>
 {% include 'report/range_offset_form.html' %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="control-group">
+            Total hours reported: <strong>{{total_hours}}</strong>
+        </div>
+    </div>
+</div>
 
 <table id="project-report"
        class="table table-bordered table-striped tablesorter">
@@ -18,8 +27,8 @@
                 <a href="{% url 'user_detail' u.username %}"
                    >{{ u.userprofile.fullname }}</a>
             </td>
-            <td>{{ u.actualtime__actual_time__sum|interval_to_hours }}</td>
-            <td>{{ u.actualtime__completed__max }}</td>
+            <td>{{ u.hours_logged|interval_to_hours }}</td>
+            <td>{{ u.last_worked_on }}</td>
         </tr>
         {% endfor %}
     </tbody>
