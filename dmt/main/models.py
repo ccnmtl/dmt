@@ -717,9 +717,9 @@ ORDER BY hours_logged DESC;
             actualtime__completed__gt=start,
             actualtime__completed__lt=end
         ).distinct().annotate(
-            Max('actualtime__completed'),
-            Sum('actualtime__actual_time')
-        ).order_by('-actualtime__actual_time__sum')
+            last_worked_on=Max('actualtime__completed'),
+            hours_logged=Sum('actualtime__actual_time'),
+        ).order_by('-hours_logged')
 
         return active_users
 
