@@ -130,39 +130,12 @@ def total_hours_estimated_by_project():
         yield (pid, seconds_to_hours(seconds))
 
 
-def total_hours_logged_by_milestone():
-    q = """SELECT i.mid, extract ('epoch' from sum(a.actual_time)::interval)
-           FROM actual_times a, items i
-           WHERE a.iid = i.iid
-           GROUP BY i.mid;"""
-    cursor = connection.cursor()
-    cursor.execute(q)
-    for (mid, seconds) in cursor.fetchall():
-        yield (mid, seconds_to_hours(seconds))
-
-
-def total_hours_estimated_by_milestone():
-    q = """SELECT i.mid, extract ('epoch' from sum(i.estimated_time)::interval)
-           FROM items i
-           WHERE i.status in ('OPEN', 'INPROGRESS')
-           GROUP BY i.mid;"""
-    cursor = connection.cursor()
-    cursor.execute(q)
-    for (mid, seconds) in cursor.fetchall():
-        yield (mid, seconds_to_hours(seconds))
-
-
 @periodic_task(run_every=crontab(hour='*', minute='*', day_of_week='*'))
 def total_hours_estimated_vs_logged():
     for pid, hours in total_hours_estimated_by_project():
         statsd.gauge("projects.%d.hours_estimated" % pid, int(hours))
     for pid, hours in total_hours_logged_by_project():
         statsd.gauge("projects.%d.hours_logged" % pid, int(hours))
-
-    for mid, hours in total_hours_estimated_by_milestone():
-        statsd.gauge("milestones.%d.hours_estimated" % mid, int(hours))
-    for mid, hours in total_hours_logged_by_milestone():
-        statsd.gauge("milestones.%d.hours_logged" % mid, int(hours))
 
 
 @periodic_task(run_every=crontab(hour=1, minute=0, day_of_week='*'))
