@@ -419,6 +419,11 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         p = Project.objects.get(name='Test project name')
         self.assertTrue(self.u.userprofile in p.personnel_in_project())
 
+    def test_edit_project_form(self):
+        p = ProjectFactory()
+        r = self.c.get(p.get_absolute_url() + "edit/")
+        self.assertEqual(r.status_code, 200)
+
 
 class MyProjectViewTests(TestCase):
     def setUp(self):
