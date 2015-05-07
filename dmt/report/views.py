@@ -68,7 +68,7 @@ class ActiveProjectsExportView(LoggedInMixin, RangeOffsetMixin, View):
                         'Project Status', 'Caretaker', 'Hours logged']
 
         rows = [[x.pid, x.name, x.projnum, x.last_worked_on, x.status,
-                 x.caretaker, interval_to_hours(x.hours_logged)]
+                 x.caretaker_user, interval_to_hours(x.hours_logged)]
                 for x in data['projects']]
 
         generator = ReportFileGenerator()

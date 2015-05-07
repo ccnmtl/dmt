@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django_filters import (
     CharFilter, FilterSet, ModelChoiceFilter, NumberFilter,
@@ -24,10 +25,8 @@ class ClientFilter(FilterSet):
 class ProjectFilter(FilterSet):
     name = CharFilter(label='Project Name', lookup_type='icontains')
     projnum = NumberFilter(label='Project Number')
-    caretaker = ModelChoiceFilter(
-        queryset=UserProfile.objects.filter(
-            Q(status__iexact='active') & ~Q(username__startswith='grp_')
-        ))
+    caretaker_user = ModelChoiceFilter(
+        queryset=User.objects.filter(~Q(username__startswith='grp_')))
     description = CharFilter(lookup_type='icontains')
 
 

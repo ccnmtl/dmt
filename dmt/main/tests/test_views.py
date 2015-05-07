@@ -1132,7 +1132,7 @@ class UserTest(TestCase):
     def test_deactivate_populated(self):
         u = UserProfileFactory(status='active')
         # this user actually has some stuff
-        p = ProjectFactory(caretaker=u)
+        p = ProjectFactory(caretaker_user=u.user)
         assigned = ItemFactory(assigned_to=u)
         owned = ItemFactory(owner=u)
         # reassign it to the request user
@@ -1150,7 +1150,6 @@ class UserTest(TestCase):
 
         # refetch and check
         p = Project.objects.get(pid=p.pid)
-        self.assertEqual(p.caretaker, self.u.userprofile)
         self.assertEqual(p.caretaker_user, self.u)
 
         assigned = Item.objects.get(iid=assigned.iid)
@@ -1170,9 +1169,9 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
     def setUp(self):
         super(TestAddTrackersView, self).setUp()
 
-        self.project = ProjectFactory(caretaker=self.u.userprofile)
-        self.project2 = ProjectFactory(caretaker=self.u.userprofile)
-        self.project3 = ProjectFactory(caretaker=self.u.userprofile)
+        self.project = ProjectFactory(caretaker_user=self.u)
+        self.project2 = ProjectFactory(caretaker_user=self.u)
+        self.project3 = ProjectFactory(caretaker_user=self.u)
         MilestoneFactory(project=self.project)
         MilestoneFactory(project=self.project2)
         MilestoneFactory(project=self.project3)
