@@ -74,7 +74,7 @@ class ProjectUpdateForm(ModelForm):
 
     class Meta:
         model = Project
-        exclude = ['pid', 'caretaker']
+        exclude = ['pid']
 
 
 class MilestoneUpdateForm(ModelForm):

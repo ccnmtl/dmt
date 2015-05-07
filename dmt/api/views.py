@@ -101,12 +101,12 @@ class ExternalAddItemView(APIView):
         try:
             assignee = UserProfile.objects.get(username=assignee_username)
         except UserProfile.DoesNotExist:
-            assignee = project.caretaker
+            assignee = project.caretaker_user.userprofile
 
         try:
             owner = UserProfile.objects.get(username=owner_username)
         except UserProfile.DoesNotExist:
-            owner = project.caretaker
+            owner = project.caretaker_user.userprofile
 
         try:
             milestone = Milestone.objects.get(mid=mid)

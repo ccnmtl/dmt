@@ -364,7 +364,6 @@ class Project(models.Model):
     name = models.CharField("Project name", max_length=255)
     projnum = models.IntegerField("Project number", null=True, blank=True)
     pub_view = models.BooleanField("PMT View", default=False)
-    caretaker = models.ForeignKey(UserProfile, db_column='caretaker')
     caretaker_user = models.ForeignKey(User, null=True)
     description = models.TextField(blank=True)
     url = models.CharField("Project URL", max_length=255, blank=True)

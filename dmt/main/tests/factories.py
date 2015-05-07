@@ -43,7 +43,6 @@ class ProjectFactory(factory.DjangoModelFactory):
     pid = factory.Sequence(lambda n: n)
     name = factory.Sequence(lambda n: 'Test Project {0}'.format(n))
     pub_view = True
-    caretaker = factory.SubFactory(UserProfileFactory)
     caretaker_user = factory.SubFactory(UserFactory)
 
 

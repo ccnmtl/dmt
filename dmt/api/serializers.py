@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from dmt.main.models import (
     Client, Item, Milestone, Notify, Project, UserProfile
 )
@@ -47,16 +48,23 @@ class NotifySerializer(serializers.Serializer):
         fields = ('item', 'username')
 
 
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name')
+
+
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     milestone_set = serializers.HyperlinkedRelatedField(
         many=True,
         view_name='milestone-detail',
         read_only=True
     )
+    caretaker_user = UserSerializer()
 
     class Meta:
         model = Project
-        fields = ('pid', 'name', 'pub_view', 'caretaker',
+        fields = ('pid', 'name', 'pub_view', 'caretaker_user',
                   'description', 'status', 'type', 'area',
                   'url', 'restricted', 'approach', 'info_url',
                   'entry_rel', 'eval_url', 'projnum', 'scale',
@@ -64,7 +72,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
                   'milestone_set')
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = UserProfile
         fields = ('username', 'fullname', 'email', 'status',
