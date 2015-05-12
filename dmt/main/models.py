@@ -266,9 +266,9 @@ class UserProfile(models.Model):
             add_date_time__gte=start.date(),
             add_date_time__lte=end,
         ).exclude(event=None).select_related(
-            'event_item', 'event_item__milestone',
-            'event_item__milestone__project',
-            'username', 'event', 'item')
+            'event__item', 'event__item__milestone',
+            'event__item__milestone__project',
+            'event', 'item')
         all_events.extend([TimeLineEvent(c) for c in events])
 
         comments = Comment.objects.filter(
@@ -734,17 +734,16 @@ ORDER BY hours_logged DESC;
             event__item__milestone__project=self,
             add_date_time__gte=start.date(),
             add_date_time__lte=end,
-        ).select_related('event_item', 'event_item__milestone',
-                         'event_item__milestone__project',
-                         'username', 'event', 'item')
+        ).select_related('event__item', 'event__item__milestone',
+                         'event__item__milestone__project',
+                         'event', 'item')
         all_events.extend([TimeLineEvent(c) for c in events])
 
         comments = Comment.objects.filter(
             item__milestone__project=self,
             add_date_time__gte=start.date(),
             add_date_time__lte=end,
-        ).select_related('item', 'item__milestone', 'item__milestone__project',
-                         'user')
+        ).select_related('item', 'item__milestone', 'item__milestone__project')
         all_events.extend([TimeLineComment(c) for c in comments])
 
         actual_times = ActualTime.objects.filter(
