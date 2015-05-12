@@ -83,5 +83,4 @@ rebase:
 # to run it after that, though.
 install: ./ve/bin/python check jenkins
 	createdb $(APP)
-	$(MANAGE) syncdb --noinput
-	make migrate
+	$(MANAGE) migrate

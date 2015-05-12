@@ -72,27 +72,26 @@ TEMPLATE_LOADERS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.debug',
-    'django.core.context_processors.request',
+    'django.template.context_processors.debug',
+    'django.template.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
     'stagingcontext.staging_processor',
     'gacontext.ga_processor',
     'djangowind.context.context_processor',
-    'django.core.context_processors.static',
+    'django.template.context_processors.static',
     'dmt.main.contextprocessors.graphite_base_processor',
 )
 
 MIDDLEWARE_CLASSES = [
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'waffle.middleware.WaffleMiddleware',
@@ -130,7 +129,7 @@ INSTALLED_APPS = [
     'interval',
     'rest_framework',
     'taggit',
-    'taggit_templatetags',
+    'taggit_templatetags2',
     'djcelery',
     'bootstrap3',
     'emoji',
@@ -234,4 +233,10 @@ GRAPHITE_BASE = "https://nanny-render.cul.columbia.edu/render/"
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
+}
+
+PROVIDER_APPLICATION_MODEL = 'provider.Application'
+
+MIGRATION_MODULES = {
+    'provider': 'dmt.migrations.provider',
 }
