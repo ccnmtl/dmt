@@ -1083,7 +1083,8 @@ class GroupTest(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.client.get(
             reverse('group_detail', args=(grp_username,)))
-        self.assertFalse(user_username in r.content)
+        user_url = self.group.username.get_absolute_url()
+        self.assertFalse(user_url in r.content)
 
     def test_add_user_to_group(self):
         grp_username = self.group.grp.username
@@ -1094,7 +1095,7 @@ class GroupTest(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.client.get(
             reverse('group_detail', args=(grp_username,)))
-        self.assertTrue(u.username in r.content)
+        self.assertTrue(u.get_absolute_url() in r.content)
 
     def test_create_group(self):
         r = self.client.post(reverse('group_create'), dict(group='foo'))

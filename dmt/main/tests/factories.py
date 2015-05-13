@@ -17,6 +17,7 @@ class UserProfileFactory(factory.DjangoModelFactory):
     fullname = factory.Sequence(lambda n: 'User {0}'.format(n))
     email = factory.Sequence(lambda n: 'user{0}@columbia.edu'.format(n))
     grp = False
+    status = "active"
     user = factory.SubFactory('dmt.main.tests.factories.UserFactory',
                               userprofile=None)
 

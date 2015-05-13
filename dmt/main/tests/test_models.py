@@ -6,7 +6,8 @@ import unittest
 from .factories import (
     UserProfileFactory, ItemFactory, NodeFactory, ProjectFactory,
     AttachmentFactory, ClientFactory, StatusUpdateFactory,
-    ActualTimeFactory, MilestoneFactory, NotifyFactory)
+    ActualTimeFactory, MilestoneFactory, NotifyFactory,
+    GroupFactory)
 from datetime import datetime, timedelta
 from simpleduration import Duration
 from dmt.main.models import (
@@ -117,6 +118,13 @@ class UserModelTest(TestCase):
         StatusUpdateFactory(user=u)
         t = u.timeline()
         self.assertEqual(len(t), 1)
+
+    def test_get_absolute_url(self):
+        u = UserProfileFactory(grp=False)
+        self.assertTrue(u.get_absolute_url().startswith("/user"))
+
+        u = UserProfileFactory(grp=True)
+        self.assertTrue(u.get_absolute_url().startswith("/group"))
 
 
 class ProjectUserTest(TestCase):
@@ -525,6 +533,12 @@ class ProjectTest(TestCase):
         p.add_manager(u1)
         self.assertTrue(u2 in p.all_users_not_in_project())
         self.assertFalse(u1 in p.all_users_not_in_project())
+
+    def test_all_personnel_in_project(self):
+        p = ProjectFactory()
+        g = GroupFactory()
+        p.add_manager(g.grp)
+        self.assertTrue(g.username in p.all_personnel_in_project())
 
     def test_add_item_invalid_duration(self):
         m = MilestoneFactory()
