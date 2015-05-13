@@ -538,8 +538,6 @@ class ProjectTest(TestCase):
         p = ProjectFactory()
         g = GroupFactory()
         p.add_manager(g.grp)
-        print(p.all_personnel_in_project())
-        print(g)
         self.assertTrue(g.username in p.all_personnel_in_project())
 
     def test_add_item_invalid_duration(self):
