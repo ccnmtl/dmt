@@ -613,7 +613,7 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
         groups = [u for u in self.personnel_in_project()
                   if u.grp]
         for g in groups:
-            users.update(u.users_in_group())
+            users.update(g.users_in_group())
         return sorted(list(users), key=lambda user: user.fullname.lower())
 
     def current_date(self):
