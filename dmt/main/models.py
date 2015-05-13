@@ -358,6 +358,11 @@ def interval_sum(intervals):
 def clean_subject(s):
     return s.replace('\n', ' ').replace('\r', '')
 
+PROJECT_STATUS_CHOICES = [
+    "New", "Development", "Deployment", "Defunct",
+    "Deferred", "Non-project",
+]
+
 
 class Project(models.Model):
     pid = models.AutoField(primary_key=True)
@@ -370,7 +375,10 @@ class Project(models.Model):
     info_url = models.CharField("Information URL", max_length=255, blank=True)
     eval_url = models.CharField("Evaluation URL", max_length=255, blank=True)
     wiki_category = models.CharField(max_length=256, blank=True)
-    status = models.CharField(max_length=16, blank=True)
+    status = models.CharField(
+        max_length=16, blank=True,
+        default="New",
+        choices=[(c, c) for c in PROJECT_STATUS_CHOICES])
     entry_rel = models.BooleanField("Released", default=False)
     poster = models.BooleanField("Poster project", default=False)
     type = models.CharField(max_length=50, blank=True)
