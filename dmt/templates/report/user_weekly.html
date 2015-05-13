@@ -39,7 +39,7 @@
 		{% for project in active_projects %}
 		<tr>
 			<td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
-			<td>{{project.time}}</td>
+			<td>{{project.time|interval_to_hours}} hours</td>
 		</tr>
 		{% endfor %}
 	</tbody>
@@ -60,7 +60,7 @@
 	<tbody>
 		{% for t in individual_times %}
 		<tr>
-			<td>{{t.actual_time}}</td>
+			<td>{{t.actual_time|interval_to_hours}} hours</td>
 			<td><a href="{{t.item.get_absolute_url}}">{{t.item.title}}</a></td>
 			<td>{{t.completed}}</td>
 			<td><a href="{{t.item.milestone.project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
