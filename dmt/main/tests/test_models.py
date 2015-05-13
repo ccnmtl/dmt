@@ -118,6 +118,13 @@ class UserModelTest(TestCase):
         t = u.timeline()
         self.assertEqual(len(t), 1)
 
+    def test_get_absolute_url(self):
+        u = UserProfileFactory(grp=False)
+        self.assertTrue(u.get_absolute_url().startswith("/user"))
+
+        u = UserProfileFactory(grp=True)
+        self.assertTrue(u.get_absolute_url().startswith("/group"))
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):

@@ -4,6 +4,7 @@ from django.db import connection, models
 from django.db.models import Max, Sum
 from django.db.models.signals import post_save
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from datetime import timedelta, datetime
 from dateutil import parser
 from interval.fields import IntervalField
@@ -49,7 +50,10 @@ class UserProfile(models.Model):
         return self.fullname
 
     def get_absolute_url(self):
-        return "/user/%s/" % self.username
+        if self.grp:
+            return reverse("group_detail", args=(self.username,))
+        else:
+            return reverse("user_detail", args=(self.username,))
 
     def active(self):
         return self.status == 'active'
