@@ -961,6 +961,16 @@ class TestForum(TestCase):
         r = self.c.get(n.get_absolute_url())
         self.assertEquals(r.status_code, 404)
 
+    def test_linkify_infinite_loop(self):
+        # see https://pmt.ccnmtl.columbia.edu/item/101115/
+        n = NodeFactory(body=(
+            '<a href="https://www1.columbia.edu/sec/cu/lweb/reserves/">'
+            'https://www1.columbia.edu/sec/cu/lweb/reserves/</a>. '
+            'Instructors can also email film requests to butlres@lib'
+            'raries.cul.columbia.edu'))
+        r = self.c.get(n.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+
 
 class TestForumTagViews(TestCase):
     def setUp(self):
