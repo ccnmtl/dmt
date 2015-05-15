@@ -88,4 +88,4 @@ django-behave==0.1.4
 django-oauth2-provider==0.2.6.1
 django-extra-views==0.6.5
 bleach==1.4.1
-html5lib==0.999
+html5lib==1.0b6
