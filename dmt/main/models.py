@@ -5,6 +5,7 @@ from django.db.models import Max, Sum
 from django.db.models.signals import post_save
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from datetime import timedelta, datetime
 from dateutil import parser
 from interval.fields import IntervalField
@@ -260,7 +261,7 @@ class UserProfile(models.Model):
     def timeline(self, start=None, end=None):
         all_events = []
         if end is None:
-            end = datetime.now()
+            end = timezone.now()
 
         if start is None:
             start = end - timedelta(weeks=1)
@@ -312,7 +313,7 @@ class UserProfile(models.Model):
         return Milestone.objects.filter(
             project__caretaker_user=self.user,
             status='OPEN',
-            target_date__lt=datetime.now(),
+            target_date__lt=timezone.now(),
         ).order_by('target_date').select_related('project')
 
 
@@ -507,7 +508,7 @@ class Project(models.Model):
             r_status='',
             estimated_time='0',
             target_date=milestone.target_date,
-            last_mod=datetime.now(),
+            last_mod=timezone.now(),
             description='')
         item.add_event('OPEN', user, "<b>Action item added</b>")
         if tags:
@@ -546,7 +547,7 @@ class Project(models.Model):
             r_status=r_status,
             estimated_time=td,
             target_date=target_date,
-            last_mod=datetime.now(),
+            last_mod=timezone.now(),
             description=description)
         item.add_event('OPEN', owner, "<b>%s added</b>" % type.capitalize())
         if tags:
@@ -574,8 +575,8 @@ class Project(models.Model):
             reply_to=0,
             replies=0,
             type='post',
-            added=datetime.now(),
-            modified=datetime.now(),
+            added=timezone.now(),
+            modified=timezone.now(),
             project=self)
         if tags:
             n.tags.add(*tags)
@@ -627,7 +628,7 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
     def current_date(self):
         """ very simple helper that makes it easier to set the
         default date on add-* forms"""
-        return datetime.now().date()
+        return timezone.now().date()
 
     def group_hours(self, group, start, end):
         cursor = connection.cursor()
@@ -737,7 +738,7 @@ ORDER BY hours_logged DESC;
     def timeline(self, start=None, end=None):
         all_events = []
         if end is None:
-            end = datetime.now()
+            end = timezone.now()
 
         if start is None:
             start = end - timedelta(weeks=1)
@@ -887,7 +888,7 @@ class Milestone(models.Model):
         self.save()
 
     def target_date_passed(self):
-        return self.target_date < datetime.now().date()
+        return self.target_date < timezone.now().date()
 
     def num_unclosed_items(self):
         return self.item_set.filter(
@@ -963,7 +964,7 @@ class Item(models.Model):
     def target_date_status(self):
         overdue = 0
         if self.target_date:
-            overdue = (datetime.now().date() - self.target_date).days
+            overdue = (timezone.now().date() - self.target_date).days
         return overdue_days_to_string(overdue)
 
     def is_bug(self):
@@ -984,7 +985,7 @@ class Item(models.Model):
 
     def add_resolve_time(self, user, time, completed=None):
         if not completed:
-            completed = datetime.now()
+            completed = timezone.now()
         ActualTime.objects.create(
             item=self,
             resolver=user,
@@ -1009,7 +1010,7 @@ class Item(models.Model):
         return self.status in ['RESOLVED', 'INPROGRESS', 'VERIFIED', 'CLOSED']
 
     def touch(self):
-        self.last_mod = datetime.now()
+        self.last_mod = timezone.now()
         self.save()
 
     def add_comment(self, user, body):
@@ -1017,7 +1018,7 @@ class Item(models.Model):
             item=self,
             username=user.username,
             comment=body,
-            add_date_time=datetime.now())
+            add_date_time=timezone.now())
 
     def resolve(self, user, r_status, comment):
         self.status = "RESOLVED"
@@ -1025,13 +1026,13 @@ class Item(models.Model):
         self.save()
         e = Events.objects.create(
             status="RESOLVED",
-            event_date_time=datetime.now(),
+            event_date_time=timezone.now(),
             item=self)
         Comment.objects.create(
             event=e,
             username=user.username,
             comment="<b>Resolved %s</b><br />\n%s" % (r_status, comment),
-            add_date_time=datetime.now())
+            add_date_time=timezone.now())
 
     def verify(self, user, comment):
         self.status = 'VERIFIED'
@@ -1039,13 +1040,13 @@ class Item(models.Model):
         self.save()
         e = Events.objects.create(
             status="VERIFIED",
-            event_date_time=datetime.now(),
+            event_date_time=timezone.now(),
             item=self)
         Comment.objects.create(
             event=e,
             username=user.username,
             comment="<b>Verified</b><br />\n%s" % comment,
-            add_date_time=datetime.now())
+            add_date_time=timezone.now())
 
     def mark_in_progress(self, user, comment):
         self.status = 'INPROGRESS'
@@ -1053,13 +1054,13 @@ class Item(models.Model):
         self.save()
         e = Events.objects.create(
             status="INPROGRESS",
-            event_date_time=datetime.now(),
+            event_date_time=timezone.now(),
             item=self)
         Comment.objects.create(
             event=e,
             username=user.username,
             comment="<b>Marked as In-progress</b><br />\n%s" % comment,
-            add_date_time=datetime.now())
+            add_date_time=timezone.now())
 
     def reopen(self, user, comment):
         self.status = 'OPEN'
@@ -1067,13 +1068,13 @@ class Item(models.Model):
         self.save()
         e = Events.objects.create(
             status="OPEN",
-            event_date_time=datetime.now(),
+            event_date_time=timezone.now(),
             item=self)
         Comment.objects.create(
             event=e,
             username=user.username,
             comment="<b>Reopened</b><br />\n%s" % comment,
-            add_date_time=datetime.now())
+            add_date_time=timezone.now())
 
     def reassign(self, user, assigned_to, comment):
         self.assigned_to = assigned_to
@@ -1081,14 +1082,14 @@ class Item(models.Model):
         self.save()
         e = Events.objects.create(
             status="OPEN",
-            event_date_time=datetime.now(),
+            event_date_time=timezone.now(),
             item=self)
         Comment.objects.create(
             event=e,
             username=user.username,
             comment="<b>Reassigned to %s</b><br />\n%s" % (
                 assigned_to.fullname, comment),
-            add_date_time=datetime.now())
+            add_date_time=timezone.now())
         self.add_cc(assigned_to)
 
     def change_owner(self, user, owner, comment):
@@ -1097,14 +1098,14 @@ class Item(models.Model):
         self.save()
         e = Events.objects.create(
             status="OPEN",
-            event_date_time=datetime.now(),
+            event_date_time=timezone.now(),
             item=self)
         Comment.objects.create(
             event=e,
             username=user.username,
             comment="<b>Ownership changed to %s</b><br />\n%s" % (
                 owner.fullname, comment),
-            add_date_time=datetime.now())
+            add_date_time=timezone.now())
 
     def set_priority(self, priority, user):
         old_priority = self.priority
@@ -1120,13 +1121,13 @@ class Item(models.Model):
     def add_event(self, status, user, comment):
         e = Events.objects.create(
             status=status,
-            event_date_time=datetime.now(),
+            event_date_time=timezone.now(),
             item=self)
         Comment.objects.create(
             event=e,
             username=user.username,
             comment=comment,
-            add_date_time=datetime.now())
+            add_date_time=timezone.now())
 
     def setup_default_notification(self):
         self.add_cc(self.owner)
@@ -1395,8 +1396,8 @@ class Node(models.Model):
             reply_to=self.nid,
             replies=0,
             type='comment',
-            added=datetime.now(),
-            modified=datetime.now(),
+            added=timezone.now(),
+            modified=timezone.now(),
             project=project)
         self.replies = Node.objects.filter(reply_to=self.nid).count()
         self.save()
@@ -1422,7 +1423,7 @@ class Node(models.Model):
         statsd.incr('main.email_sent')
 
     def touch(self):
-        self.modified = datetime.now()
+        self.modified = timezone.now()
         self.save()
 
 
