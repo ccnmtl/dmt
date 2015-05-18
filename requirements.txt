@@ -20,7 +20,7 @@ fuzzywuzzy==0.4.0
 sure==1.2.9
 ipython==3.0.0
 ipdb==0.8
-isodate==0.5.0
+isodate==0.5.1
 SPARQLWrapper==1.6.4
 rdflib==4.1.2
 selenium==2.45.0
@@ -31,8 +31,8 @@ logilab-astng==0.24.3
 astroid==1.2.1
 pylint==1.4.1
 six==1.9.0
-python-dateutil==2.4.0
-pytz==2014.7
+python-dateutil==2.4.2
+pytz==2015.4
 simpleduration==0.1.0
 factory_boy==2.5.2
 python-ldap==2.4.18

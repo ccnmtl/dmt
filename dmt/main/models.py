@@ -1118,15 +1118,16 @@ class Item(models.Model):
                 priority_label_f(priority)))
 
     def add_event(self, status, user, comment):
+        now = datetime.now()
         e = Events.objects.create(
             status=status,
-            event_date_time=datetime.now(),
+            event_date_time=now,
             item=self)
         Comment.objects.create(
             event=e,
             username=user.username,
             comment=comment,
-            add_date_time=datetime.now())
+            add_date_time=now)
 
     def setup_default_notification(self):
         self.add_cc(self.owner)
