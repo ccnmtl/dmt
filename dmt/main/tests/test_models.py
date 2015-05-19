@@ -2,6 +2,7 @@ from django import forms
 from django.test import TestCase
 from django.conf import settings
 from django.core import mail
+from django.utils import timezone
 import unittest
 from .factories import (
     UserProfileFactory, ItemFactory, NodeFactory, ProjectFactory,
@@ -553,7 +554,7 @@ class ProjectTest(TestCase):
         i = m.item_set.all()[0]
         self.assertEqual(i.estimated_time.seconds, 0)
 
-    def test_add_item_valid_duration(self):
+    def test_add_item_valid_duration_and_timezone(self):
         m = MilestoneFactory()
         p = m.project
         u = UserProfileFactory()
@@ -565,6 +566,13 @@ class ProjectTest(TestCase):
         self.assertTrue(m.item_set.all().count() > 0)
         i = m.item_set.all()[0]
         self.assertEqual(i.estimated_time.seconds, 7200)
+
+        # Assert that the last_mod time is within ten mins of what
+        # we expect.
+        now = timezone.now()
+        five_mins = timedelta(minutes=5)
+        self.assertTrue(i.last_mod < (now + five_mins))
+        self.assertTrue(i.last_mod > (now - five_mins))
 
     def test_timeline_empty(self):
         p = ProjectFactory()
