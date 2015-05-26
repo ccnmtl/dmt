@@ -810,6 +810,10 @@ class TestItemWorkflow(TestCase):
         r = self.c.get(project.get_absolute_url())
         self.assertTrue("this is a todo" in r.content)
 
+        i = Item.objects.get(title="this is a todo")
+        self.assertEqual(i.owner_user, self.u)
+        self.assertEqual(i.assigned_user, self.u)
+
     def test_add_todos_bad_params(self):
         i = ItemFactory()
         project = i.milestone.project
