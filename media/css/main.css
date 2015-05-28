@@ -1457,4 +1457,8 @@ button.pmt-report-submit { margin-top: 25px; }
     margin-bottom: 0;
 }
 
+#add-trackers-form td.field-project .form-group .select2-container {
+    padding-top: 2px;
+}
+
 .twitter-typeahead { width: 100%; }

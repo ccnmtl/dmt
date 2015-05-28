@@ -6,7 +6,7 @@ require([
     domReady(function() {
         $('#add-tracker-form').submit(function(event) {
             var $form = $(event.target);
-            var pid = $form.find('#tracker-pid-input').val();
+            var pid = $form.find('select[name="project"]').val();
             var task = $form.find('#tracker-task-input').val();
             var time = $form.find('#tracker-time-input').val();
             var client = $form.find('#tracker-client-input').val();

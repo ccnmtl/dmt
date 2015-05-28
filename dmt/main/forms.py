@@ -1,12 +1,13 @@
 import re
 from django import forms
 from django.forms import ModelForm, TextInput
-from .models import StatusUpdate, Node, UserProfile, Project, Milestone, Item
+from dmt.main.models import (
+    StatusUpdate, Node, UserProfile, Project, Milestone, Item
+)
 
 
 class AddTrackerForm(forms.Form):
-    project = forms.CharField()
-    project_pid = forms.IntegerField(widget=forms.HiddenInput())
+    project = forms.ModelChoiceField(queryset=Project.objects.all())
     task = forms.CharField()
     time = forms.CharField()
     client_uni = forms.CharField(required=False)

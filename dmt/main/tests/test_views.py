@@ -1197,20 +1197,17 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
             'form-MIN_NUM_FORMS': 0,
             'form-MAX_NUM_FORMS': 1000,
 
-            'form-0-project': self.project.name,
-            'form-0-project_pid': self.project.pid,
+            'form-0-project': self.project.pk,
             'form-0-task': 'test',
             'form-0-time': '3hr',
             'form-0-client-uni': '',
 
-            'form-1-project': self.project2.name,
-            'form-1-project_pid': self.project2.pid,
+            'form-1-project': self.project2.pk,
             'form-1-task': 'test project 2',
             'form-1-time': '2hr',
             'form-1-client-uni': '',
 
-            'form-2-project': self.project3.name,
-            'form-2-project_pid': self.project3.pid,
+            'form-2-project': self.project3.pk,
             'form-2-task': 'test project 3',
             'form-2-time': '15m',
             'form-2-client-uni': '',
@@ -1252,7 +1249,7 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
                 self.valid_post_data['form-%d-task' % i])
             self.assertEqual(
                 items[i].milestone.project.pk,
-                self.valid_post_data['form-%d-project_pid' % i])
+                self.valid_post_data['form-%d-project' % i])
             self.assertEqual(
                 items[i].get_resolve_time(),
                 Duration(self.valid_post_data['form-%d-time' % i]).timedelta())
@@ -1265,13 +1262,11 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         params = self.valid_post_data.copy()
         params.update({
             'form-1-project': '',
-            'form-1-project_pid': '',
             'form-1-task': '',
             'form-1-time': '',
             'form-1-client-uni': '',
 
             'form-2-project': '',
-            'form-2-project_pid': '',
             'form-2-task': '',
             'form-2-time': '',
             'form-2-client-uni': '',
@@ -1290,7 +1285,7 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         self.assertEqual(i.title, self.valid_post_data['form-0-task'])
         self.assertEqual(
             i.milestone.project.pk,
-            self.valid_post_data['form-0-project_pid'])
+            self.valid_post_data['form-0-project'])
         self.assertEqual(
             i.get_resolve_time(),
             Duration(self.valid_post_data['form-0-time']).timedelta())
@@ -1303,15 +1298,12 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         params = self.valid_post_data.copy()
         params.update({
             'form-0-project': '',
-            'form-0-project_pid': '',
             'form-0-time': '',
 
             'form-1-project': '',
-            'form-1-project_pid': '',
             'form-1-time': '',
 
             'form-2-project': '',
-            'form-2-project_pid': '',
             'form-2-time': ''
         })
 

@@ -26,16 +26,9 @@
             {% for form in formset %}
             <tr>
                 {% for field in form %}
-
-                {% if field.name != 'project_pid' %}
                 <td class="field-{{ field.name }}">
                     {% bootstrap_field field layout='inline' %}
                 </td>
-                {% else %}
-                {# Render the hidden 'project_pid' input normally #}
-                {{ field }}
-                {% endif %}
-
                 {% endfor %}
             </tr>
             {% endfor %}
