@@ -88,19 +88,19 @@
         data-target="#resolve"><span class="glyphicon
         glyphicon-ok"></span> Resolve</a>
         {% endif %}
-        
+
         {% if object.inprogressable %}
         <a class="btn btn-default btn-xs btn-inprogress" href="#" data-toggle="modal"
         data-target="#mark-in-progress"><span class="glyphicon
         glyphicon-record"></span> Mark as in-progress</a>
         {% endif %}
-        
+
         {% if object.verifiable %}
         <a class="btn btn-success btn-xs btn-verify" href="#" data-toggle="modal"
         data-target="#verify"><span class="glyphicon
         glyphicon-ok"></span> Verify</a>
         {% endif %}
-        
+
         {% if object.reopenable %}
         <a class="btn btn-danger btn-xs" href="#" data-toggle="modal"
         data-target="#reopen"><span class="glyphicon
@@ -108,7 +108,7 @@
         {% endif %}
         </div>
       </dd>
- 
+
       <dt>Owner</dt>
       <dd>
         <a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a>
@@ -154,7 +154,7 @@
       <dt>Link</dt>
       <dd><a href="{{object.url}}" target="_blank">{{object.url|truncatechars:40}}</a></dd>
       {% endif %}
-      
+
       {% if clients %}
       <dt>Clients</dt>
       {% for client in clients %}
@@ -165,7 +165,7 @@
       </dd>
       {% endfor %}
       {% endif %}
-      
+
       <dt>Tags</dt>
       <dd>
       {% if object.tags %}
@@ -182,12 +182,12 @@
       <span class="input-group-btn"><input type="submit" value="Tag" class="btn btn-primary" /></span>
       </div>
       </dd>
-      
+
       {% flag notification_ui %}
       <span id="item-id" style="display: none;">{{object.iid}}</span>
-      
+
       <div id="item-container"></div>
-      
+
       <dt>&nbsp;</dt>
       <dd>
       <div class="input-group" id="item-notification-container">
@@ -195,7 +195,7 @@
       {% if assigned_to_current_user and notifications_enabled_for_current_user %}
       class="disabled"
       {% endif %}
-      
+
       for="input_notification">
       <input
       {% if assigned_to_current_user and notifications_enabled_for_current_user %}
@@ -204,7 +204,7 @@
       {% elif notifications_enabled_for_current_user %}
       checked="checked"
       {% endif %}
-      
+
       class="form-control"
       type="checkbox"
       placeholder="add tags (comma separated)"
@@ -228,14 +228,14 @@
               {% endfor %}
           </ul>
       </dd>
-      
+
       <script type="text/template" id="item-template">
       </script>
       {% endflag %}
       </form>
-      
+
       {% if object.actualtime_set.count %}
-      
+
       <dt>Time logged</dt>
       <dd>
       {% for at in object.actualtime_set.all %}
@@ -254,7 +254,7 @@
 
 
 
- 
+
 
 <div class="modal fade" id="add-hours" tabindex="-1" role="dialog" aria-labelledby="add-time-label" aria-hidden="true">
     <div class="modal-dialog">
@@ -269,7 +269,7 @@
 
                     <div class="row">
                         <div class="col-sm-4">
-                            <input type="text" name="time" 
+                            <input type="text" name="time"
                               placeholder="Time" id="tracker-time-input"
                               class="form-control" />
                         </div>
@@ -302,40 +302,28 @@
         <h4 class="modal-title" id="resolve-label">Resolve Item</h4>
       </div>
       <div class="modal-body">
-				<div class="form-group">
-					<label for="resolve-status">Resolve Status</label>
-					<select class="form-control" id="resolve-status" name="r_status">
-						<option value="FIXED">FIXED</option>
-						<option value="INVALID">INVALID</option>
-						<option value="WORKSFORME">WORKSFORME</option>
-						<option value="WONTFIX">WONTFIX</option>
-						<option value="DUPLICATE">DUPLICATE</option>
-						<option value="NEEDINFO">NEEDINFO</option>
-					</select>
-				</div>
-
-				<div class="form-group">
-					<div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-          For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
-                    <textarea name="comment" class="form-control"
-                              id="dmt-project-item-resolve-comment"
-                              rows="5" placeholder="Comment..."></textarea>
+                <div class="form-group">
+                    <label for="resolve-status">Resolve Status</label>
+                    <select class="form-control" id="resolve-status" name="r_status">
+                        <option value="FIXED">FIXED</option>
+                        <option value="INVALID">INVALID</option>
+                        <option value="WORKSFORME">WORKSFORME</option>
+                        <option value="WONTFIX">WONTFIX</option>
+                        <option value="DUPLICATE">DUPLICATE</option>
+                        <option value="NEEDINFO">NEEDINFO</option>
+                    </select>
                 </div>
+
+                {% with modalname='resolve' %}
+                {% include 'main/item_detail_textarea_preview.html' %}
+                {% endwith %}
 
                 <div class="form-group">
-                    <div class="instructions">
-                        Comment preview:
-                    </div>
-                    <div class="dmt-markdown-project-item-resolve-preview dmt-markdown-preview"
-                         >Comment</div>
+                    <label for="resolve-time-input">Time</label>
+                    <input type="text" name="time" placeholder="time"
+                                 id="resolve-time-input"
+                                 class="form-control" />
                 </div>
-
-				<div class="form-group">
-					<label for="resolve-time-input">Time</label>
-					<input type="text" name="time" placeholder="time"
-								 id="resolve-time-input"
-								 class="form-control" />
-				</div>
 
       </div>
       <div class="modal-footer">
@@ -358,20 +346,10 @@
         <h4 class="modal-title" id="inprogress-label">Mark as In Progress</h4>
       </div>
       <div class="modal-body">
-          <div class="form-group">
-            <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-                For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
-            <textarea name="comment" class="form-control"
-                      id="dmt-project-item-inprogress-comment"
-                      rows="5" placeholder="Comment..."></textarea>
-          </div>
-          <div class="form-group">
-              <div class="instructions">
-                  Comment preview:
-              </div>
-              <div class="dmt-markdown-project-item-inprogress-preview dmt-markdown-preview"
-                   >Comment</div>
-          </div>
+          {% with modalname='inprogress' %}
+          {% include 'main/item_detail_textarea_preview.html' %}
+          {% endwith %}
+
           <div class="form-group">
               <label for="progress-time-input">Time</label>
               <input type="text" name="time" placeholder="time"
@@ -399,17 +377,16 @@
         <h4 class="modal-title" id="verify-label">Verify</h4>
       </div>
       <div class="modal-body">
-				<div class="form-group">
-				<div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-                        For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
-					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
-				</div>
-                <div class="form-group">
-					<label for="verify-time-input">Time</label>
-					<input type="text" name="time" placeholder="time"
-						   id="verify-time-input"
-						   class="form-control" />
-				</div>
+          {% with modalname='verify' %}
+          {% include 'main/item_detail_textarea_preview.html' %}
+          {% endwith %}
+
+          <div class="form-group">
+              <label for="verify-time-input">Time</label>
+              <input type="text" name="time" placeholder="time"
+                     id="verify-time-input"
+                     class="form-control" />
+          </div>
       </div><!-- end .modal-body -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -431,11 +408,10 @@
         <h4 class="modal-title" id="reopen-label">Reopen</h4>
       </div>
       <div class="modal-body">
-          <div class="form-group">
-          <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-                        For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
-              <textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
-          </div>
+          {% with modalname='reopen' %}
+          {% include 'main/item_detail_textarea_preview.html' %}
+          {% endwith %}
+
           <div class="form-group">
               <label for="reopen-time-input">Time</label>
               <input type="text" name="time" placeholder="time"
@@ -470,22 +446,10 @@
         <h4 class="modal-title" id="add-comment-label">Write Comment</h4>
       </div>
       <div class="modal-body">
-          <div class="form-group">
-              <div class="instructions">
-                <span class="glyphicon glyphicon-question-sign"></span>
-                For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.
-              </div>
-              <textarea name="comment"
-                        class="form-control"
-                        rows="5"
-                        placeholder="Comment..."></textarea>
-          </div>
-          <div class="form-group">
-              <div class="instructions">
-                Comment preview:
-              </div>
-              <div class="dmt-markdown-item-preview dmt-markdown-preview">Comment...</div>
-          </div>
+          {% with modalname='addcomment' %}
+          {% include 'main/item_detail_textarea_preview.html' %}
+          {% endwith %}
+
           <div class="form-group">
               <label for="comment-time-input">Time</label>
               <input type="text" name="time" placeholder="time"
@@ -522,13 +486,11 @@
               <input type="text" name="title" placeholder="title"
               class="form-control" />
           </div>
-          <div class="form-group">
-              <div class="instructions">
-                <span class="glyphicon glyphicon-question-sign"></span>
-                For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.
-              </div>
-              <textarea name="description" class="form-control" rows="5" placeholder="Description"></textarea>
-          </div>
+
+          {% with modalname='addattachment' inputname='description' %}
+          {% include 'main/item_detail_textarea_preview.html' %}
+          {% endwith %}
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -550,45 +512,45 @@
         <h4 class="modal-title" id="split-label">Split Item</h4>
       </div>
       <div class="modal-body">
-					<div class="form-group">
-						<input type="text" name="title_0" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_0" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_1" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_1" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_2" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_2" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_3" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_3" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_4" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_4" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_5" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_5" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_6" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_6" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_7" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_7" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_8" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_8" class="form-control" placeholder="Sub-item title" />
+                    </div>
 
-					<div class="form-group">
-						<input type="text" name="title_9" class="form-control" placeholder="Sub-item title" />
-					</div>
+                    <div class="form-group">
+                        <input type="text" name="title_9" class="form-control" placeholder="Sub-item title" />
+                    </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -609,27 +571,28 @@
         <h4 class="modal-title" id="reassign-label">Reassign</h4>
       </div>
       <div class="modal-body">
-				<div class="form-group">
-					<label for="assign-to-select">Assign To</label>
-					<select name="assigned_to" class="form-control" id="assign-to-select">
-						{% for user in item.milestone.project.all_personnel_in_project %}
-						<option value="{{user.username}}"
-										{% ifequal user.username item.assigned_to.username %}
-										selected="selected"
-										{% endifequal %}>{{user.fullname}}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="form-group">
-					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
-				</div>
+                <div class="form-group">
+                    <label for="assign-to-select">Assign To</label>
+                    <select name="assigned_to" class="form-control" id="assign-to-select">
+                        {% for user in item.milestone.project.all_personnel_in_project %}
+                        <option value="{{user.username}}"
+                                        {% ifequal user.username item.assigned_to.username %}
+                                        selected="selected"
+                                        {% endifequal %}>{{user.fullname}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-				<div class="form-group">
-					<label for="reassign-time-input">Time</label>
-					<input type="text" name="time" placeholder="time"
-								 id="reassign-time-input"
-								 class="form-control" />
-				</div>
+                {% with modalname='reassign' %}
+                {% include 'main/item_detail_textarea_preview.html' %}
+                {% endwith %}
+
+                <div class="form-group">
+                    <label for="reassign-time-input">Time</label>
+                    <input type="text" name="time" placeholder="time"
+                                 id="reassign-time-input"
+                                 class="form-control" />
+                </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -649,26 +612,28 @@
         <h4 class="modal-title" id="reassign-label">Change Owner</h4>
       </div>
       <div class="modal-body">
-				<div class="form-group">
-					<label for="assign-to-select">Owner</label>
-					<select name="owner" class="form-control" id="assign-to-select">
-						{% for user in item.milestone.project.all_personnel_in_project %}
-						<option value="{{user.username}}"
-										{% ifequal user.username item.owner.username %}
-										selected="selected"
-										{% endifequal %}>{{user.fullname}}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="form-group">
-					<textarea name="comment" class="form-control" rows="5" placeholder="Comment..."></textarea>
-				</div>
-				<div class="form-group">
-					<label for="owner-time-input">Time</label>
-					<input type="text" name="time" placeholder="time"
-								 id="owner-time-input"
-								 class="form-control" />
-				</div>
+                <div class="form-group">
+                    <label for="assign-to-select">Owner</label>
+                    <select name="owner" class="form-control" id="assign-to-select">
+                        {% for user in item.milestone.project.all_personnel_in_project %}
+                        <option value="{{user.username}}"
+                                        {% ifequal user.username item.owner.username %}
+                                        selected="selected"
+                                        {% endifequal %}>{{user.fullname}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% with modalname='changeowner' %}
+                {% include 'main/item_detail_textarea_preview.html' %}
+                {% endwith %}
+
+                <div class="form-group">
+                    <label for="owner-time-input">Time</label>
+                    <input type="text" name="time" placeholder="time"
+                                 id="owner-time-input"
+                                 class="form-control" />
+                </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -706,9 +671,9 @@
         <h4><a href="{{attachment.src}}" title="Download this attachment">{{attachment.title|default:attachment.filename}}</a></h4>
         {% endif %}
 
-        
+
         </div>
-        
+
         <div class="attachment-byline text-muted">
         Uploaded by <a href="{% url 'user_detail' attachment.author.username %}">{{attachment.author.fullname}}</a>
         on {{attachment.last_mod}}
@@ -780,7 +745,7 @@
     {% endfor %}
 <br />
 <a href="#" class="btn btn-sm btn-default pull-right" data-toggle="modal"
-	data-target="#add-comment"><span class="glyphicon glyphicon-comment"></span> <span class="item-action-text hidden-xs hidden-sm">Write comment</span></a>
+    data-target="#add-comment"><span class="glyphicon glyphicon-comment"></span> <span class="item-action-text hidden-xs hidden-sm">Write comment</span></a>
 </div>
 {% endblock %}
 

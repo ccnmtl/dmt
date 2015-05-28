@@ -7,17 +7,24 @@ require([
     'jquery',
     'utils/markdown_preview'
 ], function(domReady, $, MarkdownPreview) {
-    domReady(function() {
-        var preview = new MarkdownPreview(
-            $('textarea#dmt-project-item-resolve-comment'),
-            $('.dmt-markdown-project-item-resolve-preview')
-        );
-        preview.startEventHandler();
+    var modals = [
+        'addcomment',
+        'resolve',
+        'inprogress',
+        'changeowner',
+        'reassign',
+        'addattachment',
+        'verify',
+        'reopen'
+    ];
 
-        preview = new MarkdownPreview(
-            $('textarea#dmt-project-item-inprogress-comment'),
-            $('.dmt-markdown-project-item-inprogress-preview')
-        );
-        preview.startEventHandler();
+    domReady(function() {
+        modals.forEach(function(modal) {
+            var preview = new MarkdownPreview(
+                $('textarea#dmt-project-item-' + modal + '-comment'),
+                $('.dmt-markdown-project-item-' + modal + '-preview')
+            );
+            preview.startEventHandler();
+        });
     });
 });
