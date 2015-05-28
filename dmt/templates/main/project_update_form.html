@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 
 {% block title %}Project: Edit {{object.name}}{% endblock %}
 {% block extraclass %} class="project-form"{% endblock %}
@@ -13,7 +13,7 @@
 <form action="." method="post">{% csrf_token %}
 <fieldset>
 
-{{form|bootstrap}}
+{% bootstrap_form form %}
 
 <div class="button-set">
 <a href="{% url 'project_detail' object.pid %}" class="btn btn-default">Cancel</a>

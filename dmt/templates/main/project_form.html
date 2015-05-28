@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 
 {% block title %}Project: Create new project{% endblock %}
 {% block extraclass %} class="project-form"{% endblock %}
@@ -15,7 +15,7 @@
 <form action="." method="post">{% csrf_token %}
 <fieldset>
 
-{{form|bootstrap}}
+{% bootstrap_form form %}
 
 <div class="button-set">
 <input type="submit" value="Save project" class="btn btn-primary" />

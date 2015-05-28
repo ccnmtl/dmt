@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+{% load bootstrap3 %}
+
 {% block title %}Edit Item #{{object.iid}}&ndash;{{object.title}}{% endblock %}
 {% block extraclass %} class="object-form item-form"{% endblock %}
 
@@ -27,7 +28,7 @@
   <div class="item-details">
     <form action="." method="post">{% csrf_token %}
     <fieldset>
-    {{form|bootstrap}}
+    {% bootstrap_form form %}
     <div class="button-set">
     <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
     <input type="submit" value="Save" class="btn btn-primary" />

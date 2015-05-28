@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 
 {% block content %}
 <p class="pull-right"><a class="btn btn-xs btn-danger"
-												 href="{{object.get_absolute_url}}delete/"><span class="glyphicon
-																										 glyphicon-trash"></span>
+						 href="{{object.get_absolute_url}}delete/"><span class="glyphicon
+																				glyphicon-trash"></span>
 		delete</a></p>
 
 <form action="." method="post">{% csrf_token %}
-<fieldset><legend>Edit Forum Post</legend>
-{{form|bootstrap}}
+    <fieldset><legend>Edit Forum Post</legend>
+        {% bootstrap_form form %}
 
-<a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
-<input type="submit" value="Save" class="btn btn-primary" />
-</fieldset>
+        <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </fieldset>
 </form>
 {% endblock %}

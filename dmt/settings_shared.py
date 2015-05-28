@@ -119,7 +119,6 @@ INSTALLED_APPS = [
     'compressor',
     'django_markwhat',
     'django_statsd',
-    'bootstrapform',
     'debug_toolbar',
     'waffle',
     'django_jenkins',

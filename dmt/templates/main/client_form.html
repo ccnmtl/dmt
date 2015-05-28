@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 
 {% block content %}
 <h1>Add New Client</h1>
 <form action="." method="post">{% csrf_token %}
 <fieldset>
-{{form|bootstrap}}
+{% bootstrap_form form %}
 
 <div class="button-set">
 <input type="submit" value="Add Client" class="btn btn-primary" />
