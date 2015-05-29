@@ -1,10 +1,29 @@
 from datetime import datetime
+from django.utils import timezone
 from dmt.main.utils import interval_to_hours
 
 
 class TimeLineItem(object):
     def __lt__(self, other):
-        return self.timestamp() < other.timestamp()
+        my_timestamp = self.timestamp()
+        other_timestamp = other.timestamp()
+
+        try:
+            if timezone.is_naive(my_timestamp):
+                my_timestamp = timezone.make_aware(my_timestamp)
+        except:
+            # If an exception is raised, then it's not actually
+            # a timestamp, it could be an int for testing purposes,
+            # so let the comparison go through.
+            pass
+
+        try:
+            if timezone.is_naive(other_timestamp):
+                other_timestamp = timezone.make_aware(other_timestamp)
+        except:
+            pass
+
+        return my_timestamp < other_timestamp
 
     # methods to override
 

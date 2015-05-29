@@ -1,5 +1,6 @@
 import unittest
 from datetime import timedelta, datetime
+from django.utils import timezone
 from dmt.main.timeline import (
     TimeLineItem, TimeLineEvent, TimeLineComment, TimeLineActualTime,
     TimeLineStatus, TimeLinePost, TimeLineMilestone,
@@ -43,7 +44,13 @@ class DummyItem(object):
 
 class DummyEvent(object):
     def __init__(self):
-        self.event_date_time = "foo"
+        self.event_date_time = datetime.now()
+        self.item = DummyItem()
+
+
+class DummyEventTzAware(object):
+    def __init__(self):
+        self.event_date_time = timezone.now()
         self.item = DummyItem()
 
 
@@ -58,16 +65,40 @@ class DummyComment(object):
         return "comment user"
 
 
+class DummyCommentTzAware(object):
+    def __init__(self):
+        self.event = DummyEventTzAware()
+        self.comment = "Dummy Comment"
+        self.add_date_time = "comment add_date_time"
+        self.item = self.event.item
+
+    def user(self):
+        return "comment user"
+
+
 class TestTimeLineEvent(unittest.TestCase):
     def test_basics(self):
         e = TimeLineEvent(DummyComment())
+
+        now = datetime.now()
+        five_mins = timedelta(minutes=5)
+
         self.assertEqual(e.label(), None)
-        self.assertEqual(e.timestamp(), "foo")
+        self.assertTrue(e.timestamp() < (now + five_mins))
+        self.assertTrue(e.timestamp() > (now - five_mins))
         self.assertEqual(e.event_type(), "event")
         self.assertEqual(e.title(), "dummy item")
         self.assertEqual(e.body(), "Dummy Comment")
         self.assertEqual(e.user(), "comment user")
         self.assertEqual(e.url(), "item absolute url")
+
+    def test_naive_date_compare(self):
+        e1 = TimeLineEvent(DummyComment())
+        e2 = TimeLineEvent(DummyCommentTzAware())
+        try:
+            e1 < e2
+        except TypeError:
+            self.fail('Compare between naive and non-naive timestamps failure')
 
 
 class TestTimeLineComment(unittest.TestCase):
