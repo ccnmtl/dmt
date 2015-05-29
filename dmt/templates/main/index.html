@@ -12,7 +12,6 @@
 
 {% block content %}
 
-
 <h1 class="page-title">My Items</h1>
 
 {% if request.user.is_anonymous %}
@@ -39,7 +38,7 @@
   </div><!-- ./object-action-set -->
 
 <!-- ADD TRACKER -->
-<div class="modal fade" id="add-tracker" tabindex="-1" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
+<div class="modal fade" id="add-tracker" role="dialog" aria-labelledby="add-tracker-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,13 +46,22 @@
                 <h4 class="modal-title" id="add-tracker-label">Add Tracker</h4>
             </div>
             <div class="modal-body">
-                <form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">{% csrf_token %}
+                <form id="add-tracker-form"
+                      action="/api/1.0/tracker/add/"
+                      method="post" role="form">
+                    {% csrf_token %}
                     <input type="hidden" name="pid" value="0" id="tracker-pid-input" />
 
                     <div class="row">
-                        <div class="col-sm-12">
-                            <input type="text" name="project" placeholder="Project"
-                                   class="form-control" id="project-input" />
+                        <div class="col-sm-10">
+                            <select name="project"
+                                    class="form-control select2"
+                                    id="project-input">
+                                <option value="" selected="selected">---------</option>
+                                {% for p in projects %}
+                                <option value="{{ p.pk }}">{{ p }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <br />

@@ -392,6 +392,11 @@ class ItemDetailView(LoggedInMixin, DetailView):
 class IndexView(LoggedInMixin, TemplateView):
     template_name = "main/index.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['projects'] = Project.objects.all()
+        return context
+
 
 class ClientListView(LoggedInMixin, FilterView):
     filterset_class = ClientFilter
@@ -1262,7 +1267,7 @@ class AddTrackersView(LoggedInMixin, FormSetView):
         return super(AddTrackersView, self).formset_valid(formset)
 
     def handle_formset_row(self, form, user):
-        project_pid = form.cleaned_data.get('project_pid')
+        project = form.cleaned_data.get('project')
         task = form.cleaned_data.get('task')
         time = form.cleaned_data.get('time', '1 hour')
         client_uni = form.cleaned_data.get('client_uni')
@@ -1270,7 +1275,6 @@ class AddTrackersView(LoggedInMixin, FormSetView):
         d = new_duration(time)
         td = d.timedelta()
 
-        project = get_object_or_404(Project, pid=project_pid)
         milestone = project.upcoming_milestone()
         item = Item.objects.create(
             milestone=milestone,
@@ -1293,7 +1297,7 @@ class AddTrackersView(LoggedInMixin, FormSetView):
             self.request,
             self.success_message % dict(
                 project_link=reverse('project_detail',
-                                     args=(project_pid,)),
+                                     args=(project.pk,)),
                 project_name=project.name)
         )
 

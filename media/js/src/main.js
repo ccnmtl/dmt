@@ -24,13 +24,13 @@ require.config({
         'bootstrap-datepicker':
             '../libs/bootstrap-datepicker/bootstrap-datepicker.min',
 
-        typeahead: '../libs/typeahead/typeahead.jquery.min'
+        select2: '../libs/select2/select2.min'
     },
     shim: {
         'bootstrap-datepicker': {
             'deps': ['jquery']
         },
-        typeahead: {
+        'select2': {
             'deps': ['jquery']
         },
         backbone: {
@@ -53,8 +53,7 @@ require([
     'backbone',
     'bootstrap-datepicker',
     '../libs/remarkable/remarkable',
-    '../libs/typeahead/bloodhound.min',
-    'typeahead',
+    'select2',
 
     // src
     'utils/markdown_preview',
@@ -101,24 +100,6 @@ require([
         }
     });
 
-    var projects = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        limit: 10,
-        remote: {
-            url: '/drf/projects/?search=%QUERY',
-            filter: function(projects) {
-                return _.map(projects.results, function(data) {
-                    return {
-                        name: data.name,
-                        pid: data.pid
-                    };
-                });
-            }
-        }
-    });
-    projects.initialize();
-
     domReady(function() {
         $('input[name=target_date]').datepicker({
             autoclose: true,
@@ -126,27 +107,10 @@ require([
             todayHighlight: true
         });
 
-        $('#project-input,#add-trackers-form .field-project input').typeahead({
-            hint: false,
-            highlight: true
-        }, {
-            name: 'results',
-            displayKey: 'name',
-            source: projects.ttAdapter()
+        $('#project-input').select2({
+            placeholder: 'Project',
+            width: '100%'
         });
-
-        $('#project-input').on('typeahead:selected', function(object, datum) {
-            $('#tracker-pid-input').val(datum.pid);
-        });
-        $('#add-trackers-form .field-project input').on(
-            'typeahead:selected',
-            function(e, datum) {
-                var pid = datum.pid;
-                var $input = $(e.target);
-                var name = $input.attr('name');
-                var $pidInput = $input.closest('tr')
-                    .find('input[name="' + name + '_pid"]').first();
-                $pidInput.val(pid);
-            });
+        $('#add-trackers-form .field-project select').select2();
     });
 });
