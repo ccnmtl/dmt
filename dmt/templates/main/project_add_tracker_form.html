@@ -7,8 +7,12 @@
                 <h4 class="modal-title" id="add-tracker-label">Add Tracker</h4>
             </div>
             <div class="modal-body">
-                <form id="add-tracker-form" action="/api/1.0/tracker/add/" method="post" role="form">{% csrf_token %}
-                    <input type="hidden" name="pid" value="{{object.pid}}" id="tracker-pid-input" />
+                <form id="add-tracker-form" action="/api/1.0/tracker/add/"
+                      method="post" role="form">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="project"
+                           value="{{object.pk}}" />
 
                     <div class="row">
                         <div class="col-sm-7">
