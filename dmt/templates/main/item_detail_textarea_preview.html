@@ -1,0 +1,27 @@
+{# This component expects the 'modalname' variable to be defined. #}
+
+<div class="form-group">
+    <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+        For text formatting, please see the
+        <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet"
+           target="_blank">Markdown cheat sheet</a> for syntax rules.
+    </div>
+
+    {% if inputname %}
+        <textarea name="{{inputname}}" class="form-control"
+              id="dmt-project-item-{{modalname}}-comment"
+              rows="5" placeholder="{{inputname|capfirst}}"></textarea>
+    {% else %}
+        <textarea name="comment" class="form-control"
+                  id="dmt-project-item-{{modalname}}-comment"
+                  rows="5" placeholder="Comment..."></textarea>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <div class="instructions">
+        Comment preview:
+    </div>
+    <div class="dmt-markdown-project-item-{{modalname}}-preview dmt-markdown-preview"
+         >Comment</div>
+</div>
