@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+{% load bootstrap3 %}
+
 {% block title %}Clients List{% endblock %}
 
 {% block primarynavtabs %}
@@ -79,7 +80,7 @@
 <p><a class="btn btn-success" href="/client/">Clear Filter</a></p>
 <hr />
 <form action="" method="get">
-  {{ filter.form|bootstrap }}
+  {% bootstrap_form filter.form %}
   <input type="submit" class="btn btn-primary" value="filter" />
 </form>
 </div>

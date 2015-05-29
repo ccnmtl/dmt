@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+
+{% load bootstrap3 %}
+
 {% block extraclass %} class="project-page"{% endblock %}
 
 {% block title %}All Projects{% endblock %}
@@ -63,7 +65,7 @@
     <a href="/project/" class="btn btn-default">Cancel</a>
   </div>
 
-  {{ filter.form|bootstrap }}
+  {% bootstrap_form filter.form %}
 
   <div class="button-set">
     <input type="submit" class="btn btn-primary" value="Filter" />

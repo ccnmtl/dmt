@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% load bootstrap %}
+
+{% load bootstrap3 %}
 
 {% block title %}All Users{% endblock %}
 
@@ -54,7 +55,7 @@
 <div class="tab-pane fade object-form" id="filter">
 
 <form action="" method="get">
-  {{ filter.form|bootstrap }}
+  {% bootstrap_form filter.form %}
 
   <div class="button-set">
     <input type="submit" class="btn btn-primary" value="Filter" />
