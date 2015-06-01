@@ -1,6 +1,6 @@
 import re
 from django import forms
-from django.forms import ModelForm, TextInput
+from django.forms import ModelForm, TextInput, URLInput
 from dmt.main.models import (
     StatusUpdate, Node, UserProfile, Project, Milestone, Item
 )
@@ -36,7 +36,7 @@ class UserUpdateForm(ModelForm):
             "type": TextInput(),
             "title": TextInput(),
             "phone": TextInput(),
-            "photo_url": TextInput(),
+            "photo_url": URLInput(),
             "campus": TextInput(),
             "building": TextInput(),
             "room": TextInput()
