@@ -1,4 +1,7 @@
+import pytz
 from datetime import date, datetime, timedelta
+from django.conf import settings
+from django.utils.dateparse import parse_date
 
 
 class PrevNextWeekMixin(object):
@@ -12,9 +15,15 @@ class PrevNextWeekMixin(object):
 
     def get_params(self):
         if self.request.GET.get('date', None):
-            (y, m, d) = self.request.GET.get('date').split('-')
-            now = datetime(year=int(y), month=int(m), day=int(d))
-            self.calc_weeks(now)
+            date_str = self.request.GET.get('date')
+            naive = parse_date(date_str)
+            # Convert the date to a datetime
+            naive = datetime.combine(naive, datetime.min.time())
+            # Make the datetime tz-aware as documented here:
+            # https://docs.djangoproject.com/en/1.8/topics/i18n/timezones/#usage
+            aware = pytz.timezone(settings.TIME_ZONE).localize(naive,
+                                                               is_dst=None)
+            self.calc_weeks(aware)
 
     def get_context_data(self, *args, **kwargs):
         self.get_params()
@@ -24,8 +33,14 @@ class PrevNextWeekMixin(object):
 
     def calc_weeks(self, now):
         self.now = now
-        self.week_start = now + timedelta(days=-now.weekday())
-        self.week_end = self.week_start + timedelta(days=6)
+        self.week_start = now + timedelta(days=-self.now.weekday())
+
+        # This week ends at 11:59:59 on Sunday night.
+        self.week_end = self.week_start + timedelta(days=6,
+                                                    hours=23,
+                                                    minutes=59,
+                                                    seconds=59)
+
         self.prev_week = self.week_start - timedelta(weeks=1)
         self.next_week = self.week_start + timedelta(weeks=1)
 
