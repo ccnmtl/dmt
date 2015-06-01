@@ -1,8 +1,9 @@
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
 from django.db import connection
+from django.utils import timezone
 from django_statsd.clients import statsd
-from datetime import datetime, timedelta
+from datetime import timedelta
 import time
 from .models import Item, ActualTime, interval_sum
 from .models import UserProfile, Milestone
@@ -72,7 +73,7 @@ def estimates_report():
 
 
 def hours_logged(weeks=1):
-    now = datetime.now()
+    now = timezone.now()
     one_week_ago = now - timedelta(weeks=weeks)
     # active projects
     try:
@@ -140,7 +141,7 @@ def total_hours_estimated_vs_logged():
 
 @periodic_task(run_every=crontab(hour=1, minute=0, day_of_week='*'))
 def close_passed_milestones():
-    now = datetime.now()
+    now = timezone.now()
     for milestone in Milestone.objects.filter(
             status='OPEN', target_date__lt=now):
         milestone.update_milestone()
@@ -164,7 +165,7 @@ def bump_someday_maybe_target_dates():
     should never actually reach a target date.
     so once a day, we take any that are upcoming
     and push them far into the future again. """
-    now = datetime.now()
+    now = timezone.now()
     upcoming = now + timedelta(weeks=4)
     future = now + timedelta(weeks=52)
     for m in Milestone.objects.filter(
