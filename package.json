@@ -2,6 +2,7 @@
   "name": "dmt",
   "version": "0.1.0",
   "description": "Project management tool",
+  "license": "GPL-2.0+",
   "scripts": {
     "test": "./node_modules/karma/bin/karma start"
   },
