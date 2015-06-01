@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
+from django.utils import timezone
 
 from dmt.main.models import UserProfile, Item, Milestone, Project
 from dmt.main.views import LoggedInMixin
@@ -235,7 +236,7 @@ class PassedMilestonesView(LoggedInMixin, TemplateView):
         context = super(PassedMilestonesView, self).get_context_data(**kwargs)
         context['items'] = Item.objects.filter(status='RESOLVED')
 
-        now = datetime.now()
+        now = timezone.now()
         context['milestones'] = Milestone.objects.filter(
             status='OPEN',
             target_date__lt=now,

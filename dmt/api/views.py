@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +10,7 @@ from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from simpleduration import Duration, InvalidDuration
-from datetime import datetime, timedelta
+from datetime import timedelta
 from dateutil import parser
 
 from dmt.main.models import (
@@ -264,9 +265,9 @@ class ProjectMilestoneList(generics.ListCreateAPIView):
 
 def process_completed(completed=None):
     if completed == 'last':
-        return datetime.now() - timedelta(days=7)
+        return timezone.now() - timedelta(days=7)
     if completed == 'before_last':
-        return datetime.now() - timedelta(days=14)
+        return timezone.now() - timedelta(days=14)
     return completed
 
 
@@ -296,7 +297,7 @@ class AddTrackerView(View):
             owner_user=user.user, assigned_user=user.user,
             title=task, status='VERIFIED',
             priority=1, target_date=milestone.target_date,
-            last_mod=datetime.now(),
+            last_mod=timezone.now(),
             estimated_time=td)
         if client_uni != '':
             r = Client.objects.filter(

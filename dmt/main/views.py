@@ -11,6 +11,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
@@ -36,7 +37,7 @@ from dmt.main.utils import new_duration, safe_basename
 from dmt.report.mixins import PrevNextWeekMixin, RangeOffsetMixin
 
 from django_markwhat.templatetags.markup import commonmark
-from datetime import datetime, timedelta
+from datetime import timedelta
 from simpleduration import Duration, InvalidDuration
 from hashlib import sha1
 import time
@@ -971,7 +972,7 @@ class ProjectAddMilestoneView(LoggedInMixin, View):
         Milestone.objects.create(
             project=project, name=name,
             status='OPEN',
-            target_date=request.POST.get('target_date', datetime.now().date())
+            target_date=request.POST.get('target_date', timezone.now().date())
         )
         return HttpResponseRedirect(project.get_absolute_url())
 
@@ -1031,7 +1032,7 @@ class DashboardView(LoggedInMixin, TemplateView):
             total_hours_estimated - sm_hours_estimated)
 
         # recent/upcoming milestones
-        now = datetime.now()
+        now = timezone.now()
         four_weeks_ago = now - timedelta(weeks=4)
         four_weeks_future = now + timedelta(weeks=4)
         two_weeks_ago = now - timedelta(weeks=2)
@@ -1117,7 +1118,7 @@ class SignS3View(LoggedInMixin, View):
         elif 'gif' in mime_type:
             extension = ".gif"
 
-        now = datetime.now()
+        now = timezone.now()
         uid = str(uuid.uuid4())
         object_name = "%04d/%02d/%02d/%02d/%s-%s%s" % (
             now.year, now.month, now.day,
@@ -1173,7 +1174,7 @@ class ItemAddAttachmentView(LoggedInMixin, View):
             description=description,
             filename=filename,
             type=atype,
-            last_mod=datetime.now(),
+            last_mod=timezone.now(),
         )
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -1283,7 +1284,7 @@ class AddTrackersView(LoggedInMixin, FormSetView):
             owner_user=user, assigned_user=user,
             title=task, status='VERIFIED',
             priority=1, target_date=milestone.target_date,
-            last_mod=datetime.now(),
+            last_mod=timezone.now(),
             estimated_time=td)
 
         if client_uni:

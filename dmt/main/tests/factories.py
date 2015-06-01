@@ -2,6 +2,7 @@ import factory
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.utils import timezone
 from django.utils.timezone import utc
 from dmt.main.models import UserProfile, Project, Milestone, Item
 from dmt.main.models import Comment, Events, Node, ActualTime, StatusUpdate
@@ -54,7 +55,7 @@ class MilestoneFactory(factory.DjangoModelFactory):
     mid = factory.Sequence(lambda n: n)
     project = factory.SubFactory(ProjectFactory)
     name = factory.Sequence(lambda n: 'Test Milestone {0}'.format(n))
-    target_date = datetime.now().date() + timedelta(days=3650)
+    target_date = timezone.now().date() + timedelta(days=3650)
     status = "OPEN"
 
 
