@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 {% load dmttags %}
 
-{% block title %}User Weekly
- Report: <a href="{{u.get_absolute_url}}">{{u.fullname}}</a>
- ({{week_start}} to {{week_end}})
+{% block title %}
+User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
 {% endblock %}
 
 {% block primarynavtabs %}
