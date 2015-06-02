@@ -1,4 +1,6 @@
-from datetime import date, timedelta
+import pytz
+from datetime import date, datetime, timedelta
+from django.conf import settings
 from django.test import TestCase
 from django.utils.dateparse import parse_datetime
 from dmt.report.mixins import RangeOffsetMixin, PrevNextWeekMixin
@@ -31,5 +33,21 @@ class RangeOffsetMixinTests(TestCase):
 
     def test_calc_interval(self):
         self.mixin.calc_interval()
+        naive_today = datetime.combine(date.today(), datetime.min.time())
+        aware_today = pytz.timezone(settings.TIME_ZONE).localize(
+            naive_today, is_dst=None)
+        naive_end_of_today = datetime.combine(date.today(),
+                                              datetime.max.time())
+        aware_end_of_today = pytz.timezone(settings.TIME_ZONE).localize(
+            naive_end_of_today, is_dst=None)
+
         self.assertEqual(self.mixin.interval_start,
-                         date.today() - timedelta(days=31))
+                         aware_today - timedelta(days=31))
+        self.assertEqual(self.mixin.interval_end, aware_end_of_today)
+
+        self.mixin.offset_days = 3
+        self.mixin.calc_interval()
+        self.assertEqual(self.mixin.interval_start,
+                         aware_today - timedelta(days=34))
+        self.assertEqual(self.mixin.interval_end,
+                         aware_end_of_today - timedelta(days=3))
