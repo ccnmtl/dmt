@@ -70,7 +70,7 @@ User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
 
 <h3>Piegraph</h3>
 
-<img src="http://chart.apis.google.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;chs=800x300&amp;chds=0,{{max_time|interval_to_hours}}&amp;chd=t:{% for project in active_projects %}{{project.time|interval_to_hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for project in active_projects %}{{project.name|urlencode}}|{% endfor %}"
+<img src="https://chart.googleapis.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;chs=800x300&amp;chds=0,{{max_time|interval_to_hours}}&amp;chd=t:{% for project in active_projects %}{{project.time|interval_to_hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for project in active_projects %}{{project.name|urlencode}}|{% endfor %}"
    width="800" height="300" alt="" />
 
 {% endblock %}
