@@ -1,6 +1,6 @@
-from dateutil import parser
 from datetime import date, timedelta
 from django.test import TestCase
+from django.utils.dateparse import parse_datetime
 from dmt.report.mixins import RangeOffsetMixin, PrevNextWeekMixin
 
 
@@ -9,20 +9,20 @@ class PrevNextWeekMixinTests(TestCase):
         self.mixin = PrevNextWeekMixin()
 
     def test_calc_weeks(self):
-        now = parser.parse('Nov 1 2014 12pm')
+        now = parse_datetime('2014-11-01 00:00:00')
         self.mixin.calc_weeks(now)
         self.assertEqual(
             self.mixin.week_start,
-            parser.parse('Oct 27 2014 12pm'))
+            parse_datetime('2014-10-27 00:00:00'))
         self.assertEqual(
             self.mixin.week_end,
-            parser.parse('Nov 2 2014 12pm'))
+            parse_datetime('2014-11-02 23:59:59'))
         self.assertEqual(
             self.mixin.prev_week,
-            parser.parse('Oct 20 2014 12pm'))
+            parse_datetime('2014-10-20 00:00:00'))
         self.assertEqual(
             self.mixin.next_week,
-            parser.parse('Nov 3 2014 12pm'))
+            parse_datetime('2014-11-03 00:00:00'))
 
 
 class RangeOffsetMixinTests(TestCase):

@@ -83,14 +83,10 @@ class UserProfile(models.Model):
         return sorted(set(list(projects)), key=lambda x: x.name.lower())
 
     def resolve_times_for_interval(self, start, end):
-        # Handle dates as well as datetimes
-        start_date = getattr(start, 'date', start)
-        end_date = getattr(end, 'date', end)
-
         return ActualTime.objects.filter(
             resolver=self,
-            completed__gt=start_date,
-            completed__lte=end_date
+            completed__gt=start,
+            completed__lte=end
         ).select_related('item', 'item__milestone', 'item__milestone__project')
 
     def total_resolve_times(self):
@@ -341,8 +337,8 @@ class ProjectUser(object):
                 a.actual_time for a in ActualTime.objects.filter(
                     resolver=self.user,
                     item__milestone__project=self.project,
-                    completed__gt=start.date,
-                    completed__lte=end.date)])
+                    completed__gt=start,
+                    completed__lte=end)])
 
 
 # before putting in the IntervalField, there were some
