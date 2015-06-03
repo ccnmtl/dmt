@@ -4,7 +4,9 @@ from django.conf import settings
 from django.core import mail
 from django.utils import timezone
 import unittest
+from freezegun import freeze_time
 from .factories import (
+    CommentFactory,
     UserProfileFactory, ItemFactory, NodeFactory, ProjectFactory,
     AttachmentFactory, ClientFactory, StatusUpdateFactory,
     ActualTimeFactory, MilestoneFactory, NotifyFactory,
@@ -329,6 +331,22 @@ class ItemTest(TestCase):
         NotifyFactory(item=i, username=u2)
         i.update_email("a comment", i.owner)
         self.assertEqual(len(mail.outbox), 1)
+
+
+class CommentTest(TestCase):
+    def setUp(self):
+        self.c = CommentFactory()
+
+    def test_is_valid_from_factory(self):
+        self.c.full_clean()
+
+    def test_has_been_edited(self):
+        self.assertFalse(self.c.has_been_edited())
+        with freeze_time('2020-01-01'):
+            self.c.comment_src = 'test'
+            self.c.comment = 'test'
+            self.c.save()
+            self.assertTrue(self.c.has_been_edited())
 
 
 class HistoryItemTest(TestCase):

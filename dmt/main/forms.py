@@ -1,9 +1,12 @@
 import re
 from django import forms
 from django.forms import ModelForm, TextInput, URLInput
+from django_markwhat.templatetags.markup import commonmark
 from dmt.main.models import (
+    Comment,
     StatusUpdate, Node, UserProfile, Project, Milestone, Item
 )
+from dmt.main.templatetags.dmttags import linkify
 
 
 class AddTrackerForm(forms.Form):
@@ -99,3 +102,16 @@ class ItemUpdateForm(ModelForm):
         exclude = ['iid', 'owner', 'owner_user', 'assigned_user',
                    'assigned_to', 'status', 'r_status', 'last_mod',
                    'tags', 'priority', 'url']
+
+
+class CommentUpdateForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment_src']
+
+    def save(self, commit=True):
+        instance = super(CommentUpdateForm, self).save(commit=False)
+        instance.comment = linkify(commonmark(instance.comment_src))
+        if commit:
+            instance.save()
+        return instance

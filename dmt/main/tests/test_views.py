@@ -706,6 +706,38 @@ class TestItemWorkflow(TestCase):
         # Assert that the comment still exists
         Comment.objects.get(cid=comment.cid)
 
+    def test_update_own_comment(self):
+        i = ItemFactory()
+        e = EventFactory(item=i)
+        comment = CommentFactory(
+            item=i, event=e, username=self.u.userprofile.username)
+        url = reverse('comment_update', args=(comment.cid,))
+        r = self.c.post(url, {
+            'comment_src': 'testing update'
+        })
+        self.assertEqual(r.status_code, 302)
+
+        # Assert that comment was updated
+        comment.refresh_from_db()
+        self.assertEqual(comment.comment_src, 'testing update')
+        self.assertEqual(comment.comment, '<p>testing update</p>\n')
+
+    def test_update_someone_elses_comment(self):
+        i = ItemFactory()
+        e = EventFactory(item=i)
+        comment = CommentFactory(item=i, event=e, username='someone_else')
+        url = reverse('comment_update', args=(comment.cid,))
+        r = self.c.post(url, {
+            'comment_src': 'testing update'
+        })
+        self.assertEqual(r.status_code, 403)
+
+        # Assert that the comment still exists
+        Comment.objects.get(cid=comment.cid)
+        comment.refresh_from_db()
+        self.assertNotEqual(comment.comment_src, 'testing update')
+        self.assertNotEqual(comment.comment, '<p>testing update</p>\n')
+
     def test_resolve(self):
         i = ItemFactory()
         r = self.c.post(
