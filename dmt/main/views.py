@@ -29,7 +29,7 @@ from dmt.main.models import (
 from dmt.main.models import interval_sum
 from dmt.main.filters import ClientFilter, ProjectFilter, UserFilter
 from dmt.main.forms import (
-    AddTrackerForm, ItemUpdateForm,
+    AddTrackerForm, CommentUpdateForm, ItemUpdateForm,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm)
 from dmt.main.templatetags.dmttags import linkify
@@ -140,7 +140,7 @@ class AddCommentView(LoggedInMixin, View):
         if body == '':
             return HttpResponseRedirect(item.get_absolute_url())
 
-        item.add_comment(user, linkify(commonmark(body)))
+        item.add_comment(user, body, linkify(commonmark(body)))
         item.touch()
         item.update_email(body, user)
         log_time(item, user, request)
@@ -175,6 +175,30 @@ class CommentDeleteView(LoggedInMixin, DeleteView):
         comment = get_object_or_404(Comment, cid=cid)
         self.require_comment_owner(comment)
         return super(CommentDeleteView, self).post(request, args, kwargs)
+
+
+class CommentUpdateView(LoggedInMixin, UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
+
+    def require_comment_owner(self, comment):
+        """Raise an error if request.user doesn't own the given comment."""
+        pmt_user = self.request.user.userprofile
+        if not comment.user_is_owner(pmt_user):
+            raise PermissionDenied
+
+    def get_object(self, queryset=None):
+        """Ensure that the comment is owned by request.user."""
+        comment = super(CommentUpdateView, self).get_object()
+        self.require_comment_owner(comment)
+        return comment
+
+    def get_success_url(self):
+        # Get the item's url from the comment
+        cid = self.kwargs['pk']
+        comment = get_object_or_404(Comment, cid=cid)
+        item = comment.item
+        return reverse('item_detail', args=(item.iid,))
 
 
 class ResolveItemView(LoggedInMixin, View):

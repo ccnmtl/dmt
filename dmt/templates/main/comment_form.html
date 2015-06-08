@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load markup %}
+{% load emoji_tags %}
+{% load dmttags %}
+
+{% block content %}
+
+<div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
+    For text formatting, please see the
+    <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet"
+       target="_blank">Markdown cheat sheet</a> for syntax rules.
+</div>
+
+<form id="pmt-add-comment-form" action="." method="post">
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+
+    <div class="form-group">
+        <div class="instructions">Comment preview:</div>
+        <div class="dmt-markdown-preview">
+            {{object.comment_src|commonmark|linkify|emoji_replace}}
+        </div>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Update" />
+</form>
+
+{% endblock %}

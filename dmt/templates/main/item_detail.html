@@ -721,6 +721,14 @@
                     </time>
                 </a>
             </div>
+            {% if history_item.c and history_item.c.has_been_edited %}
+            <div class="pmt-item-timestamp-updated">
+                Updated
+                <time title="{{history_item.c.updated_at}}">
+                    {{history_item.c.updated_at}}
+                </time>
+            </div>
+            {% endif %}
         </div>
         <div class="col-md-7 item-comment">
 
@@ -728,14 +736,19 @@
             {% if request.user.userprofile.username == history_item.user.username %}
             {# Is it a comment? #}
             {% if history_item.c %}
-            <form method="get"
-                  action="{% url 'comment_delete' history_item.c.cid %}">
-                <button type="submit"
-                        title="Delete comment"
-                        class="btn btn-default btn-xs pmt-delete">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </button>
-            </form>
+
+            <div class="btn-group pull-right" role="group">
+                <a class="btn btn-default btn-xs"
+                   title="Edit comment"
+                   href="{% url 'comment_update' history_item.c.cid %}"
+                   ><span class="glyphicon glyphicon-pencil"></span></a>
+
+                <a class="btn btn-default btn-xs"
+                    title="Delete comment"
+                    href="{% url 'comment_delete' history_item.c.cid %}"
+                    ><span class="glyphicon glyphicon-trash"></span>
+                </a>
+            </div>
             {% endif %}
             {% endif %}
 

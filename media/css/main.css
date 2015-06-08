@@ -298,7 +298,6 @@ footer.page-footer {
 }
 
 .item-history .item-comment { word-wrap: break-word; }
-.item-history .item-comment button.pmt-delete { float: right; }
 
 .object-action-set,
 .item-action-set {
@@ -1203,6 +1202,11 @@ padding: 4px;
 
 .pmt-item-timestamp {
     white-space: nowrap;
+}
+
+.pmt-item-timestamp-updated {
+    font-style: italic;
+    font-size: small;
 }
 
 .pmt-item-timestamp a {

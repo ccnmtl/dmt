@@ -160,7 +160,7 @@ class GitUpdateView(View):
                     item.type, item.iid, item.title, comment),
                 user)
         elif comment != "":
-            item.add_comment(user, comment)
+            item.add_comment(user, comment, comment)
             item.update_email(
                 "comment added to %s $%d %s updated\n%s\n" % (
                     item.type, item.iid, item.title, comment),

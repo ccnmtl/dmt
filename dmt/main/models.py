@@ -1011,11 +1011,12 @@ class Item(models.Model):
         self.last_mod = timezone.now()
         self.save()
 
-    def add_comment(self, user, body):
+    def add_comment(self, user, comment_src, rendered_comment):
         Comment.objects.create(
             item=self,
             username=user.username,
-            comment=body,
+            comment_src=comment_src,
+            comment=rendered_comment,
             add_date_time=timezone.now())
 
     def resolve(self, user, r_status, comment):
@@ -1545,11 +1546,14 @@ class Attachment(models.Model):
 
 class Comment(models.Model):
     cid = models.AutoField(primary_key=True)
+    comment_src = models.TextField(blank=True)
     comment = models.TextField()
     add_date_time = models.DateTimeField(null=True, blank=True)
     username = models.CharField(max_length=32)
     item = models.ForeignKey(Item, null=True, db_column='item', blank=True)
     event = models.ForeignKey(Events, null=True, db_column='event', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
         db_table = u'comments'
@@ -1561,6 +1565,20 @@ class Comment(models.Model):
     def user_is_owner(self, user):
         """Return True if user is comment owner."""
         return self.username == user.username
+
+    def has_been_edited(self):
+        """Return True if the comment has been edited."""
+        if self.created_at and self.updated_at:
+            five_seconds = timedelta(seconds=5)
+            # Is updated_at within 5 seconds of created_at?
+            # If so, this comment probably hasn't been edited.
+            if (self.updated_at + five_seconds) > self.created_at and \
+               (self.updated_at - five_seconds) < self.created_at:
+                return False
+            else:
+                return True
+
+        return False
 
 
 class StatusUpdate(models.Model):

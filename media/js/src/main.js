@@ -60,6 +60,7 @@ require([
     'client_edit',
     'forms/add_time_form',
     'forms/add_tracker_form',
+    'forms/comment_form',
     'forms/project_add_action_item_form',
     'forms/project_add_bug_form',
     'forms/project_action_item_modals',
