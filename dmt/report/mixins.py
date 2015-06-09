@@ -1,6 +1,7 @@
 import pytz
 from datetime import date, datetime, timedelta
 from django.conf import settings
+from django.utils import timezone
 from django.utils.dateparse import parse_date
 
 
@@ -23,7 +24,11 @@ class PrevNextWeekMixin(object):
             # https://docs.djangoproject.com/en/1.8/topics/i18n/timezones/#usage
             aware = pytz.timezone(settings.TIME_ZONE).localize(naive,
                                                                is_dst=None)
-            self.calc_weeks(aware)
+        else:
+            # There was no date param in the URL, so use now.
+            aware = timezone.now()
+
+        self.calc_weeks(aware)
 
     def get_context_data(self, *args, **kwargs):
         self.get_params()
@@ -33,7 +38,9 @@ class PrevNextWeekMixin(object):
 
     def calc_weeks(self, now):
         self.now = now
-        self.week_start = now + timedelta(days=-self.now.weekday())
+        # Set week_start to the beginning of Monday.
+        monday = now + timedelta(days=-self.now.weekday())
+        self.week_start = datetime.combine(monday, datetime.min.time())
 
         # This week ends at 11:59:59 on Sunday night.
         self.week_end = self.week_start + timedelta(days=6,
