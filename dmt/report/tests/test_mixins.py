@@ -26,6 +26,13 @@ class PrevNextWeekMixinTests(TestCase):
             self.mixin.next_week,
             parse_datetime('2014-11-03 00:00:00'))
 
+        now = parse_datetime('2014-11-01 11:25:28')
+        self.mixin.calc_weeks(now)
+        self.assertEqual(
+            self.mixin.week_start,
+            parse_datetime('2014-10-27 00:00:00'),
+            'It calculates the beginning of the week accurately')
+
 
 class RangeOffsetMixinTests(TestCase):
     def setUp(self):
