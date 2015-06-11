@@ -70,27 +70,28 @@
 
 
 
-<dl class="dl-horizontal clearfix">
-{% with object.user_groups as groups %}
-{% if groups %}
-<dt>Groups:</dt>
-<dd>
-    {% for g in groups %}
-    <a href="{% url 'group_detail' g.username %}">
-        {{g.group_fullname}}</a>{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-</dd>
-{% endif %}
-{% endwith %}
-
-{% if object.primary_group %}
-<dt>Primary Group:</dt>
-<dd>
-    <a href="{% url 'group_detail' object.primary_group.username %}"
-       >{{object.primary_group.group_fullname}}</a>
-</dd>
-{% endif %}
-</dl>
+    <dl class="dl-horizontal clearfix">
+        {% if object.primary_group %}
+        <dt>Primary Group:</dt>
+        <dd>
+            <a href="{% url 'group_detail' object.primary_group.username %}"
+               >{{object.primary_group.group_fullname}}</a>
+        </dd>
+        {% endif %}
+        {% with object.user_groups as groups %}
+        {% if groups %}
+        <dt>Other Groups:</dt>
+        <dd>
+            {% for g in groups %}
+            {% if object.primary_group != g %}
+            <a href="{% url 'group_detail' g.username %}">
+                {{g.group_fullname}}</a>{% if not forloop.last %}, {% endif %}
+            {% endif %}
+            {% endfor %}
+        </dd>
+        {% endif %}
+        {% endwith %}
+    </dl>
 
 
 <dl class="dl-horizontal clearfix">

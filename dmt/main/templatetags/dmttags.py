@@ -1,7 +1,9 @@
 import bleach
 from django import template
 from html5lib.tokenizer import HTMLTokenizer
+from dmt.main.models import InGroup
 import dmt.main.utils as utils
+
 
 register = template.Library()
 
@@ -35,3 +37,9 @@ def linkify(value):
                           skip_pre=True,
                           parse_email=False,
                           tokenizer=HTMLTokenizer)
+
+
+@register.filter
+def verbose_group_name(group_user):
+    """Given a group's UserProfile, return its name."""
+    return InGroup.verbose_name(group_user.fullname)
