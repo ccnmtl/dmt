@@ -1210,35 +1210,36 @@ class DeleteAttachmentView(LoggedInMixin, DeleteView):
         return self.object.item.get_absolute_url()
 
 
-class GroupDetailView(LoggedInMixin, ListView):
+class GroupDetailView(LoggedInMixin, DetailView):
     template_name = "main/group_detail.html"
-    model = InGroup
+    model = UserProfile
 
     def get_context_data(self, **kwargs):
         ctx = super(GroupDetailView, self).get_context_data(**kwargs)
+        group = ctx.get('object')
 
-        group_name = self.kwargs['pk']
-        group = get_object_or_404(UserProfile, username=group_name)
-        ctx['group_name'] = InGroup.verbose_name(group.fullname)
-        ctx['group'] = group
-        ctx['eligible_users'] = self.eligible_users(group_name)
+        primary_members = UserProfile.objects.filter(
+            primary_group=ctx.get('object')).order_by('fullname')
+
+        other_members = UserProfile.objects.filter(
+            ingroup__grp=group
+        ).filter(
+            ~Q(pk__in=primary_members)
+        ).order_by('fullname')
+
+        eligible_users = UserProfile.objects.filter(
+            status='active'
+        ).filter(
+            ~Q(pk__in=other_members),
+            ~Q(pk=group.pk),
+        )
+
+        ctx.update({
+            'primary_members': primary_members,
+            'other_members': other_members,
+            'eligible_users': eligible_users,
+        })
         return ctx
-
-    def get_queryset(self):
-        group_name = self.kwargs['pk']
-        return self.members(group_name)
-
-    def members(self, group_name):
-        group_memberships = InGroup.objects.filter(
-            grp__username=group_name).order_by('username__fullname')
-        return [x.username for x in group_memberships]
-
-    def eligible_users(self, group_name):
-        active_users = set(UserProfile.objects.filter(status='active'))
-        members = set(self.members(group_name))
-        users = sorted(active_users - members,
-                       key=lambda x: x.fullname.lower())
-        return users
 
 
 class RemoveUserFromGroupView(LoggedInMixin, View):

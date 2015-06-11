@@ -1107,6 +1107,8 @@ class GroupTest(TestCase):
         self.u.save()
         self.client.login(username="testuser", password="test")
         self.group = GroupFactory()
+        self.u.userprofile.primary_group = self.group.grp
+        self.u.userprofile.save()
 
     def test_group_list(self):
         response = self.client.get(reverse('group_list'))
@@ -1117,6 +1119,22 @@ class GroupTest(TestCase):
         response = self.client.get(
             reverse('group_detail', args=(self.group.grp.username,)))
         self.assertEqual(response.status_code, 200)
+
+        self.assertTrue(
+            self.u.userprofile in response.context['primary_members'])
+        self.assertEqual(
+            response.context['primary_members'].count(), 1)
+
+        self.assertTrue(
+            self.group.username in response.context['other_members'])
+        self.assertEqual(
+            response.context['other_members'].count(), 1)
+
+        self.assertTrue(
+            self.u.userprofile in response.context['eligible_users'])
+        self.assertEqual(
+            response.context['eligible_users'].count(), 1)
+
         self.assertTrue(str(self.group) in response.content)
         self.assertTrue(self.group.username.username in response.content)
 

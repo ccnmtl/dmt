@@ -22,19 +22,14 @@ class StaffReportCalculator(object):
             try:
                 group_user = UserProfile.objects.get(username="grp_" + grp)
             except UserProfile.DoesNotExist:
+                # If we can't find a group under this name, just
+                # continue to the next iteration of the loop.
                 continue
 
-            for user in group_user.users_in_group():
-                existing_user = \
-                    [x for x in user_data
-                     if x['user'].username == user.username]
-                if existing_user:
-                    # This user is already in our user_data list. This means
-                    # they belong to more than one group that we're reporting
-                    # on. In this case, it's safe to just skip this duplicate
-                    # entry.
-                    continue
+            # Find all users whose primary group is the selected group.
+            users = UserProfile.objects.filter(primary_group=group_user)
 
+            for user in users:
                 user_time = user.interval_time(start, end)
                 group_name = InGroup.verbose_name(group_user.fullname)
                 group_username = group_user.username
