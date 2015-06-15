@@ -14,20 +14,20 @@
 <div id="tabs" class="tab-content">
 <div id="day" class="tab-pane active">
 <h2>Traffic</h2>
-<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.dmt.response.200&graphOnly=false&hideGrid=true&hideLegend=true">
+<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.nginx.dmt.status.200.count&graphOnly=false&hideGrid=true&hideLegend=true">
 <h2>Response Times (max/mean/min)</h2>
 <img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976726.925&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.lower)&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.upper)&hideGrid=true&hideLegend=true&from=-24hours"/>
 <h2>Celery Times</h2>
 <img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976726.925&target=keepLastValue(ccnmtl.app.timers.dmt.celery.item_stats_report.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.celery.estimates_report.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.celery.hours_logged_report.mean)&hideGrid=true&hideLegend=true&from=-24hours"/>
 <h2>Errors</h2>
-<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.dmt.response.404&target=ccnmtl.app.counters.dmt.response.500&graphOnly=false&hideGrid=true">
+<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.nginx.dmt.status.404.count&target=ccnmtl.app.counters.nginx.dmt.status.500.count&graphOnly=false&hideGrid=true">
 </div>
 
 
 <div id="week" class="tab-pane">
 <h2>Traffic</h2>
 
-<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.dmt.response.200&graphOnly=false&hideGrid=true&hideLegend=true&from=-7days">
+<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.nginx.dmt.status.200.count&graphOnly=false&hideGrid=true&hideLegend=true&from=-7days">
 
 <h2>Response Times (max/mean/min)</h2>
 <img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976726.925&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.lower)&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.upper)&hideGrid=true&hideLegend=true&from=-7days"/>
@@ -35,32 +35,32 @@
 <img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976726.925&target=keepLastValue(ccnmtl.app.timers.dmt.celery.item_stats_report.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.celery.estimates_report.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.celery.hours_logged_report.mean)&hideGrid=true&hideLegend=true&from=-7days"/>
 
 <h2>Errors</h2>
-<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.dmt.response.404&target=ccnmtl.app.counters.dmt.response.500&graphOnly=false&hideGrid=true&from=-7days">
+<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.nginx.dmt.status.404.count&target=ccnmtl.app.counters.nginx.dmt.status.500.count&graphOnly=false&hideGrid=true&from=-7days">
 
 </div>
 
 <div id="month" class="tab-pane">
 
 <h2>Traffic</h2>
-<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.dmt.response.200&graphOnly=false&hideGrid=true&hideLegend=true&from=-1months">
+<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.nginx.dmt.status.200.count&graphOnly=false&hideGrid=true&hideLegend=true&from=-1months">
 <h2>Response Times (max/mean/min)</h2>
 <img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976726.925&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.lower)&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.upper)&hideGrid=true&hideLegend=true&from=-1months"/>
 <h2>Celery Times</h2>
 <img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976726.925&target=keepLastValue(ccnmtl.app.timers.dmt.celery.item_stats_report.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.celery.estimates_report.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.celery.hours_logged_report.mean)&hideGrid=true&hideLegend=true&from=-1months"/>
 <h2>Errors</h2>
-<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.dmt.response.404&target=ccnmtl.app.counters.dmt.response.500&graphOnly=false&hideGrid=true&from=-1months">
+<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.nginx.dmt.status.404.count&target=ccnmtl.app.counters.nginx.dmt.status.500.count&graphOnly=false&hideGrid=true&from=-1months">
 </div>
 
 
 <div id="year" class="tab-pane">
 <h2>Traffic</h2>
-<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.dmt.response.200&graphOnly=false&hideGrid=true&hideLegend=true&from=-1years">
+<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.nginx.dmt.status.200.count&graphOnly=false&hideGrid=true&hideLegend=true&from=-1years">
 <h2>Response Times (max/mean/min)</h2>
 <img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976726.925&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.lower)&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.view.GET.upper)&hideGrid=true&hideLegend=true&from=-1years"/>
 <h2>Celery Times</h2>
 <img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976726.925&target=keepLastValue(ccnmtl.app.timers.dmt.celery.item_stats_report.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.celery.estimates_report.mean)&target=keepLastValue(ccnmtl.app.timers.dmt.celery.hours_logged_report.mean)&hideGrid=true&hideLegend=true&from=-1years"/>
 <h2>Errors</h2>
-<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.dmt.response.404&target=ccnmtl.app.counters.dmt.response.500&graphOnly=false&hideGrid=true&from=-1years">
+<img width="900" height="200" src="{{GRAPHITE_BASE}}?width=900&height=200&_salt=1337976132.743&target=ccnmtl.app.counters.nginx.dmt.status.404.count&target=ccnmtl.app.counters.nginx.dmt.status.500.count&graphOnly=false&hideGrid=true&from=-1years">
 </div>
 </div>
 
