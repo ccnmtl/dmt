@@ -43,7 +43,7 @@ kombu==3.0.26
 librabbitmq==1.6.1
 billiard==3.3.0.20
 celery==3.1.18
-enum34==1.0.3
+enum34==1.0.4
 parse-type==0.3.4
 parse==1.6.5
 behave==1.2.5
