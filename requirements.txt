@@ -83,7 +83,7 @@ django-celery==3.1.16
 django-casper==0.0.3
 django-bootstrap3==5.4.0
 django-emoji==2.0.0
-django-behave==0.1.4
+django-behave==0.1.5
 django-oauth2-provider==0.2.6.1
 django-extra-views==0.6.5
 bleach==1.4.1
