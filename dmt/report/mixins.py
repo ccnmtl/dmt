@@ -12,7 +12,7 @@ class PrevNextWeekMixin(object):
     """
 
     def __init__(self):
-        self.calc_weeks(datetime.today())
+        self.calc_weeks(timezone.now())
 
     def get_params(self):
         if self.request.GET.get('date', None):

@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.test import TestCase
 from django.conf import settings
+from django.utils import timezone
 import unittest
 
 from dmt.report.models import (
@@ -11,7 +12,7 @@ from dmt.report.models import (
 
 class ActiveProjectsCalculatorTests(TestCase):
     def setUp(self):
-        now = datetime.today()
+        now = timezone.now()
         self.interval_start = now - timedelta(days=365)
         self.interval_end = self.interval_start + timedelta(days=365)
 
@@ -26,7 +27,7 @@ class ActiveProjectsCalculatorTests(TestCase):
 
 class StaffReportCalculatorTests(TestCase):
     def setUp(self):
-        now = datetime.today()
+        now = timezone.now()
         self.week_start = now + timedelta(days=-now.weekday())
         self.week_end = self.week_start + timedelta(days=6)
 
@@ -41,7 +42,7 @@ class StaffReportCalculatorTests(TestCase):
 
 class WeeklySummaryReportCalculatorTests(TestCase):
     def setUp(self):
-        now = datetime.today()
+        now = timezone.now()
         self.week_start = now + timedelta(days=-now.weekday())
         self.week_end = self.week_start + timedelta(days=6)
 

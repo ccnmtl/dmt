@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
@@ -90,7 +90,7 @@ class UserYearlyView(LoggedInMixin, TemplateView):
         context = super(UserYearlyView, self).get_context_data(**kwargs)
         username = kwargs['pk']
         user = get_object_or_404(UserProfile, username=username)
-        now = datetime.today()
+        now = timezone.now()
         interval_start = now + timedelta(days=-365)
         interval_end = now
         data = user.weekly_report(interval_start, interval_end)

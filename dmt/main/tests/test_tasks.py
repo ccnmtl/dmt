@@ -1,6 +1,7 @@
 from django.test import TestCase
+from django.utils import timezone
 from .factories import MilestoneFactory
-from datetime import datetime, timedelta
+from datetime import timedelta
 from dmt.main.models import Milestone
 from dmt.main.tasks import (
     get_item_counts_by_status, item_counts, hours_logged,
@@ -31,9 +32,9 @@ class TestBumpSomedayMaybe(TestCase):
         m = MilestoneFactory(
             name="Someday/Maybe",
             status="OPEN",
-            target_date=datetime.now().date())
+            target_date=timezone.now().date())
         bump_someday_maybe_target_dates()
         m2 = Milestone.objects.get(mid=m.mid)
         self.assertEqual(
             m2.target_date,
-            (datetime.now() + timedelta(weeks=52)).date())
+            (timezone.now() + timedelta(weeks=52)).date())

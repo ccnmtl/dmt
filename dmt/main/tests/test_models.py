@@ -214,7 +214,7 @@ class ItemTest(TestCase):
         self.assertEqual(i.status_display(), 'FIXED')
 
     def test_target_date_status(self):
-        now = datetime.now()
+        now = timezone.now()
         i = ItemFactory(target_date=(now + timedelta(days=8)).date())
         self.assertEqual(i.target_date_status(), "ok")
 
