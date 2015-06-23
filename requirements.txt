@@ -47,7 +47,7 @@ enum34==1.0.4
 parse-type==0.3.4
 parse==1.6.5
 behave==1.2.5
-wsgi_intercept==0.8.1
+wsgi_intercept==0.10.0
 mechanize==0.2.5
 recordtype==1.1
 urlparse2==1.1.1
