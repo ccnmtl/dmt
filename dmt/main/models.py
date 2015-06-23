@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import timezone
-from datetime import timedelta, datetime
+from datetime import timedelta
 from dateutil import parser
 from interval.fields import IntervalField
 from taggit.managers import TaggableManager
@@ -64,14 +64,14 @@ class UserProfile(models.Model):
                    for a in self.resolve_times_for_interval(start, end))
 
     def has_recent_active_projects(self):
-        now = datetime.today()
+        now = timezone.now()
         start = now - timedelta(weeks=5)
         return self.actualtime_set.filter(
             completed__gte=start, completed__lte=now).count() > 0
 
     def recent_active_projects(self):
         """ any projects touched in the last year """
-        now = datetime.today()
+        now = timezone.now()
         start = now - timedelta(weeks=5)
         projects = Project.objects.raw(
             'SELECT distinct m.pid as pid '
@@ -211,7 +211,7 @@ class UserProfile(models.Model):
         return self.statusupdate_set.all()[:count]
 
     def progress_report(self):
-        now = datetime.today()
+        now = timezone.now()
         week_start = now + timedelta(days=-now.weekday())
         hours_logged = self.interval_time(
             week_start,
@@ -483,7 +483,7 @@ class Project(models.Model):
 
         r = self.milestone_set.filter(
             status='OPEN',
-            target_date__gte=datetime.today())
+            target_date__gte=timezone.now())
         if r.count():
             return r.order_by('target_date')[0]
         # there aren't any upcoming open milestones, but we need

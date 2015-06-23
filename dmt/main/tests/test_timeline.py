@@ -136,7 +136,7 @@ class TestTimeLineActualTime(unittest.TestCase):
 class DummyStatus(object):
     def __init__(self):
         self.user = "status user"
-        self.added = datetime.now().date()
+        self.added = timezone.now().date()
         self.body = "body"
 
 
@@ -175,7 +175,7 @@ class TestTimeLinePost(unittest.TestCase):
 
 class DummyMilestone(object):
     def __init__(self):
-        self.target_date = datetime.now().date()
+        self.target_date = timezone.now().date()
         self.name = "milestone name"
 
     def get_absolute_url(self):
