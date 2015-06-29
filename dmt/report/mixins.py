@@ -95,10 +95,19 @@ class RangeOffsetMixin(object):
         self.interval_end = aware_end
 
     def get_params(self):
-        self.range_days = int(
-            self.request.GET.get('range', self.range_days))
-        self.offset_days = int(
-            self.request.GET.get('offset', self.offset_days))
+        try:
+            self.range_days = int(
+                self.request.GET.get('range', self.range_days))
+        except ValueError:
+            # Just use the default if we can't parse the urlparam.
+            self.range_days = 31
+
+        try:
+            self.offset_days = int(
+                self.request.GET.get('offset', self.offset_days))
+        except ValueError:
+            self.offset_days = 0
+
         self.calc_interval()
 
     def get_context_data(self, *args, **kwargs):

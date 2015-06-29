@@ -440,6 +440,20 @@ class MyProjectViewTests(TestCase):
         self.assertTrue(p.name in r.content)
         self.assertTrue(reverse('project_detail', args=(p.pid,)) in r.content)
 
+    def test_project_view_queryparams(self):
+        p = ProjectFactory()
+        r = self.client.get(
+            reverse('project_detail', args=(p.pid,)) + '?range=300&offset=')
+        self.assertEqual(r.status_code, 200)
+
+        r = self.client.get(
+            reverse('project_detail', args=(p.pid,)) + '?range=&offset=0')
+        self.assertEqual(r.status_code, 200)
+
+        r = self.client.get(
+            reverse('project_detail', args=(p.pid,)) + '?range=&offset=')
+        self.assertEqual(r.status_code, 200)
+
     def test_my_projects_page_not_in_project(self):
         p = ProjectFactory()
         r = self.client.get(reverse('my_project_list'))
