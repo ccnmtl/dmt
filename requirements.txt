@@ -54,7 +54,7 @@ urlparse2==1.1.1
 sqlparse==0.1.14
 whitelistaffilmapper==0.1.0
 boto==2.38.0
-unicodecsv==0.9.4
+unicodecsv==0.13.0
 XlsxWriter==0.6.1
 splinter==0.7.2
 shortuuid==0.4.2
