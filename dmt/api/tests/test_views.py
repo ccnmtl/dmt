@@ -33,6 +33,12 @@ class AddTrackerViewTest(TestCase):
             dict())
         self.assertEqual(r.status_code, 200)
 
+    def test_post_with_empty_fields(self):
+        r = self.c.post(
+            "/api/1.0/trackers/add/",
+            dict(pid='', task=''))
+        self.assertEqual(r.status_code, 200)
+
     def test_post(self):
         r = self.c.post(
             "/api/1.0/trackers/add/",
