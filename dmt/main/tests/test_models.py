@@ -129,6 +129,15 @@ class UserModelTest(TestCase):
         u = UserProfileFactory(grp=True)
         self.assertTrue(u.get_absolute_url().startswith("/group"))
 
+    def test_progress_report(self):
+        u = UserProfileFactory()
+        d = u.progress_report()
+        self.assertEqual(d['hours_logged'], 0)
+        self.assertEqual(d['week_percentage'], 0)
+        self.assertEqual(d['target_hours'], 14)
+        self.assertEqual(d['target_percentage'], 40)
+        self.assertEqual(d['behind'], True)
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):
