@@ -284,7 +284,7 @@ class AddTrackerView(View):
         completed = process_completed(request.POST.get('completed', ''))
         td = d.timedelta()
         # two required fields
-        if None in [pid, task]:
+        if None in [pid, task] or '' in [pid, task]:
             return HttpResponse("bad request")
 
         project = get_object_or_404(Project, pid=pid)
