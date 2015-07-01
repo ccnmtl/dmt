@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import timezone
-from datetime import timedelta
+from datetime import datetime, timedelta
 from dateutil import parser
 from interval.fields import IntervalField
 from taggit.managers import TaggableManager
@@ -212,7 +212,8 @@ class UserProfile(models.Model):
 
     def progress_report(self):
         now = timezone.now()
-        week_start = now + timedelta(days=-now.weekday())
+        monday = now + timedelta(days=-now.weekday())
+        week_start = datetime.combine(monday, datetime.min.time())
         hours_logged = self.interval_time(
             week_start,
             week_start + timedelta(days=7))
