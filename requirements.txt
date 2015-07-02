@@ -2,7 +2,7 @@ Django==1.8.2
 CommonMark==0.5.4
 django-markwhat==1.4
 uuid==1.30
-psycopg2==2.5.4
+psycopg2==2.6.1
 versiontools==1.9.1
 statsd==3.1
 pep8==1.5.7
