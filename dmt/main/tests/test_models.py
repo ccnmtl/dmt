@@ -136,7 +136,6 @@ class UserModelTest(TestCase):
         self.assertEqual(d['week_percentage'], 0)
         self.assertTrue('target_hours' in d)
         self.assertTrue('target_percentage' in d)
-        self.assertEqual(d['behind'], True)
 
 
 class ProjectUserTest(TestCase):
