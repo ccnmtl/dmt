@@ -17,7 +17,7 @@ cssselect==0.9.1
 BeautifulSoup==3.2.1
 lxml==3.4.4
 fuzzywuzzy==0.4.0
-sure==1.2.9
+sure==1.2.12
 ipython==3.0.0
 ipdb==0.8
 isodate==0.5.1
