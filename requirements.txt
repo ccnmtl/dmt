@@ -1,4 +1,4 @@
-Django==1.8.2
+Django==1.8.3
 CommonMark==0.5.4
 django-markwhat==1.4
 uuid==1.30
