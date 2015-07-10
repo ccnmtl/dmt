@@ -11,7 +11,7 @@ require([
 
             $.ajax({
                 type: 'POST',
-                url: '/api/1.0/items/' + iid + '/hours/',
+                url: '/drf/items/' + iid + '/hours/',
                 data: {time: time},
                 success: function(data, status) {
                     formUtils.onSuccess($form, data, status);
