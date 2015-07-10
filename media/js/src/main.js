@@ -112,6 +112,7 @@ require([
             placeholder: 'Project',
             width: '100%'
         });
-        $('#add-trackers-form .field-project select').select2();
+        $('#add-trackers-form .field-project select,' +
+          'select#project-personnel-input').select2();
     });
 });

@@ -273,16 +273,22 @@
         {% endfor %}
     </ul>
   
-    <form action="/project/{{object.pid}}/add_user/" method="post">{% csrf_token %}
-      <p>Add Personnel:</p>
-      <select name="username">
-        {% for user in object.all_users_not_in_project %}
-        <option value="{{user.username}}">
-          {{user.fullname}}
-        </option>
-        {% endfor %}
-      </select> <input type="submit" value="add" class="btn
-      btn-primary" />
+    <form action="/project/{{object.pid}}/add_user/" method="post"
+          class="form-inline">
+        {% csrf_token %}
+        <div class="form-group">
+            <label form="project-personnel-input">Add Personnel:</label>
+            <select name="username"
+                    class="form-control select2"
+                    id="project-personnel-input">
+                {% for user in object.all_users_not_in_project %}
+                <option value="{{user.username}}">
+                    {{user.fullname}}
+                </option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="add" class="btn btn-primary" />
+        </div>
     </form>
   
   </div>

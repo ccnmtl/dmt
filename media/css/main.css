@@ -1466,3 +1466,7 @@ button.pmt-report-submit { margin-top: 25px; }
 }
 
 .twitter-typeahead { width: 100%; }
+
+select#project-personnel-input {
+    min-width: 200px;
+}
