@@ -29,9 +29,10 @@ urlpatterns = patterns(
         ProjectMilestoneList.as_view(), name='project-milestones'),
     url(r'^milestones/(?P<pk>\d+)/items/$',
         MilestoneItemList.as_view(), name='milestone-items'),
-    (r'^trackers/add/', AddTrackerView.as_view()),
-    (r'^items/(?P<pk>\d+)/hours/$', ItemHoursView.as_view()),
-    (r'^git/$', GitUpdateView.as_view()),
+    url(r'^trackers/add/', AddTrackerView.as_view(), name='add-tracker'),
+    url(r'^items/(?P<pk>\d+)/hours/$', ItemHoursView.as_view(),
+        name='item-hours'),
+    url(r'^git/$', GitUpdateView.as_view(), name='git-update'),
     url(r'^external_add_item/$', ExternalAddItemView.as_view(),
         name='external-add-item'),
 )

@@ -1,9 +1,7 @@
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import generics, viewsets
@@ -32,11 +30,7 @@ class ClientViewSet(viewsets.ModelViewSet):
     paginate_by = 10
 
 
-class ItemHoursView(View):
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ItemHoursView, self).dispatch(*args, **kwargs)
-
+class ItemHoursView(APIView):
     def post(self, request, pk):
         item = get_object_or_404(Item, iid=pk)
         user = request.user.userprofile
@@ -136,7 +130,10 @@ def normalize_email(email):
     return email
 
 
-class GitUpdateView(View):
+class GitUpdateView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         return super(GitUpdateView, self).dispatch(*args, **kwargs)
@@ -176,7 +173,8 @@ class GitUpdateView(View):
                 # we just deal with it...
                 pass
         item.touch()
-        return HttpResponse("ok")
+        data = ItemSerializer(item, context={'request': request}).data
+        return Response(data)
 
 
 class MilestoneItemList(generics.ListCreateAPIView):
@@ -271,11 +269,7 @@ def process_completed(completed=None):
     return completed
 
 
-class AddTrackerView(View):
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(AddTrackerView, self).dispatch(*args, **kwargs)
-
+class AddTrackerView(APIView):
     def post(self, request):
         pid = request.POST.get('pid', None)
         task = request.POST.get('task', None)
@@ -307,7 +301,8 @@ class AddTrackerView(View):
             else:
                 pass
         item.add_resolve_time(user, td, completed)
-        return HttpResponse("ok")
+        data = ItemSerializer(item, context={'request': request}).data
+        return Response(data)
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

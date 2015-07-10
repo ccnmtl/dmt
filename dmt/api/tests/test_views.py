@@ -26,22 +26,23 @@ class AddTrackerViewTest(TestCase):
         self.c.login(username="testuser", password="test")
         self.milestone = MilestoneFactory()
         self.project = self.milestone.project
+        self.url = reverse('add-tracker')
 
     def test_post_without_required_fields(self):
         r = self.c.post(
-            "/api/1.0/trackers/add/",
+            self.url,
             dict())
         self.assertEqual(r.status_code, 200)
 
     def test_post_with_empty_fields(self):
         r = self.c.post(
-            "/api/1.0/trackers/add/",
+            self.url,
             dict(pid='', task=''))
         self.assertEqual(r.status_code, 200)
 
     def test_post(self):
         r = self.c.post(
-            "/api/1.0/trackers/add/",
+            self.url,
             dict(
                 pid=self.project.pid,
                 task="test",
@@ -51,7 +52,7 @@ class AddTrackerViewTest(TestCase):
 
     def test_post_backdated_last(self):
         r = self.c.post(
-            "/api/1.0/trackers/add/",
+            self.url,
             dict(
                 pid=self.project.pid,
                 task="test backdated last",
@@ -73,7 +74,7 @@ class AddTrackerViewTest(TestCase):
 
     def test_post_backdated_before_last(self):
         r = self.c.post(
-            "/api/1.0/trackers/add/",
+            self.url,
             dict(
                 pid=self.project.pid,
                 task="test",
@@ -91,7 +92,7 @@ class AddTrackerViewTest(TestCase):
 
     def test_post_with_nonexistant_client(self):
         r = self.c.post(
-            "/api/1.0/trackers/add/",
+            self.url,
             dict(
                 pid=self.project.pid,
                 task="test",
@@ -103,7 +104,7 @@ class AddTrackerViewTest(TestCase):
     def test_post_with_client(self):
         self.client = ClientFactory()
         r = self.c.post(
-            "/api/1.0/trackers/add/",
+            self.url,
             dict(
                 pid=self.project.pid,
                 task="test",
@@ -118,7 +119,7 @@ class AddTrackerViewTest(TestCase):
         self.client2.email = self.client.email
         self.client2.save()
         r = self.c.post(
-            "/api/1.0/trackers/add/",
+            self.url,
             dict(
                 pid=self.project.pid,
                 task="test",
@@ -139,7 +140,7 @@ class ItemHoursViewTest(TestCase):
 
     def test_post(self):
         r = self.c.post(
-            "/api/1.0/items/%d/hours/" % self.item.iid,
+            reverse('item-hours', kwargs={'pk': self.item.iid}),
             dict(
                 time="1 hour",
             ))
@@ -150,25 +151,29 @@ class ItemHoursViewTest(TestCase):
 class GitUpdateViewTest(TestCase):
     def setUp(self):
         self.c = self.client
+        self.url = reverse('git-update')
 
     def test_post_fixed(self):
         i = ItemFactory()
         i.save()
         r = self.c.post(
-            "/api/1.0/git/",
+            self.url,
             dict(status='FIXED',
                  iid=i.iid,
                  email=i.assigned_to.email,
                  comment="a comment")
             )
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.content, "ok")
+
+        content = json.loads(r.content)
+        self.assertEqual(content['iid'], i.iid)
+        self.assertEqual(content['status'], 'RESOLVED')
 
     def test_post_fixed_with_resolve_time(self):
         i = ItemFactory()
         i.save()
         r = self.c.post(
-            "/api/1.0/git/",
+            self.url,
             dict(status='FIXED',
                  iid=i.iid,
                  email=i.assigned_to.email,
@@ -176,19 +181,25 @@ class GitUpdateViewTest(TestCase):
                  comment="a comment")
             )
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.content, "ok")
+
+        content = json.loads(r.content)
+        self.assertEqual(content['iid'], i.iid)
+        self.assertEqual(content['status'], 'RESOLVED')
 
     def test_post_comment(self):
         i = ItemFactory()
         i.save()
         r = self.c.post(
-            "/api/1.0/git/",
+            self.url,
             dict(iid=i.iid,
                  email=i.assigned_to.email,
                  comment="a comment")
             )
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.content, "ok")
+
+        content = json.loads(r.content)
+        self.assertEqual(content['iid'], i.iid)
+        self.assertEqual(content['status'], 'OPEN')
 
 
 class ItemTests(APITestCase):

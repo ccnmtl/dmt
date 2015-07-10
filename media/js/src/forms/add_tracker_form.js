@@ -14,7 +14,7 @@ require([
 
             $.ajax({
                 type: 'POST',
-                url: '/api/1.0/trackers/add/',
+                url: '/drf/trackers/add/',
                 data: {
                     pid: pid,
                     task: task,
