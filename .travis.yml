@@ -1,4 +1,5 @@
 language: python
+sudo: false
 addons:
   postgresql: "9.3"
   firefox: "28.0"
