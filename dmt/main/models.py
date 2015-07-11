@@ -172,7 +172,9 @@ class UserProfile(models.Model):
     def items(self):
         assigned = set(self.open_assigned_items())
         owned = set(self.resolved_owned_items())
-        return list(assigned.union(owned))
+        items = list(assigned.union(owned))
+        items = sorted(items, key=lambda x: (-x.priority, x.target_date))
+        return items
 
     def clients(self):
         return Client.objects.filter(contact=self)
@@ -825,7 +827,7 @@ class Milestone(models.Model):
         return Item.objects.filter(
             milestone=self,
             status__in=['OPEN', 'RESOLVED', 'INPROGRESS']
-        ).select_related(
+        ).order_by('-target_date').select_related(
             'owner_user', 'assigned_user',
             'owner_user__userprofile', 'assigned_user__userprofile')
 
