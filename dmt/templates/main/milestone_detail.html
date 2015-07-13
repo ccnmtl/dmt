@@ -61,7 +61,7 @@
 </div><!-- /.object-box -->
 
 
-{% if object.item_set.count %}
+{% if object.item_set.exists %}
 <table class="table table-condensed table-striped tablesorter tablesorter-default">
 	<thead>
 		<tr>
@@ -76,7 +76,7 @@
 	</thead>
 
 	<tbody>
-		{% for item in object.item_set.all %}
+		{% for item in object.sorted_items %}
 		<tr>
 			<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
 	           width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
@@ -97,7 +97,7 @@
 {% block js %}
     <script>
         $(document).ready(function()  { 
-            {% if object.item_set.count %}
+            {% if object.item_set.exists %}
                $("table.tablesorter").tablesorter({sortList: [[1,0], [3,1]]}); 
             {% endif %}
         });

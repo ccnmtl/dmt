@@ -895,6 +895,9 @@ class Milestone(models.Model):
         return self.item_set.filter(
             status__in=['OPEN', 'INPROGRESS', 'RESOLVED']).count()
 
+    def sorted_items(self):
+        return self.item_set.order_by('status', '-target_date')
+
     def __unicode__(self):
         return self.name
 
