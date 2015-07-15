@@ -8,7 +8,6 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from datetime import datetime, timedelta
 from dateutil import parser
-from interval.fields import IntervalField
 from taggit.managers import TaggableManager
 from django.core.mail import send_mail
 from django_statsd.clients import statsd
@@ -940,7 +939,7 @@ class Item(models.Model):
     r_status = models.CharField(max_length=16, blank=True)
     last_mod = models.DateTimeField(null=True, blank=True)
     target_date = models.DateField(null=True, blank=True)
-    estimated_time = IntervalField(blank=True, null=True)
+    estimated_time = models.DurationField(blank=True, null=True)
     url = models.TextField(blank=True)
 
     tags = TaggableManager()
@@ -1498,7 +1497,7 @@ class ActualTime(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')
     resolver = models.ForeignKey(UserProfile, db_column='resolver')
     user = models.ForeignKey(User, null=True)
-    actual_time = IntervalField(null=True, blank=True)
+    actual_time = models.DurationField(null=True, blank=True)
     completed = models.DateTimeField(primary_key=True)
 
     class Meta:
