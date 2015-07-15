@@ -82,12 +82,20 @@
             <span class="caret"></span>
             </a>
             <ul class="dropdown-menu user-menu-list">
-              <li><a href="/accounts/logout/"><span class="grey"><span class="glyphicon glyphicon-log-out"></span></span> Log out</a></li>
-              <li><a href="{{request.user.userprofile.get_absolute_url}}"><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a></li>
-{% flag user_timeline %}
-<li><a href="{% url 'user_timeline' request.user.userprofile.username %}">View Timeline</a></li>
-{% endflag %}
+                <li>
+                    <a href="{{request.user.userprofile.get_absolute_url}}"><span class="grey"><span class="glyphicon glyphicon-user"></span></span> Profile</a>
+                </li>
+                {% flag user_timeline %}
+                <li>
+                    <a href="{% url 'user_timeline' request.user.userprofile.username %}"
+                       ><span class="icon-timeline"></span> Timeline</a>
+                </li>
+                {% endflag %}
 
+                <li role="separator" class="divider"></li>
+                <li>
+                    <a href="/accounts/logout/"><span class="grey"><span class="glyphicon glyphicon-log-out"></span></span> Log out</a>
+                </li>
             </ul>
           </li>
         {% endif %}
