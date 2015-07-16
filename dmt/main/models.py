@@ -506,7 +506,7 @@ class Project(models.Model):
             priority=1,
             status='OPEN',
             r_status='',
-            estimated_time='0',
+            estimated_time=timedelta(seconds=0),
             target_date=milestone.target_date,
             last_mod=timezone.now(),
             description='')
