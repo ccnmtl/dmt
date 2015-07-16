@@ -49,6 +49,14 @@ class UserWeeklyTest(LoggedInTestMixin, TestCase):
         r = self.client.get("/report/user/testuser/weekly/?date=2012-12-16")
         self.assertEqual(r.status_code, 200)
 
+    def test_user_weekly_bogus_date(self):
+        r = self.client.get("/report/user/testuser/weekly/?date=zijf3jf093j")
+        self.assertEqual(r.status_code, 200)
+
+    def test_user_weekly_empty_date(self):
+        r = self.client.get("/report/user/testuser/weekly/?date=")
+        self.assertEqual(r.status_code, 200)
+
 
 class UserYearlyTest(LoggedInTestMixin, TestCase):
     def test_yearly_review_redirect(self):
