@@ -125,6 +125,7 @@ INSTALLED_APPS = [
     'smoketest',
     'django_extensions',
     'impersonate',
+    'interval',
     'rest_framework',
     'taggit',
     'taggit_templatetags2',
