@@ -15,9 +15,9 @@ class PrevNextWeekMixin(object):
         self.calc_weeks(timezone.now())
 
     def get_params(self):
-        if self.request.GET.get('date', None):
-            date_str = self.request.GET.get('date')
-            naive = parse_date(date_str)
+        date_str = self.request.GET.get('date', '')
+        naive = parse_date(date_str)
+        if date_str and naive:
             # Convert the date to a datetime
             naive = datetime.combine(naive, datetime.min.time())
             # Make the datetime tz-aware as documented here:
