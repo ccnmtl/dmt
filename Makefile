@@ -4,7 +4,8 @@ FLAKE8=./ve/bin/flake8
 
 jenkins: ./ve/bin/python check jshint jscs flake8 test
 
-travis: ./ve/bin/python check jshint jscs flake8 test integration
+travis: ./ve/bin/python check jshint jscs flake8 integration
+	$(MANAGE) test
 
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
