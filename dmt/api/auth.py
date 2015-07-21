@@ -28,7 +28,7 @@ class SafeOriginPermission(permissions.BasePermission):
         try:
             return settings.WHITELIST_ORIGIN_IPS and \
                 (remote_addr in settings.WHITELIST_ORIGIN_IPS)
-        except NameError:
+        except AttributeError:
             return False
 
     def _has_safe_referrer(self, referrer):
@@ -38,14 +38,14 @@ class SafeOriginPermission(permissions.BasePermission):
             return referrer and \
                 urlparse(referrer).netloc.endswith(
                     settings.WHITELIST_ORIGIN_URLS)
-        except NameError:
+        except AttributeError:
             return False
 
     def _has_safe_remote_host(self, remote_host):
         try:
             return remote_host and remote_host.endswith(
                 settings.WHITELIST_ORIGIN_URLS)
-        except NameError:
+        except AttributeError:
             return False
 
     def has_permission(self, request, view):
