@@ -85,28 +85,12 @@ class ExternalAddItemView(APIView):
         debug_info = request.data.get('debug_info', '')
         redirect_url = request.data.get('redirect_url', '')
         append_iid = request.data.get('append_iid', '')
-
-        if debug_info:
-            description += '\n-----\n\nDEBUG INFO:\n' + debug_info + '\n'
-
-        description += '\n-----\n\nSubmitted by ' \
-            + name + ' <' + email + '>\n'
+        description = get_description(description, debug_info, name, email)
         project = get_object_or_404(Project, pid=pid)
 
-        try:
-            assignee = UserProfile.objects.get(username=assignee_username)
-        except UserProfile.DoesNotExist:
-            assignee = project.caretaker_user.userprofile
-
-        try:
-            owner = UserProfile.objects.get(username=owner_username)
-        except UserProfile.DoesNotExist:
-            owner = project.caretaker_user.userprofile
-
-        try:
-            milestone = Milestone.objects.get(mid=mid)
-        except Milestone.DoesNotExist:
-            milestone = project.upcoming_milestone()
+        assignee = get_assignee(assignee_username, project)
+        owner = get_owner(owner_username, project)
+        milestone = get_milestone(mid, project)
 
         item = project.add_item(
             type=item_type,
@@ -122,6 +106,36 @@ class ExternalAddItemView(APIView):
 
         return self.redirect_or_return_item(
             request, item, redirect_url, append_iid)
+
+
+def get_description(description, debug_info, name, email):
+    if debug_info:
+        description += '\n-----\n\nDEBUG INFO:\n' + debug_info + '\n'
+
+    description += '\n-----\n\nSubmitted by ' \
+                   + name + ' <' + email + '>\n'
+    return description
+
+
+def get_assignee(assignee_username, project):
+    try:
+        return UserProfile.objects.get(username=assignee_username)
+    except UserProfile.DoesNotExist:
+        return project.caretaker_user.userprofile
+
+
+def get_owner(owner_username, project):
+    try:
+        return UserProfile.objects.get(username=owner_username)
+    except UserProfile.DoesNotExist:
+        return project.caretaker_user.userprofile
+
+
+def get_milestone(mid, project):
+    try:
+        return Milestone.objects.get(mid=mid)
+    except Milestone.DoesNotExist:
+        return project.upcoming_milestone()
 
 
 def normalize_email(email):

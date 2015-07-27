@@ -8,7 +8,7 @@ statsd==3.1
 pep8==1.5.7
 pyflakes==0.8.1
 flake8==2.2.5
-mccabe==0.2.1
+mccabe==0.3.1
 pyparsing==2.0.3
 certifi==14.5.14
 backports.ssl-match-hostname==3.4.0.2
