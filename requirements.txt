@@ -23,7 +23,7 @@ ipdb==0.8
 isodate==0.5.1
 SPARQLWrapper==1.6.4
 rdflib==4.1.2
-selenium==2.46.0
+selenium==2.46.1
 coverage==3.7.1
 pyasn1==0.1.8
 pyOpenSSL==0.15.1
