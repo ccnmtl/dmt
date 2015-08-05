@@ -315,6 +315,8 @@ class ExternalAddItemTests(APITestCase):
                 self.assignee.fullname,
                 self.title)
         )
+        self.assertIn(self.owner.email, mail.outbox[0].to)
+        self.assertIn(self.assignee.email, mail.outbox[0].to)
 
     def test_post_sends_email_even_when_owner_is_assignee(self):
         self.post_data['assigned_to'] = self.owner.username
