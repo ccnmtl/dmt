@@ -101,7 +101,8 @@ class ExternalAddItemView(APIView):
             priority=priority,
             target_date=parser.parse(target_date).date(),
             description=description,
-            estimated_time=estimated_time
+            estimated_time=estimated_time,
+            email_everyone=True,
         )
 
         return self.redirect_or_return_item(

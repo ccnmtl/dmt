@@ -520,7 +520,7 @@ class Project(models.Model):
                  assigned_to=None, owner=None, milestone=None,
                  priority=1, description="", estimated_time="1 hour",
                  status='OPEN', r_status='',
-                 tags=None, target_date=None):
+                 tags=None, target_date=None, email_everyone=False):
         try:
             d = Duration(estimated_time)
         except InvalidDuration:
@@ -557,7 +557,10 @@ class Project(models.Model):
         item.add_project_notification()
         item.update_email(
             "%s added\n----\n%s"
-            % (type.capitalize(), description), owner)
+            % (type.capitalize(), description),
+            owner,
+            skip_self=(not email_everyone),
+        )
         milestone.update_milestone()
         return item
 
@@ -1155,7 +1158,12 @@ class Item(models.Model):
         n.user = user.user
         n.save()
 
-    def update_email(self, comment, user):
+    def update_email(self, comment, user, skip_self=True):
+        """Send out an email update about this PMT Item.
+
+        When skip_self is True (which is the default), then update_email
+        doesn't send an email to the passed in 'user'.
+        """
         body = comment.replace(
             "<b>", "").replace("</b>", "").replace("<br />", "\n")
         body = textwrap.fill(body, replace_whitespace=False)
@@ -1189,7 +1197,10 @@ Please do not reply to this message.
             self.get_absolute_url(),
             body
         )
-        addresses = [u.email for u in self.users_to_email(user)]
+        if skip_self:
+            addresses = [u.email for u in self.users_to_email(user)]
+        else:
+            addresses = [u.email for u in self.users_to_email()]
 
         send_mail(clean_subject(email_subj), email_body, user.email,
                   addresses, fail_silently=settings.DEBUG)
