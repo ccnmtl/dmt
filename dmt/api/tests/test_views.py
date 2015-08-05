@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime, timedelta
 
+from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.contrib.auth.models import User
@@ -243,6 +244,7 @@ class ExternalAddItemTests(APITestCase):
         self.email = 'submission_email@example.com'
         self.name = 'Item Submitter'
         self.owner = UserProfileFactory()
+        self.assignee = UserProfileFactory()
         self.project = ProjectFactory()
         self.milestone = MilestoneFactory(project=self.project)
         self.estimated_time = '1h'
@@ -256,7 +258,7 @@ class ExternalAddItemTests(APITestCase):
             'mid': unicode(self.milestone.pk),
             'type': 'action item',
             'owner': self.owner.username,
-            'assigned_to': self.owner.username,
+            'assigned_to': self.assignee.username,
             'estimated_time': self.estimated_time,
             'target_date': self.target_date,
             'debug_info': self.debug_info,
@@ -271,9 +273,19 @@ class ExternalAddItemTests(APITestCase):
                              REMOTE_HOST='http://example.com')
         self.assertEqual(r.status_code, 403)
 
+        r = self.client.post(reverse('external-add-item'),
+                             self.post_data,
+                             REMOTE_HOST='http://example.com')
+        self.assertEqual(r.status_code, 403)
+
     def test_post_external_referrer_is_forbidden(self):
         r = self.client.post(reverse('external-add-item'),
                              {},
+                             HTTP_REFERER='http://example.com')
+        self.assertEqual(r.status_code, 403)
+
+        r = self.client.post(reverse('external-add-item'),
+                             self.post_data,
                              HTTP_REFERER='http://example.com')
         self.assertEqual(r.status_code, 403)
 
@@ -289,11 +301,40 @@ class ExternalAddItemTests(APITestCase):
         )
         self.assertEqual(r.data.get('type'), 'action item')
         self.assertTrue(self.owner.username in r.data.get('owner'))
-        self.assertTrue(self.owner.username in r.data.get('assigned_to'))
+        self.assertTrue(self.assignee.username in r.data.get('assigned_to'))
         self.assertTrue(self.debug_info in r.data.get('description'))
         self.assertTrue(unicode(self.milestone.pk) in r.data.get('milestone'))
         self.assertEqual(r.data.get('estimated_time'), '1:00:00')
         self.assertEqual(r.data.get('target_date'), self.target_date)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            '[PMT Item: {}] Attn: {} - {}'.format(
+                self.project.name,
+                self.assignee.fullname,
+                self.title)
+        )
+        self.assertIn(self.owner.email, mail.outbox[0].to)
+        self.assertIn(self.assignee.email, mail.outbox[0].to)
+
+    def test_post_sends_email_even_when_owner_is_assignee(self):
+        self.post_data['assigned_to'] = self.owner.username
+        r = self.client.post(reverse('external-add-item'),
+                             self.post_data,
+                             REMOTE_HOST=self.remote_host)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.data.get('title'), self.title)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            '[PMT Item: {}] Attn: {} - {}'.format(
+                self.project.name,
+                self.owner.fullname,
+                self.title)
+        )
+        self.assertEqual(mail.outbox[0].to, [self.owner.email])
 
     def test_post_redirects_client(self):
         redirect_url = 'http://example.com'
