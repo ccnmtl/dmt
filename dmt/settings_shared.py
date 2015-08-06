@@ -201,8 +201,7 @@ AFFILS_WHITELIST = [
 ]
 WIND_STAFF_MAPPER_GROUPS = ['tlc.cunix.local:columbia.edu']
 WIND_SUPERUSER_MAPPER_GROUPS = ['anp8', 'jb2410', 'zm4', 'egr2107',
-                                'sld2131', 'amm8', 'mar227', 'jed2161',
-                                'njn2118']
+                                'sld2131', 'amm8', 'mar227', 'njn2118']
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_HTTPONLY = True
