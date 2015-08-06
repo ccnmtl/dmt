@@ -20,7 +20,7 @@ fuzzywuzzy==0.6.0
 sure==1.2.12
 ipython==3.0.0
 ipdb==0.8
-isodate==0.5.1
+isodate==0.5.4
 SPARQLWrapper==1.6.4
 rdflib==4.1.2
 selenium==2.46.1
