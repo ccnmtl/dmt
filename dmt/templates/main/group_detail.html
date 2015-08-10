@@ -28,14 +28,6 @@
             {{ user.fullname }}
         </a>
     </td>
-		<td>
-			<form action="{% url 'remove_user_from_group' object.username %}"
-				  method="post">{% csrf_token %}
-				<input type="hidden" name="username" value="{{user.username}}" />
-			<input type="submit" class="btn btn-warning pull-right btn-xs"
-				   value="remove" />
-			</form>
-		</td>
 </tr>
 {% endfor %}
 </table>
