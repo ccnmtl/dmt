@@ -27,13 +27,15 @@ class InGroupTest(TestCase):
 
 
 class UserModelTest(TestCase):
+    def setUp(self):
+        self.u = UserProfileFactory()
+
     def test_gau(self):
-        u = UserProfileFactory()
-        self.assertEqual(u.get_absolute_url(), "/user/%s/" % u.username)
+        self.assertEqual(
+            self.u.get_absolute_url(), "/user/%s/" % self.u.username)
 
     def test_unicode(self):
-        u = UserProfileFactory()
-        self.assertEqual(str(u), u.fullname)
+        self.assertEqual(str(self.u), self.u.fullname)
 
     def test_active(self):
         u = UserProfileFactory(status='active')
@@ -50,76 +52,66 @@ class UserModelTest(TestCase):
         self.assertEqual(len(r['active_projects']), 1)
 
     def test_manager_on(self):
-        u = UserProfileFactory()
-        self.assertEqual(u.manager_on(), [])
+        self.assertEqual(self.u.manager_on(), [])
 
     def test_developer_on(self):
-        u = UserProfileFactory()
-        self.assertEqual(u.developer_on(), [])
+        self.assertEqual(self.u.developer_on(), [])
 
     def test_guest_on(self):
-        u = UserProfileFactory()
-        self.assertEqual(u.guest_on(), [])
+        self.assertEqual(self.u.guest_on(), [])
 
     def test_clients_empty(self):
-        u = UserProfileFactory()
-        self.assertEqual(len(u.clients()), 0)
+        self.assertEqual(len(self.u.clients()), 0)
 
     def test_user_groups_empty(self):
-        u = UserProfileFactory()
-        self.assertEqual(len(u.user_groups()), 0)
+        self.assertEqual(len(self.u.user_groups()), 0)
+
+    def test_user_groups_not_empty(self):
+        GroupFactory(username=self.u)
+        self.assertEqual(len(self.u.user_groups()), 1)
 
     def test_users_in_group_empty(self):
-        u = UserProfileFactory()
-        self.assertEqual(len(u.users_in_group()), 0)
+        self.assertEqual(len(self.u.users_in_group()), 0)
 
     def test_has_recent_active_projects(self):
-        u = UserProfileFactory()
-        self.assertFalse(u.has_recent_active_projects())
+        self.assertFalse(self.u.has_recent_active_projects())
 
     def test_recent_active_projects(self):
-        u = UserProfileFactory()
-        self.assertEqual(u.recent_active_projects(), [])
+        self.assertEqual(self.u.recent_active_projects(), [])
 
     def test_total_resolve_times(self):
-        u = UserProfileFactory()
-        self.assertEqual(u.total_resolve_times(), 0.)
+        self.assertEqual(self.u.total_resolve_times(), 0.)
 
     def test_total_assigned_time(self):
-        u = UserProfileFactory()
-        self.assertEqual(u.total_assigned_time(), 0.)
+        self.assertEqual(self.u.total_assigned_time(), 0.)
 
     def test_group_fullname(self):
         u = UserProfileFactory(fullname="foo (group)")
         self.assertEqual(u.group_fullname(), "foo")
 
     def test_weekly_report_email_body(self):
-        u = UserProfileFactory()
-        r = u.weekly_report_email_body(1.0, True)
+        r = self.u.weekly_report_email_body(1.0, True)
         self.assertEqual(
             r,
             """This week you have only logged 1.0 hours.\n\n"""
             """Now is a good time to take care of that.\n""")
-        r = u.weekly_report_email_body(1.0, False)
+        r = self.u.weekly_report_email_body(1.0, False)
         self.assertEqual(
             r,
             """You've logged 1.0 hours this week. Good job!\n""")
 
     def test_send_weekly_report(self):
-        u = UserProfileFactory()
-        u.send_weekly_report()
+        self.u.send_weekly_report()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "PMT Weekly Report")
 
     def test_timeline_empty(self):
-        u = UserProfileFactory()
-        t = u.timeline()
+        t = self.u.timeline()
         self.assertEqual(t, [])
 
     def test_timeline_notempty(self):
-        u = UserProfileFactory()
-        StatusUpdateFactory(user=u)
-        t = u.timeline()
+        StatusUpdateFactory(user=self.u)
+        t = self.u.timeline()
         self.assertEqual(len(t), 1)
 
     def test_get_absolute_url(self):
@@ -130,8 +122,7 @@ class UserModelTest(TestCase):
         self.assertTrue(u.get_absolute_url().startswith("/group"))
 
     def test_progress_report(self):
-        u = UserProfileFactory()
-        d = u.progress_report()
+        d = self.u.progress_report()
         self.assertEqual(d['hours_logged'], 0)
         self.assertEqual(d['week_percentage'], 0)
         self.assertTrue('target_hours' in d)

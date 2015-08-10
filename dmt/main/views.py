@@ -1223,8 +1223,6 @@ class GroupDetailView(LoggedInMixin, DetailView):
 
         other_members = UserProfile.objects.filter(
             ingroup__grp=group
-        ).filter(
-            ~Q(pk__in=primary_members)
         ).order_by('fullname')
 
         eligible_users = UserProfile.objects.filter(
