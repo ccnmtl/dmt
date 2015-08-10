@@ -75,7 +75,7 @@ django-smoketest==0.3.0
 django-extensions==1.5.2
 django-stagingcontext==0.1.0
 django-ga-context==0.1.0
-django-impersonate==0.9
+django-impersonate==0.9.1
 django-pgsql-interval-field==0.9.3
 django-filter==0.10.0
 djangorestframework==3.1.3
