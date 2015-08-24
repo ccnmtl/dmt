@@ -90,6 +90,6 @@ django-behave==0.1.5
 django-oauth2-provider==0.2.6.1
 django-extra-views==0.6.5
 bleach==1.4.1
-html5lib==1.0b6
+html5lib==0.999999
 html2text==2015.6.21
 freezegun==0.3.3
