@@ -88,7 +88,7 @@ django-bootstrap3==6.1.0
 django-emoji==2.0.0
 django-behave==0.1.5
 django-oauth2-provider==0.2.6.1
-django-extra-views==0.6.5
+django-extra-views==0.7.1
 bleach==1.4.1
 html5lib==1.0b6
 html2text==2015.4.14
