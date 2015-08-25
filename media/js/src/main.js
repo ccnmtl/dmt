@@ -101,6 +101,14 @@ require([
         }
     });
 
+    var selectSorter = function(results) {
+        var query = $('.select2-search__field').val().toLowerCase();
+        return results.sort(function(a, b) {
+            return a.text.toLowerCase().indexOf(query) -
+                b.text.toLowerCase().indexOf(query);
+        });
+    };
+
     domReady(function() {
         $('input[name=target_date]').datepicker({
             autoclose: true,
@@ -110,9 +118,12 @@ require([
 
         $('#project-input').select2({
             placeholder: 'Project',
-            width: '100%'
+            width: '100%',
+            sorter: selectSorter
         });
         $('#add-trackers-form .field-project select,' +
-          'select#project-personnel-input').select2();
+          'select#project-personnel-input').select2({
+              sorter: selectSorter
+          });
     });
 });
