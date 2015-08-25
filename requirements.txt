@@ -22,7 +22,7 @@ ipython==3.0.0
 ipdb==0.8
 isodate==0.5.4
 SPARQLWrapper==1.6.4
-rdflib==4.1.2
+rdflib==4.2.1
 selenium==2.46.1
 coverage==3.7.1
 pyasn1==0.1.8
