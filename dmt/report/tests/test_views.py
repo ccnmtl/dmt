@@ -1,9 +1,12 @@
+from datetime import timedelta
 from django.test import TestCase
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from dmt.main.models import InGroup
 from dmt.main.tests.factories import (
-    ItemFactory, MilestoneFactory, UserProfileFactory)
+    ActualTimeFactory, ItemFactory, MilestoneFactory, UserProfileFactory
+)
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 import unittest
 
@@ -19,6 +22,11 @@ class ActiveProjectTests(LoggedInTestMixin, TestCase):
 
 
 class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(ActiveProjectExportTests, self).setUp()
+        completed = timezone.now() - timedelta(days=3)
+        ActualTimeFactory(completed=completed)
+
     @unittest.skipUnless(
         settings.DATABASES['default']['ENGINE'] ==
         'django.db.backends.postgresql_psycopg2',
@@ -29,6 +37,12 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
             '?format=csv&range=31&offset=0')
         self.assertEqual(r.status_code, 200)
 
+        r_offset = self.client.get(
+            reverse('active_projects_report_export') +
+            '?format=csv&range=31&offset=100')
+        self.assertEqual(r_offset.status_code, 200)
+        self.assertNotEqual(r.content, r_offset.content)
+
     @unittest.skipUnless(
         settings.DATABASES['default']['ENGINE'] ==
         'django.db.backends.postgresql_psycopg2',
@@ -38,6 +52,12 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
             reverse('active_projects_report_export') +
             '?format=xlsx&range=31&offset=0')
         self.assertEqual(r.status_code, 200)
+
+        r_offset = self.client.get(
+            reverse('active_projects_report_export') +
+            '?format=xlsx&range=31&offset=100')
+        self.assertEqual(r_offset.status_code, 200)
+        self.assertNotEqual(r.content, r_offset.content)
 
 
 class UserWeeklyTest(LoggedInTestMixin, TestCase):

@@ -15,6 +15,7 @@ class PrevNextWeekMixin(object):
         self.calc_weeks(timezone.now())
 
     def get_params(self):
+        """Update the interval based on request params."""
         date_str = self.request.GET.get('date', '')
         naive = parse_date(date_str)
         if date_str and naive:
@@ -95,6 +96,7 @@ class RangeOffsetMixin(object):
         self.interval_end = aware_end
 
     def get_params(self):
+        """Update the interval based on request params."""
         try:
             self.range_days = int(
                 self.request.GET.get('range', self.range_days))
