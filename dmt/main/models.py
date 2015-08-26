@@ -689,28 +689,13 @@ ORDER BY p.projnum
     @staticmethod
     def projects_active_between(start, end):
         """ Return projects active between the given dates. """
-        projects = Project.objects.raw("""
-SELECT
-    p.pid,
-    p.name,
-    p.projnum,
-    date(tempalias.max) AS last_worked_on,
-    p.status AS project_status,
-    tempalias.sum AS hours_logged
-FROM
-    (
-    SELECT p.pid, max(completed), sum(a.actual_time)
-    FROM projects p, milestones m, items i, actual_times a
-    WHERE p.pid = m.pid
-        AND m.mid = i.mid
-        AND i.iid = a.iid
-        AND a.completed >= %s
-        AND a.completed <= %s
-    GROUP BY p.pid
-    ) AS tempalias, projects p
-WHERE tempalias.pid = p.pid
-ORDER BY hours_logged DESC;
-        """, [start, end])
+        projects = Project.objects.filter(
+            milestone__item__actualtime__completed__gte=start,
+            milestone__item__actualtime__completed__lte=end,
+        ).annotate(
+            last_worked_on=Max('milestone__item__actualtime__completed'),
+            hours_logged=Sum('milestone__item__actualtime__actual_time'),
+        ).order_by('-hours_logged')
         return projects
 
     def last_mod(self):
