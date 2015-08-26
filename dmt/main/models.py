@@ -690,8 +690,8 @@ ORDER BY p.projnum
     def projects_active_between(start, end):
         """ Return projects active between the given dates. """
         projects = Project.objects.filter(
-            milestone__item__actualtime__completed__gt=start,
-            milestone__item__actualtime__completed__lt=end,
+            milestone__item__actualtime__completed__gte=start,
+            milestone__item__actualtime__completed__lte=end,
         ).annotate(
             last_worked_on=Max('milestone__item__actualtime__completed'),
             hours_logged=Sum('milestone__item__actualtime__actual_time'),
