@@ -982,7 +982,7 @@ class ProjectAddStatusUpdateView(LoggedInMixin, View):
         if body == '':
             return HttpResponseRedirect(project.get_absolute_url())
         StatusUpdate.objects.create(
-            project=project, user=user, body=body)
+            project=project, user=user, body=body, author=request.user)
         statsd.incr('main.status_update')
         return HttpResponseRedirect(project.get_absolute_url())
 
