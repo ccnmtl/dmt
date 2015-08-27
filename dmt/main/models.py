@@ -614,11 +614,17 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
                   addresses, fail_silently=settings.DEBUG)
 
     def personnel_in_project(self):
-        return [
-            w.username for w in WorksOn.objects.filter(
-                project=self
-            ).select_related('username')
-            if w.username.status == 'active']
+        """ return list of all users/groups in project
+
+        sorted with groups first, then individual users,
+        sorted alphabetically by fullname """
+        return sorted(
+            [
+                w.username for w in WorksOn.objects.filter(
+                    project=self
+                ).select_related('username')
+                if w.username.status == 'active'],
+            key=lambda user: (not user.grp, user.fullname.lower()))
 
     def all_personnel_in_project(self):
         users = set([u for u in self.personnel_in_project()
