@@ -79,6 +79,7 @@ class NotifyFactory(factory.DjangoModelFactory):
 
     item = factory.SubFactory(ItemFactory)
     username = factory.SubFactory(UserProfileFactory)
+    user = factory.SubFactory(UserFactory)
 
 
 class EventFactory(factory.DjangoModelFactory):
@@ -111,6 +112,7 @@ class NodeFactory(factory.DjangoModelFactory):
     added = datetime(2020, 12, 1).replace(tzinfo=utc)
     modified = datetime(2020, 12, 1).replace(tzinfo=utc)
     author = factory.SubFactory(UserProfileFactory)
+    user = factory.SubFactory(UserFactory)
 
 
 class ActualTimeFactory(factory.DjangoModelFactory):
@@ -119,6 +121,7 @@ class ActualTimeFactory(factory.DjangoModelFactory):
 
     item = factory.SubFactory(ItemFactory)
     resolver = factory.SubFactory(UserProfileFactory)
+    user = factory.SubFactory(UserFactory)
     actual_time = timedelta(hours=1).total_seconds()
     completed = datetime(2013, 12, 20).replace(tzinfo=utc)
 
@@ -136,6 +139,7 @@ class ClientFactory(factory.DjangoModelFactory):
     school = "TestSchool"
     email = "testclient@columbia.edu"
     contact = factory.SubFactory(UserProfileFactory)
+    user = factory.SubFactory(UserFactory)
     status = 'active'
 
 
@@ -146,6 +150,7 @@ class StatusUpdateFactory(factory.DjangoModelFactory):
     project = factory.SubFactory(ProjectFactory)
     user = factory.SubFactory(UserProfileFactory)
     body = "some text as a body"
+    author = factory.SubFactory(UserFactory)
 
 
 class AttachmentFactory(factory.DjangoModelFactory):
@@ -157,6 +162,7 @@ class AttachmentFactory(factory.DjangoModelFactory):
     title = "an attachment"
     type = "jpg"
     author = factory.SubFactory(UserProfileFactory)
+    user = factory.SubFactory(UserFactory)
 
 
 class GroupFactory(factory.DjangoModelFactory):
