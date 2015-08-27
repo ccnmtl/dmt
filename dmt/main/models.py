@@ -792,7 +792,7 @@ class Document(models.Model):
     description = models.TextField(blank=True)
     version = models.CharField(max_length=16, blank=True)
     author = models.ForeignKey(UserProfile, db_column='author')
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User)
     last_mod = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -1134,14 +1134,9 @@ class Item(models.Model):
         if user.status == "inactive":
             # don't bother with inactive users
             return
-        n, _ = Notify.objects.get_or_create(
+        Notify.objects.get_or_create(
             item=self,
-            username=user)
-        # if we just added 'user' into the above, it could
-        # result in duplicate entries since the user field
-        # is currently empty for these.
-        n.user = user.user
-        n.save()
+            username=user, user=user.user)
 
     def update_email(self, comment, user, skip_self=True):
         """Send out an email update about this PMT Item.
@@ -1309,7 +1304,7 @@ class Notify(models.Model):
                              db_column='iid',
                              related_name='notifies')
     username = models.ForeignKey(UserProfile, db_column='username')
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User)
 
     class Meta:
         db_table = u'notify'
@@ -1332,7 +1327,7 @@ class Client(models.Model):
     email = models.CharField(max_length=128, blank=True)
     contact = models.ForeignKey(UserProfile, null=True, db_column='contact',
                                 blank=True)
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User)
     comments = models.TextField(blank=True)
     status = models.CharField(max_length=16, blank=True)
     email_secondary = models.CharField(max_length=128, blank=True)
@@ -1364,7 +1359,7 @@ class Node(models.Model):
     subject = models.CharField(max_length=256, blank=True)
     body = models.TextField(blank=True)
     author = models.ForeignKey(UserProfile, db_column='author')
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User)
     reply_to = models.IntegerField(null=True, blank=True)
     replies = models.IntegerField(null=True, blank=True)
     type = models.CharField(max_length=8)
@@ -1430,7 +1425,7 @@ class Node(models.Model):
 
 class WorksOn(models.Model):
     username = models.ForeignKey(UserProfile, db_column='username')
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User)
     project = models.ForeignKey(Project, db_column='pid')
     auth = models.CharField(max_length=16)
 
@@ -1493,7 +1488,7 @@ class ProjectClient(models.Model):
 class ActualTime(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')
     resolver = models.ForeignKey(UserProfile, db_column='resolver')
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User)
     actual_time = IntervalField(null=True, blank=True)
     completed = models.DateTimeField(primary_key=True)
 
