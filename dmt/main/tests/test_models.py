@@ -558,6 +558,15 @@ class ProjectTest(TestCase):
         p.add_manager(g.grp)
         self.assertTrue(g.username in p.all_personnel_in_project())
 
+    def test_personnel_in_project_sorts_groups_first(self):
+        p = ProjectFactory()
+        u = UserProfileFactory()
+        g = GroupFactory()
+        p.add_manager(u)
+        p.add_manager(g.grp)
+        r = p.personnel_in_project()
+        self.assertEqual(r, [g.grp, u])
+
     def test_add_item_invalid_duration(self):
         m = MilestoneFactory()
         p = m.project
