@@ -360,7 +360,7 @@ class NotifyTests(APITestCase):
         self.u.save()
         self.pu = self.u.userprofile
         self.item = ItemFactory()
-        self.n = NotifyFactory(item=self.item, username=self.pu)
+        self.n = NotifyFactory(item=self.item, username=self.pu, user=self.u)
         self.url = reverse("notify", kwargs={'pk': self.n.item.iid})
 
     def test_delete(self):
