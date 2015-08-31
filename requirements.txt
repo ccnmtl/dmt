@@ -38,7 +38,7 @@ python-dateutil==2.4.2
 pytz==2015.4
 simpleduration==0.1.0
 factory_boy==2.5.2
-python-ldap==2.4.19
+python-ldap==2.4.20
 anyjson==0.3.3
 amqp==1.4.6
 amqplib==1.0.2
