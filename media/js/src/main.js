@@ -123,6 +123,7 @@ require([
         });
         $('#add-trackers-form .field-project select,' +
           'select#project-personnel-input').select2({
+              'min-width': '160px',
               sorter: selectSorter
           });
     });
