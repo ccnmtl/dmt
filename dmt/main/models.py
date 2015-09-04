@@ -1195,11 +1195,10 @@ Please do not reply to this message.
     def users_to_email(self, skip=None):
         return [
             n.username
-            for n in Notify.objects.filter(
-                item=self)
-            if (n.username.status == 'active'
-                and not n.username.grp
-                and n.username != skip)]
+            for n in Notify.objects.filter(item=self)
+            if (n.user.userprofile.status == 'active'
+                and not n.user.userprofile.grp
+                and n.user.userprofile.username != skip)]
 
     def copy_clients_to_new_item(self, new_item):
         for ic in self.itemclient_set.all():
@@ -1317,7 +1316,7 @@ class Notify(models.Model):
         unique_together = ('item', 'username')
 
     def __unicode__(self):
-        return '%s' % (self.username.username)
+        return '%s' % (self.user.userprofile.username)
 
 
 class Client(models.Model):

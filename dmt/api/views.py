@@ -226,8 +226,7 @@ class NotifyView(APIView):
     def delete(self, request, pk, **kwargs):
         if request.user.is_authenticated():
             item = get_object_or_404(Item, iid=pk)
-            user = request.user.userprofile
-            Notify.objects.get(username=user, item=item).delete()
+            Notify.objects.get(user=request.user, item=item).delete()
             return Response(status=204)
         else:
             return Response(status=403)
@@ -238,8 +237,7 @@ class NotifyView(APIView):
             pmt_username = user.username
             get_object_or_404(Notify,
                               item_id=pk,
-                              user=request.user,
-                              username=pmt_username)
+                              user=request.user)
             data = {'notify': pmt_username}
             return Response(data)
         else:

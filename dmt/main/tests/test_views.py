@@ -529,7 +529,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
     def test_item_view_notification_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
         i = ItemFactory(assigned_to=self.u.userprofile)
-        n = NotifyFactory(item=i, username=self.u.userprofile)
+        n = NotifyFactory(item=i, user=self.u)
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue("input_notification" in r.content)

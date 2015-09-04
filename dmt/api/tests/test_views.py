@@ -227,7 +227,7 @@ class ItemTests(APITestCase):
 
     def test_get_with_notification(self):
         self.notification = NotifyFactory(
-            item=self.item, username=self.u.userprofile)
+            item=self.item, user=self.u)
 
         r = self.client.get(
             reverse('item-detail', kwargs={'pk': self.item.iid}))
