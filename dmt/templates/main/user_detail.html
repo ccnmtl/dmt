@@ -255,7 +255,7 @@
       <h4><a href="{{n.get_absolute_url}}">{{n.subject|emoji_replace}}</a></h4>
       </div>
       <div class="forum-byline text-muted">
-      by {{n.author.fullname}}
+      by {{n.user.userprofile.fullname}}
       | {{n.added}}
       </div>
       {% if n.tags.count %}

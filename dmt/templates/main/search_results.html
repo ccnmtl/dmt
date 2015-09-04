@@ -84,7 +84,7 @@
 <ul>
 {% for node in nodes %}
 <li><a href="{{node.get_absolute_url}}">[{{node.added}}]
-		{{node.subject}}</a> (<a href="{{node.author.get_absolute_url}}">{{node.author.fullname}}</a>)</li>
+		{{node.subject}}</a> (<a href="{{node.user.userprofile.get_absolute_url}}">{{node.author.fullname}}</a>)</li>
 {% endfor %}
 </ul>
 {% endif %}
