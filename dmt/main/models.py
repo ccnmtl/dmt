@@ -446,7 +446,7 @@ class Project(models.Model):
 
     def add_personnel(self, user, auth='guest'):
         # make sure we don't duplicate any
-        WorksOn.objects.filter(project=self, username=user).delete()
+        WorksOn.objects.filter(project=self, user=user.user).delete()
         WorksOn.objects.create(username=user, project=self, auth=auth,
                                user=user.user)
 
@@ -465,13 +465,13 @@ class Project(models.Model):
         self.set_personnel(users, auth='guest')
 
     def remove_personnel(self, user):
-        WorksOn.objects.filter(project=self, username=user).delete()
+        WorksOn.objects.filter(project=self, user=user.user).delete()
 
     def all_users_not_in_project(self):
         already_in = set(
             [w.username
              for w in WorksOn.objects.filter(
-                 project=self).select_related('username')])
+                 project=self).select_related('user')])
         all_users = set(UserProfile.objects.filter(status='active'))
         return sorted(list(all_users - already_in),
                       key=lambda x: x.fullname.lower())
@@ -620,10 +620,10 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
         sorted alphabetically by fullname """
         return sorted(
             [
-                w.username for w in WorksOn.objects.filter(
+                w.user.userprofile for w in WorksOn.objects.filter(
                     project=self
-                ).select_related('username')
-                if w.username.status == 'active'],
+                ).select_related('user')
+                if w.user.userprofile.status == 'active'],
             key=lambda user: (not user.grp, user.fullname.lower()))
 
     def all_personnel_in_project(self):
