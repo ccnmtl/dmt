@@ -298,7 +298,7 @@ class UserProfile(models.Model):
         all_events.extend([TimeLineStatus(s) for s in statuses])
 
         posts = Node.objects.filter(
-            author=self,
+            user=self.user,
             added__gte=start.date(),
             added__lte=end,
         ).select_related('project')
@@ -773,7 +773,7 @@ ORDER BY p.projnum
             project=self,
             added__gte=start.date(),
             added__lte=end,
-        ).select_related('project', 'author')
+        ).select_related('project', 'user')
         all_events.extend([TimeLinePost(p) for p in posts])
 
         milestones = Milestone.objects.filter(
@@ -1405,7 +1405,7 @@ class Node(models.Model):
         self.email_reply(body, user, n)
 
     def email_reply(self, body, user, reply):
-        if self.author == user:
+        if self.user.userprofile == user:
             # self-reply
             return
         body = textwrap.fill(body, replace_whitespace=False)
@@ -1420,7 +1420,7 @@ class Node(models.Model):
             % (self.get_absolute_url()))
 
         send_mail(clean_subject(subject), body, user.email,
-                  [self.author.email], fail_silently=settings.DEBUG)
+                  [self.user.userprofile.email], fail_silently=settings.DEBUG)
         statsd.incr('main.email_sent')
 
     def touch(self):

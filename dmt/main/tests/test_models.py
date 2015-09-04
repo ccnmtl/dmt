@@ -392,7 +392,7 @@ class NodeTest(TestCase):
 
     def test_email_reply_self_reply(self):
         n = NodeFactory()
-        n.email_reply("", n.author, None)
+        n.email_reply("", n.user.userprofile, None)
         # should not send an email when it's a self-reply
         self.assertEqual(len(mail.outbox), 0)
 

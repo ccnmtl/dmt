@@ -61,7 +61,7 @@
 {% if node.project %}
 [<a href="{{node.project.get_absolute_url}}">{{node.project.name}}</a>]
 {% endif %}
-	by <a href="{{node.author.get_absolute_url}}">{{node.author.fullname}}</a>, {{node.added}}</li>
+	by <a href="{{node.user.userprofile.get_absolute_url}}">{{node.user.userprofile.fullname}}</a>, {{node.added}}</li>
 {% endfor %}
 </ul>
 
