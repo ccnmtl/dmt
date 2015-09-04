@@ -39,19 +39,19 @@ class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
                   'description', 'item_set')
 
 
-class NotifySerializer(serializers.Serializer):
-    item = serializers.PrimaryKeyRelatedField(read_only=True)
-    username = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    class Meta:
-        model = Notify
-        fields = ('item', 'username')
-
-
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name')
+
+
+class NotifySerializer(serializers.HyperlinkedModelSerializer):
+    item = serializers.PrimaryKeyRelatedField(read_only=True)
+    user = UserSerializer()
+
+    class Meta:
+        model = Notify
+        fields = ('item', 'user')
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
