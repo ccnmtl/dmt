@@ -35,6 +35,7 @@ def interval_to_hours(duration):
 def linkify(value):
     return bleach.linkify(value,
                           skip_pre=True,
+                          skip_code=True,
                           parse_email=False,
                           tokenizer=HTMLTokenizer)
 
