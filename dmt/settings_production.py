@@ -1,38 +1,19 @@
 # flake8: noqa
 from settings_shared import *
+from ccnmtlsettings.production import common
+import os
 
-TEMPLATE_DIRS = (
-    "/var/www/dmt/dmt/dmt/templates",
-)
+project = 'dmt'
+base = os.path.dirname(__file__)
 
-MEDIA_ROOT = '/var/www/dmt/uploads/'
-# put any static media here to override app served static media
-STATICMEDIA_MOUNTS = (
-    ('/sitemedia', '/var/www/dmt/dmt/sitemedia'),
-)
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dmt',
-        'HOST': '',
-        'PORT': 6432,
-        'USER': '',
-        'PASSWORD': '',
-    }
-}
-
-COMPRESS_ROOT = "/var/www/dmt/dmt/media/"
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
-
-STATICFILES_DIRS = ()
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), "../media")
-
-STATSD_PATCHES.append('django_statsd.patches.db')
-
-if 'migrate' not in sys.argv:
-    INSTALLED_APPS.append('raven.contrib.django.raven_compat')
+locals().update(
+    common(
+        project=project,
+        base=base,
+        STATIC_ROOT=STATIC_ROOT,
+        INSTALLED_APPS=INSTALLED_APPS,
+        s3static=False,
+    ))
 
 try:
     from local_settings import *
