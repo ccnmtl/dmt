@@ -1196,9 +1196,9 @@ Please do not reply to this message.
         return [
             n.username
             for n in Notify.objects.filter(item=self)
-            if (n.user.userprofile.status == 'active'
-                and not n.user.userprofile.grp
-                and n.user.userprofile.username != skip)]
+            if (n.user.userprofile.status == 'active' and
+                not n.user.userprofile.grp and
+                n.user.userprofile.username != skip)]
 
     def copy_clients_to_new_item(self, new_item):
         for ic in self.itemclient_set.all():

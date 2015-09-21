@@ -37,8 +37,8 @@ class StatusUpdateFeed(Feed):
 
     def item_description(self, item):
         return """<a href="%s">%s</a>:  %s  -- <a href="%s">%s</a>  (%s)""" % (
-            ("https://dmt.ccnmtl.columbia.edu"
-             + item.project.get_absolute_url()),
+            ("https://dmt.ccnmtl.columbia.edu" +
+             item.project.get_absolute_url()),
             item.project.name,
             item.body,
             "https://dmt.ccnmtl.columbia.edu" + item.user.get_absolute_url(),
@@ -78,8 +78,8 @@ class ProjectFeed(Feed):
 
     def item_description(self, item):
         return """<a href="%s">%s</a>:  %s -- %s / assigned to: %s (%s)""" % (
-            ("https://dmt.ccnmtl.columbia.edu"
-             + item.get_absolute_url()),
+            ("https://dmt.ccnmtl.columbia.edu" +
+             item.get_absolute_url()),
             item.title,
             item.status,
             item.owner,
