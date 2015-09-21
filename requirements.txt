@@ -19,7 +19,7 @@ lxml==3.4.4
 fuzzywuzzy==0.6.0
 sure==1.2.12
 ipython==3.0.0
-ipdb==0.8
+ipdb==0.8.1
 isodate==0.5.4
 SPARQLWrapper==1.6.4
 rdflib==4.2.1
