@@ -18,6 +18,13 @@ BeautifulSoup==3.2.1
 lxml==3.4.4
 fuzzywuzzy==0.6.0
 sure==1.2.12
+traitlets==4.0.0
+ipython_genutils==0.1.0
+decorator==4.0.2
+pexpect==3.3
+pickleshare==0.5
+simplegeneric==0.8.1
+path.py==8.1.1
 ipython==4.0.0
 ipdb==0.8.1
 isodate==0.5.4
