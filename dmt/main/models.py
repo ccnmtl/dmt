@@ -797,7 +797,6 @@ class Document(models.Model):
     url = models.CharField(max_length=256, blank=True)
     description = models.TextField(blank=True)
     version = models.CharField(max_length=16, blank=True)
-    author = models.ForeignKey(UserProfile, db_column='author')
     user = models.ForeignKey(User)
     last_mod = models.DateTimeField(null=True, blank=True)
 
