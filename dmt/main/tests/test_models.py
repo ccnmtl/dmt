@@ -621,7 +621,7 @@ class ProjectTest(TestCase):
         n = NodeFactory(subject="\r\n \r\n linebreaks", project=p)
         u2 = UserProfileFactory(status='active')
         p.add_manager(u2)
-        p.email_post(n, "a body", n.author)
+        p.email_post(n, "a body", n.user.userprofile)
         self.assertEqual(len(mail.outbox), 1)
 
 

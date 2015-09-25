@@ -207,7 +207,7 @@ class UserProfile(models.Model):
         return [ig.username for ig in self.group_members.all()]
 
     def recent_forum_posts(self, count=10):
-        return self.node_set.all()[:count]
+        return Node.objects.filter(user=self.user)[:count]
 
     def recent_status_updates(self, count=20):
         return self.statusupdate_set.all()[:count]
@@ -574,7 +574,6 @@ class Project(models.Model):
         n = Node.objects.create(
             subject=subject,
             body=body,
-            author=user,
             user=user.user,
             reply_to=0,
             replies=0,
@@ -1362,7 +1361,6 @@ class Node(models.Model):
     nid = models.AutoField(primary_key=True)
     subject = models.CharField(max_length=256, blank=True)
     body = models.TextField(blank=True)
-    author = models.ForeignKey(UserProfile, db_column='author')
     user = models.ForeignKey(User)
     reply_to = models.IntegerField(null=True, blank=True)
     replies = models.IntegerField(null=True, blank=True)
@@ -1391,7 +1389,6 @@ class Node(models.Model):
         n = Node.objects.create(
             subject='Re: ' + self.subject,
             body=body,
-            author=user,
             user=user.user,
             reply_to=self.nid,
             replies=0,
