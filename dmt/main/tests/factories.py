@@ -111,7 +111,6 @@ class NodeFactory(factory.DjangoModelFactory):
     nid = factory.Sequence(lambda n: n)
     added = datetime(2020, 12, 1).replace(tzinfo=utc)
     modified = datetime(2020, 12, 1).replace(tzinfo=utc)
-    author = factory.SubFactory(UserProfileFactory)
     user = factory.SubFactory(UserFactory)
 
 
