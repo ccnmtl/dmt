@@ -11,7 +11,7 @@ class ClientSerializer(serializers.HyperlinkedModelSerializer):
         model = Client
         fields = ('client_id', 'lastname', 'firstname', 'title',
                   'registration_date', 'department', 'school',
-                  'add_affiliation', 'phone', 'email', 'contact',
+                  'add_affiliation', 'phone', 'email',
                   'comments', 'status', 'email_secondary',
                   'phone_mobile', 'phone_other', 'website_url')
 

@@ -177,7 +177,7 @@ class UserProfile(models.Model):
         return items
 
     def clients(self):
-        return Client.objects.filter(contact=self)
+        return Client.objects.filter(user__userprofile=self)
 
     def manager_on(self):
         return [w.project for w in self.workson_set.filter(
