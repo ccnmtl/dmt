@@ -1131,8 +1131,8 @@ class Item(models.Model):
         self.add_cc(self.assigned_to)
 
     def add_project_notification(self):
-        for n in NotifyProject.objects.filter(pid=self.milestone.project):
-            self.add_cc(n.user.userprofile)
+        for u in self.milestone.project.managers():
+            self.add_cc(u)
 
     def add_cc(self, user):
         if user.status == "inactive":
@@ -1449,14 +1449,6 @@ class Events(models.Model):
         if (s == 'open'):
             s = 'dmt-' + s
         return s
-
-
-class NotifyProject(models.Model):
-    pid = models.ForeignKey(Project, db_column='pid')
-    user = models.ForeignKey(User, null=True)
-
-    class Meta:
-        db_table = u'notify_project'
 
 
 class InGroup(models.Model):
