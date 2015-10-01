@@ -219,7 +219,7 @@
       <dd>
           <ul>
               {% for notify in notified_users %}
-              {% with userprofile=notify.username %}
+              {% with userprofile=notify.user.userprofile %}
               <li>
                   <a href="{% url 'user_detail' userprofile.username %}"
                      >{{userprofile.fullname}}</a>
