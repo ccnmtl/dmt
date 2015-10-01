@@ -240,7 +240,7 @@
       <dd>
       {% for at in object.actualtime_set.all %}
       <ul class="time-logged">
-      <li>{{at.actual_time}} <a href="{{at.resolver.get_absolute_url}}">{{at.resolver.fullname}}</a>
+      <li>{{at.actual_time}} <a href="{{at.user.userprofile.get_absolute_url}}">{{at.user.userprofile.fullname}}</a>
       {{at.completed}}</li>
       </ul>
       {% endfor %}

@@ -77,14 +77,14 @@ class UserProfile(models.Model):
             'SELECT distinct m.pid as pid '
             'FROM milestones m, items i, actual_times a '
             'WHERE m.mid = i.mid AND i.iid = a.iid '
-            'AND a.resolver = %s '
+            'AND a.user_id = %s '
             'AND a.completed > %s '
-            'AND a.completed < %s', [self.username, start, now])
+            'AND a.completed < %s', [self.user.id, start, now])
         return sorted(set(list(projects)), key=lambda x: x.name.lower())
 
     def resolve_times_for_interval(self, start, end):
         return ActualTime.objects.filter(
-            resolver=self,
+            user=self.user,
             completed__gt=start,
             completed__lte=end
         ).select_related('item', 'item__milestone', 'item__milestone__project')
@@ -92,7 +92,7 @@ class UserProfile(models.Model):
     def total_resolve_times(self):
         return interval_sum(
             a.actual_time for a in ActualTime.objects.filter(
-                resolver=self)).total_seconds() / 3600.
+                user=self.user)).total_seconds() / 3600.
 
     def total_assigned_time(self):
         return interval_sum(
@@ -284,7 +284,7 @@ class UserProfile(models.Model):
         all_events.extend([TimeLineComment(c) for c in comments])
 
         actual_times = ActualTime.objects.filter(
-            resolver=self,
+            user=self.user,
             completed__gte=start.date(),
             completed__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project')
@@ -338,7 +338,7 @@ class ProjectUser(object):
         return interval_sum(
             [
                 a.actual_time for a in ActualTime.objects.filter(
-                    resolver=self.user,
+                    user=self.user.user,
                     item__milestone__project=self.project,
                     completed__gt=start,
                     completed__lte=end)])
@@ -643,11 +643,12 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
         cursor = connection.cursor()
         cursor.execute("""
 SELECT SUM(a.actual_time) AS hours
-FROM actual_times a, in_group g, milestones m, items i
+FROM actual_times a, in_group g, milestones m, items i, users u
 WHERE a.iid = i.iid
     AND i.mid = m.mid
     AND m.pid = %s
-    AND a.resolver = g.username
+    AND a.user_id = u.user_id
+    AND g.username = u.username
     AND g.grp  = %s
     AND a.completed > %s
     AND a.completed <= %s
@@ -660,11 +661,12 @@ WHERE a.iid = i.iid
         cursor = connection.cursor()
         cursor.execute("""
 SELECT SUM(a.actual_time) AS total_time
-FROM actual_times a, items i, milestones m, in_group g
+FROM actual_times a, items i, milestones m, in_group g, users u
 WHERE a.iid = i.iid
     AND i.mid = m.mid
     AND m.pid = %s
-    AND a.resolver = g.username
+    AND a.user_id = u.user_id
+    AND g.username = u.username
     AND g.grp IN ('grp_programmers','grp_webmasters','grp_video',
         'grp_educationaltechnologists','grp_management')
     AND a.completed > %s
@@ -679,11 +681,12 @@ WHERE a.iid = i.iid
         groups_string = ','.join([x.username for x in groups])
         projects = Project.objects.raw("""
 SELECT DISTINCT p.pid, p.name, p.projnum
-FROM projects p, milestones m, items i, actual_times a, in_group g
+FROM projects p, milestones m, items i, actual_times a, in_group g, users u
 WHERE p.pid = m.pid
     AND m.mid = i.mid
     AND i.iid = a.iid
-    AND a.resolver = g.username
+    AND a.user_id = u.user_id
+    AND g.username = u.username
     AND g.grp = ANY (string_to_array(%s, ',')::text[])
     AND a.completed > %s
     AND a.completed <= %s
@@ -758,7 +761,7 @@ ORDER BY p.projnum
             completed__gte=start.date(),
             completed__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project',
-                         'resolver')
+                         'user')
         all_events.extend([TimeLineActualTime(a) for a in actual_times])
 
         statuses = StatusUpdate.objects.filter(
@@ -1501,8 +1504,8 @@ class ActualTime(models.Model):
         cursor = connection.cursor()
         cursor.execute("""
 SELECT SUM(a.actual_time) AS total
-FROM actual_times a, in_group g
-WHERE a.resolver = g.username
+FROM actual_times a, in_group g, users u
+WHERE a.user_id = u.user_id AND g.username = u.username
     AND g.grp IN ('grp_programmers','grp_webmasters','grp_video',
 'grp_educationaltechnologists','grp_management')
     AND a.completed > %s

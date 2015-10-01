@@ -117,7 +117,7 @@ class TimeLineActualTime(TimeLineItem):
         return self.a.completed
 
     def user(self):
-        return self.a.resolver
+        return self.a.user.userprofile
 
     def title(self):
         return self.a.item.title

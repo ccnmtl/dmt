@@ -115,8 +115,10 @@ class TestTimeLineComment(unittest.TestCase):
 
 class DummyActualTime(object):
     def __init__(self):
+        class DummyUser(object):
+            userprofile = "resolver"
         self.completed = "completed"
-        self.resolver = "resolver"
+        self.user = DummyUser()
         self.actual_time = timedelta(hours=1)
         self.item = DummyItem()
 
