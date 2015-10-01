@@ -1132,7 +1132,7 @@ class Item(models.Model):
 
     def add_project_notification(self):
         for n in NotifyProject.objects.filter(pid=self.milestone.project):
-            self.add_cc(n.username)
+            self.add_cc(n.user.userprofile)
 
     def add_cc(self, user):
         if user.status == "inactive":
@@ -1453,7 +1453,6 @@ class Events(models.Model):
 
 class NotifyProject(models.Model):
     pid = models.ForeignKey(Project, db_column='pid')
-    username = models.ForeignKey(UserProfile, db_column='username')
     user = models.ForeignKey(User, null=True)
 
     class Meta:
