@@ -148,7 +148,7 @@
             <li><a class="dropdown-toggle dmt-global-nav" data-toggle="dropdown" href="#"><span class="nav-icon nav-icon-clients"></span> <span class="hidden-sm">Clients</span> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="/client/?contact={{request.user.userprofile.username}}&amp;status=active">My active clients</a></li>
+              <li><a href="/client/?user={{request.user.username}}&amp;status=active">My active clients</a></li>
               <li><a href="/client/">All clients</a></li>
               <li><a href="{% url 'add_client' %}"><span class="glyphicon glyphicon-plus-sign"></span> Add new client</a></li>
             </ul>

@@ -5,8 +5,6 @@ from django_filters import (
     ChoiceFilter,
 )
 
-from dmt.main.models import UserProfile
-
 
 class ClientFilter(FilterSet):
     lastname = CharFilter(label='Last Name', lookup_type='icontains')
@@ -16,9 +14,9 @@ class ClientFilter(FilterSet):
     email = CharFilter(lookup_type='icontains')
     phone = CharFilter(label='Phone Number', lookup_type='icontains')
     comments = CharFilter(lookup_type='icontains')
-    contact = ModelChoiceFilter(
-        queryset=UserProfile.objects.filter(
-            Q(status__iexact='active') & ~Q(username__startswith='grp_')
+    user = ModelChoiceFilter(
+        queryset=User.objects.filter(
+            ~Q(username__startswith='grp_')
         ))
 
 
