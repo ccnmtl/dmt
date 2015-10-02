@@ -79,7 +79,7 @@ def hours_logged(weeks=1):
     try:
         times_logged = ActualTime.objects.filter(
             completed__gt=one_week_ago).select_related(
-            'item', 'resolver', 'item__milestone',
+            'item', 'user', 'item__milestone',
             'item__milestone__project')
         return int(
             interval_sum(

@@ -45,7 +45,7 @@ class UserModelTest(TestCase):
 
     def test_weekly_report(self):
         at = ActualTimeFactory()
-        u = at.resolver
+        u = at.user.userprofile
         start = datetime(year=2013, month=12, day=16)
         end = datetime(year=2013, month=12, day=23)
         r = u.weekly_report(start, end)

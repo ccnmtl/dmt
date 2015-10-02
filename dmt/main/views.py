@@ -1068,12 +1068,12 @@ class DashboardView(LoggedInMixin, TemplateView):
         # active projects
         times_logged = ActualTime.objects.filter(
             completed__gt=two_weeks_ago).select_related(
-            'item', 'resolver', 'item__milestone',
+            'item', 'user', 'item__milestone',
             'item__milestone__project')
         all_active_items = set([a.item for a in times_logged])
         all_active_projects = set(
             [i.milestone.project for i in all_active_items])
-        all_active_users = set([a.resolver for a in times_logged])
+        all_active_users = set([a.user.userprofile for a in times_logged])
 
         for p in all_active_projects:
             p.recent_hours = interval_sum(
@@ -1083,7 +1083,7 @@ class DashboardView(LoggedInMixin, TemplateView):
         for u in all_active_users:
             u.recent_hours = interval_sum(
                 [a.actual_time for a in times_logged
-                 if a.resolver == u]).total_seconds() / 3600.
+                 if a.user.userprofile == u]).total_seconds() / 3600.
 
         context['active_projects'] = [
             p for p in sorted(list(all_active_projects),
