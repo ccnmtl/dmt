@@ -47,7 +47,7 @@ simpleduration==0.1.0
 factory_boy==2.5.2
 python-ldap==2.4.20
 anyjson==0.3.3
-amqp==1.4.6
+amqp==1.4.7
 amqplib==1.0.2
 kombu==3.0.26
 librabbitmq==1.6.1
