@@ -1,0 +1,35 @@
+db:
+  image: postgres
+rabbitmq:
+  image: rabbitmq
+web:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000 --settings=dmt.settings_compose
+  volumes:
+    - .:/var/www/dmt/dmt
+  ports:
+    - "8000:8000"
+  links:
+    - db
+    - rabbitmq
+celery:
+  build: .
+  command: python manage.py celery worker --settings=dmt.settings_compose
+  environment:
+    - C_FORCE_ROOT=true
+  volumes:
+    - .:/var/www/dmt/dmt
+  links:
+    - db
+    - rabbitmq
+
+beat:
+  build: .
+  command: python manage.py celery beat --settings=dmt.settings_compose
+  environment:
+    - C_FORCE_ROOT=true
+  volumes:
+    - .:/var/www/dmt/dmt
+  links:
+    - db
+    - rabbitmq

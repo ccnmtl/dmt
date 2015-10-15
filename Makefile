@@ -58,6 +58,15 @@ check: ./ve/bin/python
 shell: ./ve/bin/python
 	$(MANAGE) shell_plus
 
+build:
+	docker build -t ccnmtl/dmt .
+
+compose-run:
+	docker-compose up
+
+compose-migrate:
+	docker-compose run web python manage.py migrate --settings=dmt.settings_compose
+
 clean:
 	rm -rf ve media/CACHE reports node_modules
 	rm -f celerybeat-schedule .coverage
