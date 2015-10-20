@@ -1,3 +1,4 @@
+--index-url https://pypi.ccnmtl.columbia.edu/
 Django==1.8.5
 CommonMark==0.5.4
 django-markwhat==1.4
