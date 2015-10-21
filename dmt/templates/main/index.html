@@ -335,11 +335,10 @@ $(document).ready(function() {
             dom: 'C<"clear">lfrtip',
             colVis: {
                 iOverlayFade: 0,
-            }
+            },
+            searching: true
         });
-        table
-            .order([1, 'desc'], [3, 'asc'])
-            .draw();
+        table.order([1, 'desc'], [3, 'asc']).draw();
     {% endif %}
     {% endwith %}
     $("table#owned-items").tablesorter({sortList: [[1,0], [3,1]]}); 

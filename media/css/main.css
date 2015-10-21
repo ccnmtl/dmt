@@ -592,8 +592,12 @@ span.attachment-action-text {
 .search-wrapper input:focus:-ms-input-placeholder { color:transparent; } /* Internet Explorer 10+ */
 
 .search-box {
-    height: 26px;
     width: 300px; /* Responsive definition required */
+}
+
+.search-box,
+.dataTables_wrapper input[type="search"] {
+    height: 26px;
     margin-top: 6px;
     padding: 3px 25px 3px 7px;
     border: 1px solid #999;
@@ -702,11 +706,14 @@ nav .container {
 #user-items div.due { background: #f93; }
 #user-items div.late { background: #f00; }
 #user-items div.overdue { background: #000; }
-.dashboard div.ColVis { margin-top: -70px; }
+.dashboard div.ColVis {
+    margin-left: 20px;
+    margin-top: 3px;
+}
 
 .progressbar-set {
     height: 25px;
-    margin: 60px 0 0 0;
+    margin-bottom: 5px;
     padding: 0;
     border: 0;
 }
@@ -869,8 +876,8 @@ div.ColVis_collectionBackground {
 
 .project-tabs,
 .object-tabs {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     border: 0;
     border-bottom: 5px solid #e2ebf5;
 }
@@ -1345,7 +1352,10 @@ button.pmt-report-submit { margin-top: 25px; }
 
 @media (max-width: 767px) {
     #outer-container { padding-top: 80px; }
-    .ColVis { display: none; }
+    .dataTables_filter,
+    .ColVis {
+        display: none;
+    }
     .theme-brand {
         height: 40px;
         width: 80px;
