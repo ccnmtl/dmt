@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -291,7 +291,7 @@ class AddTrackerView(APIView):
         td = d.timedelta()
         # two required fields
         if None in [pid, task] or '' in [pid, task]:
-            return HttpResponse("bad request")
+            return HttpResponseBadRequest()
 
         project = get_object_or_404(Project, pid=pid)
         user = request.user.userprofile
@@ -310,8 +310,6 @@ class AddTrackerView(APIView):
                 email=client_uni + "@columbia.edu")
             if r.count() > 0:
                 item.add_clients([r[0]])
-            else:
-                pass
         item.add_resolve_time(user, td, completed)
         data = ItemSerializer(item, context={'request': request}).data
         return Response(data)
