@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.contrib.auth.models import User
 
+from rest_framework import status
 from rest_framework.test import APITestCase
 
 from dmt.main.models import ActualTime, Item, Notify
@@ -33,13 +34,13 @@ class AddTrackerViewTest(TestCase):
         r = self.c.post(
             self.url,
             dict())
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_with_empty_fields(self):
         r = self.c.post(
             self.url,
             dict(pid='', task=''))
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post(self):
         r = self.c.post(
