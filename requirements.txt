@@ -45,7 +45,8 @@ six==1.9.0
 python-dateutil==2.4.2
 pytz==2015.6
 simpleduration==0.1.0
-factory_boy==2.5.2
+fake-factory==0.5.3
+factory_boy==2.6.0
 python-ldap==2.4.20
 anyjson==0.3.3
 amqp==1.4.7
