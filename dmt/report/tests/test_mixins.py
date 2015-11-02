@@ -1,5 +1,5 @@
 import pytz
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.test import TestCase
 from django.utils.dateparse import parse_datetime
@@ -39,11 +39,13 @@ class RangeOffsetMixinTests(TestCase):
         self.mixin = RangeOffsetMixin()
 
     def test_calc_interval(self):
+        today = parse_datetime('2014-10-27 00:00:00')
+        self.mixin._today = today
         self.mixin.calc_interval()
-        naive_today = datetime.combine(date.today(), datetime.min.time())
+        naive_today = datetime.combine(today, datetime.min.time())
         aware_today = pytz.timezone(settings.TIME_ZONE).localize(
             naive_today, is_dst=None)
-        naive_end_of_today = datetime.combine(date.today(),
+        naive_end_of_today = datetime.combine(today,
                                               datetime.max.time())
         aware_end_of_today = pytz.timezone(settings.TIME_ZONE).localize(
             naive_end_of_today, is_dst=None)

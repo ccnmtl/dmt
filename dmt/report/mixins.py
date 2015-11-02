@@ -77,13 +77,19 @@ class RangeOffsetMixin(object):
     # this range_days.
     range_days = 31
     offset_days = 0
+    _today = None
+
+    def today(self):
+        if not self._today:
+            self._today = date.today()
+        return self._today
 
     def calc_interval(self):
         # Calculate from the beginning of the first day in the range
         # to the end of the last day.
-        naive_start = datetime.combine(date.today(), datetime.min.time()) - \
+        naive_start = datetime.combine(self.today(), datetime.min.time()) - \
             timedelta(days=(self.range_days + self.offset_days))
-        naive_end = datetime.combine(date.today(), datetime.max.time()) - \
+        naive_end = datetime.combine(self.today(), datetime.max.time()) - \
             timedelta(days=(self.offset_days))
 
         # Convert to TZ-aware, based on the current timezone.
