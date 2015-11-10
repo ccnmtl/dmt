@@ -91,7 +91,7 @@ djangorestframework==3.2.4
 django-taggit==0.17.3
 django-templatetag-sugar==1.0
 django-taggit-templatetags2==1.4.0
-django-celery==3.1.16
+django-celery==3.1.17
 django-casper==0.0.3
 django-bootstrap3==6.2.2
 django-emoji==2.0.0
