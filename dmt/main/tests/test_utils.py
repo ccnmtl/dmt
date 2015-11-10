@@ -28,6 +28,8 @@ class SafeBasenameTests(unittest.TestCase):
 
 class SimpleDurationStringTests(unittest.TestCase):
     def test_simpleduration_string(self):
+        self.assertEqual(simpleduration_string(timedelta(0)), '')
+
         self.assertEqual(
             simpleduration_string(timedelta(days=2)),
             '2d')
