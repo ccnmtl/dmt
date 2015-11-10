@@ -47,3 +47,30 @@ def safe_basename(s):
     # only allow alphanumerics, '-' and '.'
     b = re.sub(r'[^\w\-\.]', '', b)
     return b
+
+
+def simpleduration_string(duration):
+    """Returns a simpleduration-friendly string.
+
+    Based on Django's duration_string() function.
+    """
+    days = duration.days
+    seconds = duration.seconds
+
+    minutes = seconds // 60
+    seconds = seconds % 60
+
+    hours = minutes // 60
+    minutes = minutes % 60
+
+    string = ''
+    if days:
+        string += '{}d '.format(days)
+    if hours:
+        string += '{:d}h '.format(hours)
+    if minutes:
+        string += '{:d}m '.format(minutes)
+    if seconds:
+        string += '{:d}s'.format(seconds)
+
+    return string.strip()

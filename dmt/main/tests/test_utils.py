@@ -1,24 +1,59 @@
 import unittest
 from datetime import timedelta
-import dmt.main.utils as utils
+from dmt.main.utils import (
+    interval_to_hours, safe_basename, simpleduration_string
+)
 
 
 class IntervalToHoursTests(unittest.TestCase):
     def test_interval_to_hours(self):
         self.assertEqual(
-            utils.interval_to_hours(timedelta(0)),
+            interval_to_hours(timedelta(0)),
             0)
         self.assertEqual(
-            utils.interval_to_hours(timedelta(hours=1)),
+            interval_to_hours(timedelta(hours=1)),
             1)
         self.assertEqual(
-            utils.interval_to_hours(timedelta(hours=1, seconds=1800)),
+            interval_to_hours(timedelta(hours=1, seconds=1800)),
             1.5)
         self.assertEqual(
-            utils.interval_to_hours(timedelta(days=1, hours=1, seconds=1800)),
+            interval_to_hours(timedelta(days=1, hours=1, seconds=1800)),
             25.5)
 
 
 class SafeBasenameTests(unittest.TestCase):
     def test_safe_basename(self):
-        self.assertEqual(utils.safe_basename('Foo bar.png'), 'foobar.png')
+        self.assertEqual(safe_basename('Foo bar.png'), 'foobar.png')
+
+
+class SimpleDurationStringTests(unittest.TestCase):
+    def test_simpleduration_string(self):
+        self.assertEqual(
+            simpleduration_string(timedelta(days=2)),
+            '2d')
+
+        self.assertEqual(
+            simpleduration_string(timedelta(days=2, hours=5)),
+            '2d 5h')
+
+        self.assertEqual(
+            simpleduration_string(timedelta(hours=2)),
+            '2h')
+
+        self.assertEqual(
+            simpleduration_string(timedelta(hours=2, minutes=30)),
+            '2h 30m')
+
+        self.assertEqual(
+            simpleduration_string(timedelta(hours=12)),
+            '12h')
+
+        self.assertEqual(
+            simpleduration_string(timedelta(hours=12, seconds=45)),
+            '12h 45s')
+
+        self.assertEqual(
+            simpleduration_string(timedelta(hours=1,
+                                            minutes=15,
+                                            seconds=40)),
+            '1h 15m 40s')

@@ -121,7 +121,7 @@ class ActualTimeFactory(factory.DjangoModelFactory):
     item = factory.SubFactory(ItemFactory)
     resolver = factory.SubFactory(UserProfileFactory)
     user = factory.SubFactory(UserFactory)
-    actual_time = timedelta(hours=1).total_seconds()
+    actual_time = timedelta(hours=1)
     completed = datetime(2013, 12, 20).replace(tzinfo=utc)
 
 

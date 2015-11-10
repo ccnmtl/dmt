@@ -305,7 +305,7 @@ class ExternalAddItemTests(APITestCase):
         self.assertTrue(self.assignee.username in r.data.get('assigned_to'))
         self.assertTrue(self.debug_info in r.data.get('description'))
         self.assertTrue(unicode(self.milestone.pk) in r.data.get('milestone'))
-        self.assertEqual(r.data.get('estimated_time'), '1:00:00')
+        self.assertEqual(r.data.get('estimated_time'), '01:00:00')
         self.assertEqual(r.data.get('target_date'), self.target_date)
 
         self.assertEqual(len(mail.outbox), 1)

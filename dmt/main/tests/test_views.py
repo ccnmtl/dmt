@@ -1,6 +1,7 @@
 import json
 import unittest
 import urllib
+from datetime import timedelta
 
 from simpleduration import Duration
 from .factories import (
@@ -13,6 +14,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.utils.dateparse import parse_date
 from factory.fuzzy import FuzzyInteger
 from waffle.models import Flag
 from dmt.main.models import UserProfile as PMTUser
@@ -271,11 +273,15 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         u = UserProfileFactory()
         milestone = MilestoneFactory()
 
-        r = self.c.post(milestone.project.get_absolute_url() +
-                        "add_action_item/",
-                        {"assigned_to": u.username,
-                         "milestone": milestone.mid,
-                         "owner": u.username})
+        r = self.c.post(
+            milestone.project.get_absolute_url() + "add_action_item/",
+            {
+                "assigned_to": u.username,
+                "milestone": milestone.mid,
+                "owner": u.username,
+                "estimated_time": "4h",
+            }
+        )
         self.assertEqual(r.status_code, 302)
 
         items = Item.objects.filter(milestone=milestone, assigned_to=u)
@@ -283,6 +289,44 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.assertEqual(items[0].assigned_to, u)
         self.assertEqual(items[0].assigned_user, u.user)
         self.assertEqual(items[0].title, "Untitled")
+        self.assertEqual(items[0].estimated_time, timedelta(hours=4))
+
+    def test_update_action_item(self):
+        item = ItemFactory(owner=self.pu, assigned_to=self.pu)
+
+        url = reverse('item_update', args=(item.iid,))
+        r = self.c.post(url, {
+            'type': 'action item',
+            'title': 'my title',
+            'milestone': item.milestone.mid,
+            'target_date': '2015-11-09',
+            'estimated_time': '3h',
+        })
+        self.assertEqual(r.status_code, 302)
+
+        item.refresh_from_db()
+        self.assertEqual(item.type, 'action item')
+        self.assertEqual(item.assigned_to, self.pu)
+        self.assertEqual(item.title, 'my title')
+        self.assertEqual(item.target_date, parse_date('2015-11-09'))
+        self.assertEqual(item.estimated_time, timedelta(hours=3))
+
+        r = self.c.post(url, {
+            'type': 'action item',
+            'title': item.title,
+            'milestone': item.milestone.mid,
+            'target_date': '2015-11-12',
+            'estimated_time': '5h 30m',
+        })
+        self.assertEqual(r.status_code, 302)
+
+        item.refresh_from_db()
+        self.assertEqual(item.type, 'action item')
+        self.assertEqual(item.assigned_to, self.pu)
+        self.assertEqual(item.title, 'my title')
+        self.assertEqual(item.target_date, parse_date('2015-11-12'))
+        self.assertEqual(item.estimated_time,
+                         timedelta(hours=5, minutes=30))
 
     def test_add_action_item_empty_title(self):
         u = UserProfileFactory()

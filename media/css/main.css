@@ -969,9 +969,6 @@ padding: 4px;
     text-align: center;
 }
 
-.item-form input[id*="estimated_time_"] { width: 40px; }
-.item-form label[class*="estimated_time_"] { margin-right: 30px; }
-
 .milestone-set {
     margin-bottom: 20px;
     border: 1px solid #e2ebf5;

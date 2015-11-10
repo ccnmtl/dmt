@@ -1,12 +1,15 @@
 import re
+from datetime import timedelta
 from django import forms
 from django.forms import ModelForm, TextInput, URLInput
 from django_markwhat.templatetags.markup import commonmark
+from simpleduration import Duration, InvalidDuration
 from dmt.main.models import (
     Comment,
     StatusUpdate, Node, UserProfile, Project, Milestone, Item
 )
 from dmt.main.templatetags.dmttags import linkify
+from dmt.main.utils import simpleduration_string
 
 
 class AddTrackerForm(forms.Form):
@@ -87,6 +90,19 @@ class MilestoneUpdateForm(ModelForm):
         exclude = ['mid', 'project', 'status']
 
 
+class SimpleDurationField(forms.DurationField):
+    def prepare_value(self, value):
+        return simpleduration_string(value)
+
+    def clean(self, value):
+        try:
+            d = Duration(value).timedelta()
+        except InvalidDuration:
+            d = timedelta(hours=1)
+
+        return super(SimpleDurationField, self).clean(d)
+
+
 class ItemUpdateForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -96,6 +112,9 @@ class ItemUpdateForm(ModelForm):
         project = Project.objects.get(milestone=milestone)
         project_milestones = project.milestone_set.all()
         self.fields['milestone'].queryset = project_milestones
+        self.fields['estimated_time'] = SimpleDurationField(
+            help_text='Enter time and unit. For example: <code>2h 30m</code>',
+            initial='1h')
 
     class Meta:
         model = Item
