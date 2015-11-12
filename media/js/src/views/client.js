@@ -36,7 +36,7 @@ define([
             toggleActive: function() {
                 this.model.set(
                     'status',
-                    this.model.get('status') == 'active' ?
+                    this.model.get('status') === 'active' ?
                         'inactive' : 'active');
                 this.model.save();
             },
