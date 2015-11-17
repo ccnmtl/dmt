@@ -41,7 +41,7 @@ logilab-common==1.0.2
 logilab-astng==0.24.3
 astroid==1.3.8
 pylint==1.4.4
-six==1.9.0
+six==1.10.0
 python-dateutil==2.4.2
 pytz==2015.7
 simpleduration==0.1.0
