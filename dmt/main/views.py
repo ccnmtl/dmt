@@ -997,7 +997,7 @@ class ProjectAddMilestoneView(LoggedInMixin, View):
             status='OPEN',
             target_date=request.POST.get('target_date', timezone.now().date())
         )
-        return HttpResponseRedirect(project.get_absolute_url())
+        return HttpResponseRedirect(project.get_absolute_url() + '#milestones')
 
 
 class TagNodeView(LoggedInMixin, View):
