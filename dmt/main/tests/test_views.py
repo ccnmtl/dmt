@@ -244,6 +244,14 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         r = self.c.get(self.p.get_absolute_url())
         self.assertTrue("NEW TEST MILESTONE" in r.content)
 
+    def test_add_milestone_redirects_to_milestones_page(self):
+        """ PMT #103894 """
+        r = self.c.post(self.p.get_absolute_url() + "add_milestone/",
+                        dict(name="NEW TEST MILESTONE",
+                             target_date="2020-01-01"))
+        self.assertEqual(r.status_code, 302)
+        self.assertTrue(r.url.endswith('#milestones'))
+
     def test_add_milestone_empty_title(self):
         r = self.c.post(self.p.get_absolute_url() + "add_milestone/",
                         dict(name="",
