@@ -54,7 +54,7 @@ urlpatterns = patterns(
     url(r'^add_trackers/$', AddTrackersView.as_view(), name='add_trackers'),
     (r'^api/1.0/', include('dmt.api.urls')),
     (r'^drf/', include('dmt.api.urls')),
-    url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
+    url(r'^oauth2/', include('oauth2_provider.urls', namespace='oauth2')),
     (r'^search/$', SearchView.as_view()),
     (r'^client/$', ClientListView.as_view()),
     url(r'^client/(?P<pk>\d+)/$', ClientDetailView.as_view(),

@@ -51,8 +51,7 @@ INSTALLED_APPS += [  # noqa
     'dmt.api',
     'bdd_tests',
     'django_behave',
-    'provider',
-    'provider.oauth2',
+    'oauth2_provider',
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
@@ -75,10 +74,4 @@ REST_FRAMEWORK = {
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
-}
-
-PROVIDER_APPLICATION_MODEL = 'provider.Application'
-
-MIGRATION_MODULES = {
-    'provider': 'dmt.migrations.provider',
 }
