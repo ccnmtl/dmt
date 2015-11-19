@@ -87,10 +87,25 @@
                       </div>
 
                       <div class="form-group pull-right form-group-col-2">
-                          <label for="target_date">Target Date</label>
-                          <input type="text" name="target_date" id="id_target_date"
+                          <label for="actionitem_target_date">Target Date</label>
+                          <input type="text" name="target_date"
+                                 id="actionitem_target_date"
                                  class="form-control" />
                       </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="form-group pull-right form-group-col-2">
+                            <label>Remind Me
+                                <input type="checkbox"
+                                       class="remind-me-toggle">
+                            </label>
+
+                            <input type="text" name="reminder"
+                                   id="id_reminder"
+                                   class="form-control"
+                                   placeholder="(time before target date)">
+                        </div>
                     </div>
 
                     <div class="clearfix">

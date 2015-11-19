@@ -38,7 +38,7 @@
                                 );
                             {% endfor %}
                         </script>
-                        <label for="bug-milestones">Milestone</label>
+                        <label for="bug-milestone">Milestone</label>
                         <select name="milestone" id="bug-milestone"
                                 class="form-control">
                             {% for milestone in object.milestone_set.all %}
@@ -68,8 +68,9 @@
                       </div>
   
                       <div class="form-group pull-right form-group-col-2">
-                          <label for="target_date">Target Date</label>
-                          <input type="text" name="target_date" id="id_target_date"
+                          <label for="bug_target_date">Target Date</label>
+                          <input type="text" name="target_date"
+                                 id="bug_target_date"
                                  class="form-control" />
                       </div>
                     </div>

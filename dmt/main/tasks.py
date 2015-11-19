@@ -1,5 +1,6 @@
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
+from django.contrib.auth.models import User
 from django.db import connection
 from django.utils import timezone
 from django_statsd.clients import statsd
@@ -157,6 +158,18 @@ def weekly_report_emails():
 def user_weekly_report_email(username):
     u = UserProfile.objects.get(username=username)
     u.send_weekly_report()
+
+
+@periodic_task(run_every=crontab(minute=0, hour='*'))
+def user_reminder_emails():
+    """Email any reminders to users that have set them up.
+
+    Users can set up action items to automatically remind themselves
+    before the due date ahead of time. The precision is hourly, so
+    this task is set up to run every hour.
+    """
+    for u in User.objects.filter(is_active=True):
+        print(u)
 
 
 @periodic_task(run_every=crontab(hour=0, minute=0))
