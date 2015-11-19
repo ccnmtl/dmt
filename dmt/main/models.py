@@ -1018,6 +1018,7 @@ class Item(models.Model):
             comment_src=comment_src,
             comment=rendered_comment,
             add_date_time=timezone.now())
+        self.add_cc(user)
 
     def resolve(self, user, r_status, comment):
         self.status = "RESOLVED"
