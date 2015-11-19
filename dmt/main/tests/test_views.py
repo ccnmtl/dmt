@@ -21,7 +21,7 @@ from waffle.models import Flag
 from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import (
     Attachment, Comment, Item, ItemClient, Milestone, Project,
-    Client
+    Client, Notify
 )
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 
@@ -740,6 +740,20 @@ class TestItemWorkflow(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
         self.assertTrue("this is a comment" in r.content)
+
+    def test_add_comment_ccs_user(self):
+        """ PMT #103873
+
+        if a user comments on an item, they automatically
+        get added to the CC list so they will receive followups.
+        """
+        i = ItemFactory()
+        r = self.c.post(
+            i.get_absolute_url() + "comment/",
+            dict(comment='this is a comment'))
+        self.assertEqual(r.status_code, 302)
+        c = Notify.objects.filter(item=i, user=self.u).count()
+        self.assertTrue(c > 0)
 
     def test_add_comment_markdown(self):
         i = ItemFactory()
