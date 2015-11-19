@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404, render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
+from django.utils.dateparse import parse_date
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
@@ -37,6 +38,7 @@ from dmt.main.utils import new_duration, safe_basename
 from dmt.report.mixins import PrevNextWeekMixin, RangeOffsetMixin
 
 from django_markwhat.templatetags.markup import commonmark
+from dateutil.relativedelta import relativedelta
 from datetime import timedelta
 from simpleduration import Duration, InvalidDuration
 from hashlib import sha1
@@ -542,18 +544,23 @@ class ProjectCreateView(LoggedInMixin, CreateView):
 
         try:
             # Add Final Release milestone
-            form.instance.add_milestone('Final Release',
-                                        form.data['target_date'],
-                                        'project completion')
+            form.instance.add_milestone(
+                'Final Release',
+                form.data['target_date'],
+                'project completion')
 
-            # Add Someday/Maybe milestone
-            form.instance.add_milestone('Someday/Maybe',
-                                        '2015-01-01',
-                                        'A milestone for items that will ' +
-                                        'not be immediately worked on. ' +
-                                        'Items in this milestone will not ' +
-                                        'appear on a homepage or in time ' +
-                                        'estimates.')
+            # Add Someday/Maybe milestone, with a due date 2 years
+            # after the target date of the project.
+            target_date = parse_date(form.data['target_date'])
+            milestone_due_date = target_date + relativedelta(years=2)
+            form.instance.add_milestone(
+                'Someday/Maybe',
+                milestone_due_date.strftime('%Y-%m-%d'),
+                'A milestone for items that will ' +
+                'not be immediately worked on. ' +
+                'Items in this milestone will not ' +
+                'appear on a homepage or in time ' +
+                'estimates.')
 
             # Add project creator to the project personnel list
             form.instance.add_personnel(current_user, auth='manager')

@@ -2,6 +2,7 @@ import json
 import unittest
 import urllib
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 from simpleduration import Duration
 from .factories import (
@@ -380,17 +381,27 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         test_pub_view = 'public'
         test_target_date = '2020-04-28'
         test_wiki_category = ''
-        r = self.c.post(reverse('project_create'),
-                        {'name': test_name,
-                         'description': test_desc,
-                         'pub_view': test_pub_view,
-                         'target_date': test_target_date,
-                         'test_wiki_category': test_wiki_category})
+        r = self.c.post(reverse('project_create'), {
+            'name': test_name,
+            'description': test_desc,
+            'pub_view': test_pub_view,
+            'target_date': test_target_date,
+            'test_wiki_category': test_wiki_category
+        })
         self.assertEqual(r.status_code, 302)
         url = r.url
         r = self.c.get(url)
-        self.assertTrue(test_name in r.content)
-        self.assertTrue(test_desc in r.content)
+        self.assertContains(r, test_name)
+        self.assertContains(r, test_desc)
+
+        p = Project.objects.get(name=test_name)
+        # Assert that a Someday/Maybe milestone was created for
+        # the project with the correct due date.
+        someday_maybe = p.milestone_set.filter(name='Someday/Maybe').first()
+        due_date = parse_date(test_target_date) + relativedelta(years=2)
+        self.assertEqual(someday_maybe.target_date.year, due_date.year)
+        self.assertEqual(someday_maybe.target_date.month, due_date.month)
+        self.assertEqual(someday_maybe.target_date.day, due_date.day)
 
     def test_create_project_post_requires_project_name(self):
         r = self.c.post(reverse('project_create'),
