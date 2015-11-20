@@ -1588,3 +1588,15 @@ class StatusUpdate(models.Model):
 
     def __unicode__(self):
         return "%s - %s" % (self.project.name, self.user.fullname)
+
+
+class Reminder(models.Model):
+    # The length of time before the item's target date
+    # that the user would like to be reminded.
+    reminder_time = models.DurationField(
+        help_text='Enter time and unit. For example: <code>1d</code> ' +
+        'for one day.')
+    user = models.ForeignKey(User)
+    item = models.ForeignKey(Item)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
