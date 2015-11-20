@@ -5,12 +5,13 @@ from django.core import mail
 from django.utils import timezone
 import unittest
 from freezegun import freeze_time
-from .factories import (
+from dmt.main.tests.factories import (
     CommentFactory,
     UserProfileFactory, ItemFactory, NodeFactory, ProjectFactory,
     AttachmentFactory, ClientFactory, StatusUpdateFactory,
     ActualTimeFactory, MilestoneFactory, NotifyFactory,
-    GroupFactory)
+    GroupFactory, ReminderFactory
+)
 from datetime import datetime, timedelta
 from simpleduration import Duration
 from dmt.main.models import (
@@ -658,3 +659,11 @@ class TestHelpers(unittest.TestCase):
     def test_truncate_string(self):
         self.assertEqual(truncate_string("foobar", length=5), "fooba...")
         self.assertEqual(truncate_string("foobar", length=10), "foobar")
+
+
+class TestReminder(TestCase):
+    def setUp(self):
+        self.r = ReminderFactory()
+
+    def test_is_valid_from_factory(self):
+        self.r.full_clean()

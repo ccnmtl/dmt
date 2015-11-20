@@ -101,10 +101,21 @@
                                        class="remind-me-toggle">
                             </label>
 
-                            <input type="text" name="reminder"
-                                   id="id_reminder"
-                                   class="form-control"
-                                   placeholder="(time before target date)">
+                            <div class="remind-me-form">
+                                <input name="reminder"
+                                       type="number"
+                                       id="id_reminder"
+                                       class="form-control">
+                                <select name="reminder_unit"
+                                        class="form-control">
+                                    <option value="h">hours</option>
+                                    <option value="d">days</option>
+                                    <option value="w">weeks</option>
+                                </select>
+                                <span class="help-block">
+                                    Time before target date to email reminder
+                                </span>
+                            </div>
                         </div>
                     </div>
 

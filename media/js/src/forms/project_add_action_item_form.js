@@ -41,7 +41,7 @@ require([
         $('.remind-me-toggle').on('change', function() {
             var $this = $(this);
             var $reminderInput = $this.closest('.form-group')
-                .find('#id_reminder');
+                .find('.remind-me-form');
             if ($this.is(':checked')) {
                 $reminderInput.show();
             } else {

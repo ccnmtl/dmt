@@ -1,13 +1,12 @@
 import factory
-from factory.fuzzy import FuzzyDateTime
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils import timezone
 from django.utils.timezone import utc
 from dmt.main.models import (
-    UserProfile, Project, Milestone, Item
-    Comment, Events, Node, ActualTime, StatusUpdate
+    UserProfile, Project, Milestone, Item,
+    Comment, Events, Node, ActualTime, StatusUpdate,
     Client, Attachment, Notify, InGroup, Reminder
 )
 from dmt.main.models import create_user_profile
@@ -180,6 +179,6 @@ class ReminderFactory(factory.DjangoModelFactory):
     class Meta:
         model = Reminder
 
-    remind_time = timedelta(days=1)
+    reminder_time = timedelta(days=1)
     user = factory.SubFactory(UserFactory)
     item = factory.SubFactory(ItemFactory)

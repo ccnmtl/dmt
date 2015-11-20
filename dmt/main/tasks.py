@@ -165,7 +165,7 @@ def user_reminder_emails():
     """Email any reminders to users that have set them up.
 
     Users can set up action items to automatically remind themselves
-    before the due date ahead of time. The precision is hourly, so
+    before the due date ahead of time. The granularity is hourly, so
     this task is set up to run every hour.
     """
     for u in User.objects.filter(is_active=True):

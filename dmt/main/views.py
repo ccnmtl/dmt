@@ -20,7 +20,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
 from django_statsd.clients import statsd
-from extra_views import FormSetView
+from extra_views import FormSetView, UpdateWithInlinesView
 from taggit.models import Tag
 from taggit.utils import parse_tags
 from dmt.main.models import (
@@ -31,8 +31,10 @@ from dmt.main.models import interval_sum
 from dmt.main.filters import ClientFilter, ProjectFilter, UserFilter
 from dmt.main.forms import (
     AddTrackerForm, CommentUpdateForm, ItemUpdateForm,
+    RemindersInlineFormSet,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
-    ProjectUpdateForm, MilestoneUpdateForm)
+    ProjectUpdateForm, MilestoneUpdateForm
+)
 from dmt.main.templatetags.dmttags import linkify
 from dmt.main.utils import new_duration, safe_basename
 from dmt.report.mixins import PrevNextWeekMixin, RangeOffsetMixin
@@ -724,9 +726,17 @@ class MilestoneUpdateView(LoggedInMixin, UpdateView):
     form_class = MilestoneUpdateForm
 
 
-class ItemUpdateView(LoggedInMixin, UpdateView):
+class ItemUpdateView(LoggedInMixin, UpdateWithInlinesView):
     model = Item
     form_class = ItemUpdateForm
+    inlines = [RemindersInlineFormSet]
+
+    def forms_valid(self, form, inlines):
+        for inline in inlines:
+            # Connect the current user to the Reminder form
+            inline.forms[0].instance.user = self.request.user
+
+        return super(ItemUpdateView, self).forms_valid(form, inlines)
 
 
 class ItemDeleteView(LoggedInMixin, DeleteView):

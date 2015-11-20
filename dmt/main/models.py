@@ -1591,11 +1591,17 @@ class StatusUpdate(models.Model):
 
 
 class Reminder(models.Model):
-    # The length of time before the item's target date
-    # that the user would like to be reminded.
+    class Meta:
+        unique_together = ('user', 'item')
+
+    # reminder_time is the length of time before the item's target
+    # date that the user would like to be reminded. We're storing this
+    # as a timedelta instead of an absolute date, because target_date
+    # is not a required field for items, so it can't always be
+    # derived.
     reminder_time = models.DurationField(
         help_text='Enter time and unit. For example: <code>1d</code> ' +
-        'for one day.')
+        'to be reminded one day before the target date.')
     user = models.ForeignKey(User)
     item = models.ForeignKey(Item)
     created_at = models.DateTimeField(auto_now_add=True)

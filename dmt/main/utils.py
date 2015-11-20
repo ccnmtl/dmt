@@ -54,6 +54,9 @@ def simpleduration_string(duration):
 
     Based on Django's duration_string() function.
     """
+    if duration is None:
+        return ''
+
     days = duration.days
     seconds = duration.seconds
 

@@ -21,7 +21,7 @@ from waffle.models import Flag
 from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import (
     Attachment, Comment, Item, ItemClient, Milestone, Project,
-    Client, Notify
+    Client, Notify, Reminder
 )
 from dmt.main.tests.support.mixins import LoggedInTestMixin
 
@@ -300,43 +300,6 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.assertEqual(items[0].title, "Untitled")
         self.assertEqual(items[0].estimated_time, timedelta(hours=4))
 
-    def test_update_action_item(self):
-        item = ItemFactory(owner=self.pu, assigned_to=self.pu)
-
-        url = reverse('item_update', args=(item.iid,))
-        r = self.c.post(url, {
-            'type': 'action item',
-            'title': 'my title',
-            'milestone': item.milestone.mid,
-            'target_date': '2015-11-09',
-            'estimated_time': '3h',
-        })
-        self.assertEqual(r.status_code, 302)
-
-        item.refresh_from_db()
-        self.assertEqual(item.type, 'action item')
-        self.assertEqual(item.assigned_to, self.pu)
-        self.assertEqual(item.title, 'my title')
-        self.assertEqual(item.target_date, parse_date('2015-11-09'))
-        self.assertEqual(item.estimated_time, timedelta(hours=3))
-
-        r = self.c.post(url, {
-            'type': 'action item',
-            'title': item.title,
-            'milestone': item.milestone.mid,
-            'target_date': '2015-11-12',
-            'estimated_time': '5h 30m',
-        })
-        self.assertEqual(r.status_code, 302)
-
-        item.refresh_from_db()
-        self.assertEqual(item.type, 'action item')
-        self.assertEqual(item.assigned_to, self.pu)
-        self.assertEqual(item.title, 'my title')
-        self.assertEqual(item.target_date, parse_date('2015-11-12'))
-        self.assertEqual(item.estimated_time,
-                         timedelta(hours=5, minutes=30))
-
     def test_add_action_item_empty_title(self):
         u = UserProfileFactory()
         milestone = MilestoneFactory()
@@ -486,6 +449,81 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         p = ProjectFactory()
         r = self.c.get(p.get_absolute_url() + "edit/")
         self.assertEqual(r.status_code, 200)
+
+
+class TestItemUpdate(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(TestItemUpdate, self).setUp()
+        self.c = self.client
+        self.p = ProjectFactory()
+        self.item = ItemFactory(owner=self.pu, assigned_to=self.pu)
+        self.formset_data = {
+            'reminder_set-TOTAL_FORMS': 1,
+            'reminder_set-INITIAL_FORMS': 0,
+            'reminder_set-MIN_NUM_FORMS': 1,
+            'reminder_set-MAX_NUM_FORMS': 1,
+            'reminder_set-0-reminder_time': '',
+            'reminder_set-0-item': self.item.pk,
+        }
+        self.url = reverse('item_update', args=(self.item.iid,))
+        self.formdata = {
+            'type': 'action item',
+            'title': 'my title',
+            'milestone': self.item.milestone.mid,
+            'target_date': '2015-11-09',
+            'estimated_time': '3h',
+        }
+        self.formdata.update(self.formset_data)
+
+    def test_update_action_item(self):
+        r = self.c.post(self.url, self.formdata)
+        self.assertEqual(r.status_code, 302)
+
+        self.item.refresh_from_db()
+        self.assertEqual(self.item.type, 'action item')
+        self.assertEqual(self.item.assigned_to, self.pu)
+        self.assertEqual(self.item.title, 'my title')
+        self.assertEqual(self.item.target_date, parse_date('2015-11-09'))
+        self.assertEqual(self.item.estimated_time, timedelta(hours=3))
+        self.assertEqual(Reminder.objects.count(), 0)
+
+        self.formdata.update({
+            'target_date': '2015-11-12',
+            'estimated_time': '5h 30m',
+        })
+        r = self.c.post(self.url, self.formdata)
+        self.assertEqual(r.status_code, 302)
+
+        self.item.refresh_from_db()
+        self.assertEqual(self.item.type, 'action item')
+        self.assertEqual(self.item.assigned_to, self.pu)
+        self.assertEqual(self.item.title, 'my title')
+        self.assertEqual(self.item.target_date, parse_date('2015-11-12'))
+        self.assertEqual(self.item.estimated_time,
+                         timedelta(hours=5, minutes=30))
+        self.assertEqual(Reminder.objects.count(), 0)
+
+    def test_update_reminder(self):
+        self.formdata.update({
+            'reminder_set-0-reminder_time': '1d',
+        })
+        r = self.c.post(self.url, self.formdata)
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(Reminder.objects.count(), 1)
+
+        reminder = Reminder.objects.first()
+        self.assertEqual(reminder.user, self.u)
+        self.assertEqual(reminder.item, self.item)
+        self.assertEqual(reminder.reminder_time, timedelta(days=1))
+
+        self.formdata.update({
+            'reminder_set-0-reminder_time': '',
+            'reminder_set-0-DELETE': 'on',
+        })
+        r = self.c.post(self.url, self.formdata)
+        self.assertEqual(r.status_code, 302)
+        # self.assertEqual(Reminder.objects.count(), 0)
+        # TODO
 
 
 class MyProjectViewTests(TestCase):
