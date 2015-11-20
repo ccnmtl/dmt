@@ -238,6 +238,19 @@ class UserProfile(models.Model):
             body, settings.SERVER_EMAIL,
             [self.email], fail_silently=settings.DEBUG)
 
+    def send_reminder(self, reminder):
+        body = (
+            'Reminder: This PMT item is due in {}:\n'.format(
+                reminder.reminder_time) +
+            '{}'.format(reminder.item.get_absolute_url()))
+
+        send_mail(
+            'PMT Reminder: {}'.format(reminder.item.title),
+            body,
+            settings.SERVER_EMAIL,
+            [self.email],
+            fail_silently=settings.DEBUG)
+
     def weekly_report_email_body(self, hours_logged, behind):
         if behind:
             return (

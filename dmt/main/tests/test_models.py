@@ -106,6 +106,21 @@ class UserModelTest(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "PMT Weekly Report")
 
+    def test_send_reminder(self):
+        r = ReminderFactory(user=self.u.user)
+        self.u.send_reminder(r)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            'PMT Reminder: {}'.format(r.item.title))
+
+        expected_body = (
+            'Reminder: This PMT item is due in {}:\n'.format(
+                r.reminder_time) +
+            '{}'.format(r.item.get_absolute_url()))
+
+        self.assertEqual(mail.outbox[0].body, expected_body)
+
     def test_timeline_empty(self):
         t = self.u.timeline()
         self.assertEqual(t, [])

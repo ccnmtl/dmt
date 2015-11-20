@@ -1,13 +1,15 @@
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
-from django.contrib.auth.models import User
 from django.db import connection
+from django.db.models import Q
 from django.utils import timezone
 from django_statsd.clients import statsd
 from datetime import timedelta
 import time
-from .models import Item, ActualTime, interval_sum
-from .models import UserProfile, Milestone
+from dmt.main.models import (
+    Item, ActualTime, interval_sum,
+    UserProfile, Milestone, Reminder
+)
 from pytz import AmbiguousTimeError
 
 
@@ -160,16 +162,35 @@ def user_weekly_report_email(username):
     u.send_weekly_report()
 
 
+@task
+def reminder_email(reminder):
+    up = reminder.user.userprofile
+    up.send_reminder(reminder)
+    reminder.delete()
+
+
 @periodic_task(run_every=crontab(minute=0, hour='*'))
-def user_reminder_emails():
+def send_reminder_emails():
     """Email any reminders to users that have set them up.
 
     Users can set up action items to automatically remind themselves
     before the due date ahead of time. The granularity is hourly, so
     this task is set up to run every hour.
     """
-    for u in User.objects.filter(is_active=True):
-        print(u)
+    # Find all reminders where the item has a target date,
+    # and the user is active.
+    reminders = Reminder.objects.filter(
+        Q(item__target_date__isnull=False) &
+        Q(user__is_active=True))
+
+    now = timezone.now()
+    five_mins = timedelta(minutes=5)
+
+    for r in reminders:
+        # Find out if this reminder is ready to be sent.
+        target_date = r.item.target_date
+        if ((target_date - r.reminder_time) < (now + five_mins)):
+            reminder_email.delay(reminder=r)
 
 
 @periodic_task(run_every=crontab(hour=0, minute=0))
