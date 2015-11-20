@@ -1,7 +1,6 @@
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
 from django.db import connection
-from django.db.models import Q
 from django.utils import timezone
 from django_statsd.clients import statsd
 from datetime import timedelta
@@ -180,8 +179,8 @@ def send_reminder_emails():
     # Find all reminders where the item has a target date,
     # and the user is active.
     reminders = Reminder.objects.filter(
-        Q(item__target_date__isnull=False) &
-        Q(user__is_active=True))
+        item__target_date__isnull=False,
+        user__is_active=True)
 
     now = timezone.now()
     five_mins = timedelta(minutes=5)

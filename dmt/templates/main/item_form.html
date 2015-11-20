@@ -31,7 +31,14 @@
             {% bootstrap_form form %}
         </fieldset>
         <fieldset>
-            <h3>Manage Reminder</h3>
+            <h3>
+                Manage Reminder
+                <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+            </h3>
+            <p>
+                The reminder will email you at the specified time before
+                this item's target date.
+            </p>
             {% for inline in inlines %}
             {% bootstrap_formset inline %}
             {% endfor %}

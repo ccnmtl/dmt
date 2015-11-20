@@ -22,7 +22,9 @@
 </p>
 
 
-<h1 class="page-title no-margin no-padding">Item #{{object.iid}} &#8226; {% if object.is_bug %}BUG:{% endif %} {{object.title|emoji_replace}}</h1>
+<h1 class="page-title no-margin no-padding">
+    Item #{{object.iid}} &#8226; {% if object.is_bug %}BUG:{% endif %} {{object.title|emoji_replace}}
+</h1>
 
 
 <p class="item-status">
@@ -143,7 +145,14 @@
       </dd>
 
       <dt>Target date</dt>
-      <dd>{{object.target_date}}</dd>
+      <dd>
+          {{object.target_date}}
+          {% if has_reminder %}
+          <span class="glyphicon glyphicon-bell"
+                aria-hidden="true"
+                title="You'll be reminded {{reminder_time}} before the due date"></span>
+          {% endif %}
+      </dd>
 
       {% if object.estimated_time %}
       <dt>Estimated time</dt>
