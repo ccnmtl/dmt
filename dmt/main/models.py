@@ -12,6 +12,7 @@ from taggit.managers import TaggableManager
 from django.core.mail import send_mail
 from django_statsd.clients import statsd
 from simpleduration import Duration, InvalidDuration
+from dmt.main.utils import simpleduration_string
 from .timeline import (
     TimeLineEvent, TimeLineComment,
     TimeLinePost, TimeLineActualTime, TimeLineStatus,
@@ -241,7 +242,7 @@ class UserProfile(models.Model):
     def send_reminder(self, reminder):
         body = (
             'Reminder: This PMT item is due in {}:\n'.format(
-                reminder.reminder_time) +
+                simpleduration_string(reminder.reminder_time)) +
             '{}'.format(reminder.item.get_absolute_url()))
 
         send_mail(

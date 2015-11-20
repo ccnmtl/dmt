@@ -14,6 +14,7 @@ from dmt.main.tests.factories import (
 )
 from datetime import datetime, timedelta
 from simpleduration import Duration
+from dmt.main.utils import simpleduration_string
 from dmt.main.models import (
     ActualTime, Events, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
     truncate_string, HistoryEvent, Reminder
@@ -116,7 +117,7 @@ class UserModelTest(TestCase):
 
         expected_body = (
             'Reminder: This PMT item is due in {}:\n'.format(
-                r.reminder_time) +
+                simpleduration_string(r.reminder_time)) +
             '{}'.format(r.item.get_absolute_url()))
 
         self.assertEqual(mail.outbox[0].body, expected_body)
