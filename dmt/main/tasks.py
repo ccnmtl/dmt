@@ -1,9 +1,11 @@
+import pytz
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
+from django.conf import settings
 from django.db import connection
 from django.utils import timezone
 from django_statsd.clients import statsd
-from datetime import timedelta
+from datetime import datetime, timedelta
 import time
 from dmt.main.models import (
     Item, ActualTime, interval_sum,
@@ -177,18 +179,22 @@ def send_reminder_emails():
     this task is set up to run every hour.
     """
     # Find all reminders where the item has a target date,
-    # and the user is active.
+    # and the user is active, and the item is not verified.
     reminders = Reminder.objects.filter(
         item__target_date__isnull=False,
-        user__is_active=True)
+        user__is_active=True
+    ).exclude(item__status__exact='VERIFIED')
 
     now = timezone.now()
     five_mins = timedelta(minutes=5)
 
     for r in reminders:
         # Find out if this reminder is ready to be sent.
-        target_date = r.item.target_date
-        if ((target_date - r.reminder_time) < (now + five_mins)):
+        target_datetime = datetime.combine(
+            r.item.target_date, datetime.min.time())
+        aware_target = pytz.timezone(settings.TIME_ZONE).localize(
+            target_datetime, is_dst=None)
+        if ((aware_target - r.reminder_time) < (now + five_mins)):
             reminder_email.delay(reminder=r)
 
 

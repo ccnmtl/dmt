@@ -1,12 +1,13 @@
 from django.test import TestCase
 from django.utils import timezone
-from .factories import MilestoneFactory
+from dmt.main.tests.factories import MilestoneFactory, ReminderFactory
 from datetime import timedelta
-from dmt.main.models import Milestone
+from dmt.main.models import Milestone, Reminder
 from dmt.main.tasks import (
     get_item_counts_by_status, item_counts, hours_logged,
     bump_someday_maybe_target_dates,
-    seconds_to_hours)
+    seconds_to_hours, send_reminder_emails
+)
 
 
 class TestHelpers(TestCase):
@@ -38,3 +39,12 @@ class TestBumpSomedayMaybe(TestCase):
         self.assertEqual(
             m2.target_date,
             (timezone.now() + timedelta(weeks=52)).date())
+
+
+class TestReminderTask(TestCase):
+    def setUp(self):
+        self.r = ReminderFactory()
+
+    def test_task(self):
+        send_reminder_emails()
+        self.assertEqual(Reminder.objects.count(), 0)
