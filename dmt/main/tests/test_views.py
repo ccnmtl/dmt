@@ -265,6 +265,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         r = self.c.post(self.p.get_absolute_url() + "add_action_item/",
                         dict())
         self.assertEquals(r.status_code, 404)
+        self.assertEquals(Reminder.objects.count(), 0)
 
     def test_timeline(self):
         r = self.c.get(reverse("project_timeline", args=[self.p.pid]))
@@ -277,6 +278,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTrue(
             "value=\"testuser\" selected=\"selected\"" in r.content)
+        self.assertEqual(Reminder.objects.count(), 0)
 
     def test_add_action_item(self):
         u = UserProfileFactory()
@@ -299,6 +301,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.assertEqual(items[0].assigned_user, u.user)
         self.assertEqual(items[0].title, "Untitled")
         self.assertEqual(items[0].estimated_time, timedelta(hours=4))
+        self.assertEqual(Reminder.objects.count(), 0)
 
     def test_add_action_item_empty_title(self):
         u = UserProfileFactory()
@@ -317,6 +320,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.assertEqual(items[0].assigned_to, u)
         self.assertEqual(items[0].assigned_user, u.user)
         self.assertEqual(items[0].title, "Untitled")
+        self.assertEqual(Reminder.objects.count(), 0)
 
     def test_add_action_item_owner(self):
         u = UserProfileFactory()
@@ -332,6 +336,34 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         items = Item.objects.filter(milestone=milestone, owner=u,
                                     owner_user=u.user)
         self.assertEqual(len(items), 1)
+        self.assertEqual(Reminder.objects.count(), 0)
+
+    def test_add_action_item_with_reminder(self):
+        u = UserProfileFactory()
+        milestone = MilestoneFactory()
+
+        url = reverse('add_action_item', args=(milestone.project.pk,))
+        r = self.c.post(url, {
+            'assigned_to': u.username,
+            'milestone': milestone.mid,
+            'owner': u.username,
+            'remind_me_toggle': 'on',
+            'reminder_time': 2,
+            'reminder_unit': 'd',
+        })
+        self.assertEqual(r.status_code, 302)
+
+        items = Item.objects.filter(
+            milestone=milestone,
+            owner=u,
+            owner_user=u.user)
+        i = items.first()
+        self.assertEqual(len(items), 1)
+        self.assertEqual(Reminder.objects.count(), 1)
+        reminder = Reminder.objects.first()
+        self.assertEqual(reminder.item, i)
+        self.assertEqual(reminder.user, self.u)
+        self.assertEqual(reminder.reminder_time, timedelta(days=2))
 
     def test_create_project_get(self):
         r = self.c.get(reverse('project_create'))
@@ -522,8 +554,8 @@ class TestItemUpdate(LoggedInTestMixin, TestCase):
         })
         r = self.c.post(self.url, self.formdata)
         self.assertEqual(r.status_code, 302)
+        # TODO why doesn't this work?
         # self.assertEqual(Reminder.objects.count(), 0)
-        # TODO
 
 
 class MyProjectViewTests(TestCase):

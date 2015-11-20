@@ -98,19 +98,19 @@
                         <div class="form-group pull-right form-group-col-2">
                             <label>Remind Me
                                 <input type="checkbox"
+                                       name="remind_me_toggle"
                                        class="remind-me-toggle">
                             </label>
 
                             <div class="remind-me-form">
-                                <input name="reminder"
+                                <input name="reminder_time"
                                        type="number"
-                                       id="id_reminder"
+                                       id="id_reminder_time"
                                        class="form-control">
                                 <select name="reminder_unit"
                                         class="form-control">
-                                    <option value="h">hours</option>
                                     <option value="d">days</option>
-                                    <option value="w">weeks</option>
+                                    <option value="h">hours</option>
                                 </select>
                                 <span class="help-block">
                                     Time before target date to email reminder

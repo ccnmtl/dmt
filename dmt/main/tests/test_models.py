@@ -7,16 +7,16 @@ import unittest
 from freezegun import freeze_time
 from dmt.main.tests.factories import (
     CommentFactory,
-    UserProfileFactory, ItemFactory, NodeFactory, ProjectFactory,
-    AttachmentFactory, ClientFactory, StatusUpdateFactory,
-    ActualTimeFactory, MilestoneFactory, NotifyFactory,
-    GroupFactory, ReminderFactory
+    UserProfileFactory, UserFactory, ItemFactory, NodeFactory,
+    ProjectFactory, AttachmentFactory, ClientFactory,
+    StatusUpdateFactory, ActualTimeFactory, MilestoneFactory,
+    NotifyFactory, GroupFactory, ReminderFactory
 )
 from datetime import datetime, timedelta
 from simpleduration import Duration
 from dmt.main.models import (
     ActualTime, Events, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
-    truncate_string, HistoryEvent
+    truncate_string, HistoryEvent, Reminder
 )
 
 
@@ -347,6 +347,14 @@ class ItemTest(TestCase):
         i.update_email("a comment", i.owner)
         self.assertEqual(len(mail.outbox), 1)
 
+    def test_add_reminder(self):
+        i = ItemFactory(title='\r\n \r\n linebreaks')
+        u = UserFactory()
+        r = i.add_reminder('5d', u)
+        self.assertEqual(r.item, i)
+        self.assertEqual(r.user, u)
+        self.assertEqual(r.reminder_time, timedelta(days=5))
+
 
 class CommentTest(TestCase):
     def setUp(self):
@@ -592,9 +600,10 @@ class ProjectTest(TestCase):
                    priority=1, description="",
                    estimated_time="Invalid Estimated Time",
                    status='OPEN', r_status='')
-        self.assertTrue(m.item_set.all().count() > 0)
-        i = m.item_set.all()[0]
+        self.assertTrue(m.item_set.count() > 0)
+        i = m.item_set.first()
         self.assertEqual(i.estimated_time.seconds, 0)
+        self.assertEqual(Reminder.objects.count(), 0)
 
     def test_add_item_valid_duration_and_timezone(self):
         m = MilestoneFactory()
@@ -605,8 +614,8 @@ class ProjectTest(TestCase):
                    priority=1, description="",
                    estimated_time="2 hours",
                    status='OPEN', r_status='')
-        self.assertTrue(m.item_set.all().count() > 0)
-        i = m.item_set.all()[0]
+        self.assertTrue(m.item_set.count() > 0)
+        i = m.item_set.first()
         self.assertEqual(i.estimated_time.seconds, 7200)
 
         # Assert that the last_mod time is within ten mins of what
@@ -615,6 +624,38 @@ class ProjectTest(TestCase):
         five_mins = timedelta(minutes=5)
         self.assertTrue(i.last_mod < (now + five_mins))
         self.assertTrue(i.last_mod > (now - five_mins))
+        self.assertEqual(Reminder.objects.count(), 0)
+
+    def test_add_item_with_reminder(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserProfileFactory()
+        p.add_item(
+            type='action item', title='new item',
+            assigned_to=u, owner=u, milestone=m,
+            priority=1, description='',
+            estimated_time='2 hours',
+            status='OPEN', r_status='',
+            reminder_duration='7d')
+        self.assertEqual(m.item_set.count(), 1)
+        self.assertEqual(
+            Reminder.objects.count(), 0,
+            'add_reminder requires a current_user')
+
+        # Same thing, with a current_user
+        i = p.add_item(
+            type='action item', title='new item',
+            assigned_to=u, owner=u, milestone=m,
+            priority=1, description='',
+            estimated_time='2 hours',
+            status='OPEN', r_status='',
+            current_user=u.user,
+            reminder_duration='7d')
+        self.assertEqual(m.item_set.count(), 2)
+        self.assertEqual(Reminder.objects.count(), 1)
+        r = Reminder.objects.first()
+        self.assertEqual(r.item, i)
+        self.assertEqual(r.reminder_time, timedelta(days=7))
 
     def test_timeline_empty(self):
         p = ProjectFactory()

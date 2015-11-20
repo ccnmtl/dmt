@@ -532,7 +532,11 @@ class Project(models.Model):
                  assigned_to=None, owner=None, milestone=None,
                  priority=1, description="", estimated_time="1 hour",
                  status='OPEN', r_status='',
-                 tags=None, target_date=None, email_everyone=False):
+                 tags=None,
+                 target_date=None,
+                 email_everyone=False,
+                 reminder_duration=None,
+                 current_user=None):
         try:
             d = Duration(estimated_time)
         except InvalidDuration:
@@ -562,6 +566,9 @@ class Project(models.Model):
             target_date=target_date,
             last_mod=timezone.now(),
             description=description)
+
+        item.add_reminder(reminder_duration, current_user)
+
         item.add_event('OPEN', owner, "<b>%s added</b>" % type.capitalize())
         if tags:
             item.tags.add(*tags)
@@ -1032,6 +1039,27 @@ class Item(models.Model):
             comment=rendered_comment,
             add_date_time=timezone.now())
         self.add_cc(user)
+
+    def add_reminder(self, reminder_duration, user):
+        """Add a reminder to this Item.
+
+        Takes a simpleduration-compatible string, and the
+        user who would like to be reminded.
+
+        Returns the created reminder, or None if it wasn't
+        created.
+        """
+        if (reminder_duration is None) or (user is None):
+            return None
+
+        try:
+            reminder_d = Duration(reminder_duration)
+        except InvalidDuration:
+            reminder_d = Duration('1d')
+        return Reminder.objects.create(
+            user=user,
+            item=self,
+            reminder_time=reminder_d.timedelta())
 
     def resolve(self, user, r_status, comment):
         self.status = "RESOLVED"

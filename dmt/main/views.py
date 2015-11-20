@@ -970,6 +970,14 @@ class ProjectAddItemView(LoggedInMixin, View):
             Milestone, mid=request.POST.get('milestone'))
         priority = request.POST.get('priority', '1')
         target_date = request.POST.get('target_date') or milestone.target_date
+
+        remind_me_toggle = request.POST.get('remind_me_toggle')
+        reminder_duration = None
+        if remind_me_toggle == 'on':
+            reminder_time = request.POST.get('reminder_time')
+            reminder_unit = request.POST.get('reminder_unit', u'd')
+            reminder_duration = reminder_time + reminder_unit
+
         project.add_item(
             type=self.item_type,
             title=title,
@@ -982,7 +990,10 @@ class ProjectAddItemView(LoggedInMixin, View):
             status='OPEN',
             r_status='',
             tags=tags,
-            target_date=target_date)
+            target_date=target_date,
+            reminder_duration=reminder_duration,
+            current_user=request.user
+        )
         statsd.incr('main.%s_added' % (self.item_type.replace(' ', '_')))
         return HttpResponseRedirect(project.get_absolute_url())
 
