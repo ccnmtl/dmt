@@ -4,21 +4,21 @@
   "description": "Project management tool",
   "license": "GPL-2.0+",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start"
+    "test": "karma start"
   },
   "devDependencies": {
     "casperjs": "~1.1.0-beta3",
-    "karma": "~0.12.31",
-    "karma-junit-reporter": "~0.2.2",
+    "karma": "~0.13.15",
+    "karma-junit-reporter": "~0.3.8",
     "karma-html2js-preprocessor": "~0.1.0",
-    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-phantomjs-launcher": "~0.2.1",
     "qunitjs": "~1.17.1",
-    "karma-qunit": "~0.1.4",
-    "requirejs": "~2.1.17",
+    "karma-qunit": "~0.1.8",
+    "requirejs": "~2.1.21",
     "karma-requirejs": "~0.2.2",
     "karma-sinon": "~1.0.4",
-    "phantomjs": "~1.9.16",
-    "sinon": "~1.14.1",
+    "phantomjs": "~1.9.18",
+    "sinon": "~1.17.2",
     "sinon-qunit": "~2.0.0"
   },
   "repository": {
