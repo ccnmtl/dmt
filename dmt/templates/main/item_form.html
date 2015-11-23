@@ -27,13 +27,26 @@
 
   <div class="item-details">
     <form action="." method="post">{% csrf_token %}
-    <fieldset>
-    {% bootstrap_form form %}
-    <div class="button-set">
-    <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
-    <input type="submit" value="Save" class="btn btn-primary" />
-    </div>
-    </fieldset>
+        <fieldset>
+            {% bootstrap_form form %}
+        </fieldset>
+        <fieldset>
+            <h3>
+                Manage Reminder
+                <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+            </h3>
+            <p>
+                The reminder will email you at the specified time before
+                this item's target date.
+            </p>
+            {% for inline in inlines %}
+            {% bootstrap_formset inline %}
+            {% endfor %}
+        </fieldset>
+        <div class="button-set">
+            <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
     </form>
   </div><!-- /.item-details -->
 </div><!-- /.item-box -->

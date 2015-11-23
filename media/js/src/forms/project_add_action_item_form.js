@@ -36,5 +36,17 @@ require([
         preview.startEventHandler();
 
         setupDateSwitcher();
+
+        // set up "remind me" toggle
+        $('.remind-me-toggle').on('change', function() {
+            var $this = $(this);
+            var $reminderInput = $this.closest('.form-group')
+                .find('.remind-me-form');
+            if ($this.is(':checked')) {
+                $reminderInput.show();
+            } else {
+                $reminderInput.hide();
+            }
+        });
     });
 });

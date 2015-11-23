@@ -227,6 +227,15 @@ dd:hover .priority-select { visibility: visible; }
     width: 47%;
 }
 
+#add-action-item-form .remind-me-form {
+    display: none;
+}
+
+#add-action-item-form .remind-me-form .form-control {
+    display: inline;
+    width: 47%;
+}
+
 .dl-horizontal dd input[type=checkbox] {
     height: auto;
     width: auto;

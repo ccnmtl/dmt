@@ -4,9 +4,11 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils import timezone
 from django.utils.timezone import utc
-from dmt.main.models import UserProfile, Project, Milestone, Item
-from dmt.main.models import Comment, Events, Node, ActualTime, StatusUpdate
-from dmt.main.models import Client, Attachment, Notify, InGroup
+from dmt.main.models import (
+    UserProfile, Project, Milestone, Item,
+    Comment, Events, Node, ActualTime, StatusUpdate,
+    Client, Attachment, Notify, InGroup, Reminder
+)
 from dmt.main.models import create_user_profile
 
 
@@ -71,6 +73,7 @@ class ItemFactory(factory.DjangoModelFactory):
     milestone = factory.SubFactory(MilestoneFactory)
     status = "OPEN"
     priority = 1
+    target_date = timezone.now()
 
 
 class NotifyFactory(factory.DjangoModelFactory):
@@ -170,3 +173,12 @@ class GroupFactory(factory.DjangoModelFactory):
 
     grp = factory.SubFactory(UserProfileFactory, grp=True)
     username = factory.SubFactory(UserProfileFactory)
+
+
+class ReminderFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Reminder
+
+    reminder_time = timedelta(days=1)
+    user = factory.SubFactory(UserFactory)
+    item = factory.SubFactory(ItemFactory)

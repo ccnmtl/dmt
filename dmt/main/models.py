@@ -12,6 +12,7 @@ from taggit.managers import TaggableManager
 from django.core.mail import send_mail
 from django_statsd.clients import statsd
 from simpleduration import Duration, InvalidDuration
+from dmt.main.utils import simpleduration_string
 from .timeline import (
     TimeLineEvent, TimeLineComment,
     TimeLinePost, TimeLineActualTime, TimeLineStatus,
@@ -237,6 +238,19 @@ class UserProfile(models.Model):
             "PMT Weekly Report",
             body, settings.SERVER_EMAIL,
             [self.email], fail_silently=settings.DEBUG)
+
+    def send_reminder(self, reminder):
+        body = (
+            'Reminder: This PMT item is due in {}:\n'.format(
+                simpleduration_string(reminder.reminder_time)) +
+            '{}'.format(reminder.item.get_absolute_url()))
+
+        send_mail(
+            'PMT Reminder: {}'.format(reminder.item.title),
+            body,
+            settings.SERVER_EMAIL,
+            [self.email],
+            fail_silently=settings.DEBUG)
 
     def weekly_report_email_body(self, hours_logged, behind):
         if behind:
@@ -519,7 +533,11 @@ class Project(models.Model):
                  assigned_to=None, owner=None, milestone=None,
                  priority=1, description="", estimated_time="1 hour",
                  status='OPEN', r_status='',
-                 tags=None, target_date=None, email_everyone=False):
+                 tags=None,
+                 target_date=None,
+                 email_everyone=False,
+                 reminder_duration=None,
+                 current_user=None):
         try:
             d = Duration(estimated_time)
         except InvalidDuration:
@@ -549,6 +567,9 @@ class Project(models.Model):
             target_date=target_date,
             last_mod=timezone.now(),
             description=description)
+
+        item.add_reminder(reminder_duration, current_user)
+
         item.add_event('OPEN', owner, "<b>%s added</b>" % type.capitalize())
         if tags:
             item.tags.add(*tags)
@@ -1019,6 +1040,27 @@ class Item(models.Model):
             comment=rendered_comment,
             add_date_time=timezone.now())
         self.add_cc(user)
+
+    def add_reminder(self, reminder_duration, user):
+        """Add a reminder to this Item.
+
+        Takes a simpleduration-compatible string, and the
+        user who would like to be reminded.
+
+        Returns the created reminder, or None if it wasn't
+        created.
+        """
+        if (reminder_duration is None) or (user is None):
+            return None
+
+        try:
+            reminder_d = Duration(reminder_duration)
+        except InvalidDuration:
+            reminder_d = Duration('1d')
+        return Reminder.objects.create(
+            user=user,
+            item=self,
+            reminder_time=reminder_d.timedelta())
 
     def resolve(self, user, r_status, comment):
         self.status = "RESOLVED"
@@ -1588,3 +1630,21 @@ class StatusUpdate(models.Model):
 
     def __unicode__(self):
         return "%s - %s" % (self.project.name, self.user.fullname)
+
+
+class Reminder(models.Model):
+    class Meta:
+        unique_together = ('user', 'item')
+
+    # reminder_time is the length of time before the item's target
+    # date that the user would like to be reminded. We're storing this
+    # as a timedelta instead of an absolute date, because target_date
+    # is not a required field for items, so it can't always be
+    # derived.
+    reminder_time = models.DurationField(
+        help_text='Enter time and unit. For example: <code>1d</code> ' +
+        'to be reminded one day before the target date.')
+    user = models.ForeignKey(User)
+    item = models.ForeignKey(Item)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

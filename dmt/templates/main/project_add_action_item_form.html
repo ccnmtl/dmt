@@ -87,10 +87,36 @@
                       </div>
 
                       <div class="form-group pull-right form-group-col-2">
-                          <label for="target_date">Target Date</label>
-                          <input type="text" name="target_date" id="id_target_date"
+                          <label for="actionitem_target_date">Target Date</label>
+                          <input type="text" name="target_date"
+                                 id="actionitem_target_date"
                                  class="form-control" />
                       </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="form-group pull-right form-group-col-2">
+                            <label>Remind Me
+                                <input type="checkbox"
+                                       name="remind_me_toggle"
+                                       class="remind-me-toggle">
+                            </label>
+
+                            <div class="remind-me-form">
+                                <input name="reminder_time"
+                                       type="number"
+                                       id="id_reminder_time"
+                                       class="form-control">
+                                <select name="reminder_unit"
+                                        class="form-control">
+                                    <option value="d">days</option>
+                                    <option value="h">hours</option>
+                                </select>
+                                <span class="help-block">
+                                    Time before target date to email reminder
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="clearfix">

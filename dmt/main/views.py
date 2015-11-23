@@ -20,21 +20,23 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
 from django_statsd.clients import statsd
-from extra_views import FormSetView
+from extra_views import FormSetView, UpdateWithInlinesView
 from taggit.models import Tag
 from taggit.utils import parse_tags
 from dmt.main.models import (
     Comment, Project, Milestone, Item, InGroup, Node, UserProfile, Client,
-    StatusUpdate, ActualTime, Notify, Attachment
+    StatusUpdate, ActualTime, Notify, Attachment, Reminder
 )
 from dmt.main.models import interval_sum
 from dmt.main.filters import ClientFilter, ProjectFilter, UserFilter
 from dmt.main.forms import (
     AddTrackerForm, CommentUpdateForm, ItemUpdateForm,
+    RemindersInlineFormSet,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
-    ProjectUpdateForm, MilestoneUpdateForm)
+    ProjectUpdateForm, MilestoneUpdateForm
+)
 from dmt.main.templatetags.dmttags import linkify
-from dmt.main.utils import new_duration, safe_basename
+from dmt.main.utils import new_duration, safe_basename, simpleduration_string
 from dmt.report.mixins import PrevNextWeekMixin, RangeOffsetMixin
 
 from django_markwhat.templatetags.markup import commonmark
@@ -387,6 +389,7 @@ class ItemDetailView(LoggedInMixin, DetailView):
 
         context['assigned_to_current_user'] = False
         context['notifications_enabled_for_current_user'] = False
+        context['has_reminder'] = False
 
         current_user = self.request.user
 
@@ -395,6 +398,16 @@ class ItemDetailView(LoggedInMixin, DetailView):
 
             context['assigned_to_current_user'] = \
                 (context['item'].assigned_to.username == current_username)
+
+            try:
+                reminder = Reminder.objects.get(
+                    user=current_user,
+                    item=context['item'])
+                context['has_reminder'] = True
+                context['reminder_time'] = simpleduration_string(
+                    reminder.reminder_time)
+            except Reminder.DoesNotExist:
+                pass
 
             all_notifies = Notify.objects.filter(
                 item=context['item'].iid).order_by(
@@ -724,9 +737,17 @@ class MilestoneUpdateView(LoggedInMixin, UpdateView):
     form_class = MilestoneUpdateForm
 
 
-class ItemUpdateView(LoggedInMixin, UpdateView):
+class ItemUpdateView(LoggedInMixin, UpdateWithInlinesView):
     model = Item
     form_class = ItemUpdateForm
+    inlines = [RemindersInlineFormSet]
+
+    def forms_valid(self, form, inlines):
+        for inline in inlines:
+            # Connect the current user to the Reminder form
+            inline.forms[0].instance.user = self.request.user
+
+        return super(ItemUpdateView, self).forms_valid(form, inlines)
 
 
 class ItemDeleteView(LoggedInMixin, DeleteView):
@@ -949,6 +970,14 @@ class ProjectAddItemView(LoggedInMixin, View):
             Milestone, mid=request.POST.get('milestone'))
         priority = request.POST.get('priority', '1')
         target_date = request.POST.get('target_date') or milestone.target_date
+
+        remind_me_toggle = request.POST.get('remind_me_toggle')
+        reminder_duration = None
+        if remind_me_toggle == 'on':
+            reminder_time = request.POST.get('reminder_time')
+            reminder_unit = request.POST.get('reminder_unit', u'd')
+            reminder_duration = reminder_time + reminder_unit
+
         project.add_item(
             type=self.item_type,
             title=title,
@@ -961,7 +990,10 @@ class ProjectAddItemView(LoggedInMixin, View):
             status='OPEN',
             r_status='',
             tags=tags,
-            target_date=target_date)
+            target_date=target_date,
+            reminder_duration=reminder_duration,
+            current_user=request.user
+        )
         statsd.incr('main.%s_added' % (self.item_type.replace(' ', '_')))
         return HttpResponseRedirect(project.get_absolute_url())
 

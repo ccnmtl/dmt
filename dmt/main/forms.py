@@ -3,10 +3,12 @@ from datetime import timedelta
 from django import forms
 from django.forms import ModelForm, TextInput, URLInput
 from django_markwhat.templatetags.markup import commonmark
+from extra_views import InlineFormSet
 from simpleduration import Duration, InvalidDuration
 from dmt.main.models import (
     Comment,
-    StatusUpdate, Node, UserProfile, Project, Milestone, Item
+    StatusUpdate, Node, UserProfile, Project, Milestone, Item,
+    Reminder
 )
 from dmt.main.templatetags.dmttags import linkify
 from dmt.main.utils import simpleduration_string
@@ -103,8 +105,25 @@ class SimpleDurationField(forms.DurationField):
         return super(SimpleDurationField, self).clean(d)
 
 
-class ItemUpdateForm(ModelForm):
+class ReminderForm(ModelForm):
+    class Meta:
+        model = Reminder
+        exclude = ['user']
 
+    reminder_time = SimpleDurationField(
+        help_text='Enter time and unit. For example: <code>1d</code> ' +
+        'to be reminded one day before the target date. The minimum ' +
+        'granularity for reminders is hourly.')
+
+
+class RemindersInlineFormSet(InlineFormSet):
+    model = Reminder
+    form_class = ReminderForm
+    min_num = 1
+    max_num = 1
+
+
+class ItemUpdateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ItemUpdateForm, self).__init__(*args, **kwargs)
         passed_item = kwargs.get('instance')
