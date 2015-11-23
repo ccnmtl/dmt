@@ -12,8 +12,8 @@ define([
             tagName: 'div',
             template: _.template($('#client-template').html()),
             events: {
-                'click #save' : 'updateFromForm',
-                'click #activate' : 'toggleActive',
+                'click #save': 'updateFromForm',
+                'click #activate': 'toggleActive',
                 'click #edit-link': 'toggleEditForm'
             },
             initialize: function() {

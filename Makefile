@@ -28,7 +28,7 @@ node_modules/jshint/bin/jshint:
 	npm install jshint --prefix .
 
 node_modules/jscs/bin/jscs:
-	npm install jscs@1.8.1 --prefix .
+	npm install jscs@"~2.6.0" --prefix .
 
 node_modules/.bin/r.js:
 	npm install requirejs --prefix .
