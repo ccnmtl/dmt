@@ -1,6 +1,13 @@
+ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 MANAGE=./manage.py
 APP=dmt
 FLAKE8=./ve/bin/flake8
+
+ifeq ($(TAG), undefined)
+	IMAGE = ccnmtl/$(APP)
+else
+	IMAGE = ccnmtl/$(APP):$(TAG)
+endif
 
 jenkins: ./ve/bin/python check jshint jscs flake8 test
 
@@ -58,9 +65,6 @@ check: ./ve/bin/python
 shell: ./ve/bin/python
 	$(MANAGE) shell_plus
 
-build:
-	docker build -t ccnmtl/dmt .
-
 compose-run:
 	docker-compose up
 
@@ -93,3 +97,15 @@ rebase:
 install: ./ve/bin/python check jenkins
 	createdb $(APP)
 	$(MANAGE) migrate
+
+wheelhouse/requirements.txt: requirements.txt
+	mkdir -p wheelhouse
+	docker run --rm \
+	-v $(ROOT_DIR):/app \
+	-v $(ROOT_DIR)/wheelhouse:/wheelhouse \
+	ccnmtl/django.build
+	cp requirements.txt wheelhouse/requirements.txt
+	touch wheelhouse/requirements.txt
+
+build: wheelhouse/requirements.txt
+	docker build -t $(IMAGE) .
