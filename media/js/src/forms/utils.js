@@ -26,6 +26,9 @@ define([
     };
 
     /**
+     * @param {jQuery} $form
+     * @param {object} data
+     * @param {string} status
      * @param {array} clearSelectors - An optional argument that can
      *   contain an array of selectors that the form clears on success.
      *   If this argument isn't used, onSuccess defaults to clearing
