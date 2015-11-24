@@ -113,12 +113,13 @@ class UserModelTest(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject,
-            'PMT Reminder: {}'.format(r.item.title))
+            '[PMT Reminder] {}'.format(r.item.title))
 
         expected_body = (
             'Reminder: This PMT item is due in {}:\n'.format(
                 simpleduration_string(r.reminder_time)) +
-            '{}'.format(r.item.get_absolute_url()))
+            'https://pmt.ccnmtl.columbia.edu{}'.format(
+                r.item.get_absolute_url()))
 
         self.assertEqual(mail.outbox[0].body, expected_body)
 

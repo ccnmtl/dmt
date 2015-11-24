@@ -243,10 +243,11 @@ class UserProfile(models.Model):
         body = (
             'Reminder: This PMT item is due in {}:\n'.format(
                 simpleduration_string(reminder.reminder_time)) +
-            '{}'.format(reminder.item.get_absolute_url()))
+            'https://pmt.ccnmtl.columbia.edu{}'.format(
+                reminder.item.get_absolute_url()))
 
         send_mail(
-            'PMT Reminder: {}'.format(reminder.item.title),
+            '[PMT Reminder] {}'.format(reminder.item.title),
             body,
             settings.SERVER_EMAIL,
             [self.email],
