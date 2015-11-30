@@ -40,6 +40,8 @@ EMAIL_PORT = os.environ.get(
 
 SERVER_EMAIL = os.environ.get('SERVER_EMAIL', app + "@thraxil.org")
 
+BASE_URL = os.environ.get('BASE_URL', 'https://' + app + '.ccnmtl.columbia.edu')
+
 # -------------------------------------------
 
 DEBUG = False

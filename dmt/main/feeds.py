@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from .models import Node, StatusUpdate, Project, Item
@@ -18,13 +19,14 @@ class ForumFeed(Feed):
 
     def item_description(self, item):
         return (
-            "<small>by <b><a href=\"https://dmt.ccnmtl.columbia.edu%s"
+            "<small>by <b><a href=\"%s%s"
             "\">%s</a></b> @ %s</small><br />%s") % (
-            item.user.userprofile.get_absolute_url(),
-            item.user.userprofile.fullname, item.added, item.body)
+                settings.BASE_URL,
+                item.user.userprofile.get_absolute_url(),
+                item.user.userprofile.fullname, item.added, item.body)
 
     def item_link(self, item):
-        return "https://dmt.ccnmtl.columbia.edu" + item.get_absolute_url()
+        return settings.BASE_URL + item.get_absolute_url()
 
 
 class StatusUpdateFeed(Feed):
@@ -37,11 +39,11 @@ class StatusUpdateFeed(Feed):
 
     def item_description(self, item):
         return """<a href="%s">%s</a>:  %s  -- <a href="%s">%s</a>  (%s)""" % (
-            ("https://dmt.ccnmtl.columbia.edu" +
+            (settings.BASE_URL +
              item.project.get_absolute_url()),
             item.project.name,
             item.body,
-            "https://dmt.ccnmtl.columbia.edu" + item.user.get_absolute_url(),
+            settings.BASE_URL + item.user.get_absolute_url(),
             item.user.fullname,
             item.added.date())
 
@@ -78,7 +80,7 @@ class ProjectFeed(Feed):
 
     def item_description(self, item):
         return """<a href="%s">%s</a>:  %s -- %s / assigned to: %s (%s)""" % (
-            ("https://dmt.ccnmtl.columbia.edu" +
+            (settings.BASE_URL +
              item.get_absolute_url()),
             item.title,
             item.status,
