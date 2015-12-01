@@ -14,7 +14,7 @@ from .factories import (
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils.dateparse import parse_date
 from factory.fuzzy import FuzzyInteger
 from waffle.models import Flag
@@ -1220,6 +1220,24 @@ class TestFeeds(TestCase):
         ItemFactory()
         r = self.c.get("/feeds/project/%s/" % p.pid)
         self.assertEquals(r.status_code, 200)
+
+    @override_settings(BASE_URL="https://newbase.com")
+    def test_base_url(self):
+        i = ItemFactory()
+        r = self.c.get("/feeds/project/%s/" % i.milestone.project.pid)
+        self.assertEquals(r.status_code, 200)
+        self.assertFalse("dmt.ccnmtl.columbia.edu" in r.content)
+        self.assertTrue("https://newbase.com" in r.content)
+
+        StatusUpdateFactory()
+        r = self.c.get("/feeds/status/")
+        self.assertFalse("dmt.ccnmtl.columbia.edu" in r.content)
+        self.assertTrue("https://newbase.com" in r.content)
+
+        NodeFactory()
+        r = self.c.get("/feeds/forum/rss/")
+        self.assertFalse("dmt.ccnmtl.columbia.edu" in r.content)
+        self.assertTrue("https://newbase.com" in r.content)
 
 
 class TestDRFViews(TestCase):

@@ -15,6 +15,8 @@ locals().update(
         s3static=False,
     ))
 
+BASE_URL = "https://pmt.ccnmtl.columbia.edu"
+
 try:
     from local_settings import *
 except ImportError:

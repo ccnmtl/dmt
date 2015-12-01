@@ -72,6 +72,8 @@ REST_FRAMEWORK = {
     ]
 }
 
+BASE_URL = "https://localhost"
+
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
