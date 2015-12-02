@@ -47,6 +47,10 @@ class StatusUpdateFeed(Feed):
             item.user.fullname,
             item.added.date())
 
+    def item_link(self, item):
+        return (settings.BASE_URL + item.project.get_absolute_url() +
+                "#status-" + str(item.id))
+
 
 class ProjectFeed(Feed):
     """Create a feed of the active items, per project (id)"""

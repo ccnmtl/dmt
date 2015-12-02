@@ -1233,6 +1233,7 @@ class TestFeeds(TestCase):
         r = self.c.get("/feeds/status/")
         self.assertFalse("dmt.ccnmtl.columbia.edu" in r.content)
         self.assertTrue("https://newbase.com" in r.content)
+        self.assertTrue("<link>https://newbase.com/project" in r.content)
 
         NodeFactory()
         r = self.c.get("/feeds/forum/rss/")

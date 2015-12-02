@@ -378,7 +378,7 @@
   
   <div class="tab-pane fade" id="updates">
     {% for n in object.recent_status_updates %}
-    <div class="status-update">
+    <div class="status-update" id="status-update-{{n.id}}">
       <div class="status-update-byline">
         <a href="{{n.user.get_absolute_url}}">{{n.user.fullname}}</a>
         &#8226;
