@@ -5,7 +5,7 @@ django-markwhat==1.4
 uuid==1.30
 psycopg2==2.6.1
 versiontools==1.9.1
-statsd==3.1
+statsd==3.2.1
 pep8==1.6.2
 pyflakes==1.0.0
 flake8==2.5.0
