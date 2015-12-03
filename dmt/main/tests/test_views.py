@@ -1211,9 +1211,13 @@ class TestFeeds(TestCase):
         self.assertEquals(r.status_code, 200)
 
     def test_status_feed(self):
-        StatusUpdateFactory()
+        s = StatusUpdateFactory()
         r = self.c.get("/feeds/status/")
         self.assertEquals(r.status_code, 200)
+        self.assertTrue("<author>{} ({})</author>".format(
+            s.user.email, s.user.fullname) in r.content)
+        self.assertTrue("<pubDate>{}</pubDate>".format(
+            s.added.strftime("%a, %02d %b %Y %H:%M:%S %z")) in r.content)
 
     def test_project_feed(self):
         p = ProjectFactory()
