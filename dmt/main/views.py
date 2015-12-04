@@ -1034,6 +1034,7 @@ class ProjectAddMilestoneView(LoggedInMixin, View):
         Milestone.objects.create(
             project=project, name=name,
             status='OPEN',
+            description=request.POST.get('description', ''),
             target_date=request.POST.get('target_date', timezone.now().date())
         )
         return HttpResponseRedirect(project.get_absolute_url() + '#milestones')
