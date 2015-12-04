@@ -12,7 +12,7 @@ locals().update(
         base=base,
         STATIC_ROOT=STATIC_ROOT,
         INSTALLED_APPS=INSTALLED_APPS,
-        s3static=False,
+        cloudfront="d36erjh421b5om",
     ))
 
 BASE_URL = "https://pmt.stage.ccnmtl.columbia.edu"
