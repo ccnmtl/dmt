@@ -38,18 +38,24 @@ class StatusUpdateFeed(Feed):
         return StatusUpdate.objects.order_by("-added")[:30]
 
     def item_description(self, item):
-        return """<a href="%s">%s</a>:  %s  -- <a href="%s">%s</a>  (%s)""" % (
+        return """<a href="%s">%s</a>:  %s""" % (
             (settings.BASE_URL +
              item.project.get_absolute_url()),
             item.project.name,
-            item.body,
-            settings.BASE_URL + item.user.get_absolute_url(),
-            item.user.fullname,
-            item.added.date())
+            item.body)
 
     def item_link(self, item):
         return (settings.BASE_URL + item.project.get_absolute_url() +
                 "#status-" + str(item.id))
+
+    def item_author_name(self, item):
+        return item.user.fullname
+
+    def item_author_email(self, item):
+        return item.user.email
+
+    def item_pubdate(self, item):
+        return item.added
 
 
 class ProjectFeed(Feed):
