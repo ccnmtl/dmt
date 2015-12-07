@@ -3,6 +3,12 @@ MANAGE=./manage.py
 APP=dmt
 FLAKE8=./ve/bin/flake8
 
+NODE_MODULES=./node_modules
+JS_SENTINAL=$(NODE_MODULES)/sentinal
+JSHINT=$(NODE_MODULES)/jshint/bin/jshint
+JSCS=$(NODE_MODULES)/jscs/bin/jscs
+REQUIREJS=$(NODE_MODULES)/.bin/r.js
+
 ifeq ($(TAG), undefined)
 	IMAGE = ccnmtl/$(APP)
 else
@@ -16,14 +22,19 @@ travis: ./ve/bin/python check jshint jscs flake8 test integration
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
 
-jshint: node_modules/jshint/bin/jshint
-	./node_modules/jshint/bin/jshint media/js/src/ media/js/tests
+jshint: $(JS_SENTINAL)
+	$(JSHINT) media/js/src/ media/js/tests
 
-jscs: node_modules/jscs/bin/jscs
-	./node_modules/jscs/bin/jscs media/js/src/ media/js/tests
+jscs: $(JS_SENTINAL)
+	$(JSCS) media/js/src/ media/js/tests
 
-js: node_modules/.bin/r.js
-	./node_modules/.bin/r.js -o build.js
+$(JS_SENTINAL): package.json
+	rm -rf $(NODE_MODULES)
+	npm install
+	touch $(JS_SENTINAL)
+
+media/main-built.js: $(JS_SENTINAL) build.js media/js/src
+	$(REQUIREJS) -o build.js
 
 behave: ./ve/bin/python check
 	$(MANAGE) test bdd_tests --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
@@ -31,23 +42,12 @@ behave: ./ve/bin/python check
 behave-wip: ./ve/bin/python check
 	$(MANAGE) test bdd_tests --behave_no-capture --behave_tags @wip --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
 
-node_modules/jshint/bin/jshint:
-	npm install jshint --prefix .
-
-node_modules/jscs/bin/jscs:
-	npm install jscs@"~2.6.0" --prefix .
-
-node_modules/.bin/r.js:
-	npm install requirejs --prefix .
-
-test: ./ve/bin/python
-	npm install
+test: ./ve/bin/python $(JS_SENTINAL)
 	$(MANAGE) jenkins --pep8-exclude=migrations --enable-coverage --coverage-rcfile=.coveragerc
 	npm test
 
-integration: ./ve/bin/python
-	npm install
-	$(MANAGE) jenkins --settings=dmt.settings_integration
+integration: ./ve/bin/python $(JS_SENTINAL)
+	$(MANAGE) jenkins --settings=$(APP).settings_integration
 	npm test
 
 flake8: ./ve/bin/python
@@ -69,7 +69,7 @@ compose-run:
 	docker-compose up
 
 compose-migrate:
-	docker-compose run web python manage.py migrate --settings=dmt.settings_compose
+	docker-compose run web python manage.py migrate --settings=$(APP).settings_compose
 
 clean:
 	rm -rf ve media/CACHE reports node_modules
