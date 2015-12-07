@@ -240,10 +240,13 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
     def test_add_milestone(self):
         r = self.c.post(self.p.get_absolute_url() + "add_milestone/",
                         dict(name="NEW TEST MILESTONE",
+                             description="NEW DESCRIPTION",
                              target_date="2020-01-01"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(self.p.get_absolute_url())
         self.assertTrue("NEW TEST MILESTONE" in r.content)
+        m = Milestone.objects.get(name="NEW TEST MILESTONE")
+        self.assertEqual(m.description, "NEW DESCRIPTION")
 
     def test_add_milestone_redirects_to_milestones_page(self):
         """ PMT #103894 """
@@ -1211,9 +1214,13 @@ class TestFeeds(TestCase):
         self.assertEquals(r.status_code, 200)
 
     def test_status_feed(self):
-        StatusUpdateFactory()
+        s = StatusUpdateFactory()
         r = self.c.get("/feeds/status/")
         self.assertEquals(r.status_code, 200)
+        self.assertTrue("<author>{} ({})</author>".format(
+            s.user.email, s.user.fullname) in r.content)
+        self.assertTrue("<pubDate>{}</pubDate>".format(
+            s.added.strftime("%a, %02d %b %Y %H:%M:%S %z")) in r.content)
 
     def test_project_feed(self):
         p = ProjectFactory()
