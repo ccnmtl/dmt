@@ -72,9 +72,13 @@
         {% if request.user.is_anonymous %}
         <li>You’re not logged in</li>
         {% else %}
-          <li class="dropdown">
+
+        <li class="dropdown">
+            <a href="{% url 'user_detail' request.user.userprofile.username %}">
+                <img src="{{request.user.userprofile.photo_url}}"
+                     class="img-circle user-avatar">
+            </a>
             <a class="dropdown-toggle username" data-toggle="dropdown" href="#">{% if request.user.userprofile.photo_url %}
-            <img src="{{request.user.userprofile.photo_url}}" class="img-circle user-avatar" />
             {% else %}
             <span class="glyphicon glyphicon-user"></span>
             {% endif %}
