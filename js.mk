@@ -18,4 +18,7 @@ jshint: $(JS_SENTINAL)
 jscs: $(JS_SENTINAL)
 	$(JSCS) $(JS_FILES)
 
-.PHONY: jshint jscs
+jstest: $(JS_SENTINAL)
+	npm test
+
+.PHONY: jshint jscs jstest
