@@ -5,9 +5,7 @@ REQUIREJS=$(NODE_MODULES)/.bin/r.js
 PY_DIRS=$(APP) bdd_tests
 MAX_COMPLEXITY=7
 
-all: jenkins jstest
-
-travis: jenkins jstest integration
+all: jstest jenkins
 
 include *.mk
 
@@ -28,3 +26,5 @@ compose-migrate:
 
 media/main-built.js: $(JS_SENTINAL) build.js media/js/src
 	$(REQUIREJS) -o build.js
+
+travis: $(JS_SENTINAL) jenkins jstest integration
