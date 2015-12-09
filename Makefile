@@ -1,19 +1,13 @@
-ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 MANAGE=./manage.py
 APP=dmt
 FLAKE8=./ve/bin/flake8
 
+REQUIREMENTS=requirements.txt
 NODE_MODULES=./node_modules
 JS_SENTINAL=$(NODE_MODULES)/sentinal
 JSHINT=$(NODE_MODULES)/jshint/bin/jshint
 JSCS=$(NODE_MODULES)/jscs/bin/jscs
 REQUIREJS=$(NODE_MODULES)/.bin/r.js
-
-ifeq ($(TAG), undefined)
-	IMAGE = ccnmtl/$(APP)
-else
-	IMAGE = ccnmtl/$(APP):$(TAG)
-endif
 
 jenkins: ./ve/bin/python check jshint jscs flake8 test
 
@@ -98,14 +92,4 @@ install: ./ve/bin/python check jenkins
 	createdb $(APP)
 	$(MANAGE) migrate
 
-wheelhouse/requirements.txt: requirements.txt
-	mkdir -p wheelhouse
-	docker run --rm \
-	-v $(ROOT_DIR):/app \
-	-v $(ROOT_DIR)/wheelhouse:/wheelhouse \
-	ccnmtl/django.build
-	cp requirements.txt wheelhouse/requirements.txt
-	touch wheelhouse/requirements.txt
-
-build: wheelhouse/requirements.txt
-	docker build -t $(IMAGE) .
+include *.mk
