@@ -483,7 +483,7 @@ class Project(models.Model):
 
     def all_users_not_in_project(self):
         already_in = set(
-            [w.username
+            [w.user.userprofile
              for w in WorksOn.objects.filter(
                  project=self).select_related('user')])
         all_users = set(UserProfile.objects.filter(status='active'))
