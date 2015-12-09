@@ -30,7 +30,7 @@ class ProjectHoursView(LoggedInMixin, View):
                  a.item.priority, a.item.target_date,
                  interval_to_hours(a.item.estimated_time),
                  a.item.milestone.mid, a.item.milestone.name,
-                 a.resolver.username, interval_to_hours(a.actual_time),
+                 a.user.userprofile.username, interval_to_hours(a.actual_time),
                  a.completed]
                 for a in actual_times]
 
