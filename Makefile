@@ -1,12 +1,10 @@
-MANAGE=./manage.py
 APP=dmt
+
+JS_FILES=media/js/src/ media/js/tests
 FLAKE8=./ve/bin/flake8
+MANAGE=./manage.py
 
 REQUIREMENTS=requirements.txt
-NODE_MODULES=./node_modules
-JS_SENTINAL=$(NODE_MODULES)/sentinal
-JSHINT=$(NODE_MODULES)/jshint/bin/jshint
-JSCS=$(NODE_MODULES)/jscs/bin/jscs
 REQUIREJS=$(NODE_MODULES)/.bin/r.js
 
 jenkins: ./ve/bin/python check jshint jscs flake8 test
@@ -15,20 +13,6 @@ travis: ./ve/bin/python check jshint jscs flake8 test integration
 
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
-
-jshint: $(JS_SENTINAL)
-	$(JSHINT) media/js/src/ media/js/tests
-
-jscs: $(JS_SENTINAL)
-	$(JSCS) media/js/src/ media/js/tests
-
-$(JS_SENTINAL): package.json
-	rm -rf $(NODE_MODULES)
-	npm install
-	touch $(JS_SENTINAL)
-
-media/main-built.js: $(JS_SENTINAL) build.js media/js/src
-	$(REQUIREJS) -o build.js
 
 behave: ./ve/bin/python check
 	$(MANAGE) test bdd_tests --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
@@ -93,3 +77,6 @@ install: ./ve/bin/python check jenkins
 	$(MANAGE) migrate
 
 include *.mk
+
+media/main-built.js: $(JS_SENTINAL) build.js media/js/src
+	$(REQUIREJS) -o build.js
