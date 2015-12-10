@@ -6,10 +6,12 @@ from .models import Node, StatusUpdate, Project, Item
 
 class ForumFeed(Feed):
     title = "PMT Forum"
-    link = "/forum/"
     description = (
         "recent posts, personal log entries and comments in the forum"
         )
+
+    def link(self):
+        return settings.BASE_URL + "/forum/"
 
     def items(self):
         return Node.objects.order_by('-modified')[:10]
@@ -31,8 +33,10 @@ class ForumFeed(Feed):
 
 class StatusUpdateFeed(Feed):
     title = "PMT Status Updates"
-    link = "/status/"
     description = "recent status updates"
+
+    def link(self):
+        return settings.BASE_URL + "/status/"
 
     def items(self):
         return StatusUpdate.objects.order_by("-added")[:30]
