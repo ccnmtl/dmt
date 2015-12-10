@@ -1374,8 +1374,6 @@ class Client(models.Model):
     add_affiliation = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=32, blank=True)
     email = models.CharField(max_length=128, blank=True)
-    contact = models.ForeignKey(UserProfile, null=True, db_column='contact',
-                                blank=True)
     user = models.ForeignKey(User)
     comments = models.TextField(blank=True)
     status = models.CharField(max_length=16, blank=True)
