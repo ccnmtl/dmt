@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.db import migrations, models
+from django.db import migrations
 
 
 def backfill_attachment_users(apps, schema_editor):
