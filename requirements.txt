@@ -56,8 +56,8 @@ amqplib==1.0.2
 kombu==3.0.30
 librabbitmq==1.6.1
 celery==3.1.19
-billiard==3.3.0.21
 enum34==1.1.1
+billiard==3.3.0.22
 parse-type==0.3.4
 parse==1.6.6
 behave==1.2.5
