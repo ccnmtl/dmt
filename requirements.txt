@@ -11,7 +11,7 @@ pyflakes==1.0.0
 flake8==2.5.0
 mccabe==0.3.1
 pyparsing==2.0.3
-certifi==2015.11.20
+certifi==2015.11.20.1
 backports.ssl-match-hostname==3.4.0.2
 tornado==4.3
 cssselect==0.9.1
