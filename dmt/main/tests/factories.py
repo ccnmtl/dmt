@@ -140,7 +140,6 @@ class ClientFactory(factory.DjangoModelFactory):
     department = "Testing"
     school = "TestSchool"
     email = "testclient@columbia.edu"
-    contact = factory.SubFactory(UserProfileFactory)
     user = factory.SubFactory(UserFactory)
     status = 'active'
 
