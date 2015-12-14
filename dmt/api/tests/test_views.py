@@ -361,7 +361,7 @@ class NotifyTests(APITestCase):
         self.u.save()
         self.pu = self.u.userprofile
         self.item = ItemFactory()
-        self.n = NotifyFactory(item=self.item, username=self.pu, user=self.u)
+        self.n = NotifyFactory(item=self.item, user=self.u)
         self.url = reverse("notify", kwargs={'pk': self.n.item.iid})
 
     def test_delete(self):
@@ -369,8 +369,7 @@ class NotifyTests(APITestCase):
         r = self.client.delete(self.url)
         self.assertEqual(r.status_code, 204)
 
-        user = self.u.userprofile
-        notify = Notify.objects.filter(item=self.item, username=user)
+        notify = Notify.objects.filter(item=self.item, user=self.u)
         self.assertEqual(len(notify), 0)
 
     def test_delete_not_logged_in(self):
@@ -400,9 +399,7 @@ class NotifyTests(APITestCase):
         r = self.client.post(self.url)
         self.assertEqual(r.status_code, 201)
 
-        user = self.u.userprofile
-        notify = Notify.objects.get(item=self.item, username=user,
-                                    user=user.user)
+        notify = Notify.objects.get(item=self.item, user=self.u)
         self.assertIsInstance(notify, Notify)
 
     def test_post_not_logged_in(self):
@@ -414,9 +411,7 @@ class NotifyTests(APITestCase):
         r = self.client.put(self.url)
         self.assertEqual(r.status_code, 201)
 
-        user = self.u.userprofile
-        notify = Notify.objects.get(item=self.item, username=user,
-                                    user=user.user)
+        notify = Notify.objects.get(item=self.item, user=self.u)
         self.assertIsInstance(notify, Notify)
 
     def test_put_not_logged_in(self):

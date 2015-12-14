@@ -248,8 +248,7 @@ class NotifyView(APIView):
             return Response(status=403)
 
         item = get_object_or_404(Item, iid=pk)
-        user = request.user.userprofile
-        Notify.objects.get_or_create(username=user, item=item,
+        Notify.objects.get_or_create(item=item,
                                      user=request.user)
         return Response(status=201)
 
@@ -258,8 +257,7 @@ class NotifyView(APIView):
             return Response(status=403)
 
         item = get_object_or_404(Item, iid=pk)
-        user = request.user.userprofile
-        Notify.objects.get_or_create(username=user, item=item,
+        Notify.objects.get_or_create(item=item,
                                      user=request.user)
         return Response(status=201)
 
