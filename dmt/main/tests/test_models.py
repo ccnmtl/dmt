@@ -256,14 +256,14 @@ class ItemTest(TestCase):
         u = UserProfileFactory()
         i.add_cc(u)
         self.assertEqual(
-            Notify.objects.filter(item=i.iid, username=u.username).count(), 1)
+            Notify.objects.filter(item=i.iid, user=u.user).count(), 1)
 
     def test_add_cc_inactive_user(self):
         i = ItemFactory()
         u = UserProfileFactory(status='inactive')
         i.add_cc(u)
         with self.assertRaises(Notify.DoesNotExist):
-            Notify.objects.get(item=i.iid, username=u.username)
+            Notify.objects.get(item=i.iid, user=u.user)
 
     def test_add_clients(self):
         i = ItemFactory()
@@ -322,7 +322,7 @@ class ItemTest(TestCase):
         i.reassign(u, assignee, '')
         self.assertEqual(
             Notify.objects.filter(
-                item=i.iid, username=assignee.username).count(), 1)
+                item=i.iid, user=assignee.user).count(), 1)
 
     @unittest.skipUnless(
         settings.DATABASES['default']['ENGINE'] ==
@@ -345,7 +345,7 @@ class ItemTest(TestCase):
     def test_update_email(self):
         i = ItemFactory(title="\r\n \r\n linebreaks")
         u2 = UserProfileFactory(status='active')
-        NotifyFactory(item=i, username=u2)
+        NotifyFactory(item=i, user=u2.user)
         i.update_email("a comment", i.owner)
         self.assertEqual(len(mail.outbox), 1)
 

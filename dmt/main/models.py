@@ -1186,7 +1186,7 @@ class Item(models.Model):
             return
         Notify.objects.get_or_create(
             item=self,
-            username=user, user=user.user)
+            user=user.user)
 
     def update_email(self, comment, user, skip_self=True):
         """Send out an email update about this PMT Item.
@@ -1238,7 +1238,7 @@ Please do not reply to this message.
 
     def users_to_email(self, skip=None):
         return [
-            n.username
+            n.user.userprofile
             for n in Notify.objects.filter(item=self)
             if (n.user.userprofile.status == 'active' and
                 not n.user.userprofile.grp and
@@ -1352,12 +1352,11 @@ class Notify(models.Model):
                              null=False,
                              db_column='iid',
                              related_name='notifies')
-    username = models.ForeignKey(UserProfile, db_column='username')
     user = models.ForeignKey(User)
 
     class Meta:
         db_table = u'notify'
-        unique_together = ('item', 'username')
+        unique_together = ('item', 'user')
 
     def __unicode__(self):
         return '%s' % (self.user.userprofile.username)

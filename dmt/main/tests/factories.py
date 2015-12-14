@@ -81,7 +81,6 @@ class NotifyFactory(factory.DjangoModelFactory):
         model = Notify
 
     item = factory.SubFactory(ItemFactory)
-    username = factory.SubFactory(UserProfileFactory)
     user = factory.SubFactory(UserFactory)
 
 
