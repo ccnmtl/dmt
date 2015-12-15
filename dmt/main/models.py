@@ -180,20 +180,20 @@ class UserProfile(models.Model):
         return Client.objects.filter(user__userprofile=self)
 
     def manager_on(self):
-        return [w.project for w in self.workson_set.filter(
+        return [w.project for w in self.user.workson_set.filter(
                 auth='manager').select_related('project')]
 
     def developer_on(self):
-        return [w.project for w in self.workson_set.filter(
+        return [w.project for w in self.user.workson_set.filter(
                 auth='developer').select_related('project')]
 
     def guest_on(self):
-        return [w.project for w in self.workson_set.filter(
+        return [w.project for w in self.user.workson_set.filter(
                 auth='guest').select_related('project')]
 
     def personnel_on(self):
         return [w.project for w
-                in self.workson_set.all(
+                in self.user.workson_set.all(
                 ).select_related('project').order_by('project__name')]
 
     def total_group_time(self, start, end):
@@ -428,13 +428,16 @@ class Project(models.Model):
         return self.milestone_set.filter(status='OPEN').order_by('target_date')
 
     def managers(self):
-        return [w.username for w in self.workson_set.filter(auth='manager')]
+        return [w.user.userprofile
+                for w in self.workson_set.filter(auth='manager')]
 
     def developers(self):
-        return [w.username for w in self.workson_set.filter(auth='developer')]
+        return [w.user.userprofile
+                for w in self.workson_set.filter(auth='developer')]
 
     def guests(self):
-        return [w.username for w in self.workson_set.filter(auth='guest')]
+        return [w.user.userprofile
+                for w in self.workson_set.filter(auth='guest')]
 
     def add_manager(self, user):
         self.add_personnel(user, auth='manager')
@@ -461,7 +464,7 @@ class Project(models.Model):
     def add_personnel(self, user, auth='guest'):
         # make sure we don't duplicate any
         WorksOn.objects.filter(project=self, user=user.user).delete()
-        WorksOn.objects.create(username=user, project=self, auth=auth,
+        WorksOn.objects.create(project=self, auth=auth,
                                user=user.user)
 
     def set_personnel(self, users, auth='guest'):
@@ -1468,7 +1471,6 @@ class Node(models.Model):
 
 
 class WorksOn(models.Model):
-    username = models.ForeignKey(UserProfile, db_column='username')
     user = models.ForeignKey(User)
     project = models.ForeignKey(Project, db_column='pid')
     auth = models.CharField(max_length=16)
