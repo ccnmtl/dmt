@@ -66,7 +66,7 @@ class UserProfile(models.Model):
     def has_recent_active_projects(self):
         now = timezone.now()
         start = now - timedelta(weeks=5)
-        return self.actualtime_set.filter(
+        return self.user.actualtime_set.filter(
             completed__gte=start, completed__lte=now).count() > 0
 
     def recent_active_projects(self):
@@ -1011,7 +1011,6 @@ class Item(models.Model):
             completed = timezone.now()
         ActualTime.objects.create(
             item=self,
-            resolver=user,
             user=user.user,
             actual_time=time,
             completed=completed)
@@ -1524,7 +1523,6 @@ class ProjectClient(models.Model):
 
 class ActualTime(models.Model):
     item = models.ForeignKey(Item, null=False, db_column='iid')
-    resolver = models.ForeignKey(UserProfile, db_column='resolver')
     user = models.ForeignKey(User)
     actual_time = models.DurationField(null=True, blank=True)
     completed = models.DateTimeField(primary_key=True)
