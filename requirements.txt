@@ -25,7 +25,7 @@ decorator==4.0.4
 pexpect==4.0.1
 pickleshare==0.5
 simplegeneric==0.8.1
-path.py==8.1.1
+path.py==8.1.2
 ipython==4.0.0
 ipdb==0.8.1
 isodate==0.5.4
