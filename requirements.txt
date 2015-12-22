@@ -90,7 +90,7 @@ django-impersonate==0.9.1
 django-pgsql-interval-field==0.9.3
 django-filter==0.11.0
 djangorestframework==3.2.4
-django-taggit==0.17.3
+django-taggit==0.17.6
 django-templatetag-sugar==1.0
 django-taggit-templatetags2==1.4.0
 django-celery==3.1.17
