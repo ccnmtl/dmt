@@ -1,6 +1,6 @@
 --index-url https://pypi.ccnmtl.columbia.edu/
 Django==1.8.7
-CommonMark==0.5.4
+CommonMark==0.5.5
 django-markwhat==1.4
 uuid==1.30
 psycopg2==2.6.1
