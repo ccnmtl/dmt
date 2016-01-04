@@ -17,7 +17,7 @@ from simpleduration import Duration
 from dmt.main.utils import simpleduration_string
 from dmt.main.models import (
     ActualTime, Events, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
-    truncate_string, HistoryEvent, Reminder
+    truncate_string, HistoryEvent, Reminder, Project
 )
 
 
@@ -682,6 +682,32 @@ class ProjectTest(TestCase):
         p.add_manager(u2)
         p.email_post(n, "a body", n.user.userprofile)
         self.assertEqual(len(mail.outbox), 1)
+
+    @freeze_time('2016-01-04')
+    def test_projects_active_between(self):
+        now = timezone.now()
+
+        # Make 5 ActualTime objects. This will ultimately create
+        # 5 different projects (as well as 5 items, 5 milestones).
+        for i in range(5):
+            # ActualTime uses "completed" (a DateTimeField) as its
+            # primary key, so it must be unique :-/. This will be
+            # difficult to change because of this model's foreign
+            # key relationships.
+            now += timedelta(seconds=10)
+            ActualTimeFactory(completed=now)
+
+        # Make one of the projects private
+        p = Project.objects.first()
+        p.pub_view = False
+        p.save()
+
+        start = datetime(year=2016, month=1, day=3)
+        end = datetime(year=2016, month=1, day=5)
+        projects = Project.projects_active_between(start, end)
+
+        self.assertEqual(projects.count(), 4,
+                         'Private projects must be hidden from reports.')
 
 
 class TestAttachment(TestCase):
