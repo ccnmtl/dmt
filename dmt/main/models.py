@@ -707,6 +707,7 @@ WHERE a.iid = i.iid
 SELECT DISTINCT p.pid, p.name, p.projnum
 FROM projects p, milestones m, items i, actual_times a, in_group g, users u
 WHERE p.pid = m.pid
+    AND p.pub_view = TRUE
     AND m.mid = i.mid
     AND i.iid = a.iid
     AND a.user_id = u.user_id
@@ -722,6 +723,7 @@ ORDER BY p.projnum
     def projects_active_between(start, end):
         """ Return projects active between the given dates. """
         projects = Project.objects.filter(
+            pub_view=True,
             milestone__item__actualtime__completed__gte=start,
             milestone__item__actualtime__completed__lte=end,
         ).annotate(
