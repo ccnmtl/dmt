@@ -175,7 +175,7 @@ class TimeLinePost(TimeLineItem):
         return "forum_post"
 
     def user(self):
-        return self.p.author
+        return self.p.user.userprofile
 
     def title(self):
         return self.p.subject

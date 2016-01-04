@@ -5,6 +5,7 @@ from dmt.main.timeline import (
     TimeLineItem, TimeLineEvent, TimeLineComment, TimeLineActualTime,
     TimeLineStatus, TimeLinePost, TimeLineMilestone,
 )
+from dmt.main.tests.factories import UserFactory
 
 
 class Dummy(TimeLineItem):
@@ -156,7 +157,7 @@ class TestTimeLineStatus(unittest.TestCase):
 class DummyPost(object):
     def __init__(self):
         self.added = "added"
-        self.author = "author"
+        self.user = UserFactory()
         self.subject = "subject"
         self.body = "body"
 
@@ -171,7 +172,7 @@ class TestTimeLinePost(unittest.TestCase):
         self.assertEqual(e.event_type(), "forum_post")
         self.assertEqual(e.title(), "subject")
         self.assertEqual(e.body(), "body")
-        self.assertEqual(e.user(), "author")
+        self.assertEqual(e.user().status, "active")
         self.assertEqual(e.url(), "post absolute url")
 
 
