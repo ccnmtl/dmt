@@ -684,7 +684,7 @@
         </div>
 
         <div class="attachment-byline text-muted">
-        Uploaded by <a href="{% url 'user_detail' attachment.author.username %}">{{attachment.author.fullname}}</a>
+        Uploaded by <a href="{% url 'user_detail' attachment.user.userprofile.username %}">{{attachment.user.userprofile.fullname}}</a>
         on {{attachment.last_mod}}
         </div>
         <div class="attachment-description">
