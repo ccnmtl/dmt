@@ -813,6 +813,15 @@ class TestItemWorkflow(TestCase):
         r = self.c.get(i.get_absolute_url())
         self.assertTrue("this is a comment" in r.content)
 
+    def test_add_comment_unicode(self):
+        i = ItemFactory()
+        r = self.c.post(
+            i.get_absolute_url() + "comment/",
+            dict(comment=u'Here is a bullet point: \u2022'))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(i.get_absolute_url())
+        self.assertTrue('Here is a bullet point:' in r.content)
+
     def test_add_comment_ccs_user(self):
         """ PMT #103873
 
