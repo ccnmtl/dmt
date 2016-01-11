@@ -183,7 +183,7 @@ def send_reminder_emails():
     reminders = Reminder.objects.filter(
         item__target_date__isnull=False,
         user__is_active=True
-    ).exclude(item__status__exact='VERIFIED')
+    ).exclude(item__status__in=['VERIFIED', 'RESOLVED'])
 
     now = timezone.now()
     five_mins = timedelta(minutes=5)
