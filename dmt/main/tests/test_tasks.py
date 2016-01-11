@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.utils import timezone
-from dmt.main.tests.factories import MilestoneFactory, ReminderFactory
+from dmt.main.tests.factories import (
+    ItemFactory, MilestoneFactory, ReminderFactory
+)
 from datetime import timedelta
 from dmt.main.models import Milestone, Reminder
 from dmt.main.tasks import (
@@ -48,3 +50,16 @@ class TestReminderTask(TestCase):
     def test_task(self):
         send_reminder_emails()
         self.assertEqual(Reminder.objects.count(), 0)
+
+    def test_reminder_email_excludes_closed_items(self):
+        resolved_item = ItemFactory(status='RESOLVED')
+        ReminderFactory(item=resolved_item)
+        verified_item = ItemFactory(status='VERIFIED')
+        ReminderFactory(item=verified_item)
+
+        send_reminder_emails()
+
+        self.assertEqual(
+            Reminder.objects.filter(item__status='RESOLVED').count(), 1)
+        self.assertEqual(
+            Reminder.objects.filter(item__status='VERIFIED').count(), 1)
