@@ -1556,7 +1556,6 @@ class Attachment(models.Model):
     type = models.CharField(max_length=8, blank=True)
     url = models.CharField(max_length=256, blank=True)
     description = models.TextField(blank=True)
-    author = models.ForeignKey(UserProfile, db_column='author')
     user = models.ForeignKey(User)
     last_mod = models.DateTimeField(null=True, blank=True)
 

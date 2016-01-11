@@ -160,7 +160,6 @@ class AttachmentFactory(factory.DjangoModelFactory):
     filename = "foo.jpg"
     title = "an attachment"
     type = "jpg"
-    author = factory.SubFactory(UserProfileFactory)
     user = factory.SubFactory(UserFactory)
 
 
