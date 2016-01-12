@@ -1214,7 +1214,6 @@ class SignS3View(LoggedInMixin, View):
 class ItemAddAttachmentView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
-        user = request.user.userprofile
         title = request.POST.get('title', 'no title')
         description = request.POST.get('description', '')
         url = request.POST.get('s3_url')
@@ -1228,7 +1227,6 @@ class ItemAddAttachmentView(LoggedInMixin, View):
             atype = 'gif'
         Attachment.objects.create(
             item=item,
-            author=user,
             user=request.user,
             url=url,
             title=title,
