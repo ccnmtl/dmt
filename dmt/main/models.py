@@ -1617,7 +1617,7 @@ class Comment(models.Model):
 class StatusUpdate(models.Model):
     project = models.ForeignKey(Project)
     user = models.ForeignKey(UserProfile)
-    author = models.ForeignKey(User, null=True)
+    author = models.ForeignKey(User)
     added = models.DateTimeField(auto_now_add=True)
     body = models.TextField(blank=True, default=u"")
 
