@@ -1,14 +1,11 @@
 define([
-    '../../libs/remarkable/remarkable'
-], function(Remarkable) {
+    '../../libs/commonmark.min',
+    '../../libs/linkify/linkify.min',
+    '../../libs/linkify/linkify-html.min'
+], function(commonmark) {
     var MarkdownPreview = function($textarea, $previewArea) {
-        // Strict CommonMark mode doesn't yet support linkify in Remarkable.js
-        //   (https://github.com/jonschlinkert/remarkable/issues/149)
-        // so just use the normal mode for now since I haven't seen any
-        // differences between that and CommonMark.
-        this.md = new Remarkable({
-            linkify: true
-        });
+        this.reader = commonmark.Parser();
+        this.writer = commonmark.HtmlRenderer();
         this.$textarea = $textarea;
         this.$previewArea = $previewArea;
     };
@@ -17,8 +14,12 @@ define([
         var me = this;
         this.$textarea.on('change keyup', function(e) {
             var comment = $(e.target).val();
-            var renderedHtml = me.md.render(comment);
-            me.$previewArea.html(renderedHtml);
+            var parsed = me.reader.parse(comment);
+            var rendered = me.writer.render(parsed);
+            if (typeof window.linkifyHtml === 'function') {
+                rendered = window.linkifyHtml(rendered);
+            }
+            me.$previewArea.html(rendered);
         });
     };
 
