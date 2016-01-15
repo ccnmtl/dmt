@@ -52,7 +52,9 @@ require([
     '../libs/jquery.cookie.min',
     'backbone',
     'bootstrap-datepicker',
-    '../libs/remarkable/remarkable',
+    '../libs/commonmark.min',
+    '../libs/linkify/linkify.min',
+    '../libs/linkify/linkify-html.min',
     'select2',
 
     // src
