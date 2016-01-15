@@ -24,7 +24,7 @@ compose-run:
 compose-migrate:
 	docker-compose run web python manage.py migrate --settings=$(APP).settings_compose
 
-media/main-built.js: $(JS_SENTINAL) build.js media/js/src
+media/main-built.js: $(JS_SENTINAL) build.js media/js/src media/js/libs
 	$(REQUIREJS) -o build.js
 
 travis: $(JS_SENTINAL) jenkins jstest integration
