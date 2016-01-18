@@ -305,7 +305,7 @@ class UserProfile(models.Model):
         all_events.extend([TimeLineActualTime(a) for a in actual_times])
 
         statuses = StatusUpdate.objects.filter(
-            user=self,
+            author=self.user,
             added__gte=start.date(),
             added__lte=end,
         ).select_related('project')

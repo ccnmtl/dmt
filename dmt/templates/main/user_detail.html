@@ -285,7 +285,7 @@
     {% for n in object.recent_status_updates %}
     <div class="status-update">
       <div class="status-update-byline">
-        <b><a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a></b> | {{n.user.fullname}}
+        <b><a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a></b> | {{n.author.userprofile.fullname}}
         &#8226;
         {{n.added.date}}
       </div><!-- /.status-update-byline -->
