@@ -143,7 +143,7 @@ class TimeLineStatus(TimeLineItem):
         self.s = s
 
     def user(self):
-        return self.s.user
+        return self.s.author.userprofile
 
     def timestamp(self):
         return datetime.combine(self.s.added, datetime.min.time())

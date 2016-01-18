@@ -210,7 +210,7 @@ class UserProfile(models.Model):
         return Node.objects.filter(user=self.user)[:count]
 
     def recent_status_updates(self, count=20):
-        return self.statusupdate_set.all()[:count]
+        return self.user.statusupdate_set.all()[:count]
 
     def progress_report(self):
         now = timezone.now()
@@ -794,7 +794,7 @@ ORDER BY p.projnum
             project=self,
             added__gte=start.date(),
             added__lte=end,
-        ).select_related('project', 'user')
+        ).select_related('project', 'author')
         all_events.extend([TimeLineStatus(s) for s in statuses])
 
         posts = Node.objects.filter(
@@ -1616,7 +1616,6 @@ class Comment(models.Model):
 
 class StatusUpdate(models.Model):
     project = models.ForeignKey(Project)
-    user = models.ForeignKey(UserProfile)
     author = models.ForeignKey(User)
     added = models.DateTimeField(auto_now_add=True)
     body = models.TextField(blank=True, default=u"")
@@ -1628,7 +1627,8 @@ class StatusUpdate(models.Model):
         return "/status/%d/" % self.id
 
     def __unicode__(self):
-        return "%s - %s" % (self.project.name, self.user.fullname)
+        return "%s - %s" % (self.project.name,
+                            self.author.userprofile.fullname)
 
 
 class Reminder(models.Model):

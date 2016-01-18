@@ -128,7 +128,7 @@ class UserModelTest(TestCase):
         self.assertEqual(t, [])
 
     def test_timeline_notempty(self):
-        StatusUpdateFactory(user=self.u, author=self.u.user)
+        StatusUpdateFactory(author=self.u.user)
         t = self.u.timeline()
         self.assertEqual(len(t), 1)
 
