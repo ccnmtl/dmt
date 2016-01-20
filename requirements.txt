@@ -2,7 +2,7 @@
 Django==1.8.8
 future==0.15.2
 CommonMark==0.6.2.ccnmtl
-django-markwhat==1.5.ccnmtl
+django-markwhat==1.5
 uuid==1.30
 psycopg2==2.6.1
 versiontools==1.9.1
