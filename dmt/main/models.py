@@ -834,7 +834,7 @@ class Document(models.Model):
 
 class Milestone(models.Model):
     mid = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
+    name = models.TextField()
     target_date = models.DateField()
     project = models.ForeignKey(Project, db_column='pid')
     status = models.CharField(max_length=8, default='OPEN')
