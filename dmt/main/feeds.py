@@ -53,10 +53,10 @@ class StatusUpdateFeed(Feed):
                 "#status-" + str(item.id))
 
     def item_author_name(self, item):
-        return item.user.fullname
+        return item.author.userprofile.fullname
 
     def item_author_email(self, item):
-        return item.user.email
+        return item.author.userprofile.email
 
     def item_pubdate(self, item):
         return item.added

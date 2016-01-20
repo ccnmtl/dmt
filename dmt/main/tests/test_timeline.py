@@ -138,7 +138,9 @@ class TestTimeLineActualTime(unittest.TestCase):
 
 class DummyStatus(object):
     def __init__(self):
-        self.user = "status user"
+        class DummyUser(object):
+            userprofile = "status user"
+        self.author = DummyUser()
         self.added = timezone.now().date()
         self.body = "body"
 

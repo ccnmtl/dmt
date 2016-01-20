@@ -1226,7 +1226,8 @@ class TestFeeds(TestCase):
         r = self.c.get("/feeds/status/")
         self.assertEquals(r.status_code, 200)
         self.assertTrue("<author>{} ({})</author>".format(
-            s.user.email, s.user.fullname) in r.content)
+            s.author.userprofile.email,
+            s.author.userprofile.fullname) in r.content)
         self.assertTrue("<pubDate>{}</pubDate>".format(
             s.added.strftime("%a, %02d %b %Y %H:%M:%S %z")) in r.content)
 

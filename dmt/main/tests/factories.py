@@ -147,7 +147,6 @@ class StatusUpdateFactory(factory.DjangoModelFactory):
         model = StatusUpdate
 
     project = factory.SubFactory(ProjectFactory)
-    user = factory.SubFactory(UserProfileFactory)
     body = "some text as a body"
     author = factory.SubFactory(UserFactory)
 

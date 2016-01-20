@@ -1013,12 +1013,11 @@ class ProjectAddNodeView(LoggedInMixin, View):
 class ProjectAddStatusUpdateView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = request.user.userprofile
         body = request.POST.get('body', u'')
         if body == '':
             return HttpResponseRedirect(project.get_absolute_url())
         StatusUpdate.objects.create(
-            project=project, user=user, body=body, author=request.user)
+            project=project, body=body, author=request.user)
         statsd.incr('main.status_update')
         return HttpResponseRedirect(project.get_absolute_url())
 
