@@ -52,7 +52,7 @@ fake-factory==0.5.3
 factory_boy==2.6.0
 python-ldap==2.4.22
 anyjson==0.3.3
-amqp==1.4.8
+amqp==1.4.9
 amqplib==1.0.2
 kombu==3.0.33
 librabbitmq==1.6.1
