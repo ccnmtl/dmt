@@ -934,12 +934,11 @@ class Item(models.Model):
         choices=[('bug', 'bug'), ('action item', 'action item')])
     owner = models.ForeignKey(UserProfile, db_column='owner',
                               related_name='owned_items')
-    owner_user = models.ForeignKey(User, null=True, db_column='owner_user',
+    owner_user = models.ForeignKey(User, db_column='owner_user',
                                    related_name='owned_items')
     assigned_to = models.ForeignKey(UserProfile, db_column='assigned_to',
                                     related_name='assigned_items')
-    assigned_user = models.ForeignKey(User, null=True,
-                                      db_column='assigned_user',
+    assigned_user = models.ForeignKey(User, db_column='assigned_user',
                                       related_name='assigned_to')
     title = models.CharField(max_length=255)
     milestone = models.ForeignKey(Milestone, db_column='mid', db_index=True)
