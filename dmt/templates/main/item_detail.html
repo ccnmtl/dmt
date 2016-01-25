@@ -156,7 +156,9 @@
 
       {% if object.estimated_time %}
       <dt>Estimated time</dt>
-      <dd>{{object.estimated_time}}</dd>
+      {% with objtime=object.estimated_time|interval_to_hours %}
+      <dd>{{objtime}} hour{{objtime|pluralize}}</dd>
+      {% endwith %}
       {% endif %}
 
       {% if object.url %}
@@ -249,8 +251,12 @@
       <dd>
       {% for at in object.actualtime_set.all %}
       <ul class="time-logged">
-      <li>{{at.actual_time}} <a href="{{at.user.userprofile.get_absolute_url}}">{{at.user.userprofile.fullname}}</a>
-      {{at.completed}}</li>
+          <li>
+              {{at.actual_time|simpleduration}}
+              <a href="{{at.user.userprofile.get_absolute_url}}"
+                 >{{at.user.userprofile.fullname}}</a>
+              {{at.completed}}
+          </li>
       </ul>
       {% endfor %}
       </dd>

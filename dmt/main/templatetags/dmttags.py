@@ -31,6 +31,11 @@ def interval_to_hours(duration):
     return utils.interval_to_hours(duration)
 
 
+@register.filter
+def simpleduration(duration):
+    return utils.simpleduration_string(duration)
+
+
 @register.filter(is_safe=True)
 def linkify(value):
     return bleach.linkify(value,

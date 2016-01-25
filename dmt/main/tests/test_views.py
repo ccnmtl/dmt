@@ -934,7 +934,7 @@ class TestItemWorkflow(TestCase):
         self.assertTrue("this is a comment" in r.content)
         self.assertTrue("RESOLVED" in r.content)
         self.assertTrue("FIXED" in r.content)
-        self.assertTrue("2:30:00" in r.content)
+        self.assertTrue("2h 30m" in r.content)
 
     def test_resolve_self_assigned(self):
         i = ItemFactory(owner=self.u.userprofile,
