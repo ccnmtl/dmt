@@ -1,5 +1,5 @@
 import pytz
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.utils import timezone
 from django.utils.dateparse import parse_date
@@ -56,76 +56,3 @@ class PrevNextWeekMixin(object):
         self.now_str = self.now.strftime(fmt)
         self.prev_week_str = self.prev_week.strftime(fmt)
         self.next_week_str = self.next_week.strftime(fmt)
-
-
-class RangeOffsetMixin(object):
-    """ A mixin for range/offset day params.
-
-    This is meant to be attached to a View. The mixin calculates dates
-    using two keyword arguments in the GET request:
-
-    - range: how many days in the past to look
-    - offset: how many days in the past to skip
-
-    So, for example, using the default values of 31 and 0, the view will
-    report on all data that occured 31 days ago, up to present time (0 days
-    ago). If you wanted to look at the data for the previous month a year
-    ago, you could leave range at 31 and set offset to 365.
-    """
-
-    # 'range' is a built-in function in python, so to avoid confusion call
-    # this range_days.
-    range_days = 31
-    offset_days = 0
-    _today = None
-
-    def today(self):
-        if not self._today:
-            self._today = date.today()
-        return self._today
-
-    def calc_interval(self):
-        # Calculate from the beginning of the first day in the range
-        # to the end of the last day.
-        naive_start = datetime.combine(self.today(), datetime.min.time()) - \
-            timedelta(days=(self.range_days + self.offset_days))
-        naive_end = datetime.combine(self.today(), datetime.max.time()) - \
-            timedelta(days=(self.offset_days))
-
-        # Convert to TZ-aware, based on the current timezone.
-        aware_start = pytz.timezone(settings.TIME_ZONE).localize(
-            naive_start, is_dst=None)
-        aware_end = pytz.timezone(settings.TIME_ZONE).localize(
-            naive_end, is_dst=None)
-
-        self.interval_start = aware_start
-        self.interval_end = aware_end
-
-    def get_params(self):
-        """Update the interval based on request params."""
-        try:
-            self.range_days = int(
-                self.request.GET.get('range', self.range_days))
-        except ValueError:
-            # Just use the default if we can't parse the urlparam.
-            self.range_days = 31
-
-        try:
-            self.offset_days = int(
-                self.request.GET.get('offset', self.offset_days))
-        except ValueError:
-            self.offset_days = 0
-
-        self.calc_interval()
-
-    def get_context_data(self, *args, **kwargs):
-        self.get_params()
-        context = super(RangeOffsetMixin, self).get_context_data(
-            *args, **kwargs)
-        context.update({
-            'range': self.range_days,
-            'offset': self.offset_days,
-            'interval_start': self.interval_start,
-            'interval_end': self.interval_end,
-        })
-        return context

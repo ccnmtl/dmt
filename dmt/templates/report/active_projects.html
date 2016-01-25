@@ -12,9 +12,8 @@
 </ul>
 
 <h2>Most Active Projects</h2>
-<h4>{{interval_start|format_mdy}} &ndash; {{interval_end|format_mdy}}</h4>
 
-{% include 'report/range_offset_form.html' %}
+{% include 'main/daterange_form.html' %}
 
 <div class="row">
     <div class="col-md-3">
@@ -25,9 +24,9 @@
 
         <div class="control-group">
             Export as:
-            <a href="{% url 'active_projects_report_export' %}?format=csv&range={{range}}&offset={{offset}}"
+            <a href="{% url 'active_projects_report_export' %}?format=csv&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
                >.csv</a>,
-            <a href="{% url 'active_projects_report_export' %}?format=xlsx&range={{range}}&offset={{offset}}"
+            <a href="{% url 'active_projects_report_export' %}?format=xlsx&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
                >.xlsx</a>
         </div>
     </div>

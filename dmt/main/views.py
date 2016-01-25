@@ -24,6 +24,7 @@ from django_statsd.clients import statsd
 from extra_views import FormSetView, UpdateWithInlinesView
 from taggit.models import Tag
 from taggit.utils import parse_tags
+from dmt.main.mixins import DaterangeMixin
 from dmt.main.models import (
     Comment, Project, Milestone, Item, InGroup, Node, UserProfile, Client,
     StatusUpdate, ActualTime, Notify, Attachment, Reminder
@@ -38,7 +39,7 @@ from dmt.main.forms import (
 )
 from dmt.main.templatetags.dmttags import linkify
 from dmt.main.utils import new_duration, safe_basename, simpleduration_string
-from dmt.report.mixins import PrevNextWeekMixin, RangeOffsetMixin
+from dmt.report.mixins import PrevNextWeekMixin
 
 from django_markwhat.templatetags.markup import commonmark
 from dateutil.relativedelta import relativedelta
@@ -597,12 +598,11 @@ class MyProjectListView(LoggedInMixin, ListView):
         return project_list
 
 
-class ProjectDetailView(LoggedInMixin, RangeOffsetMixin, DetailView):
+class ProjectDetailView(LoggedInMixin, DaterangeMixin, DetailView):
     model = Project
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectDetailView, self).get_context_data(**kwargs)
-        self.calc_interval()
         unverified_items = Item.objects.filter(
             milestone__project=self.object).filter(
                 ~Q(status='VERIFIED')

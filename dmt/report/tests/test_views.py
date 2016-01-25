@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from freezegun import freeze_time
 from dmt.main.models import InGroup
 from dmt.main.tests.factories import (
     ActualTimeFactory, ItemFactory, MilestoneFactory, UserProfileFactory
@@ -21,10 +22,11 @@ class ActiveProjectTests(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
 
 
+@freeze_time('2016-02-01')
 class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
     def setUp(self):
         super(ActiveProjectExportTests, self).setUp()
-        completed = timezone.now() - timedelta(days=3)
+        completed = timezone.now() - timedelta(days=35)
         ActualTimeFactory(completed=completed)
 
     @unittest.skipUnless(
@@ -33,13 +35,19 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
         "This test requires PostgreSQL")
     def test_active_project_export_csv_view(self):
         r = self.client.get(
-            reverse('active_projects_report_export') +
-            '?format=csv&range=31&offset=0')
+            reverse('active_projects_report_export'), {
+                'format': 'csv',
+                'interval_start': '2016-01-01',
+                'interval_end': '2016-02-01',
+            })
         self.assertEqual(r.status_code, 200)
 
         r_offset = self.client.get(
-            reverse('active_projects_report_export') +
-            '?format=csv&range=31&offset=100')
+            reverse('active_projects_report_export'), {
+                'format': 'csv',
+                'interval_start': '2015-12-01',
+                'interval_end': '2016-02-01',
+            })
         self.assertEqual(r_offset.status_code, 200)
         self.assertNotEqual(r.content, r_offset.content)
 
@@ -49,13 +57,19 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
         "This test requires PostgreSQL")
     def test_active_project_export_excel_view(self):
         r = self.client.get(
-            reverse('active_projects_report_export') +
-            '?format=xlsx&range=31&offset=0')
+            reverse('active_projects_report_export'), {
+                'format': 'xlsx',
+                'interval_start': '2016-01-01',
+                'interval_end': '2016-02-01',
+            })
         self.assertEqual(r.status_code, 200)
 
         r_offset = self.client.get(
-            reverse('active_projects_report_export') +
-            '?format=xlsx&range=31&offset=100')
+            reverse('active_projects_report_export'), {
+                'format': 'xlsx',
+                'interval_start': '2015-12-01',
+                'interval_end': '2016-02-01',
+            })
         self.assertEqual(r_offset.status_code, 200)
         self.assertNotEqual(r.content, r_offset.content)
 
@@ -111,14 +125,20 @@ class StaffReportTest(LoggedInTestMixin, TestCase):
 class StaffReportExportTests(LoggedInTestMixin, TestCase):
     def test_active_project_export_csv_view(self):
         r = self.client.get(
-            reverse('staff_report_export') +
-            '?format=csv&range=7&offset=0')
+            reverse('staff_report_export'), {
+                'format': 'csv',
+                'interval_start': '2016-01-01',
+                'interval_end': '2016-02-01',
+            })
         self.assertEqual(r.status_code, 200)
 
     def test_active_project_export_excel_view(self):
         r = self.client.get(
-            reverse('staff_report_export') +
-            '?format=xlsx&range=7&offset=0')
+            reverse('staff_report_export'), {
+                'format': 'xlsx',
+                'interval_start': '2016-01-01',
+                'interval_end': '2016-02-01',
+            })
         self.assertEqual(r.status_code, 200)
 
 
