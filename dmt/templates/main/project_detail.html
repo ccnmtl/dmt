@@ -94,24 +94,30 @@
       </div>
       <div class="modal-body">
 
-					<div class="row">
-						<div class="col-sm-7">
-							<input type="text" name="name" placeholder="name" 
-										 id="milestone-name-input"
-										 class="form-control"/>
-						</div>
+          <div class="row">
+              <div class="col-sm-7">
+                  <div class="form-group">
+                      <input type="text" name="name" placeholder="name"
+                             id="milestone-name-input"
+                             class="form-control"/>
+                  </div>
+              </div>
 
-						<div class="col-sm-4">
-            <input type="text" name="target_date" class="form-control"
-									 id="target-date"
-									 value="{{object.current_date|date:"Y-m-d"}}">
-						</div>
+              <div class="col-sm-4">
+                  <div class="form-group">
+                      <input type="text" name="target_date" class="form-control"
+                             id="target-date"
+                             value="{{object.current_date|date:"Y-m-d"}}">
+                  </div>
+              </div>
 
-            <div class="col-sm-11">
-              <textarea class="form-control" id="milestone-description-input"
-                name="description" placeholder="description"></textarea>
-            </div>
-					</div>
+              <div class="col-sm-11">
+                  <div class="form-group">
+                      <textarea class="form-control" id="milestone-description-input"
+                                name="description" placeholder="description"></textarea>
+                  </div>
+              </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
