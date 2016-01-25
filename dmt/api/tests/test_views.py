@@ -440,9 +440,9 @@ class ProjectsTest(APITestCase):
         self.assertEqual(r.status_code, 200)
 
         response = json.loads(r.content)
-        self.assertEqual(response['count'], 2)
-        self.assertEqual(response['results'][0]['name'], self.project2.name)
-        self.assertEqual(response['results'][1]['name'], self.project3.name)
+        self.assertEqual(len(response), 2)
+        self.assertEqual(response[0]['name'], self.project2.name)
+        self.assertEqual(response[1]['name'], self.project3.name)
 
     def test_search_startswith(self):
         url = reverse('project-list')
@@ -451,7 +451,7 @@ class ProjectsTest(APITestCase):
         self.assertEqual(r.status_code, 200)
 
         response = json.loads(r.content)
-        self.assertEqual(response['count'], 3)
-        self.assertEqual(response['results'][0]['name'], self.project1.name)
-        self.assertEqual(response['results'][1]['name'], self.project2.name)
-        self.assertEqual(response['results'][2]['name'], self.project4.name)
+        self.assertEqual(len(response), 3)
+        self.assertEqual(response[0]['name'], self.project1.name)
+        self.assertEqual(response[1]['name'], self.project2.name)
+        self.assertEqual(response[2]['name'], self.project4.name)
