@@ -1,6 +1,8 @@
 import re
 from datetime import timedelta
 from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.db.models.functions import Lower
 from django.forms import ModelForm, TextInput, URLInput
 from django_markwhat.templatetags.markup import commonmark
 from extra_views import InlineFormSet
@@ -72,6 +74,26 @@ class ProjectCreateForm(ModelForm):
         if not re.match(r'\d{4}-\d{1,2}-\d{1,2}', target_date):
             raise forms.ValidationError(
                 'Invalid target date: %s' % target_date)
+
+
+class ProjectPersonnelForm(forms.Form):
+    class Media:
+        css = {
+            'all': ('/media/admin/css/widgets.css',)
+        }
+
+    def __init__(self, *args, **kwargs):
+        pid = kwargs.pop('pid')
+        r = super(ProjectPersonnelForm, self).__init__(*args, **kwargs)
+        p = Project.objects.get(pk=pid)
+        qs = UserProfile.objects.filter(
+            pk__in=[u.pk for u in p.all_users_not_in_project()]
+        ).order_by(Lower('fullname')).order_by(Lower('username'))
+        self.fields['personnel'] = forms.ModelMultipleChoiceField(
+            queryset=qs,
+            widget=FilteredSelectMultiple('Personnel', is_stacked=False),
+            label='')
+        return r
 
 
 class ProjectUpdateForm(ModelForm):

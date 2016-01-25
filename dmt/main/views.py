@@ -1,3 +1,4 @@
+from urlparse import urljoin
 from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -33,7 +34,7 @@ from dmt.main.forms import (
     AddTrackerForm, CommentUpdateForm, ItemUpdateForm,
     RemindersInlineFormSet,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
-    ProjectUpdateForm, MilestoneUpdateForm
+    ProjectUpdateForm, MilestoneUpdateForm, ProjectPersonnelForm
 )
 from dmt.main.templatetags.dmttags import linkify
 from dmt.main.utils import new_duration, safe_basename, simpleduration_string
@@ -615,6 +616,8 @@ class ProjectDetailView(LoggedInMixin, RangeOffsetMixin, DetailView):
         ctx['total_hours'] = round(
             sum([u.hours_logged.total_seconds()
                  for u in ctx['users_active_in_range']]) / 3600, 2)
+        ctx['personnel_form'] = ProjectPersonnelForm(
+            pid=ctx['object'].pid)
         return ctx
 
 
@@ -920,16 +923,21 @@ class ProjectRemoveUserView(LoggedInMixin, View):
         project = get_object_or_404(Project, pid=pk)
         user = get_object_or_404(UserProfile, username=username)
         project.remove_personnel(user)
-        return HttpResponseRedirect(project.get_absolute_url())
+        return HttpResponseRedirect(
+            urljoin(project.get_absolute_url(), '#personnel'))
 
 
-class ProjectAddUserView(LoggedInMixin, View):
+class ProjectAddPersonnelView(LoggedInMixin, View):
     def post(self, request, pk):
         project = get_object_or_404(Project, pid=pk)
-        user = get_object_or_404(
-            UserProfile, username=request.POST.get('username'))
-        project.add_personnel(user)
-        return HttpResponseRedirect(project.get_absolute_url())
+
+        for username in request.POST.getlist('personnel'):
+            user = get_object_or_404(
+                UserProfile, username=username)
+            project.add_personnel(user)
+
+        return HttpResponseRedirect(
+            urljoin(project.get_absolute_url(), '#personnel'))
 
 
 class ProjectAddTodoView(LoggedInMixin, View):
