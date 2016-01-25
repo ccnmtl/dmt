@@ -1,6 +1,7 @@
 {% load bootstrap3 %}
 {% load compress %}
 {% load waffle_tags %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,6 +46,7 @@
 
   <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
   <script src="{% bootstrap_javascript_url %}"></script>
+  <script src="{% static '/media/js/src/utils/bootstrap_tabs.js' %}"></script>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
