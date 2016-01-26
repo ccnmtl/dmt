@@ -48,7 +48,7 @@ class UserProfile(models.Model):
         ordering = ['fullname']
 
     def __unicode__(self):
-        return self.fullname
+        return self.fullname or self.username
 
     def get_absolute_url(self):
         if self.grp:
@@ -490,8 +490,7 @@ class Project(models.Model):
              for w in WorksOn.objects.filter(
                  project=self).select_related('user')])
         all_users = set(UserProfile.objects.filter(status='active'))
-        return sorted(list(all_users - already_in),
-                      key=lambda x: x.fullname.lower())
+        return list(all_users - already_in)
 
     def upcoming_milestone(self):
         # ideally, we want a milestone that is open, in the future,

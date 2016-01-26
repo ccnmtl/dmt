@@ -123,10 +123,9 @@ require([
             width: '100%',
             sorter: selectSorter
         });
-        $('#add-trackers-form .field-project select,' +
-          'select#project-personnel-input').select2({
-              width: '280px',
-              sorter: selectSorter
-          });
+        $('#add-trackers-form .field-project select').select2({
+            width: '280px',
+            sorter: selectSorter
+        });
     });
 });
