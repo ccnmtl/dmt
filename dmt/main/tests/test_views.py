@@ -229,10 +229,10 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
             self.p.get_absolute_url() + "remove_user/%s/" % u.username)
         self.assertTrue(u not in self.p.managers())
 
-    def test_add_user(self):
+    def test_add_personnel(self):
         u = UserProfileFactory(status='active')
-        r = self.c.post(self.p.get_absolute_url() + "add_user/",
-                        dict(username=u.username))
+        r = self.c.post(self.p.get_absolute_url() + "add_personnel/",
+                        dict(personnel=[u.username]))
         self.assertEqual(r.status_code, 302)
         self.assertTrue(u in self.p.all_personnel_in_project())
 
@@ -934,7 +934,7 @@ class TestItemWorkflow(TestCase):
         self.assertTrue("this is a comment" in r.content)
         self.assertTrue("RESOLVED" in r.content)
         self.assertTrue("FIXED" in r.content)
-        self.assertTrue("2:30:00" in r.content)
+        self.assertTrue("2h 30m" in r.content)
 
     def test_resolve_self_assigned(self):
         i = ItemFactory(owner=self.u.userprofile,

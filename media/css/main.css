@@ -1486,3 +1486,8 @@ button.pmt-report-submit { margin-top: 25px; }
 select#project-personnel-input {
     min-width: 200px;
 }
+
+.selector h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}

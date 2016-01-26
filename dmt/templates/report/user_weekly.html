@@ -38,7 +38,9 @@ User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
 		{% for project in active_projects %}
 		<tr>
 			<td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
-			<td>{{project.time|interval_to_hours}} hours</td>
+            {% with projtime=project.time|interval_to_hours %}
+			<td>{{projtime}} hour{{projtime|pluralize}}</td>
+            {% endwith %}
 		</tr>
 		{% endfor %}
 	</tbody>
@@ -59,7 +61,9 @@ User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
 	<tbody>
 		{% for t in individual_times %}
 		<tr>
-			<td>{{t.actual_time|interval_to_hours}} hours</td>
+            {% with ttime=t.actual_time|interval_to_hours %}
+			<td>{{ttime}} hour{{ttime|pluralize}}</td>
+            {% endwith %}
 			<td><a href="{{t.item.get_absolute_url}}">{{t.item.title}}</a></td>
 			<td>{{t.completed}}</td>
 			<td><a href="{{t.item.milestone.project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
