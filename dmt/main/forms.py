@@ -79,7 +79,7 @@ class ProjectCreateForm(ModelForm):
 class ProjectPersonnelForm(forms.Form):
     class Media:
         css = {
-            'all': ('/media/admin/css/widgets.css',)
+            'all': ('admin/css/widgets.css',)
         }
 
     def __init__(self, *args, **kwargs):
