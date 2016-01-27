@@ -68,7 +68,9 @@ class ItemFactory(factory.DjangoModelFactory):
     iid = factory.Sequence(lambda n: n)
     type = "bug"
     owner = factory.SubFactory(UserProfileFactory)
+    owner_user = factory.SubFactory(UserFactory)
     assigned_to = factory.SubFactory(UserProfileFactory)
+    assigned_user = factory.SubFactory(UserFactory)
     title = factory.Sequence(lambda n: 'Test Item {0}'.format(n))
     milestone = factory.SubFactory(MilestoneFactory)
     status = "OPEN"
