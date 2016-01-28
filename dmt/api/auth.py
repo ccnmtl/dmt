@@ -49,11 +49,13 @@ class SafeOriginPermission(permissions.BasePermission):
             return False
 
     def has_permission(self, request, view):
+        real_ip = request.META.get('HTTP_X_REAL_IP')
         remote_addr = request.META.get('REMOTE_ADDR')
         remote_host = request.META.get('REMOTE_HOST')
         referrer = request.META.get('HTTP_REFERER')
 
         checks = [
+            self._has_safe_remote_addr(real_ip),
             self._has_safe_remote_addr(remote_addr),
             self._has_safe_remote_host(remote_host),
             self._has_safe_referrer(referrer),
