@@ -49,7 +49,7 @@ class SafeOriginPermission(permissions.BasePermission):
             return False
 
     def has_permission(self, request, view):
-        remote_addr = request.META.get('REMOTE_ADDR')
+        remote_addr = request.META.get('HTTP_X_REAL_IP')
         remote_host = request.META.get('REMOTE_HOST')
         referrer = request.META.get('HTTP_REFERER')
 
