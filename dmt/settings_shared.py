@@ -39,7 +39,6 @@ djcelery.setup_loader()
 INSTALLED_APPS += [  # noqa
     'django.contrib.messages',
     'django_extensions',
-    'interval',
     'rest_framework',
     'taggit',
     'taggit_templatetags2',
