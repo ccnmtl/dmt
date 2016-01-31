@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import interval.fields
 import taggit.managers
 
 
@@ -17,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ActualTime',
             fields=[
-                ('actual_time', interval.fields.IntervalField(null=True, blank=True)),
+                ('actual_time', models.DurationField(null=True, blank=True)),
                 ('completed', models.DateTimeField(serialize=False, primary_key=True)),
             ],
             options={
@@ -139,7 +138,7 @@ class Migration(migrations.Migration):
                 ('r_status', models.CharField(max_length=16, blank=True)),
                 ('last_mod', models.DateTimeField(null=True, blank=True)),
                 ('target_date', models.DateField(null=True, blank=True)),
-                ('estimated_time', interval.fields.IntervalField(null=True, blank=True)),
+                ('estimated_time', models.DurationField(null=True, blank=True)),
                 ('url', models.TextField(blank=True)),
                 ('tags', taggit.managers.TaggableManager(to='taggit.Tag', through='taggit.TaggedItem', help_text='A comma-separated list of tags.', verbose_name='Tags')),
             ],
