@@ -146,8 +146,89 @@ class ItemHoursViewTest(TestCase):
             dict(
                 time="1 hour",
             ))
+        self.assertEqual(r.status_code, 201)
+
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], 3600)
+        self.assertEqual(content['simpleduration'], '1h')
+
+        r = self.c.post(
+            reverse('item-hours', kwargs={'pk': self.item.iid}),
+            dict(
+                time="2h",
+            ))
+        self.assertEqual(r.status_code, 201)
+
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], 3600 * 2)
+        self.assertEqual(content['simpleduration'], '2h')
+
+    def test_post_empty_string(self):
+        r = self.c.post(
+            reverse('item-hours', kwargs={'pk': self.item.iid}),
+            dict(
+                time='',
+            ))
+        self.assertEqual(r.status_code, 201)
+
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], 0)
+
+    def test_post_duration_no_units(self):
+        r = self.c.post(
+            reverse('item-hours', kwargs={'pk': self.item.iid}),
+            dict(
+                time='4',
+            ))
+        self.assertEqual(r.status_code, 201)
+
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], 3600 * 4)
+        self.assertEqual(content['simpleduration'], '4h')
+
+    def test_post_duration_no_units_with_whitespace(self):
+        r = self.c.post(
+            reverse('item-hours', kwargs={'pk': self.item.iid}),
+            dict(
+                time='4 ',
+            ))
+        self.assertEqual(r.status_code, 201)
+
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], 3600 * 4)
+        self.assertEqual(content['simpleduration'], '4h')
+
+        r = self.c.post(
+            reverse('item-hours', kwargs={'pk': self.item.iid}),
+            dict(
+                time='  4',
+            ))
+        self.assertEqual(r.status_code, 201)
+
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], 3600 * 4)
+        self.assertEqual(content['simpleduration'], '4h')
+
+    def test_post_duration_invalid(self):
+        r = self.c.post(
+            reverse('item-hours', kwargs={'pk': self.item.iid}),
+            dict(
+                time='4 j',
+            ))
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.content, "ok")
+
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], None)
+
+        r = self.c.post(
+            reverse('item-hours', kwargs={'pk': self.item.iid}),
+            dict(
+                time='1h 30m invalid',
+            ))
+        self.assertEqual(r.status_code, 200)
+
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], None)
 
 
 class GitUpdateViewTest(TestCase):

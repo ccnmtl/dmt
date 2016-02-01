@@ -1,4 +1,5 @@
-from django.http import HttpResponse, HttpResponseBadRequest
+import re
+from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -14,7 +15,7 @@ from dateutil import parser
 from dmt.main.models import (
     Client, Item, Milestone, Notify, Project, UserProfile
 )
-from dmt.main.utils import new_duration
+from dmt.main.utils import new_duration, simpleduration_string
 
 from dmt.api.auth import SafeOriginAuthentication, SafeOriginPermission
 from dmt.api.filters import ProjectSearchFilter
@@ -30,14 +31,37 @@ class ClientViewSet(viewsets.ModelViewSet):
     paginate_by = 10
 
 
-class ItemHoursView(APIView):
+class ItemHoursView(generics.CreateAPIView):
     def post(self, request, pk):
-        item = get_object_or_404(Item, iid=pk)
-        user = request.user.userprofile
-        d = new_duration(request.POST.get('time', '1 hour'))
-        td = d.timedelta()
-        item.add_resolve_time(user, td)
-        return HttpResponse("ok")
+        duration_string = request.POST.get('time', '1 hour').strip()
+
+        try:
+            d = Duration(duration_string)
+        except InvalidDuration:
+            d = None
+
+        # If the user's string is a number with no unit, simpleduration
+        # throws an InvalidDuration exception. In this case, we'll assume
+        # the user is talking about the number of hours.
+        if d is None and re.match(r'\d+', duration_string):
+            try:
+                d = Duration(duration_string + 'h')
+            except InvalidDuration:
+                d = None
+
+        if d is not None:
+            td = d.timedelta()
+            item = get_object_or_404(Item, iid=pk)
+            user = request.user.userprofile
+            item.add_resolve_time(user, td)
+            return Response({
+                'duration': d.seconds,
+                'simpleduration': simpleduration_string(td),
+            }, status=201)
+
+        return Response({
+            'duration': None
+        }, status=200)
 
 
 class ItemViewSet(viewsets.ModelViewSet):
