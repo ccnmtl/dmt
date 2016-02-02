@@ -118,11 +118,18 @@ require([
             todayHighlight: true
         });
 
+        $('.input-daterange input').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            todayHighlight: true
+        });
+
         $('#project-input').select2({
             placeholder: 'Project',
             width: '100%',
             sorter: selectSorter
         });
+
         $('#add-trackers-form .field-project select').select2({
             width: '280px',
             sorter: selectSorter

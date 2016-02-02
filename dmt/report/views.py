@@ -4,13 +4,14 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
 from django.utils import timezone
 
+from dmt.main.mixins import DaterangeMixin
 from dmt.main.models import UserProfile, Item, Milestone, Project
 from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
 from dmt.report.models import (
     ActiveProjectsCalculator, StaffReportCalculator,
     WeeklySummaryReportCalculator)
-from dmt.report.mixins import PrevNextWeekMixin, RangeOffsetMixin
+from dmt.report.mixins import PrevNextWeekMixin
 from dmt.report.utils import ReportFileGenerator
 
 
@@ -40,13 +41,12 @@ class ProjectHoursView(LoggedInMixin, View):
             self.request.GET.get('format', 'csv'))
 
 
-class ActiveProjectsView(LoggedInMixin, RangeOffsetMixin, TemplateView):
+class ActiveProjectsView(LoggedInMixin, DaterangeMixin, TemplateView):
     template_name = "report/active_projects.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(ActiveProjectsView, self).get_context_data(
             *args, **kwargs)
-        self.calc_interval()
         calc = ActiveProjectsCalculator()
         data = calc.calc(context.get('interval_start'),
                          context.get('interval_end'))
@@ -54,7 +54,7 @@ class ActiveProjectsView(LoggedInMixin, RangeOffsetMixin, TemplateView):
         return context
 
 
-class ActiveProjectsExportView(LoggedInMixin, RangeOffsetMixin, View):
+class ActiveProjectsExportView(LoggedInMixin, DaterangeMixin, View):
     def get(self, request, *args, **kwargs):
         self.get_params()
 
@@ -128,12 +128,11 @@ class StaffReportPreviousWeekView(LoggedInMixin, PrevNextWeekMixin, View):
                 self.prev_week.year, self.prev_week.month, self.prev_week.day))
 
 
-class StaffReportView(LoggedInMixin, RangeOffsetMixin, TemplateView):
+class StaffReportView(LoggedInMixin, DaterangeMixin, TemplateView):
     template_name = "report/staff_report.html"
 
     def get_context_data(self, **kwargs):
         context = super(StaffReportView, self).get_context_data(**kwargs)
-        self.calc_interval()
         calc = StaffReportCalculator(['designers', 'programmers', 'video',
                                       'educationaltechnologists',
                                       'management'])
@@ -144,7 +143,7 @@ class StaffReportView(LoggedInMixin, RangeOffsetMixin, TemplateView):
         return context
 
 
-class StaffReportExportView(LoggedInMixin, RangeOffsetMixin, View):
+class StaffReportExportView(LoggedInMixin, DaterangeMixin, View):
     def get(self, request, *args, **kwargs):
         self.get_params()
         calc = StaffReportCalculator(['designers', 'programmers', 'video',

@@ -578,15 +578,27 @@ class MyProjectViewTests(TestCase):
     def test_project_view_queryparams(self):
         p = ProjectFactory()
         r = self.client.get(
-            reverse('project_detail', args=(p.pid,)) + '?range=300&offset=')
+            reverse('project_detail', args=(p.pid,)),
+            {
+                'interval_start': '2016-01-01',
+                'interval_end': '',
+            })
         self.assertEqual(r.status_code, 200)
 
         r = self.client.get(
-            reverse('project_detail', args=(p.pid,)) + '?range=&offset=0')
+            reverse('project_detail', args=(p.pid,)),
+            {
+                'interval_start': '',
+                'interval_end': '2016-02-01',
+            })
         self.assertEqual(r.status_code, 200)
 
         r = self.client.get(
-            reverse('project_detail', args=(p.pid,)) + '?range=&offset=')
+            reverse('project_detail', args=(p.pid,)),
+            {
+                'interval_start': '',
+                'interval_end': '',
+            })
         self.assertEqual(r.status_code, 200)
 
     def test_my_projects_page_not_in_project(self):

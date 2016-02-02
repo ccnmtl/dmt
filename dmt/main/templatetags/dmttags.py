@@ -27,6 +27,15 @@ def format_mdy(dt):
 
 
 @register.filter
+def format_ymd(dt):
+    """
+    Takes a datetime and formats it like this:
+      2014-07-15
+    """
+    return dt.strftime('%Y-%m-%d')
+
+
+@register.filter
 def interval_to_hours(duration):
     return utils.interval_to_hours(duration)
 

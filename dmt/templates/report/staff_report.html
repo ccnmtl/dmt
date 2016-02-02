@@ -16,16 +16,16 @@
     <li class="active">Staff Report</li>
 </ul>
 
-<h2>Staff Report from {{interval_start}} to {{interval_end}}</h2>
+<h2>Staff Report</h2>
 
-{% include 'report/range_offset_form.html' %}
+{% include 'main/daterange_form.html' %}
 
 <div class="row">
     <div class="col-md-3">
         Export as:
-        <a href="{% url 'staff_report_export' %}?format=csv&range={{range}}&offset={{offset}}"
+        <a href="{% url 'staff_report_export' %}?format=csv&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
            >.csv</a>,
-        <a href="{% url 'staff_report_export' %}?format=xlsx&range={{range}}&offset={{offset}}"
+        <a href="{% url 'staff_report_export' %}?format=xlsx&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
            >.xlsx</a>
     </div>
 </div>
