@@ -23,9 +23,16 @@ require([
                     completed: completed
                 },
                 success: function(data, status) {
-                    return formUtils.onSuccess($form, data, status, [
-                        '#tracker-task-input', '#tracker-time-input'
-                    ]);
+                    if (data && data.duration > 0) {
+                        status = status + ' - Logged ' + data.simpleduration;
+                        formUtils.onSuccess($form, data, status, [
+                            '#tracker-task-input', '#tracker-time-input'
+                        ]);
+                    } else {
+                        return formUtils.onError(
+                            $form, null, null,
+                            'Please enter a valid duration.');
+                    }
                 },
                 error: function(xhr, status, error) {
                     return formUtils.onError($form, xhr, status, error);

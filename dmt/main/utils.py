@@ -7,9 +7,18 @@ def new_duration(timestr):
     try:
         d = Duration(timestr)
     except InvalidDuration:
-        # eventually, this needs to get back to the user
-        # via form validation, but for now
-        # we just deal with it...
+        d = None
+
+    # If the user's string is a number with no unit, simpleduration
+    # throws an InvalidDuration exception. In this case, we'll assume
+    # the user is talking about the number of hours.
+    if d is None and re.match(r'\d+', timestr):
+        try:
+            d = Duration(timestr + 'h')
+        except InvalidDuration:
+            d = None
+
+    if d is None:
         d = Duration('0 minutes')
 
     return d
