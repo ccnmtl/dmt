@@ -47,11 +47,6 @@ class DaterangeMixin(object):
         self.interval_start = self.request.GET.get('interval_start', None)
         self.interval_end = self.request.GET.get('interval_end', None)
 
-        if not self.interval_start:
-            self.interval_start = self.today() - relativedelta(months=1)
-        if not self.interval_end:
-            self.interval_end = self.today()
-
         try:
             self.interval_start = parse_date(self.interval_start)
         except TypeError:
@@ -60,6 +55,11 @@ class DaterangeMixin(object):
             self.interval_end = parse_date(self.interval_end)
         except TypeError:
             pass
+
+        if not self.interval_start:
+            self.interval_start = self.today() - relativedelta(months=1)
+        if not self.interval_end:
+            self.interval_end = self.today()
 
         self.calc_interval()
 
