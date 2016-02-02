@@ -52,6 +52,8 @@ def safe_basename(s):
 def simpleduration_string(duration):
     """Returns a simpleduration-friendly string.
 
+    Accepts a timedelta object.
+
     Based on Django's duration_string() function.
     """
     if duration is None:

@@ -14,8 +14,15 @@ require([
                 url: '/drf/items/' + iid + '/hours/',
                 data: {time: time},
                 success: function(data, status) {
-                    formUtils.onSuccess($form, data, status);
-                    window.location.reload();
+                    if (data && data.duration > 0) {
+                        status = status + ' - Logged ' + data.simpleduration;
+                        formUtils.onSuccess($form, data, status);
+                        window.location.reload();
+                    } else {
+                        return formUtils.onError(
+                            $form, null, null,
+                            'Please enter a valid duration.');
+                    }
                 },
                 error: function(xhr, status, error) {
                     return formUtils.onError($form, xhr, status, error);
