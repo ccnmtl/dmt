@@ -26,7 +26,6 @@ PROJECT_APPS = [
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS += [  # noqa
-    'django.contrib.messages.context_processors.messages',
     'dmt.main.contextprocessors.graphite_base_processor',
 ]
 
@@ -37,7 +36,6 @@ MIDDLEWARE_CLASSES += [  # noqa
 djcelery.setup_loader()
 
 INSTALLED_APPS += [  # noqa
-    'django.contrib.messages',
     'django_extensions',
     'rest_framework',
     'taggit',
