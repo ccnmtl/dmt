@@ -416,7 +416,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                          'target_date': '2020-04-28',
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('This field cannot be blank.' in r.content)
+        self.assertTrue('This field is required.' in r.content)
 
     def test_create_project_post_requires_target_date(self):
         r = self.c.post(reverse('project_create'),
