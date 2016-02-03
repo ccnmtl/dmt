@@ -18,12 +18,16 @@ class ActiveProjectTests(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
 
 
-@freeze_time('2016-02-01')
 class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
     def setUp(self):
+        self.freezer = freeze_time("2016-02-01 00:00:00")
+        self.freezer.start()
         super(ActiveProjectExportTests, self).setUp()
         completed = timezone.now() - timedelta(days=35)
         ActualTimeFactory(completed=completed)
+
+    def tearDown(self):
+        self.freezer.stop()
 
     def test_active_project_export_csv_view(self):
         r = self.client.get(
