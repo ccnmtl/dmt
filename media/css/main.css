@@ -534,8 +534,6 @@ span.attachment-action-text {
     padding: 15px;
 }
 
-.dataTables_info { display: none; }
-
 /* Top navigation with logo */
 
 .navbar-dmt {
@@ -715,10 +713,6 @@ nav .container {
 #user-items div.due { background: #f93; }
 #user-items div.late { background: #f00; }
 #user-items div.overdue { background: #000; }
-.dashboard div.ColVis {
-    margin-left: 20px;
-    margin-top: 3px;
-}
 
 .progressbar-set {
     height: 25px;
@@ -770,16 +764,9 @@ nav .container {
 .no-margin { margin: 0; }
 .no-padding { padding: 0; }
 
-div.ColVis_collectionBackground {
-    -moz-opacity: 0.50 !important;
-         opacity: 0.50 !important;
-          filter:alpha(opacity=50) !important;       
-}
-
-.dashboard button.ColVis_Button {
-    padding: 4px 10px 4px 25px !important;
-    background-color: #f5f5f5 !important;
-    *background-color: #e6e6e6 !important;
+/* Dashboard dataTable customizations */
+.dashboard .dt-button.buttons-collection {
+    padding-left: 25px;
     background: url('/media/img/icon-settings.png') 4px center no-repeat, -ms-linear-gradient(top, #ffffff, #e6e6e6) !important;
     background: url('/media/img/icon-settings.png') 4px center no-repeat, -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6)) !important;
     background: url('/media/img/icon-settings.png') 4px center no-repeat, -webkit-linear-gradient(top, #ffffff, #e6e6e6) !important;
@@ -787,49 +774,14 @@ div.ColVis_collectionBackground {
     background: url('/media/img/icon-settings.png') 4px center no-repeat, linear-gradient(top, #ffffff, #e6e6e6) !important;
     background: url('/media/img/icon-settings.png') 4px center no-repeat, -moz-linear-gradient(top, #ffffff, #e6e6e6) !important;
     border: 1px solid #cccccc !important;
-    *border: 0 !important;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25) !important;
     border-color: #e6e6e6 #e6e6e6 #bfbfbf !important;
-    border-bottom-color: #b3b3b3 !important;
     -webkit-border-radius: 4px !important;
-       -moz-border-radius: 4px !important;
-            border-radius: 4px !important;
-    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0) !important;
-    filter: progid:dximagetransform.microsoft.gradient(enabled=false) !important;
-    *zoom: 1 !important;
-    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
-       -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
-    font-size: 13px !important;
-    line-height: 18px !important;
-    *line-height: 20px !important;
-    color: #333333 !important;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75) !important;
-}
-
-.dashboard button.ColVis_Button:active,
-.dashboard button.ColVis_Button:focus { outline:0; }
-
-.dashboard ul.ColVis_collection {
-    min-width: 176px;
-    padding: 0 !important;
-    background-color: #fff !important;
-}
-
-.dashboard ul.ColVis_collection li span { font-weight: normal; }
-.dashboard ul.ColVis_collection li:hover { border: 0 !important; }
-
-.dashboard ul.ColVis_collection li {
-    margin: 5px !important;
-    padding: 0 !important;
-    border: 0 !important;
+    -moz-border-radius: 4px !important;
+    border-radius: 4px !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
     box-shadow: none !important;
-    background:-webkit-linear-gradient(top, #fff 0%, #fff 89%, #fff 100%);
-    background:-moz-linear-gradient(top, #fff 0%, #fff 89%, #fff 100%);
-    background:-ms-linear-gradient(top, #fff 0%, #fff 89%, #fff 100%);
-    background:-o-linear-gradient(top, #fff 0%, #fff 89%, #fff 100%);
-    background:linear-gradient(top, #fff 0%, #fff 89%, #fff 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 )
 }
 
 .dashboard table.dataTable thead th {
@@ -857,6 +809,12 @@ div.ColVis_collectionBackground {
     padding-right: 16px !important;
     background: #faedba url("/media/img/desc.gif") no-repeat center right;
 }
+
+.dashboard div.dt-buttons {
+    float: right;
+    margin-left: 20px;
+}
+/* End Dashboard dataTable customizations */
 
 .project-breadcrumb {
     margin: 0;
@@ -1358,7 +1316,7 @@ padding: 4px;
 @media (max-width: 767px) {
     #outer-container { padding-top: 80px; }
     .dataTables_filter,
-    .ColVis {
+    .dt-buttons {
         display: none;
     }
     .theme-brand {

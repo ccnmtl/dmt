@@ -334,17 +334,23 @@
 $(document).ready(function() {
     {% with pmt_user=request.user.userprofile %}
     {% if pmt_user.items %}
-        var table = $('table#user-items').DataTable({
-            aoColumnDefs: [
-                { bVisible: false, aTargets: [4, 6] }
+    var table = $('table#user-items').DataTable({
+        aoColumnDefs: [
+            { bVisible: false, aTargets: [4, 6] }
+        ],
+        dom: 'Bfrtip',
+        buttons: [{
+            extend: 'collection',
+            text: 'Show / hide columns',
+            fade: 0,
+            buttons: [
+                'columnsVisibility'
             ],
-            dom: 'C<"clear">lfrtip',
-            colVis: {
-                iOverlayFade: 0,
-            },
-            searching: true
-        });
-        table.order([1, 'desc'], [3, 'asc']).draw();
+            visibility: true
+        }],
+        searching: true
+    });
+    table.order([1, 'desc'], [3, 'asc']).draw();
     {% endif %}
     {% endwith %}
     $("table#owned-items").tablesorter({sortList: [[1,0], [3,1]]}); 
