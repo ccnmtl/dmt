@@ -13,10 +13,6 @@ import unittest
 
 
 class ActiveProjectTests(LoggedInTestMixin, TestCase):
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_active_project_view(self):
         r = self.client.get(reverse('active_projects_report'))
         self.assertEqual(r.status_code, 200)
@@ -29,10 +25,6 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
         completed = timezone.now() - timedelta(days=35)
         ActualTimeFactory(completed=completed)
 
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_active_project_export_csv_view(self):
         r = self.client.get(
             reverse('active_projects_report_export'), {
@@ -51,10 +43,6 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
         self.assertEqual(r_offset.status_code, 200)
         self.assertNotEqual(r.content, r_offset.content)
 
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_active_project_export_excel_view(self):
         r = self.client.get(
             reverse('active_projects_report_export'), {
