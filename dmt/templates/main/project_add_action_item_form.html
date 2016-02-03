@@ -49,24 +49,36 @@
 
                                 {% for user in object.all_personnel_in_project %}
                                 {# the formatting for this option is important for a unit test. keep it on one line. #}
-                                <option value="{{user.username}}" {% ifequal user.username request.user.userprofile.username %}selected="selected"{% endifequal %}
-                                        >{{user.fullname}}</option>
+                                <option value="{{user.username}}" {% if user.username == request.user.userprofile.username %}selected="selected"{% endif %}>
+                                    {% if user.fullname %}
+                                    {{user.fullname}}
+                                    {% else %}
+                                    {{user.username}}
+                                    {% endif %}
+                                </option>
                                 {% endfor %}
                             </select>
                         </div>
 
                         <div class="form-group pull-right form-group-col-2">
                             <label for="action_item-assigned_to">Assigned To</label>
-                            <select name="assigned_to" id="action_item-assigned_to"
+                            <span id="multiple-pmt-notice"></span>
+                            <select multiple="multiple"
+                                    name="assigned_to"
+                                    id="action_item-assigned_to"
                                     class="form-control">
                                 {% for user in object.all_personnel_in_project %}
                                 <option value="{{user.username}}"
-                                        {% ifequal user.user.id object.caretaker_user.id %}
+                                        {% if user.user.id == object.caretaker_user.id %}
                                         selected="selected"
-                                        {% endifequal %}
-                                        >{{user.fullname}}{% ifequal user.user.id object.caretaker_user.id %}
-                                        *
-                                        {% endifequal %}</option>
+                                        {% endif %} >
+                                    {% if user.fullname %}
+                                        {{user.fullname}}
+                                    {% else %}
+                                        {{user.username}}
+                                    {% endif %}
+                                    {% if user.user.id == object.caretaker_user.id %} *{% endif %}
+                                </option>
                                 {% endfor %}
                             </select>
                             <div class="instructions">* Caretaker</div>

@@ -48,5 +48,16 @@ require([
                 $reminderInput.hide();
             }
         });
+
+        // Set up multiple PMT notice
+        $('select[name="assigned_to"]').on('change', function(e) {
+            var numSelected = $(this).find(':selected').length;
+            if (numSelected > 1) {
+                $('#multiple-pmt-notice').text(
+                    '(creating ' + numSelected + ' PMTs)');
+            } else {
+                $('#multiple-pmt-notice').text('');
+            }
+        });
     });
 });

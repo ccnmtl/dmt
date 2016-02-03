@@ -967,8 +967,13 @@ class ProjectAddItemView(LoggedInMixin, View):
             title = "Untitled"
         tags = clean_tags(request.POST.get('tags', u''))
         description = request.POST.get('description', u'')
-        assigned_to = get_object_or_404(
-            UserProfile, username=request.POST.get('assigned_to'))
+
+        assigned_to = request.POST.getlist('assigned_to')
+        assignees = []
+        for username in assigned_to:
+            assignee = get_object_or_404(UserProfile, username=username)
+            assignees.append(assignee)
+
         owner = get_object_or_404(
             UserProfile, username=request.POST.get(
                 'owner', user.username))
@@ -984,22 +989,23 @@ class ProjectAddItemView(LoggedInMixin, View):
             reminder_unit = request.POST.get('reminder_unit', u'd')
             reminder_duration = reminder_time + reminder_unit
 
-        project.add_item(
-            type=self.item_type,
-            title=title,
-            assigned_to=assigned_to,
-            owner=owner,
-            milestone=milestone,
-            priority=priority,
-            description=description,
-            estimated_time=request.POST.get('estimated_time', '1 hour'),
-            status='OPEN',
-            r_status='',
-            tags=tags,
-            target_date=target_date,
-            reminder_duration=reminder_duration,
-            current_user=request.user
-        )
+        for assignee in assignees:
+            project.add_item(
+                type=self.item_type,
+                title=title,
+                assigned_to=assignee,
+                owner=owner,
+                milestone=milestone,
+                priority=priority,
+                description=description,
+                estimated_time=request.POST.get('estimated_time', '1 hour'),
+                status='OPEN',
+                r_status='',
+                tags=tags,
+                target_date=target_date,
+                reminder_duration=reminder_duration,
+                current_user=request.user
+            )
         statsd.incr('main.%s_added' % (self.item_type.replace(' ', '_')))
         return HttpResponseRedirect(project.get_absolute_url())
 

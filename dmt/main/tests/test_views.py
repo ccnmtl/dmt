@@ -279,7 +279,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         r = self.c.get(milestone.project.get_absolute_url())
         self.assertEqual(r.status_code, 200)
         self.assertTrue(
-            "value=\"testuser\" selected=\"selected\"" in r.content)
+            'value="testuser" selected="selected"' in r.content)
         self.assertEqual(Reminder.objects.count(), 0)
 
     def test_add_action_item(self):
@@ -311,7 +311,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
 
         r = self.c.post(milestone.project.get_absolute_url() +
                         "add_action_item/",
-                        {"assigned_to": u.username,
+                        {"assigned_to": [u.username],
                          "milestone": milestone.mid,
                          "owner": u.username,
                          "title": ""})
@@ -324,13 +324,49 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.assertEqual(items[0].title, "Untitled")
         self.assertEqual(Reminder.objects.count(), 0)
 
+    def test_add_action_item_multiple_assignees(self):
+        u = UserProfileFactory()
+        u2 = UserProfileFactory()
+        u3 = UserProfileFactory()
+        milestone = MilestoneFactory()
+
+        r = self.c.post(
+            reverse('add_action_item', args=(milestone.project.pk,)), {
+                "assigned_to": [
+                    u2.username,
+                    u3.username,
+                ],
+                "milestone": milestone.mid,
+                "owner": u.username,
+                "title": "Test Action Item"
+            })
+        self.assertEqual(r.status_code, 302)
+
+        items = Item.objects.filter(milestone=milestone, assigned_to=u2)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].assigned_to, u2)
+        self.assertEqual(items[0].assigned_user, u2.user)
+        self.assertEqual(items[0].title, "Test Action Item")
+        self.assertEqual(Reminder.objects.count(), 0)
+
+        items = Item.objects.filter(milestone=milestone, assigned_to=u3)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].assigned_to, u3)
+        self.assertEqual(items[0].assigned_user, u3.user)
+        self.assertEqual(items[0].title, "Test Action Item")
+        self.assertEqual(Reminder.objects.count(), 0)
+
+        self.assertNotEqual(
+            Item.objects.filter(milestone=milestone, assigned_to=u2).first(),
+            Item.objects.filter(milestone=milestone, assigned_to=u3).first())
+
     def test_add_action_item_owner(self):
         u = UserProfileFactory()
         milestone = MilestoneFactory()
 
         r = self.c.post(milestone.project.get_absolute_url() +
                         "add_action_item/",
-                        {"assigned_to": u.username,
+                        {"assigned_to": [u.username],
                          "milestone": milestone.mid,
                          "owner": u.username})
         self.assertEqual(r.status_code, 302)
@@ -346,7 +382,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
 
         url = reverse('add_action_item', args=(milestone.project.pk,))
         r = self.c.post(url, {
-            'assigned_to': u.username,
+            'assigned_to': [u.username],
             'milestone': milestone.mid,
             'owner': u.username,
             'remind_me_toggle': 'on',
