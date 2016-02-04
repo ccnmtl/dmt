@@ -1,4 +1,3 @@
-import re
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
@@ -34,20 +33,7 @@ class ClientViewSet(viewsets.ModelViewSet):
 class ItemHoursView(generics.CreateAPIView):
     def post(self, request, pk):
         duration_string = request.POST.get('time', '1 hour').strip()
-
-        try:
-            d = Duration(duration_string)
-        except InvalidDuration:
-            d = None
-
-        # If the user's string is a number with no unit, simpleduration
-        # throws an InvalidDuration exception. In this case, we'll assume
-        # the user is talking about the number of hours.
-        if d is None and re.match(r'\d+', duration_string):
-            try:
-                d = Duration(duration_string + 'h')
-            except InvalidDuration:
-                d = None
+        d = new_duration(duration_string)
 
         if d is not None:
             td = d.timedelta()
@@ -334,6 +320,8 @@ class AddTrackerView(APIView):
                 item.add_clients([r[0]])
         item.add_resolve_time(user, td, completed)
         data = ItemSerializer(item, context={'request': request}).data
+        data['duration'] = d.seconds
+        data['simpleduration'] = simpleduration_string(td)
         return Response(data)
 
 

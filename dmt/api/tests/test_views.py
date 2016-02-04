@@ -62,6 +62,9 @@ class AddTrackerViewTest(TestCase):
                 completed="last",
             ))
         self.assertEqual(r.status_code, 200)
+        content = json.loads(r.content)
+        self.assertEqual(content['duration'], 3600)
+        self.assertEqual(content['simpleduration'], '1h')
 
         # Assert that the created time is accurate
         item = Item.objects.filter(
@@ -215,20 +218,20 @@ class ItemHoursViewTest(TestCase):
             dict(
                 time='4 j',
             ))
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, 201)
 
         content = json.loads(r.content)
-        self.assertEqual(content['duration'], None)
+        self.assertEqual(content['duration'], 0)
 
         r = self.c.post(
             reverse('item-hours', kwargs={'pk': self.item.iid}),
             dict(
                 time='1h 30m invalid',
             ))
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, 201)
 
         content = json.loads(r.content)
-        self.assertEqual(content['duration'], None)
+        self.assertEqual(content['duration'], 0)
 
 
 class GitUpdateViewTest(TestCase):
