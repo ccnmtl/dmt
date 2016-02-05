@@ -70,7 +70,7 @@ sqlparse==0.1.18
 whitelistaffilmapper==0.1.0
 boto==2.38.0
 unicodecsv==0.14.1
-XlsxWriter==0.7.3
+XlsxWriter==0.8.4
 splinter==0.7.3
 shortuuid==0.4.3
 contextlib2==0.5.1
