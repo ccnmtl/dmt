@@ -1,6 +1,9 @@
 {% load dmttags %}
 
 <form>
+    <div class="daterange-invalid hidden alert alert-warning">
+        The end date can't be earlier than the start date.
+    </div>
     <div class="form-group col-md-4">
         <div class="input-group input-daterange">
             <input type="text" class="form-control"
