@@ -59,10 +59,12 @@ require([
 
     // src
     'utils/markdown_preview',
+    'utils/utils',
     'client_edit',
     'forms/add_time_form',
     'forms/add_tracker_form',
     'forms/comment_form',
+    'forms/daterange_form',
     'forms/project_add_action_item_form',
     'forms/project_add_bug_form',
     'forms/project_action_item_modals',
@@ -115,13 +117,15 @@ require([
         $('input[name=target_date]').datepicker({
             autoclose: true,
             format: 'yyyy-mm-dd',
-            todayHighlight: true
+            todayHighlight: true,
+            zIndexOffset: 1040
         });
 
         $('.input-daterange input').datepicker({
             autoclose: true,
             format: 'yyyy-mm-dd',
-            todayHighlight: true
+            todayHighlight: true,
+            zIndexOffset: 1040
         });
 
         $('#project-input').select2({
