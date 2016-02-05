@@ -20,14 +20,12 @@
 
 {% include 'main/daterange_form.html' %}
 
-<div class="row">
-    <div class="col-md-3">
-        Export as:
-        <a href="{% url 'staff_report_export' %}?format=csv&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
-           >.csv</a>,
-        <a href="{% url 'staff_report_export' %}?format=xlsx&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
-           >.xlsx</a>
-    </div>
+<div class="col-md-3">
+    Export as:
+    <a href="{% url 'staff_report_export' %}?format=csv&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
+    >.csv</a>,
+    <a href="{% url 'staff_report_export' %}?format=xlsx&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
+    >.xlsx</a>
 </div>
 
 <table class="table table-striped table-condensed tablesorter tablesorter-default" id="staff-report">
