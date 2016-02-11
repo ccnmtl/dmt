@@ -59,6 +59,7 @@ require([
 
     // src
     'utils/markdown_preview',
+    'utils/markdown_wysiwyg',
     'utils/utils',
     'client_edit',
     'forms/add_time_form',
