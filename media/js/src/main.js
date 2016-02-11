@@ -59,6 +59,8 @@ require([
 
     // src
     'utils/markdown_preview',
+    'utils/markdown_toolbar_controller',
+    'utils/markdown_toolbar',
     'utils/utils',
     'client_edit',
     'forms/add_time_form',
