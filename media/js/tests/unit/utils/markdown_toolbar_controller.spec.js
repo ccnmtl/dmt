@@ -17,14 +17,16 @@ define([
 
     test('should render block prefixes correctly', function() {
         var text = 'abcc';
+        var rendered = '```\nabcc';
         var c = new MarkdownToolbarController();
-        ok(c.renderBlockPrefix(0, 0, '#', text));
+        strictEqual(c.renderBlockPrefix(0, 0, '```', text), rendered);
     });
 
     test('should render block suffixes correctly', function() {
         var text = 'abcc';
+        var rendered = 'abcc\n```';
         var c = new MarkdownToolbarController();
-        ok(c.renderBlockSuffix(0, 0, 1, '#', text));
+        strictEqual(c.renderBlockSuffix(0, 0, 3, '```', text), rendered);
     });
 
     test('should render bold selections correctly', function() {

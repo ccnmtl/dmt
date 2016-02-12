@@ -13,19 +13,22 @@ define([
         var me = this;
         var $textarea = this.$toolbar.closest('.form-group').find('textarea');
 
-        this.$toolbar.find('button.js-menu-target').on('click', function() {
-            var $container = $(this).closest('.js-menu-container');
-            $container.toggleClass('active');
-        });
-
         this.$toolbar.find('button.js-toolbar-item').on('click', function() {
             var $this = $(this);
+
+            // Get data from button element
             var prefix = $this.data('prefix');
             var suffix = $this.data('suffix');
             var blockPrefix = $this.data('block-prefix');
             var blockSuffix = $this.data('block-suffix');
+            var multiline = $this.data('multiline');
+            var surroundWithNewlines = $this.data('surround-with-newlines');
+            var orderedList = $this.data('ordered-list');
+            var replaceNext = $this.data('replace-next');
+            var scanFor = $this.data('scan-for');
             var hotkey = $this.data('toolbar-hotkey');
 
+            // Get cursor position and textarea's text
             var selectionStart = $textarea[0].selectionStart;
             var selectionEnd = $textarea[0].selectionEnd;
             var text = $textarea.val();
