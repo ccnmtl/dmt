@@ -3,30 +3,42 @@ define([
 ], function(MarkdownToolbarController) {
     test('should render prefixes correctly', function() {
         var text = 'abcdefg';
+        var d = {
+            'prefix': '**'
+        };
         var rendered = '**abcdefg';
         var c = new MarkdownToolbarController();
-        strictEqual(c.renderPrefix(0, 7, '**', text), rendered);
+        strictEqual(c.renderPrefix(0, 7, d, text), rendered);
     });
 
     test('should render suffixes correctly', function() {
         var text = 'abcdefg';
+        var d = {
+            'suffix': '**'
+        };
         var rendered = 'abcdefg**';
         var c = new MarkdownToolbarController();
-        strictEqual(c.renderSuffix(0, 7, 2, '**', text), rendered);
+        strictEqual(c.renderSuffix(0, 7, 2, d, text), rendered);
     });
 
     test('should render block prefixes correctly', function() {
         var text = 'abcc';
+        var d = {
+            'block-prefix': '```'
+        };
         var rendered = '```\nabcc';
         var c = new MarkdownToolbarController();
-        strictEqual(c.renderBlockPrefix(0, 0, '```', text), rendered);
+        strictEqual(c.renderBlockPrefix(0, 0, d, text), rendered);
     });
 
     test('should render block suffixes correctly', function() {
         var text = 'abcc';
+        var d = {
+            'block-suffix': '```'
+        };
         var rendered = 'abcc\n```';
         var c = new MarkdownToolbarController();
-        strictEqual(c.renderBlockSuffix(0, 0, 3, '```', text), rendered);
+        strictEqual(c.renderBlockSuffix(0, 0, 3, d, text), rendered);
     });
 
     test('should render bold selections correctly', function() {
@@ -81,5 +93,35 @@ define([
         rendered = '```\nabcdef\nabcdef\n\n```';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, 13, text), rendered);
+    });
+
+    test('should render lists correctly', function() {
+        var text = 'abcdef';
+        var data = {
+            'prefix': '- ',
+            'multiline': true
+        };
+        var rendered = 'abcdef- ';
+        var c = new MarkdownToolbarController();
+        strictEqual(c.render(data, text.length, text.length, text), rendered);
+
+        text = 'abcdef';
+        rendered = '- abcdef';
+        c = new MarkdownToolbarController();
+        strictEqual(c.render(data, 0, text.length, text), rendered);
+
+        text = 'abcdef\nabcdef\n';
+        rendered = '- abcdef\n\nabcdef\n';
+        c = new MarkdownToolbarController();
+        //strictEqual(c.render(data, 0, 6, text), rendered);
+
+        text = 'abcdef\nabcdef\n';
+        rendered = '- abcdef\n- abcdef\n- ';
+        c = new MarkdownToolbarController();
+        strictEqual(c.render(data, 0, text.length, text), rendered);
+        text = 'abcd\nabcd\nabc';
+        rendered = '- abcd\n- abcd\n- abc';
+        c = new MarkdownToolbarController();
+        strictEqual(c.render(data, 0, text.length, text), rendered);
     });
 });
