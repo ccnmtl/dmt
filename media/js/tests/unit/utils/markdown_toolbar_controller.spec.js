@@ -31,45 +31,55 @@ define([
 
     test('should render bold selections correctly', function() {
         var text = 'abcdef';
+        var data = {
+            'prefix': '**',
+            'suffix': '**'
+        };
         var rendered = 'abcdef****';
         var c = new MarkdownToolbarController();
-        strictEqual(c.render('**', '**', null, null, 6, 6, text), rendered);
+        strictEqual(c.render(data, 6, 6, text), rendered);
 
         text = 'abcdef';
         rendered = '**abcdef**';
         c = new MarkdownToolbarController();
-        strictEqual(c.render('**', '**', null, null, 0, 6, text), rendered);
+        strictEqual(c.render(data, 0, 6, text), rendered);
 
         text = 'abcdef\nabcdef\n';
         rendered = '**abcdef**\nabcdef\n';
         c = new MarkdownToolbarController();
-        strictEqual(c.render('**', '**', null, null, 0, 6, text), rendered);
+        strictEqual(c.render(data, 0, 6, text), rendered);
 
         text = 'abcdef\nabcdef\n';
         rendered = '**abcdef\nabcdef**\n';
         c = new MarkdownToolbarController();
-        strictEqual(c.render('**', '**', null, null, 0, 13, text), rendered);
+        strictEqual(c.render(data, 0, 13, text), rendered);
     });
 
     test('should render code selections correctly', function() {
         var text = 'abcdef';
+        var data = {
+            'prefix': '`',
+            'suffix': '`',
+            'block-prefix': '```',
+            'block-suffix': '```'
+        };
         var rendered = 'abcdef``';
         var c = new MarkdownToolbarController();
-        strictEqual(c.render('`', '`', '```', '```', 6, 6, text), rendered);
+        strictEqual(c.render(data, 6, 6, text), rendered);
 
         text = 'abcdef';
         rendered = '`abcdef`';
         c = new MarkdownToolbarController();
-        strictEqual(c.render('`', '`', '```', '```', 0, 6, text), rendered);
+        strictEqual(c.render(data, 0, 6, text), rendered);
 
         text = 'abcdef\nabcdef\n';
         rendered = '`abcdef`\nabcdef\n';
         c = new MarkdownToolbarController();
-        strictEqual(c.render('`', '`', '```', '```', 0, 6, text), rendered);
+        strictEqual(c.render(data, 0, 6, text), rendered);
 
         text = 'abcdef\nabcdef\n';
         rendered = '```\nabcdef\nabcdef\n\n```';
         c = new MarkdownToolbarController();
-        strictEqual(c.render('`', '`', '```', '```', 0, 13, text), rendered);
+        strictEqual(c.render(data, 0, 13, text), rendered);
     });
 });

@@ -5,31 +5,33 @@ define([
     };
 
     MarkdownToolbarController.prototype.render = function(
-        prefix, suffix, blockPrefix, blockSuffix,
-        selectionStart, selectionEnd, text
+        d, selectionStart, selectionEnd, text
     ) {
         var selectedText = text.substr(selectionStart, selectionEnd);
-        if (selectedText.match(/\n/) && blockPrefix && blockSuffix) {
-            if (blockPrefix) {
+        if (selectedText.match(/\n/) &&
+            d['block-prefix'] &&
+            d['block-suffix']
+           ) {
+            if (d['block-prefix']) {
                 text = this.renderBlockPrefix(
-                    selectionStart, selectionEnd, blockSuffix, text);
+                    selectionStart, selectionEnd, d['block-suffix'], text);
             }
 
-            if (blockSuffix) {
+            if (d['block-suffix']) {
                 text = this.renderBlockSuffix(
                     selectionStart, selectionEnd, this.prefixLength,
-                    blockSuffix, text);
+                    d['block-suffix'], text);
             }
         } else {
-            if (prefix) {
+            if (d.prefix) {
                 text = this.renderPrefix(
-                    selectionStart, selectionEnd, prefix, text);
+                    selectionStart, selectionEnd, d.prefix, text);
             }
 
-            if (suffix) {
+            if (d.suffix) {
                 text = this.renderSuffix(
                     selectionStart, selectionEnd, this.prefixLength,
-                    suffix, text);
+                    d.suffix, text);
             }
         }
 
