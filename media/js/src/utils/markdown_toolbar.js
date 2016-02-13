@@ -2,10 +2,11 @@ define([
     'jquery',
     'utils/markdown_toolbar_controller'
 ], function($, MarkdownToolbarController) {
-    var MarkdownToolbar = function($toolbar) {
+    var MarkdownToolbar = function($toolbar, markdownPreview) {
         this.$toolbar = $toolbar;
         this.lastHotkey = null;
         this.lastText = null;
+        this.markdownPreview = markdownPreview;
         this.init();
     };
 
@@ -45,6 +46,13 @@ define([
             // Reset cursor to original state
             $textarea[0].setSelectionRange(selectionStart, selectionEnd);
             $textarea.focus();
+
+            // Refresh the preview view if it exists.
+            if (me.markdownPreview &&
+                typeof me.markdownPreview.refresh === 'function'
+               ) {
+                me.markdownPreview.refresh($textarea.val());
+            }
         });
 
         $textarea.on('keyup', function(e) {
