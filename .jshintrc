@@ -4,16 +4,13 @@
     "trailing": true,
     "undef": true,
     "browser": true,
-		"eqeqeq": true,
+    "eqeqeq": true,
+    "jquery": true,
+    "qunit": true,
     "predef": [
-        "$",
         "define",
-        "jQuery",
         "require",
         "test",
-        "expect",
-        "ok",
-        "equal",
         "sinon",
         "confirm",
         "alert",
@@ -23,6 +20,6 @@
         "connect",
         "milestoneActionItemTargets",
         "milestoneBugTargets",
-				"Bloodhound"
+        "Bloodhound"
     ]
 }
