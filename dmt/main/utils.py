@@ -74,12 +74,10 @@ def simpleduration_string(duration):
     minutes = seconds // 60
     seconds = seconds % 60
 
-    hours = minutes // 60
+    hours = (minutes // 60) + (days * 24)
     minutes = minutes % 60
 
     string = ''
-    if days:
-        string += '{}d '.format(days)
     if hours:
         string += '{:d}h '.format(hours)
     if minutes:
