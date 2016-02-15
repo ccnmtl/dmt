@@ -4,6 +4,8 @@
 {% load emoji_tags %}
 {% load dmttags %}
 
+{% block title %}Edit Comment{% endblock %}
+
 {% block content %}
 
 <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
@@ -15,6 +17,7 @@
 <form id="pmt-add-comment-form" action="." method="post">
     {% csrf_token %}
 
+    {% include 'main/markdown_toolbar.html' %}
     {% bootstrap_form form %}
 
     <div class="form-group">

@@ -9,14 +9,15 @@ require([
             return;
         }
 
+        var $textarea = $(
+            '#pmt-add-comment-form textarea[name="comment_src"]');
         var preview = new MarkdownPreview(
-            $('#pmt-add-comment-form textarea[name="comment_src"]'),
-            $('.dmt-markdown-preview')
-        );
+            $textarea, $('.dmt-markdown-preview'));
         preview.startEventHandler();
 
         var toolbar = new MarkdownToolbar(
-            $('#add-comment .js-toolbar.toolbar-commenting'),
+            $('#pmt-add-comment-form .js-toolbar.toolbar-commenting'),
+            $textarea,
             preview
         );
     });
