@@ -156,9 +156,25 @@
 
       {% if object.estimated_time %}
       <dt>Estimated time</dt>
-      {% with objtime=object.estimated_time|interval_to_hours %}
-      <dd>{{objtime}} hour{{objtime|pluralize}}</dd>
-      {% endwith %}
+      <dd>{{object.estimated_time|simpleduration}}</dd>
+      {% endif %}
+
+      {% if object.actualtime_set.count %}
+          <dt>Time logged</dt>
+          <dd>
+              <div>Total: {{workedon_total|simpleduration}}</div>
+      {% for at in object.actualtime_set.all %}
+      <ul class="time-logged">
+          <li>
+              {{at.actual_time|simpleduration}}
+              <a href="{{at.user.userprofile.get_absolute_url}}"
+                 >{{at.user.userprofile.fullname}}</a>
+              {{at.completed}}
+          </li>
+      </ul>
+      {% endfor %}
+
+      </dd>
       {% endif %}
 
       {% if object.url %}
@@ -244,23 +260,6 @@
       </script>
       {% endflag %}
       </form>
-
-      {% if object.actualtime_set.count %}
-
-      <dt>Time logged</dt>
-      <dd>
-      {% for at in object.actualtime_set.all %}
-      <ul class="time-logged">
-          <li>
-              {{at.actual_time|simpleduration}}
-              <a href="{{at.user.userprofile.get_absolute_url}}"
-                 >{{at.user.userprofile.fullname}}</a>
-              {{at.completed}}
-          </li>
-      </ul>
-      {% endfor %}
-      </dd>
-      {% endif %}
     </dl>
 
   </div><!-- /.item-details -->
