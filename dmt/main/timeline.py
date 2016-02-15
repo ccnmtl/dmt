@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.template.defaultfilters import pluralize
 from django.utils import timezone
 from dmt.main.utils import interval_to_hours
 
@@ -123,7 +124,8 @@ class TimeLineActualTime(TimeLineItem):
         return self.a.item.title
 
     def body(self):
-        return "%.2f hours" % interval_to_hours(self.a.actual_time)
+        hours = interval_to_hours(self.a.actual_time)
+        return "{:.2f} hour{}".format(hours, pluralize(hours))
 
     def event_type(self):
         return "actual_time"
