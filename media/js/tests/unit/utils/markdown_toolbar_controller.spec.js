@@ -24,7 +24,7 @@ define([
     test('should render block prefixes correctly', function() {
         var text = 'abcc';
         var d = {
-            'block-prefix': '```'
+            'blockPrefix': '```'
         };
         var rendered = '```\nabcc';
         var c = new MarkdownToolbarController();
@@ -34,7 +34,7 @@ define([
     test('should render block suffixes correctly', function() {
         var text = 'abcc';
         var d = {
-            'block-suffix': '```'
+            'blockSuffix': '```'
         };
         var rendered = 'abcc\n```';
         var c = new MarkdownToolbarController();
@@ -72,8 +72,8 @@ define([
         var data = {
             'prefix': '`',
             'suffix': '`',
-            'block-prefix': '```',
-            'block-suffix': '```'
+            'blockPrefix': '```',
+            'blockSuffix': '```'
         };
         var rendered = 'abcdef``';
         var c = new MarkdownToolbarController();
