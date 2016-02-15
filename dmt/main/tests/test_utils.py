@@ -34,11 +34,11 @@ class SimpleDurationStringTests(unittest.TestCase):
 
         self.assertEqual(
             simpleduration_string(timedelta(days=2)),
-            '2d')
+            '48h')
 
         self.assertEqual(
             simpleduration_string(timedelta(days=2, hours=5)),
-            '2d 5h')
+            '53h')
 
         self.assertEqual(
             simpleduration_string(timedelta(hours=2)),
