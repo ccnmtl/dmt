@@ -4,8 +4,11 @@ require([
     'bootstrap-datepicker',
 
     'utils/markdown_preview',
+    'utils/markdown_toolbar',
     'forms/utils'
-], function(domReady, $, datepicker, MarkdownPreview, formUtils) {
+], function(
+    domReady, $, datepicker, MarkdownPreview, MarkdownToolbar, formUtils
+) {
     function setupDateSwitcher() {
         var $selectEl = $('#add-action-item-form #action_item-milestone');
 
@@ -25,15 +28,20 @@ require([
     }
 
     domReady(function() {
-        if (!$('#add-action-item-form')) {
+        if ($('#add-action-item-form').length === 0) {
             return;
         }
 
+        var $textarea = $('textarea#dmt-project-new-item-desc');
         var preview = new MarkdownPreview(
-            $('textarea#dmt-project-new-item-desc'),
+            $textarea,
             $('.dmt-markdown-project-item-preview')
         );
         preview.startEventHandler();
+
+        var $toolbar = $textarea.closest('.form-group')
+            .find('.js-toolbar.toolbar-commenting');
+        var toolbar = new MarkdownToolbar($toolbar, $textarea, preview);
 
         setupDateSwitcher();
 

@@ -2,17 +2,17 @@ define([
     'jquery',
     'utils/markdown_toolbar_controller'
 ], function($, MarkdownToolbarController) {
-    var MarkdownToolbar = function($toolbar, markdownPreview) {
+    var MarkdownToolbar = function($toolbar, $textarea, markdownPreview) {
         this.$toolbar = $toolbar;
+        this.$textarea = $textarea;
+        this.markdownPreview = markdownPreview;
         this.lastHotkey = null;
         this.lastText = null;
-        this.markdownPreview = markdownPreview;
         this.init();
     };
 
     MarkdownToolbar.prototype.init = function() {
         var me = this;
-        var $textarea = this.$toolbar.closest('.form-group').find('textarea');
 
         this.$toolbar.find('button.js-toolbar-item').on('click', function(e) {
             var $this = $(this);
@@ -21,9 +21,9 @@ define([
             var buttonData = $this.data();
 
             // Get cursor position and textarea's text
-            var selectionStart = $textarea[0].selectionStart;
-            var selectionEnd = $textarea[0].selectionEnd;
-            var text = $textarea.val();
+            var selectionStart = me.$textarea[0].selectionStart;
+            var selectionEnd = me.$textarea[0].selectionEnd;
+            var text = me.$textarea.val();
 
             if (buttonData.hotkey === me.lastHotkey && me.lastText) {
                 var diff = text.length - me.lastText.length;
@@ -41,21 +41,21 @@ define([
                 me.lastHotkey = buttonData.hotkey;
             }
 
-            $textarea.val(text);
+            me.$textarea.val(text);
 
             // Reset cursor to original state
-            $textarea[0].setSelectionRange(selectionStart, selectionEnd);
-            $textarea.focus();
+            me.$textarea[0].setSelectionRange(selectionStart, selectionEnd);
+            me.$textarea.focus();
 
             // Refresh the preview view if it exists.
             if (me.markdownPreview &&
                 typeof me.markdownPreview.refresh === 'function'
                ) {
-                me.markdownPreview.refresh($textarea.val());
+                me.markdownPreview.refresh(me.$textarea.val());
             }
         });
 
-        $textarea.on('keyup', function(e) {
+        this.$textarea.on('keyup', function(e) {
             me.lastHotkey = null;
         });
     };

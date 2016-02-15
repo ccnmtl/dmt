@@ -4,8 +4,11 @@ require([
     'bootstrap-datepicker',
 
     'utils/markdown_preview',
+    'utils/markdown_toolbar',
     'forms/utils'
-], function(domReady, $, datepicker, MarkdownPreview, formUtils) {
+], function(
+    domReady, $, datepicker, MarkdownPreview, MarkdownToolbar, formUtils
+) {
     function setupDateSwitcher() {
         var $selectEl = $('#add-bug-form #bug-milestone');
 
@@ -25,15 +28,20 @@ require([
     }
 
     domReady(function() {
-        if (!$('#add-bug-form')) {
+        if ($('#add-bug-form').length === 0) {
             return;
         }
 
+        var $textarea = $('textarea#dmt-project-new-bug-desc');
         var preview = new MarkdownPreview(
-            $('textarea#dmt-project-new-bug-desc'),
+            $textarea,
             $('.dmt-markdown-project-bug-preview')
         );
         preview.startEventHandler();
+
+        var $toolbar = $textarea.closest('.form-group')
+            .find('.js-toolbar.toolbar-commenting');
+        var toolbar = new MarkdownToolbar($toolbar, $textarea, preview);
 
         setupDateSwitcher();
     });
