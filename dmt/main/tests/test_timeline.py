@@ -131,7 +131,7 @@ class TestTimeLineActualTime(unittest.TestCase):
         self.assertEqual(e.timestamp(), "completed")
         self.assertEqual(e.event_type(), "actual_time")
         self.assertEqual(e.title(), "dummy item")
-        self.assertEqual(e.body(), "1.00 hours")
+        self.assertEqual(e.body(), "1.00 hour")
         self.assertEqual(e.user(), "resolver")
         self.assertEqual(e.url(), "item absolute url")
 
