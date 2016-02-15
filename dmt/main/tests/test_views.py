@@ -411,7 +411,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
     def test_create_project_post(self):
         test_name = 'Test project'
         test_desc = 'Description for the test project'
-        test_pub_view = 'public'
+        test_pub_view = True
         test_target_date = '2020-04-28'
         test_wiki_category = ''
         r = self.c.post(reverse('project_create'), {
@@ -439,7 +439,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
     def test_create_project_post_requires_project_name(self):
         r = self.c.post(reverse('project_create'),
                         {'description': 'description',
-                         'pub_view': 'public',
+                         'pub_view': True,
                          'target_date': '2020-04-28',
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
@@ -448,7 +448,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         r = self.c.post(reverse('project_create'),
                         {'name': '      ',
                          'description': 'description',
-                         'pub_view': 'public',
+                         'pub_view': True,
                          'target_date': '2020-04-28',
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
@@ -458,7 +458,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         r = self.c.post(reverse('project_create'),
                         {'name': 'Test project name',
                          'description': 'description',
-                         'pub_view': 'public',
+                         'pub_view': True,
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
         self.assertTrue('This field is required.' in r.content)
@@ -467,7 +467,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         r = self.c.post(reverse('project_create'),
                         {'name': 'Test project name',
                          'description': 'description',
-                         'pub_view': 'public',
+                         'pub_view': True,
                          'target_date': '2309ur03j30',
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
@@ -477,7 +477,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.c.post(reverse('project_create'),
                     {'name': 'Test project name',
                      'description': 'description',
-                     'pub_view': 'private',
+                     'pub_view': False,
                      'target_date': '2020-04-28',
                      'test_wiki_category': ''})
 
@@ -485,7 +485,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.c.post(reverse('project_create'),
                     {'name': 'Test project name',
                      'description': 'description',
-                     'pub_view': 'public',
+                     'pub_view': True,
                      'target_date': '2020-04-28',
                      'test_wiki_category': ''})
         p = Project.objects.get(name='Test project name')
@@ -497,7 +497,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.c.post(reverse('project_create'),
                     {'name': 'Test project name',
                      'description': 'description',
-                     'pub_view': 'public',
+                     'pub_view': True,
                      'target_date': '2020-04-28',
                      'test_wiki_category': ''})
         p = Project.objects.get(name='Test project name')
@@ -509,7 +509,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.c.post(reverse('project_create'),
                     {'name': 'Test project name',
                      'description': 'description',
-                     'pub_view': 'public',
+                     'pub_view': True,
                      'target_date': '2020-04-28',
                      'test_wiki_category': ''})
         p = Project.objects.get(name='Test project name')
