@@ -1449,7 +1449,7 @@ select#project-personnel-input {
     margin-bottom: 0;
 }
 
-/* markdown wysiwyg buttons */
+/* markdown-toolbar buttons */
 .new-discussion-timeline .previewable-comment-form .comment-form-head.tabnav {
     padding: 6px 10px 0;
     background: #f7f7f7;
@@ -1514,27 +1514,4 @@ select#project-personnel-input {
     vertical-align: text-top;
     fill: currentColor;
 }
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 100;
-    width: 160px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-top: 2px;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 4px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-}
-
-.dropdown-menu-s {
-    right: 50%;
-    left: auto;
-    -webkit-transform: translateX(50%);
-    transform: translateX(50%);
-}
-/* end markdown wysiwyg buttons */
+/* end markdown-toolbar buttons */
