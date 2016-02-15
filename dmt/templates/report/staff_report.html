@@ -39,7 +39,7 @@
         <tr>
             <td>
                 <a href="{% url 'user_detail' user.user.username %}">
-                    {{user.user.fullname}}
+                    {% firstof user.user.fullname user.user.username %}
                 </a>
             </td>
             <td>

@@ -3,7 +3,7 @@
 {% block content %}
 {% if request.user.is_superuser %}
 <form action="." method="post">{% csrf_token %}
-<fieldset><legend>Deactivate User {{user.fullname}}</legend>
+<fieldset><legend>Deactivate User {% firstof user.fullname user.username %}</legend>
 
 {% if user.project_set.all.count %}
 <h2>Projects that this user is caretaker for:</h2>
@@ -25,7 +25,7 @@
 		<select name="project_{{p.pid}}">
 			{% for u in p.all_personnel_in_project %}
 			{% ifnotequal u.username user.username %}
-			<option value="{{u.username}}">{{u.fullname}}</option>
+			<option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
 			{% endifnotequal %}
 			{% endfor %}
 		</select>
@@ -59,7 +59,7 @@
 	<td><select name="item_assigned_{{i.iid}}">
 			{% for u in i.milestone.project.all_personnel_in_project %}
 			{% ifnotequal user.username u.username %}
-			<option value="{{u.username}}">{{u.fullname}}</option>
+			<option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
 			{% endifnotequal %}
 			{% endfor %}
 			</select>
@@ -95,7 +95,7 @@
 	<td><select name="item_owner_{{i.iid}}">
 			{% for u in i.milestone.project.all_personnel_in_project %}
 			{% ifnotequal u.username user.username %}
-			<option value="{{u.username}}">{{u.fullname}}</option>
+			<option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
 			{% endifnotequal %}
 			{% endfor %}
 			</select>

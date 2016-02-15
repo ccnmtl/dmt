@@ -168,7 +168,9 @@
           <li>
               {{at.actual_time|simpleduration}}
               <a href="{{at.user.userprofile.get_absolute_url}}"
-                 >{{at.user.userprofile.fullname}}</a>
+              >
+                  {% firstof at.user.userprofile.fullname at.user.userprofile.username %}
+              </a>
               {{at.completed}}
           </li>
       </ul>
@@ -249,7 +251,9 @@
               {% with userprofile=notify.user.userprofile %}
               <li>
                   <a href="{% url 'user_detail' userprofile.username %}"
-                     >{{userprofile.fullname}}</a>
+                  >
+                      {% firstof userprofile.fullname userprofile.username %}
+                  </a>
               </li>
               {% endwith %}
               {% endfor %}
@@ -585,9 +589,10 @@
                     <select name="assigned_to" class="form-control" id="assign-to-select">
                         {% for user in item.milestone.project.all_personnel_in_project %}
                         <option value="{{user.username}}"
-                                        {% ifequal user.username item.assigned_to.username %}
-                                        selected="selected"
-                                        {% endifequal %}>{{user.fullname}}</option>
+                                {% if user.username == item.assigned_to.username %}
+                                selected="selected"
+                                {% endif %}
+                        >{% firstof user.fullname user.username %}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -626,9 +631,9 @@
                     <select name="owner" class="form-control" id="assign-to-select">
                         {% for user in item.milestone.project.all_personnel_in_project %}
                         <option value="{{user.username}}"
-                                        {% ifequal user.username item.owner.username %}
-                                        selected="selected"
-                                        {% endifequal %}>{{user.fullname}}</option>
+                                {% if user.username == item.owner.username %}
+                                selected="selected"
+                                {% endif %}>{% firstof user.fullname user.username %}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -684,7 +689,9 @@
         </div>
 
         <div class="attachment-byline text-muted">
-        Uploaded by <a href="{% url 'user_detail' attachment.user.userprofile.username %}">{{attachment.user.userprofile.fullname}}</a>
+            Uploaded by <a href="{% url 'user_detail' attachment.user.userprofile.username %}">
+            {% firstof attachment.user.userprofile.fullname attachment.user.userprofile.username %}
+            </a>
         on {{attachment.last_mod}}
         </div>
         <div class="attachment-description">
@@ -720,7 +727,9 @@
         </div>
         <div class="col-md-3 item-history-date">
             by <a href="{{history_item.user.get_absolute_url}}">
-                {{history_item.user.fullname}}</a>
+            {% firstof history_item.user.fullname history_item.user.username %}
+
+            </a>
             <br />
             <div class="pmt-item-timestamp">
                 on

@@ -60,7 +60,7 @@
             {% if i.user %}
             <a class="text-primary"
                href="{% url 'user_detail' i.user.username %}"
-               >{{i.user.fullname}}</a>, 
+               >{% firstof i.user.fullname i.user.username %}</a>, 
             {% endif %}
             item 
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
@@ -71,7 +71,7 @@
             {% if i.user %}
             <a class="text-primary"
                href="{% url 'user_detail' i.user.username %}"
-               >{{i.user.fullname}}</a>
+               >{% firstof i.user.fullname i.user.username %}</a>
             {% endif %}
             commented on item 
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
@@ -82,7 +82,7 @@
             {% if i.user %}
             <a class="text-primary"
                href="{% url 'user_detail' i.user.username %}"
-               >{{i.user.fullname}}</a>
+               >{% firstof i.user.fullname i.user.username %}</a>
             {% endif %}
                 logged 
             {% if i.body %}
@@ -97,7 +97,7 @@
             {% if i.user %}
             <a class="text-primary"
                href="{% url 'user_detail' i.user.username %}"
-               >{{i.user.fullname}}</a>
+               >{% firstof i.user.fullname i.user.username %}</a>
             {% endif %}
                 added status update
             {% if i.body %}
@@ -110,7 +110,7 @@
             {% if i.user %}
             <a class="text-primary"
                href="{% url 'user_detail' i.user.username %}"
-               >{{i.user.fullname}}</a>
+               >{% firstof i.user.fullname i.user.username %}</a>
             {% endif %}
                 posted a forum 
              “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”

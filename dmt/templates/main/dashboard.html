@@ -74,7 +74,7 @@
 <table class="table table-condensed">
 {% for user in active_users %}
 <tr>
-	<td><a href="{{user.get_absolute_url}}">{{user.fullname}}</a></td>
+	<td><a href="{{user.get_absolute_url}}">{% firstof user.fullname user.username %}</a></td>
   <td><b>{{user.recent_hours|floatformat}}</b> hours logged</td>
 </tr>
 {% endfor %}
