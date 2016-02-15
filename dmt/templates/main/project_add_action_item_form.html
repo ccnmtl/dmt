@@ -50,11 +50,7 @@
                                 {% for user in object.all_personnel_in_project %}
                                 {# the formatting for this option is important for a unit test. keep it on one line. #}
                                 <option value="{{user.username}}" {% if user.username == request.user.userprofile.username %}selected="selected"{% endif %}>
-                                    {% if user.fullname %}
-                                    {{user.fullname}}
-                                    {% else %}
-                                    {{user.username}}
-                                    {% endif %}
+                                    {% firstof user.fullname user.username %}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -72,11 +68,7 @@
                                         {% if user.user.id == object.caretaker_user.id %}
                                         selected="selected"
                                         {% endif %} >
-                                    {% if user.fullname %}
-                                        {{user.fullname}}
-                                    {% else %}
-                                        {{user.username}}
-                                    {% endif %}
+                                    {% firstof user.fullname user.username %}
                                     {% if user.user.id == object.caretaker_user.id %} *{% endif %}
                                 </option>
                                 {% endfor %}

@@ -25,7 +25,7 @@
 <tr>
     <td>
         <a href="{% url 'user_detail' user.username %}">
-            {{ user.fullname }}
+            {% firstof user.fullname user.username %}
         </a>
     </td>
 </tr>
@@ -39,7 +39,7 @@
 <tr>
     <td>
         <a href="{% url 'user_detail' user.username %}">
-            {{ user.fullname }}
+            {% firstof user.fullname user.username %}
         </a>
     </td>
         <td>
@@ -63,7 +63,9 @@
         <div class="form-group">
             <select name="username" class="form-control">
                 {% for user in eligible_users %}
-                <option value="{{user.username}}">{{user.fullname}}</option>
+                    <option value="{{user.username}}">
+                        {% firstof user.fullname user.username %}
+                    </option>
                 {% endfor %}
             </select>
         </div>

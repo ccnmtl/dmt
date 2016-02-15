@@ -24,7 +24,7 @@
 <p>User Matches:</p>
 <ul>
 {% for u in users %}
-<li><a href="{{u.get_absolute_url}}">{{u.fullname}}</a></li>
+<li><a href="{{u.get_absolute_url}}">{% firstof u.fullname u.username %}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -73,7 +73,7 @@
 {% for su in status_updates %}
 <p><a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a>:
  {{su.body}}
- &mdash; <a href="{{su.user.get_absolute_url}}">{{su.user.fullname}}</a>
+ &mdash; <a href="{{su.user.get_absolute_url}}">{% firstof su.user.fullname su.user.username %}</a>
  ({{su.added.date}})</p>
 {% endfor %}
 </ul>
@@ -84,7 +84,7 @@
 <ul>
 {% for node in nodes %}
 <li><a href="{{node.get_absolute_url}}">[{{node.added}}]
-		{{node.subject}}</a> (<a href="{{node.user.userprofile.get_absolute_url}}">{{node.author.fullname}}</a>)</li>
+		{{node.subject}}</a> (<a href="{{node.user.userprofile.get_absolute_url}}">{% firstof node.author.fullname node.author.username %}</a>)</li>
 {% endfor %}
 </ul>
 {% endif %}
