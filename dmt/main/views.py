@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import render_to_response
@@ -414,6 +414,10 @@ class ItemDetailView(LoggedInMixin, DetailView):
             all_notifies = Notify.objects.filter(
                 item=context['item'].iid).order_by(
                     'user__userprofile__fullname')
+
+            context['workedon_total'] = context[
+                'object'].actualtime_set.aggregate(total=Sum(
+                    'actual_time'))['total']
 
             current_user_notification = all_notifies.filter(
                 user=current_user).first()
