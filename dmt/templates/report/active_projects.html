@@ -67,7 +67,7 @@
             <td>{{p.status}}</td>
             <td>
                 <a href="{% url 'user_detail' p.caretaker_user.userprofile.username %}">
-                    {{p.caretaker_user.get_full_name}}
+                    {% firstof p.caretaker_user.get_full_name p.caretaker_user.username %}
                 </a>
             </td>
             <td>{{p.hours_logged|interval_to_hours}}</td>
