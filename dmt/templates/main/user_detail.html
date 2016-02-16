@@ -4,7 +4,7 @@
 {% load emoji_tags %}
 {% load dmttags %}
 
-{% block title %}User: {{object.fullname}}{% endblock %}
+{% block title %}User: {% firstof object.fullname object.username %}{% endblock %}
 {% block extraclass %} class="user-profile-page"{% endblock %}
 
 {% block primarynavtabs %}
@@ -16,11 +16,11 @@
 
 {% block content %}
 
-<h1 class="page-title">User &#8226; {{object.fullname}} <span style="font-weight: normal; color: #999;">({{object.username}})</span></h1>
+<h1 class="page-title">User &#8226; {% firstof object.fullname object.username %} <span style="font-weight: normal; color: #999;">({{object.username}})</span></h1>
 
 {% if not object.active %}
 <div class="alert alert-danger">
-  <p><b>{{object.fullname}}</b> is inactive</p>
+  <p><b>{% firstof object.fullname object.username %}</b> is inactive</p>
 </div>
 {% endif %}
 

@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
 
-{% block title %}Edit User Profile &ndash;{{object.fullname}}{% endblock %}
+{% block title %}Edit User Profile &ndash;{% firstof object.fullname object.username %}{% endblock %}
 {% block extraclass %} class="object-form"{% endblock %}
 
 {% block content %}
-<h1 class="page-title clearfix">Edit User Profile &#8226; {{object.fullname}}</h1>
+<h1 class="page-title clearfix">Edit User Profile &#8226; {% firstof object.fullname object.username %}</h1>
 
 <br />
 

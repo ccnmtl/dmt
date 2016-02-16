@@ -4,7 +4,7 @@
 {% load emoji_tags %}
 {% load dmttags %}
 
-{% block title %}User Timeline: {{object.fullname}}{% endblock %}
+{% block title %}User Timeline: {% firstof object.fullname object.username %}{% endblock %}
 
 {% block extraclass %} class="timeline-page"{% endblock %}
 
@@ -17,26 +17,13 @@
 
 {% block content %}
 
-<h1 class="page-title">User Timeline &#8226; {{object.fullname}}</h1>
+<h1 class="page-title">User Timeline &#8226; {% firstof object.fullname object.username %}</h1>
 
-
-
-<div class="pagination-nav">
-  <ul class="pagination">
-    <li><a href="?date={{prev_week.year}}-{{prev_week.month}}-{{prev_week.day}}" title="Previous week"><span aria-hidden="true"><b>&lt;</b></span><span class="sr-only">Previous</span></a></li>
-
-    <li class="disabled"><span class="page-current">
-     Week of {{week_start|date:"F jS"}} &ndash; {{week_end|date:"F jS"}} 
-    </span></li>
-
-      <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}" title="Next week"><span aria-hidden="true"><b>&gt;</b></span><span class="sr-only">Next</span></a></li>
-  </ul>
-</div>
-
-
+{% include 'main/daterange_form.html' %}
+<div class="clearfix"></div>
 
 {% if timeline %}
-<div class="pmt-timeline-week">
+<div class="pmt-timeline-interval">
     {% for i in timeline %}
     {% with i.timestamp|date:"Y-m-d" as date %}
     {% ifchanged date %}
@@ -99,10 +86,10 @@
     {% endif %}
     {% endwith %}
     {% endfor %}
-</div><!-- /.pmt-timeline-week -->
+</div><!-- /.pmt-timeline-interval -->
 
 {% else %}
-<h4 class="text-muted">There are no activities between {{week_start}} and {{week_end}} for {{object.fullname}}.</h4>
+<h4 class="text-muted">There are no activities between {{interval_start}} and {{interval_end}} for {% firstof object.fullname object.username %}.</h4>
 
 {% endif %}
 
