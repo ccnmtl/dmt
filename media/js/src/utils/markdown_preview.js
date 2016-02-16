@@ -8,6 +8,7 @@ define([
         this.writer = commonmark.HtmlRenderer();
         this.$textarea = $textarea;
         this.$previewArea = $previewArea;
+        this._startEventHandler();
     };
 
     /**
@@ -22,7 +23,7 @@ define([
         this.$previewArea.html(rendered);
     };
 
-    MarkdownPreview.prototype.startEventHandler = function() {
+    MarkdownPreview.prototype._startEventHandler = function() {
         var me = this;
         this.$textarea.on('change keyup', function(e) {
             var comment = $(e.target).val();
