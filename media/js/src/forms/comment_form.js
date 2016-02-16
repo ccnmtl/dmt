@@ -13,7 +13,6 @@ require([
             '#pmt-add-comment-form textarea[name="comment_src"]');
         var preview = new MarkdownPreview(
             $textarea, $('.dmt-markdown-preview'));
-        preview.startEventHandler();
 
         var toolbar = new MarkdownToolbar(
             $('#pmt-add-comment-form .js-toolbar.toolbar-commenting'),

@@ -69,6 +69,7 @@ require([
     'forms/daterange_form',
     'forms/project_add_action_item_form',
     'forms/project_add_bug_form',
+    'forms/project_add_node_form',
     'forms/project_action_item_modals',
     'item'
 ], function(domReady, $, _) {

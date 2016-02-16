@@ -37,7 +37,6 @@ require([
             $textarea,
             $('.dmt-markdown-project-item-preview')
         );
-        preview.startEventHandler();
 
         var $toolbar = $textarea.closest('.form-group')
             .find('.js-toolbar.toolbar-commenting');
