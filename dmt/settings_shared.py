@@ -74,3 +74,6 @@ BASE_URL = "https://localhost"
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+SERVER_EMAIL = 'pmt@ccnmtl.columbia.edu'
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
