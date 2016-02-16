@@ -49,6 +49,7 @@
   <script src="{% bootstrap_javascript_url %}"></script>
   <script src="{% static '/media/js/src/utils/bootstrap_tabs.js' %}"></script>
   <script src="{% static '/media/js/src/utils/bootstrap_modals.js' %}"></script>
+  <script src="{% static '/media/js/src/utils/bootstrap_tooltips.js' %}"></script>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -143,7 +144,16 @@
                 <li><a href="{% url 'project_create' %}"><span class="glyphicon glyphicon-plus-sign"></span> Create new project</a></li>
                 {% if request.user.userprofile.has_recent_active_projects %}
                 <li class="divider"></li>
-                <li><p class="navbar-text"><b>Your recent projects</b></p></li>
+                <li>
+                    <p class="navbar-text">
+                        <strong>Your recent projects</strong>
+                        <span class="glyphicon glyphicon-question-sign"
+                              aria-hidden="true"
+                              data-toggle="tooltip"
+                              title="These are the projects you've recently logged time on."
+                        ></span>
+                    </p>
+                </li>
                 {% for project in request.user.userprofile.recent_active_projects %}
                 <li><a href="{% url 'project_detail' project.pid %}">
                 {{project.name|truncatechars:40}}
