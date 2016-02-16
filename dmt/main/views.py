@@ -39,7 +39,6 @@ from dmt.main.forms import (
 )
 from dmt.main.templatetags.dmttags import linkify
 from dmt.main.utils import new_duration, safe_basename, simpleduration_string
-from dmt.report.mixins import PrevNextWeekMixin
 
 from django_markwhat.templatetags.markup import commonmark
 from dateutil.relativedelta import relativedelta
@@ -625,42 +624,34 @@ class ProjectDetailView(LoggedInMixin, DaterangeMixin, DetailView):
         return ctx
 
 
-class ProjectTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
+class ProjectTimeLineView(LoggedInMixin, DaterangeMixin, DetailView):
     model = Project
     template_name = "main/project_timeline.html"
 
     def get_context_data(self, **kwargs):
+        # Set the default interval to one week instead of one month.
+        self.delta = timedelta(weeks=1)
         ctx = super(ProjectTimeLineView, self).get_context_data(**kwargs)
 
         ctx['timeline'] = self.object.timeline(
-            start=self.week_start,
-            end=self.week_end,
-        )
-        ctx.update(
-            week_start=self.week_start.date,
-            week_end=self.week_end.date,
-            prev_week=self.prev_week.date,
-            next_week=self.next_week.date,
+            start=self.interval_start,
+            end=self.interval_end,
         )
         return ctx
 
 
-class UserTimeLineView(LoggedInMixin, PrevNextWeekMixin, DetailView):
+class UserTimeLineView(LoggedInMixin, DaterangeMixin, DetailView):
     model = UserProfile
     template_name = "main/user_timeline.html"
 
     def get_context_data(self, **kwargs):
+        # Set the default interval to one week instead of one month.
+        self.delta = timedelta(weeks=1)
         ctx = super(UserTimeLineView, self).get_context_data(**kwargs)
 
         ctx['timeline'] = self.object.timeline(
-            start=self.week_start,
-            end=self.week_end,
-        )
-        ctx.update(
-            week_start=self.week_start.date,
-            week_end=self.week_end.date,
-            prev_week=self.prev_week.date,
-            next_week=self.next_week.date,
+            start=self.interval_start,
+            end=self.interval_end,
         )
         return ctx
 

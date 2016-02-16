@@ -1,7 +1,8 @@
 import pytz
-from datetime import date, datetime
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
+from django.utils import timezone
 from django.utils.dateparse import parse_date
 
 
@@ -17,11 +18,12 @@ class DaterangeMixin(object):
 
     interval_start = None
     interval_end = None
+    delta = relativedelta(months=1)
     _today = None
 
     def today(self):
         if not self._today:
-            self._today = date.today()
+            self._today = timezone.localtime(timezone.now()).date()
         return self._today
 
     def calc_interval(self):
@@ -43,7 +45,6 @@ class DaterangeMixin(object):
 
     def get_params(self):
         """Update the interval based on request params."""
-
         self.interval_start = self.request.GET.get('interval_start', None)
         self.interval_end = self.request.GET.get('interval_end', None)
 
@@ -57,7 +58,7 @@ class DaterangeMixin(object):
             pass
 
         if not self.interval_start:
-            self.interval_start = self.today() - relativedelta(months=1)
+            self.interval_start = self.today() - self.delta
         if not self.interval_end:
             self.interval_end = self.today()
 
