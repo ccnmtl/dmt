@@ -1085,16 +1085,14 @@ class DashboardView(LoggedInMixin, TemplateView):
         context['total_open_items'] = total_open_items.count()
         context['open_sm_items'] = open_sm_items.count()
         context['open_non_sm_items'] = (
-            total_open_items.count() - open_sm_items.count())
+            len(context['total_open_items']) - len(context['open_sm_items']))
 
         # hour estimates
-        total_hours_estimated = interval_sum(
-            [i.estimated_time for i in total_open_items]
-        ).total_seconds() / 3600.
+        total_hours_estimated = total_open_items.aggregate(
+            t=Sum('estimated_time'))['t']
 
-        sm_hours_estimated = interval_sum(
-            [i.estimated_time for i in open_sm_items]
-        ).total_seconds() / 3600.
+        sm_hours_estimated = open_sm_items.aggregate(
+            t=Sum('estimated_time'))['t']
 
         context['sm_hours_estimated'] = sm_hours_estimated
         context['non_sm_hours_estimated'] = (

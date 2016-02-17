@@ -90,22 +90,16 @@ class UserProfile(models.Model):
         ).select_related('item', 'item__milestone', 'item__milestone__project')
 
     def total_resolve_times(self):
-        return interval_sum(
-            a.actual_time for a in ActualTime.objects.filter(
-                user=self.user)).total_seconds() / 3600.
+        return ActualTime.objects.filter(user=self.user).aggregate(
+            t=Sum('actual_time'))['t']
 
     def total_assigned_time(self):
-        return interval_sum(
-            [
-                i.estimated_time
-                for i in Item.objects.filter(
-                    assigned_to=self,
-                    status='OPEN')]).total_seconds() / 3600.
+        return Item.objects.filter(assigned_to=self, status='OPEN').aggregate(
+            t=Sum('estimated_time'))['t']
 
     def interval_time(self, start, end):
-        return interval_sum(
-            [a.actual_time
-             for a in self.resolve_times_for_interval(start, end)])
+        return self.resolve_times_for_interval(start, end).aggregate(
+            t=Sum('actual_time'))['t']
 
     def weekly_report(self, week_start, week_end):
         # TODO: rename to something more generic now that this is
