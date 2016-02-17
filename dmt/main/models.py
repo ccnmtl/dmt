@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.db import connection, models
-from django.db.models import Max, Sum
+from django.db.models import Max, Q, Sum
 from django.db.models.signals import post_save
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -175,6 +175,16 @@ class UserProfile(models.Model):
         items = list(assigned.union(owned))
         items = sorted(items, key=lambda x: (-x.priority, x.target_date))
         return items
+
+    def subscribed_items(self):
+        """Find all open items that you're following but not assigned to."""
+        return Item.objects.filter(
+            notifies__user=self.user
+        ).exclude(
+            Q(assigned_to=self) |
+            Q(assigned_user=self.user) |
+            Q(status='VERIFIED')
+        ).order_by('target_date')
 
     def clients(self):
         return Client.objects.filter(user__userprofile=self)

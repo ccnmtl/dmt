@@ -124,6 +124,11 @@
            >Owned Items
             ({{ owned_items|length }})</a>
     </li>
+    <li>
+        <a href="#subscribed-items" data-toggle="tab"
+           >Subscribed Items
+            ({{ subscribed_items|length }})</a>
+    </li>
   </ul>
 
 <div class="tab-content">
@@ -308,6 +313,31 @@
 {% comment %}pmt_user.username{% endcomment %}
 </div><!-- /#owned-items -->
 
+<div class="tab-pane fade" id="subscribed-items">
+{% if pmt_user.username %}
+{% if owned_items %}
+<table class="table table-condensed table-striped tablesorter tablesorter-default table-items"
+       id="subscribed-items">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th class="hidden-xs">Priority</th>
+            <th class="hidden-xs">Target Date</th>
+            <th>Assigned To</th>
+            <th>Project</th>
+            <th class="hidden-xs hidden-sm">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in subscribed_items %}
+            {% include 'main/item_row.html' %}
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>This user has no subscribed items</p>
+{% endif %}
+{% endif %}<!-- ./subscribed-items -->
 
 </div><!-- ./tab-content -->
 
