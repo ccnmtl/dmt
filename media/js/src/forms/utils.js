@@ -6,17 +6,13 @@ define([
     var FormUtils = function() {};
 
     FormUtils.prototype.refreshTargetDate = function($selectEl, targetDates) {
-        if (
-            typeof $().datepicker === 'undefined' ||
-                !targetDates ||
-                targetDates.length <= 0
-        ) {
+        if (!targetDates || targetDates.length <= 0) {
             return;
         }
 
         var idx = $selectEl.find('option:selected').index();
-        var $datepickerInput =
-            $selectEl.closest('form').find('#id_target_date');
+        var $datepickerInput = $selectEl.closest('form').find(
+            '#actionitem_target_date,#bug_target_date');
 
         if (targetDates.length > idx) {
             $datepickerInput.val(targetDates[idx]);
