@@ -142,6 +142,14 @@ class ResolvedItemsTest(LoggedInTestMixin, TestCase):
         self.assertTrue(i.title in r.content)
 
 
+class InprogressItemsViewTest(LoggedInTestMixin, TestCase):
+    def test_view(self):
+        i = ItemFactory(status='INPROGRESS')
+        r = self.client.get(reverse('inprogress_items_report'))
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(i.title in r.content)
+
+
 class WeeklySummaryTests(LoggedInTestMixin, TestCase):
     @unittest.skipUnless(
         settings.DATABASES['default']['ENGINE'] ==
