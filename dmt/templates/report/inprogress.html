@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Resolved Items{% endblock %}
+{% block title %}In Progress Items{% endblock %}
 
 {% block content %}
 <ul class="breadcrumb">
   <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
   <li><a href="{% url 'report_list' %}">Reports</a></li>
-        <li class="active">Resolved Items</li>
+        <li class="active">In Progress Items</li>
 </ul>
 
 <h1>In Progress Items</h1>
@@ -14,11 +14,11 @@
 <p>These are all the items across all projects that are currently In Progress</p>
 
 <table class="table table-striped table-condensed tablesorter tablesorter-default"
-       id="resolved-items">
+       id="inprogress-items">
         <thead>
                 <tr>
                         <th>Item</th>
-												<th>Assigned</th>                        
+						<th>Assigned</th>                        
                         <th>Priority</th>
                         <th>Project</th>
                         <th>Modified</th>
@@ -42,7 +42,7 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    $("#resolved-items").tablesorter({sortList: [[4,0]]});
+    $("#inprogress-items").tablesorter({sortList: [[4,0]]});
 });
 </script>
 {% endblock %}
