@@ -1,4 +1,5 @@
 from datetime import timedelta
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
@@ -233,7 +234,11 @@ class InprogressView(LoggedInMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(InprogressView, self).get_context_data(**kwargs)
-        context['items'] = Item.objects.filter(status='INPROGRESS')
+        context['items'] = Item.objects.filter(
+            status='INPROGRESS'
+        ).filter(
+            Q(assigned_to__status='active') |
+            Q(assigned_user__userprofile__status='active'))
         return context
 
 
