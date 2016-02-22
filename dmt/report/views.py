@@ -228,6 +228,15 @@ class ResolvedView(LoggedInMixin, TemplateView):
         return context
 
 
+class InprogressView(LoggedInMixin, TemplateView):
+    template_name = "report/inprogress.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(InprogressView, self).get_context_data(**kwargs)
+        context['items'] = Item.objects.filter(status='INPROGRESS')
+        return context
+
+
 class PassedMilestonesView(LoggedInMixin, TemplateView):
     template_name = "report/passed_milestones.html"
 

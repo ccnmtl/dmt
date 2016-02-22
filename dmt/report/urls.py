@@ -39,6 +39,8 @@ urlpatterns = patterns(
 
     url(r'^resolved/$', views.ResolvedView.as_view(),
         name='resolved_items_report'),
+    url(r'^inprogress/$', views.InprogressView.as_view(),
+        name='inprogress_items_report'),
     url(r'^passed_milestones/$', views.PassedMilestonesView.as_view(),
         name='passed_milestones_report'),
 )
