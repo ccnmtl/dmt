@@ -146,6 +146,10 @@ class UserModelTest(TestCase):
         self.assertTrue('target_hours' in d)
         self.assertTrue('target_percentage' in d)
 
+    def test_subscribed_items(self):
+        r = self.u.subscribed_items()
+        self.assertEqual(len(r), 0)
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):

@@ -439,6 +439,9 @@ class IndexView(LoggedInMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['projects'] = Project.objects.all()
+        if self.request.user:
+            context['subscribed_items'] = \
+                self.request.user.userprofile.subscribed_items()
         return context
 
 
