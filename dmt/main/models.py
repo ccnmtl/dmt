@@ -398,11 +398,7 @@ class Project(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField("Project name", max_length=255)
     projnum = models.IntegerField("Project number", null=True, blank=True)
-    pub_view = models.BooleanField(
-        "Public",
-        default=False,
-        help_text='This checkbox determines whether this project is ' +
-        'visible in reports.')
+    pub_view = models.BooleanField("Reportable", default=False)
     caretaker_user = models.ForeignKey(User, null=True)
     description = models.TextField(blank=True)
     url = models.CharField("Project URL", max_length=255, blank=True)
