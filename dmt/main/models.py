@@ -181,6 +181,8 @@ class UserProfile(models.Model):
         return Item.objects.filter(
             notifies__user=self.user
         ).exclude(
+            Q(owner=self) |
+            Q(owner_user=self.user) |
             Q(assigned_to=self) |
             Q(assigned_user=self.user) |
             Q(status='VERIFIED')
