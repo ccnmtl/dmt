@@ -11,40 +11,58 @@ define([
         this.init();
     };
 
+    /**
+     * Given the state of the toolbar+textarea, perform necessary
+     * actions when a toolbar button is clicked.
+     */
+    MarkdownToolbar.prototype.handleButtonClick = function(
+        $button, selectionStart, selectionEnd, text
+    ) {
+        // Get data from button element
+        var buttonData = $button.data();
+        if (buttonData.hotkey === this.lastHotkey && this.lastText) {
+            var diff = text.length - this.lastText.length;
+            selectionStart -= diff / 2;
+            selectionEnd -= diff / 2;
+            text = this.lastText;
+            this.lastHotkey = null;
+        } else {
+            var mtc = new MarkdownToolbarController();
+            this.lastText = text;
+            text = mtc.render(
+                buttonData, selectionStart, selectionEnd, text);
+            selectionStart += mtc.prefixLength;
+            selectionEnd += mtc.prefixLength;
+            this.lastHotkey = buttonData.hotkey;
+        }
+
+        return {
+            text: text,
+            selectionStart: selectionStart,
+            selectionEnd: selectionEnd
+        };
+    };
+
     MarkdownToolbar.prototype.init = function() {
         var me = this;
 
         this.$toolbar.find('button.js-toolbar-item').on('click', function(e) {
             var $this = $(this);
 
-            // Get data from button element
-            var buttonData = $this.data();
-
             // Get cursor position and textarea's text
             var selectionStart = me.$textarea[0].selectionStart;
             var selectionEnd = me.$textarea[0].selectionEnd;
             var text = me.$textarea.val();
 
-            if (buttonData.hotkey === me.lastHotkey && me.lastText) {
-                var diff = text.length - me.lastText.length;
-                selectionStart -= diff / 2;
-                selectionEnd -= diff / 2;
-                text = me.lastText;
-                me.lastHotkey = null;
-            } else {
-                var mtc = new MarkdownToolbarController();
-                me.lastText = text;
-                text = mtc.render(
-                    buttonData, selectionStart, selectionEnd, text);
-                selectionStart += mtc.prefixLength;
-                selectionEnd += mtc.prefixLength;
-                me.lastHotkey = buttonData.hotkey;
-            }
+            var result = me.handleButtonClick(
+                $this, selectionStart, selectionEnd, text);
 
-            me.$textarea.val(text);
+            me.$textarea.val(result.text);
 
             // Reset cursor to original state
-            me.$textarea[0].setSelectionRange(selectionStart, selectionEnd);
+            me.$textarea[0].setSelectionRange(
+                result.selectionStart,
+                result.selectionEnd);
             me.$textarea.focus();
 
             // Refresh the preview view if it exists.
