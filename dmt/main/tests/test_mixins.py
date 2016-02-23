@@ -1,8 +1,9 @@
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.test import TestCase
+from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.test.client import RequestFactory
 from dmt.main.mixins import DaterangeMixin
@@ -12,6 +13,24 @@ class DaterangeMixinTests(TestCase):
     def setUp(self):
         self.mixin = DaterangeMixin()
         self.rf = RequestFactory()
+
+    def test_calc_prev_next_times(self):
+        now = timezone.now()
+        p, n = self.mixin.calc_prev_next_times(
+            now - timedelta(days=7), now)
+        delta = n - p
+        self.assertEqual(
+            delta.days, 7 * 3,
+            'pagination bounds are 3 times the original delta apart')
+        self.assertEqual(delta.seconds, 0)
+        self.assertEqual(delta.microseconds, 0)
+
+        p, n = self.mixin.calc_prev_next_times(
+            now - timedelta(days=30), now)
+        delta = n - p
+        self.assertEqual(
+            delta.days, 30 * 3,
+            'pagination bounds are 3 times the original delta apart')
 
     def test_get_params(self):
         self.mixin.request = self.rf.get('/')

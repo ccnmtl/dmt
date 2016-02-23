@@ -1,0 +1,13 @@
+<nav>
+    <ul class="pager">
+        <li class="previous">
+            <a href="?interval_start={{prev_interval|date:"Y-m-d"}}&interval_end={{interval_start|date:"Y-m-d"}}">
+                <span aria-hidden="true">&larr;</span> Older</a>
+        </li>
+        <li class="next">
+            <a href="?interval_start={{interval_end|date:"Y-m-d"}}&interval_end={{next_interval|date:"Y-m-d"}}">
+                Newer <span aria-hidden="true">&rarr;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
