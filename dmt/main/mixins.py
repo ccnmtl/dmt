@@ -1,5 +1,5 @@
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.utils import timezone
@@ -18,6 +18,8 @@ class DaterangeMixin(object):
 
     interval_start = None
     interval_end = None
+    prev_interval = None
+    next_interval = None
     delta = relativedelta(months=1)
     _today = None
 
@@ -25,6 +27,21 @@ class DaterangeMixin(object):
         if not self._today:
             self._today = timezone.localtime(timezone.now()).date()
         return self._today
+
+    @staticmethod
+    def calc_prev_next_times(start, end):
+        """Calculate previous and next times.
+
+        Based on the given interval.
+        """
+        delta = end - start
+        # Remove the seconds and microseconds attributes from the
+        # timedelta. Only use the days.
+        delta -= timedelta(seconds=delta.seconds)
+        delta -= timedelta(microseconds=delta.microseconds)
+        prev_interval = start - delta
+        next_interval = end + delta
+        return (prev_interval, next_interval)
 
     def calc_interval(self):
         # Calculate from the beginning of the first day in the range
@@ -42,6 +59,8 @@ class DaterangeMixin(object):
 
         self.interval_start = aware_start
         self.interval_end = aware_end
+        self.prev_interval, self.next_interval = self.calc_prev_next_times(
+            self.interval_start, self.interval_end)
 
     def get_params(self):
         """Update the interval based on request params."""
@@ -71,5 +90,7 @@ class DaterangeMixin(object):
         context.update({
             'interval_start': self.interval_start,
             'interval_end': self.interval_end,
+            'prev_interval': self.prev_interval,
+            'next_interval': self.next_interval,
         })
         return context
