@@ -7,10 +7,10 @@ from dmt.main.tests.factories import ProjectFactory
 
 class CasperIntegrationTestsAnonUser(CasperTestCase):
     def test_integration_tests_anon_user(self):
-        self.assertTrue(self.casper(
-            os.path.join(
-                os.path.dirname(__file__),
-                'js/integration_tests_anon_user.js')))
+        path = os.path.join(
+            os.path.dirname(__file__),
+            'js/integration_tests_anon_user.js')
+        self.assertTrue(self.casper(path))
 
 
 class CasperIntegrationTestsLoggedIn(CasperTestCase):
@@ -23,7 +23,7 @@ class CasperIntegrationTestsLoggedIn(CasperTestCase):
         self.p.add_personnel(self.u.userprofile)
 
     def test_integration_tests_logged_in(self):
-        self.assertTrue(self.casper(
-            os.path.join(
-                os.path.dirname(__file__),
-                'js/integration_tests_logged_in.js')))
+        path = os.path.join(
+            os.path.dirname(__file__),
+            'js/integration_tests_logged_in.js')
+        self.assertTrue(self.casper(path))
