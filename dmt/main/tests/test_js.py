@@ -2,14 +2,15 @@ from casper.tests import CasperTestCase
 from django.contrib.auth.models import User
 import os.path
 
-from .factories import ProjectFactory
+from dmt.main.tests.factories import ProjectFactory
 
 
 class CasperIntegrationTestsAnonUser(CasperTestCase):
     def test_integration_tests_anon_user(self):
         self.assertTrue(self.casper(
-            os.path.join(os.path.dirname(__file__),
-                         'js/integration_tests_anon_user.js')))
+            os.path.join(
+                os.path.dirname(__file__),
+                'js/integration_tests_anon_user.js')))
 
 
 class CasperIntegrationTestsLoggedIn(CasperTestCase):
@@ -23,5 +24,6 @@ class CasperIntegrationTestsLoggedIn(CasperTestCase):
 
     def test_integration_tests_logged_in(self):
         self.assertTrue(self.casper(
-            os.path.join(os.path.dirname(__file__),
-                         'js/integration_tests_logged_in.js')))
+            os.path.join(
+                os.path.dirname(__file__),
+                'js/integration_tests_logged_in.js')))
