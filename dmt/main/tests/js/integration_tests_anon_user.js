@@ -1,3 +1,5 @@
+/* global casper: true */
+
 casper.test.comment('Casper integration tests');
 
 var helper = require('./support/djangocasper.js');
