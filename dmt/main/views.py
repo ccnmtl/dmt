@@ -377,6 +377,8 @@ class SplitItemView(LoggedInMixin, View):
             item.touch()
             item.update_email(comment, user)
 
+        item.title = item.title + " (SPLIT)"
+        item.save()
         item.milestone.update_milestone()
         statsd.incr('main.item_split')
         return HttpResponseRedirect(item.get_absolute_url())

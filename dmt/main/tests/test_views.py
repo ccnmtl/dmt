@@ -1042,6 +1042,9 @@ class TestItemWorkflow(TestCase):
         # make sure there are three more items now
         self.assertEqual(Item.objects.all().count(), cnt + 3)
 
+        i.refresh_from_db()
+        self.assertTrue(i.title.endswith(" (SPLIT)"))
+
     def test_split_bad_params(self):
         i = ItemFactory()
         r = self.c.post(
