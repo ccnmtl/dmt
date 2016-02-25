@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "casperjs": "~1.1.0-beta5",
-    "jscs": "~2.9.0",
+    "jscs": "~2.10.1",
     "jshint": "~2.9.1",
     "karma": "~0.13.15",
     "karma-html2js-preprocessor": "~0.1.0",
