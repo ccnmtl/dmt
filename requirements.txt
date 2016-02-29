@@ -28,7 +28,7 @@ pickleshare==0.5
 simplegeneric==0.8.1
 path.py==8.1.2
 ipython==4.1.1
-ipdb==0.8.1
+ipdb==0.9.0
 isodate==0.5.4
 SPARQLWrapper==1.6.4
 rdflib==4.2.1
