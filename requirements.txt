@@ -8,7 +8,7 @@ versiontools==1.9.1
 statsd==3.2.1
 pep8==1.7.0
 pyflakes==1.0.0
-flake8==2.5.2
+flake8==2.5.4
 mccabe==0.4.0
 certifi==2015.11.20.1
 pyparsing==2.0.7
