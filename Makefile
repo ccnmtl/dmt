@@ -16,7 +16,7 @@ behave-wip: check
 	$(MANAGE) test bdd_tests --behave_no-capture --behave_tags @wip --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
 
 integration: check $(JS_SENTINAL)
-	$(MANAGE) jenkins --settings=$(APP).settings_integration
+	$(MANAGE) test dmt.main.tests.test_js --settings=$(APP).settings_integration
 
 compose-run:
 	docker-compose up

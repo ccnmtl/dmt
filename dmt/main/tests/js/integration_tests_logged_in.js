@@ -16,7 +16,7 @@ helper.scenario('/',
         // Test that typeahead works
         this.click('a[data-target="#add-tracker"]');
         this.fill('form#add-tracker-form', {
-            project: 'Test'
+            pid: 1
         });
 
         // FIXME: the navbar is getting in the way of casper seeing
