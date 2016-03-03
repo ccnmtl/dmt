@@ -1,6 +1,18 @@
 import ntpath
 import re
+from datetime import timedelta
 from simpleduration import Duration, InvalidDuration
+
+
+def parse_negative_duration(timestr, d):
+    """Flip the sign of the given duration based on the timestring.
+
+    Returns the processed Duration.
+    """
+    if d is not None and len(timestr) > 0 and timestr[0] == '-':
+        # Interpret as a negative duration.
+        d *= -1
+    return d
 
 
 def new_duration(timestr):
@@ -20,6 +32,8 @@ def new_duration(timestr):
 
     if d is None:
         d = Duration('0 minutes')
+
+    d = parse_negative_duration(timestr, d)
 
     return d
 
@@ -65,8 +79,8 @@ def simpleduration_string(duration):
 
     Based on Django's duration_string() function.
     """
-    if duration is None:
-        return ''
+    if duration is None or duration == timedelta(0):
+        return '0h'
 
     days = duration.days
     seconds = duration.seconds

@@ -14,7 +14,11 @@ require([
                 url: '/drf/items/' + iid + '/hours/',
                 data: {time: time},
                 success: function(data, status) {
-                    if (data && data.duration > 0) {
+                    if (data &&
+                        data.duration !== 'undefined' &&
+                        data.duration !== null &&
+                        data.simpleduration !== ''
+                       ) {
                         status = status + ' - Logged ' + data.simpleduration;
                         formUtils.onSuccess($form, data, status);
                         window.location.reload();
