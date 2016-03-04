@@ -137,6 +137,34 @@ def log_time(item, user, request):
             pass
 
 
+class ActualTimeDeleteView(LoggedInMixin, DeleteView):
+    model = ActualTime
+
+    def require_owner(self, time):
+        """Raise an error if request.user doesn't own the given time."""
+        if time.user != self.request.user:
+            raise PermissionDenied
+
+    def get_object(self, queryset=None):
+        """Ensure that the time is owned by request.user."""
+        uuid = self.kwargs['uuid']
+        time = ActualTime.objects.get(uuid=uuid)
+        self.require_owner(time)
+        return time
+
+    def get_success_url(self):
+        # Get the item's url from the time
+        uuid = self.kwargs['uuid']
+        time = get_object_or_404(ActualTime, uuid=uuid)
+        return reverse('item_detail', args=(time.item.iid,))
+
+    def post(self, request, *args, **kwargs):
+        uuid = self.kwargs['uuid']
+        time = get_object_or_404(ActualTime, uuid=uuid)
+        self.require_owner(time)
+        return super(ActualTimeDeleteView, self).post(request, args, kwargs)
+
+
 class AddCommentView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)

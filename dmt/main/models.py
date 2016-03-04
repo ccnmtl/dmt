@@ -1,3 +1,4 @@
+import uuid
 from django import forms
 from django.contrib.auth.models import User
 from django.db import connection, models
@@ -1536,6 +1537,7 @@ class ProjectClient(models.Model):
 
 
 class ActualTime(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, null=True)
     item = models.ForeignKey(Item, null=False, db_column='iid')
     user = models.ForeignKey(User)
     actual_time = models.DurationField(null=True, blank=True)
