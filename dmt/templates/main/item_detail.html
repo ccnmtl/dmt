@@ -172,6 +172,11 @@
                   {% firstof at.user.userprofile.fullname at.user.userprofile.username %}
               </a>
               {{at.completed}}
+              {% if at.user == request.user and at.uuid != None %}
+                  <a href="{% url 'delete_time' at.uuid %}" title="Delete time">
+                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  </a>
+              {% endif %}
           </li>
       </ul>
       {% endfor %}
