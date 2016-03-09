@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 
 from simpleduration import Duration
 from .factories import (
+    ActualTimeFactory,
     ClientFactory, ProjectFactory, MilestoneFactory,
     ItemFactory, NodeFactory, EventFactory, CommentFactory,
     UserProfileFactory, UserFactory,
@@ -20,6 +21,7 @@ from factory.fuzzy import FuzzyInteger
 from waffle.models import Flag
 from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import (
+    ActualTime,
     Attachment, Comment, Item, ItemClient, Milestone, Project,
     Client, Notify, Reminder
 )
@@ -1633,3 +1635,33 @@ class TestUserViews(LoggedInTestMixin, TestCase):
             reverse('user_list') + "?status=inactive")
         self.assertFalse(u1.username in r.content)
         self.assertTrue(u2.username in r.content)
+
+
+class TestActualTimeDeletion(TestCase):
+    def setUp(self):
+        self.c = self.client
+        self.u = User.objects.create(username="testuser")
+        self.u.set_password("test")
+        self.u.save()
+        self.c.login(username="testuser", password="test")
+
+    def test_delete_own_time(self):
+        i = ItemFactory()
+        time = ActualTimeFactory(item=i, user=self.u)
+        url = reverse('delete_time', args=(time.uuid,))
+        r = self.c.post(url)
+        self.assertEqual(r.status_code, 302)
+
+        # Assert that comment is really deleted
+        with self.assertRaises(ActualTime.DoesNotExist):
+            ActualTime.objects.get(uuid=time.uuid)
+
+    def test_delete_someone_elses_time(self):
+        i = ItemFactory()
+        time = ActualTimeFactory(item=i, user=UserFactory())
+        url = reverse('delete_time', args=(time.uuid,))
+        r = self.c.post(url)
+        self.assertEqual(r.status_code, 403)
+
+        # Assert that the comment still exists
+        ActualTime.objects.get(uuid=time.uuid)

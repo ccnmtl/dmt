@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 
 from dmt.main.views import (
     AddTrackersView, SearchView,
+    ActualTimeDeleteView,
     AddCommentView, CommentUpdateView, CommentDeleteView, ResolveItemView,
     InProgressItemView, VerifyItemView, ReopenItemView,
     SplitItemView, ItemDetailView,
@@ -53,6 +54,9 @@ urlpatterns = patterns(
     (r'^admin/', include(admin.site.urls)),
     url(r'^add_trackers/$', AddTrackersView.as_view(), name='add_trackers'),
     (r'^api/1.0/', include('dmt.api.urls')),
+    url(r'^actualtime/(?P<uuid>[^/]+)/delete/$',
+        ActualTimeDeleteView.as_view(),
+        name='delete_time'),
     (r'^drf/', include('dmt.api.urls')),
     url(r'^oauth2/', include('oauth2_provider.urls', namespace='oauth2')),
     (r'^search/$', SearchView.as_view()),
