@@ -1652,7 +1652,6 @@ class TestActualTimeDeletion(TestCase):
         r = self.c.post(url)
         self.assertEqual(r.status_code, 302)
 
-        # Assert that comment is really deleted
         with self.assertRaises(ActualTime.DoesNotExist):
             ActualTime.objects.get(uuid=time.uuid)
 
@@ -1663,5 +1662,4 @@ class TestActualTimeDeletion(TestCase):
         r = self.c.post(url)
         self.assertEqual(r.status_code, 403)
 
-        # Assert that the comment still exists
         ActualTime.objects.get(uuid=time.uuid)
