@@ -1166,6 +1166,7 @@ class Item(models.Model):
             comment="<b>Ownership changed to %s</b><br />\n%s" % (
                 owner.fullname, comment),
             add_date_time=timezone.now())
+        self.add_cc(owner)
 
     def set_priority(self, priority, user):
         old_priority = self.priority
