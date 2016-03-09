@@ -1128,6 +1128,10 @@ class TestItemWorkflow(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
         self.assertTrue(u.fullname in r.content)
+        # make sure owner is in subscription list too
+        all_notifies = [n.user for n in Notify.objects.filter(
+            item=i.iid)]
+        self.assertTrue(u.user in all_notifies)
 
 
 class TestHistory(TestCase):
