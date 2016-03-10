@@ -23,7 +23,7 @@
         {% for u in users_active_in_range %}
         <tr>
             <td>
-                <a href="{% url 'user_detail' u.username %}"
+                <a href="{% url 'user_detail' u.userprofile.username %}"
                    >{{ u.userprofile.fullname }}</a>
             </td>
             <td>{{ u.hours_logged|interval_to_hours }}</td>
