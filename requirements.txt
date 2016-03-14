@@ -54,7 +54,7 @@ python-ldap==2.4.22
 anyjson==0.3.3
 amqp==1.4.9
 amqplib==1.0.2
-kombu==3.0.33
+kombu==3.0.34
 librabbitmq==1.6.1
 celery==3.1.23
 enum34==1.1.1
