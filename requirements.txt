@@ -116,4 +116,4 @@ django-cacheds3storage==0.1.1
 django-markwhat==1.5
 opbeat==3.2.1
 
-ccnmtlsettings==0.1.5
+ccnmtlsettings==0.1.6
