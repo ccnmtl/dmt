@@ -46,8 +46,7 @@ INSTALLED_APPS += [  # noqa
     'dmt.main',
     'dmt.report',
     'dmt.api',
-    'bdd_tests',
-    'django_behave',
+    'behave_django',
     'oauth2_provider',
 ]
 
