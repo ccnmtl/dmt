@@ -2,7 +2,7 @@ APP=dmt
 
 JS_FILES=media/js/src/ media/js/tests dmt/main/tests/js
 REQUIREJS=$(NODE_MODULES)/.bin/r.js
-PY_DIRS=$(APP) bdd_tests
+PY_DIRS=$(APP) features
 MAX_COMPLEXITY=7
 
 all: jstest jenkins
@@ -10,10 +10,7 @@ all: jstest jenkins
 include *.mk
 
 behave: check
-	$(MANAGE) test bdd_tests --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
-
-behave-wip: check
-	$(MANAGE) test bdd_tests --behave_no-capture --behave_tags @wip --behave_browser firefox --testrunner=django_behave.runner.DjangoBehaveTestSuiteRunner
+	$(MANAGE) behave
 
 integration: check $(JS_SENTINAL)
 	$(MANAGE) test dmt.main.tests.test_js --settings=$(APP).settings_integration
