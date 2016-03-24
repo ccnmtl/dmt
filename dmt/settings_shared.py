@@ -48,6 +48,7 @@ INSTALLED_APPS += [  # noqa
     'dmt.api',
     'behave_django',
     'oauth2_provider',
+    's3sign',
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
