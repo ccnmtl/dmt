@@ -154,6 +154,7 @@ class ItemUpdateForm(ModelForm):
         project_milestones = project.milestone_set.all()
         self.fields['milestone'].queryset = project_milestones
         self.fields['estimated_time'] = SimpleDurationField(
+            required=False,
             help_text='Enter time and unit. For example: <code>2h 30m</code>',
             initial='1h')
 
