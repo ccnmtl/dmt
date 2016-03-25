@@ -1,6 +1,5 @@
 from django import forms
 from django.test import TestCase
-from django.conf import settings
 from django.core import mail
 from django.utils import timezone
 import unittest
@@ -292,13 +291,6 @@ class ItemTest(TestCase):
         actualtime = ActualTime.objects.first()
         self.assertEqual(actualtime.actual_time, timedelta(0, 3600))
 
-    # SQLite can't handle aggregate functions on datetime fields
-    # https://docs.djangoproject.com/en/dev/ref/models/querysets/
-    # #aggregation-functions
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_get_resolve_zero(self):
         i = ItemFactory()
         u = UserProfileFactory()
@@ -307,10 +299,6 @@ class ItemTest(TestCase):
         resolve_time = i.get_resolve_time()
         self.assertEqual(resolve_time, timedelta(0, 0))
 
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_get_resolve_time_1h(self):
         i = ItemFactory()
         u = UserProfileFactory()
@@ -328,10 +316,6 @@ class ItemTest(TestCase):
             Notify.objects.filter(
                 item=i.iid, user=assignee.user).count(), 1)
 
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_get_resolve_time_multiple_times(self):
         i = ItemFactory()
 
