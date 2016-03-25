@@ -512,6 +512,35 @@ class DeleteTagView(LoggedInMixin, DeleteView):
     success_url = "/tag/"
 
 
+class MergeTagView(LoggedInMixin, View):
+    template_name = "main/merge_tag_form.html"
+
+    def get(self, request, slug):
+        tag = get_object_or_404(Tag, slug=slug)
+        all_tags = Tag.objects.all().order_by('name')
+        return render(request, self.template_name,
+                      dict(tag=tag, all_tags=all_tags))
+
+    def post(self, request, slug):
+        t = get_object_or_404(Tag, slug=slug)
+        t2 = get_object_or_404(Tag, slug=request.POST.get('tag'))
+
+        # see note in TagDetailView on why this iteration is weird:
+        items = [ti.content_object
+                 for ti
+                 in t.taggit_taggeditem_items.all()
+                 if ti.content_object.__class__ == Item]
+        nodes = [ti.content_object
+                 for ti
+                 in t.taggit_taggeditem_items.all()
+                 if ti.content_object.__class__ == Node]
+        for o in items + nodes:
+            o.tags.remove(t)
+            o.tags.add(t2)
+        t.delete()
+        return HttpResponseRedirect(reverse('tag_detail', args=[t2.slug]))
+
+
 class ClientDetailView(LoggedInMixin, DetailView):
     model = Client
 

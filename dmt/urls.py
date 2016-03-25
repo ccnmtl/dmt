@@ -29,7 +29,7 @@ from dmt.main.views import (
     DeleteAttachmentView, GroupCreateView,
     DeactivateUserView, ItemMoveProjectView, RemoveUserFromGroupView,
     AddUserToGroupView, MilestoneDeleteView, OwnedItemsView,
-    ItemSetMilestoneView,
+    ItemSetMilestoneView, MergeTagView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
@@ -167,7 +167,9 @@ urlpatterns = patterns(
     url(r'^user/(?P<pk>\w+)/timeline/$', UserTimeLineView.as_view(),
         name='user_timeline'),
     url(r'^tag/$', TagListView.as_view(), name='tag_list'),
-    (r'^tag/(?P<slug>[^/]+)/$', TagDetailView.as_view()),
+    url(r'^tag/(?P<slug>[^/]+)/$', TagDetailView.as_view(), name='tag_detail'),
+    url(r'^tag/(?P<slug>[^/]+)/merge/$', MergeTagView.as_view(),
+        name='merge_tag'),
     url(r'^tag/(?P<slug>[^/]+)/delete/$', DeleteTagView.as_view(),
         name="delete_tag"),
     url(r'^dashboard/$', DashboardView.as_view(), name='project_dashboard'),

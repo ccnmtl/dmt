@@ -846,6 +846,30 @@ class TestItemTagViews(LoggedInTestMixin, TestCase):
         self.assertTrue("tagone" in r.content)
 
 
+class TestTagViews(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(TestTagViews, self).setUp()
+
+    def test_merge_tags_form(self):
+        i = ItemFactory()
+        i.tags.add('testtag', 'testtag2')
+        r = self.client.get(reverse('merge_tag', args=['testtag']))
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue('value="testtag2"' in r.content)
+
+    def test_merge_tags(self):
+        i = ItemFactory()
+        i.tags.add('testtag', 'testtag2')
+        r = self.client.post(
+            reverse('merge_tag', args=['testtag']),
+            dict(tag='testtag2')
+        )
+        self.assertEqual(r.status_code, 302)
+        i.refresh_from_db()
+        self.assertEqual(len(i.tags.names()), 1)
+        self.assertIn(u'testtag2', i.tags.names())
+
+
 class TestItemWorkflow(TestCase):
     def setUp(self):
         self.c = self.client
