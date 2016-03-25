@@ -1530,10 +1530,6 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
         })
         self.assertEqual(r.status_code, 302)
 
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_add_trackers_post_multiple(self):
         r = self.client.post(reverse('add_trackers'), self.valid_post_data)
 
@@ -1557,10 +1553,6 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
                 items[i].get_resolve_time(),
                 Duration(self.valid_post_data['form-%d-time' % i]).timedelta())
 
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_add_trackers_post_single(self):
         params = self.valid_post_data.copy()
         params.update({
@@ -1593,10 +1585,6 @@ class TestAddTrackersView(LoggedInTestMixin, TestCase):
             i.get_resolve_time(),
             Duration(self.valid_post_data['form-0-time']).timedelta())
 
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_add_trackers_post_tracker_invalid(self):
         params = self.valid_post_data.copy()
         params.update({
