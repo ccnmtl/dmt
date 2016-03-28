@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+        <li><a href="{% url 'tag_list' %}">Tags</a></li>
+        <li class="active"><a href="{% url 'tag_detail' tag.slug %}">{{tag.name}}</a></li>
+    </ul>
+
+    <form action="." method="post">
+        {% csrf_token %}
+        <fieldset><legend>Merge Tag</legend>
+            <div class="form-group">
+                <label for="select-tag">Merge tag <a href="{% url 'tag_detail' tag.slug %}">{{tag.name}}</a> into:</label>
+                <select name="tag" id="select-tag">
+                    {% for t in all_tags %}
+                        {% if t != tag %}
+                            <option value="{{t.slug}}">{{t.name}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <p>All occurrences of <a href="{% url 'tag_detail' tag.slug %}">{{tag.name}}</a> will be replaced with the selected tag.</p>
+            <input type="submit" class="btn btn-primary" value="Merge" />
+        </fieldset>
+    </form>
+    
+{% endblock %}

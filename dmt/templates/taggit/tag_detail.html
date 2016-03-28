@@ -9,6 +9,7 @@
 <h1>Tag: {{object.name}}</h1>
 
 <p class="pull-right">
+    <a href="{% url 'merge_tag' object.slug %}" class="btn btn-default">Merge</a>
 <a href="{% url 'delete_tag' object.slug %}" class="btn btn-danger"><span class="glyphicon
 																											glyphicon-trash"></span>
 	Delete</a>
