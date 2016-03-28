@@ -248,8 +248,8 @@
                 </a>
             </td>
             <td data-field="owner" class="hidden-xs">
-                <a href="{% url 'user_detail' item.owner.username %}">
-                    {{item.owner|truncatechars:40}}
+                <a href="{% url 'user_detail' item.owner_user.userprofile.username %}">
+                    {{item.owner_user.userprofile|truncatechars:40}}
                 </a>
             </td>
             <td data-field="modified" class="hidden-xs">

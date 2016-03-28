@@ -305,10 +305,10 @@ class ItemTests(APITestCase):
                 self.assertEqual(r.data[attr], self.item.__dict__[attr])
 
         # Verify accuracy of relationships
-        self.assertIn(self.item.owner.username.lower(),
-                      r.data["owner"].lower())
-        self.assertIn(self.item.assigned_to.username.lower(),
-                      r.data["assigned_to"].lower())
+        self.assertEqual(self.item.owner_user.username,
+                         r.data["owner_user"]['username'])
+        self.assertEqual(self.item.assigned_user.username,
+                         r.data["assigned_user"]['username'])
 
     def test_get_with_notification(self):
         self.notification = NotifyFactory(
@@ -385,8 +385,10 @@ class ExternalAddItemTests(APITestCase):
             r.data.get('description')
         )
         self.assertEqual(r.data.get('type'), 'action item')
-        self.assertTrue(self.owner.username in r.data.get('owner'))
-        self.assertTrue(self.assignee.username in r.data.get('assigned_to'))
+        self.assertEqual(self.owner.user.username,
+                         r.data.get('owner_user')['username'])
+        self.assertEqual(self.assignee.user.username,
+                         r.data.get('assigned_user')['username'])
         self.assertTrue(self.debug_info in r.data.get('description'))
         self.assertTrue(unicode(self.milestone.pk) in r.data.get('milestone'))
         self.assertEqual(r.data.get('estimated_time'), '01:00:00')

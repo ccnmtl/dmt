@@ -100,7 +100,7 @@ class UserProfile(models.Model):
             [
                 i.estimated_time
                 for i in Item.objects.filter(
-                    assigned_to=self,
+                    assigned_user=self.user,
                     status='OPEN')]).total_seconds() / 3600.
 
     def interval_time(self, start, end):
@@ -131,34 +131,36 @@ class UserProfile(models.Model):
 
     def open_assigned_items(self):
         return Item.objects.filter(
-            assigned_to=self,
+            assigned_user=self.user,
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS']
             ).exclude(
             milestone__name='Someday/Maybe').select_related(
-                'milestone', 'milestone__project', 'owner', 'assigned_to')
+                'milestone', 'milestone__project', 'owner_user',
+                'assigned_user')
 
     def open_owned_items(self):
         """ for the 'owned items' page. """
         return Item.objects.filter(
-            owner=self,
+            owner_user=self.user,
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS', 'RESOLVED']
         ).exclude(
-            assigned_to=self
+            assigned_user=self.user
         ).order_by('-priority', '-target_date').select_related(
-            'milestone', 'milestone__project', 'assigned_to')
+            'milestone', 'milestone__project', 'assigned_user')
 
     def resolved_owned_items(self):
         return Item.objects.filter(
-            owner=self,
+            owner_user=self.user,
             status='RESOLVED'
             ).select_related(
-                'milestone', 'milestone__project', 'owner', 'assigned_to')
+                'milestone', 'milestone__project', 'owner_user',
+                'assigned_user')
 
     def non_verified_owned_items(self):
         """ all items that this user owns that
         are OPEN, INPROGRESS, or RESOLVED"""
         return Item.objects.filter(
-            owner=self,
+            owner_user=self.user,
             ).exclude(status='VERIFIED').select_related(
             'milestone', 'milestone__project')
 
@@ -166,7 +168,7 @@ class UserProfile(models.Model):
         """ all items assigned to this user that
         are OPEN, INPROGRESS, or RESOLVED"""
         return Item.objects.filter(
-            assigned_to=self,
+            assigned_user=self.user,
             ).exclude(status='VERIFIED').select_related(
             'milestone', 'milestone__project')
 
@@ -182,9 +184,7 @@ class UserProfile(models.Model):
         return Item.objects.filter(
             notifies__user=self.user
         ).exclude(
-            Q(owner=self) |
             Q(owner_user=self.user) |
-            Q(assigned_to=self) |
             Q(assigned_user=self.user) |
             Q(status='VERIFIED')
         ).order_by('target_date')
@@ -1218,7 +1218,7 @@ class Item(models.Model):
         # TODO: handle no user specified
         email_subj = "[PMT Item: %s] Attn: %s - %s" % (
             truncate_string(self.milestone.project.name),
-            self.assigned_to.fullname,
+            self.assigned_user.userprofile.fullname,
             truncate_string(self.title))
         email_body = """
 Item:\t%s
@@ -1239,7 +1239,7 @@ Please do not reply to this message.
             self.title,
             user.fullname,
             self.target_date,
-            self.assigned_to.fullname,
+            self.assigned_user.userprofile.fullname,
             self.milestone.project.name,
             self.milestone.name,
             self.get_absolute_url(),
