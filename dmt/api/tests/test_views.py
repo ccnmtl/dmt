@@ -451,8 +451,12 @@ class ExternalAddItemTests(APITestCase):
             r.data.get('description')
         )
         self.assertEqual(r.data.get('type'), 'action item')
-        self.assertTrue(self.owner.username in r.data.get('owner'))
-        self.assertTrue(self.assignee.username in r.data.get('assigned_to'))
+        self.assertIn(
+            unicode(self.owner.user.username),
+            r.data.get('owner_user').values())
+        self.assertIn(
+            unicode(self.assignee.user.username),
+            r.data.get('assigned_user').values())
         self.assertTrue(self.debug_info in r.data.get('description'))
         self.assertTrue(unicode(self.milestone.pk) in r.data.get('milestone'))
         self.assertEqual(r.data.get('estimated_time'), '01:00:00')
