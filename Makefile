@@ -24,4 +24,4 @@ compose-migrate:
 media/main-built.js: $(JS_SENTINAL) build.js media/js/src media/js/libs
 	$(REQUIREJS) -o build.js
 
-travis: $(JS_SENTINAL) jenkins jstest integration
+travis: $(JS_SENTINAL) parallel-tests jstest integration
