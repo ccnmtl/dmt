@@ -13,7 +13,7 @@ behave: check
 	$(MANAGE) behave
 
 integration: check $(JS_SENTINAL)
-	$(MANAGE) test dmt.main.tests.test_js --settings=$(APP).settings_integration
+	$(MANAGE) test --settings=$(APP).settings_integration
 
 compose-run:
 	docker-compose up
