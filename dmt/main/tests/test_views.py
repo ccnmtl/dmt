@@ -395,7 +395,6 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
 
         items = Item.objects.filter(
             milestone=milestone,
-            owner=u,
             owner_user=u.user)
         i = items.first()
         self.assertEqual(len(items), 1)
@@ -528,7 +527,9 @@ class TestItemUpdate(LoggedInTestMixin, TestCase):
         super(TestItemUpdate, self).setUp()
         self.c = self.client
         self.p = ProjectFactory()
-        self.item = ItemFactory(owner=self.pu, assigned_to=self.pu)
+        self.item = ItemFactory(
+            owner=self.pu, owner_user=self.pu.user,
+            assigned_to=self.pu, assigned_user=self.pu.user)
         self.formset_data = {
             'reminder_set-TOTAL_FORMS': 1,
             'reminder_set-INITIAL_FORMS': 0,
@@ -553,7 +554,7 @@ class TestItemUpdate(LoggedInTestMixin, TestCase):
 
         self.item.refresh_from_db()
         self.assertEqual(self.item.type, 'action item')
-        self.assertEqual(self.item.assigned_to, self.pu)
+        self.assertEqual(self.item.assigned_user.userprofile, self.pu)
         self.assertEqual(self.item.title, 'my title')
         self.assertEqual(self.item.target_date, parse_date('2015-11-09'))
         self.assertEqual(self.item.estimated_time, timedelta(hours=3))
@@ -568,7 +569,7 @@ class TestItemUpdate(LoggedInTestMixin, TestCase):
 
         self.item.refresh_from_db()
         self.assertEqual(self.item.type, 'action item')
-        self.assertEqual(self.item.assigned_to, self.pu)
+        self.assertEqual(self.item.assigned_user.userprofile, self.pu)
         self.assertEqual(self.item.title, 'my title')
         self.assertEqual(self.item.target_date, parse_date('2015-11-12'))
         self.assertEqual(self.item.estimated_time,
@@ -713,7 +714,8 @@ class TestItemViews(LoggedInTestMixin, TestCase):
 
     def test_item_view_notification_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
-        i = ItemFactory(assigned_to=self.u.userprofile)
+        i = ItemFactory(assigned_to=self.u.userprofile,
+                        assigned_user=self.u)
         n = NotifyFactory(item=i, user=self.u)
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
@@ -1012,7 +1014,9 @@ class TestItemWorkflow(TestCase):
 
     def test_resolve_self_assigned(self):
         i = ItemFactory(owner=self.u.userprofile,
-                        assigned_to=self.u.userprofile)
+                        owner_user=self.u,
+                        assigned_to=self.u.userprofile,
+                        assigned_user=self.u)
         r = self.c.post(
             i.get_absolute_url() + "resolve/",
             dict(comment='this is a comment',
@@ -1124,8 +1128,8 @@ class TestItemWorkflow(TestCase):
             project.get_absolute_url() + "add_bug/",
             dict(title='test bug', description='test',
                  priority='1', milestone=i.milestone.mid,
-                 owner=i.owner.username,
-                 assigned_to=i.assigned_to.username,
+                 owner=i.owner_user.userprofile.username,
+                 assigned_to=i.assigned_user.userprofile.username,
                  tags=""))
         r = self.c.get(project.get_absolute_url())
         self.assertTrue("test bug" in r.content)
@@ -1476,7 +1480,7 @@ class UserTest(TestCase):
         # this user actually has some stuff
         p = ProjectFactory(caretaker_user=u.user)
         assigned = ItemFactory(assigned_to=u)
-        owned = ItemFactory(owner=u)
+        owned = ItemFactory(owner=u, owner_user=u.user)
         # reassign it to the request user
         params = dict()
         params["project_%d" % p.pid] = self.u.userprofile.username
@@ -1498,7 +1502,6 @@ class UserTest(TestCase):
         self.assertEqual(assigned.assigned_to, self.u.userprofile)
 
         owned = Item.objects.get(iid=owned.iid)
-        self.assertEqual(owned.owner, self.u.userprofile)
         self.assertEqual(owned.owner_user, self.u)
 
     def test_timeline(self):

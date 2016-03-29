@@ -235,8 +235,8 @@ class ResolveItemView(LoggedInMixin, View):
         user = request.user.userprofile
         r_status = request.POST.get('r_status', u'FIXED')
         comment = linkify(commonmark(request.POST.get('comment', u'')))
-        if (item.assigned_to.username == item.owner.username and
-                item.owner.username == user.username):
+        if (item.assigned_user == item.owner_user and
+                item.owner_user == request.user):
             # streamline self-assigned item verification
             item.verify(user, comment)
         else:
@@ -420,10 +420,8 @@ class ItemDetailView(LoggedInMixin, DetailView):
         current_user = self.request.user
 
         if (current_user):
-            current_username = current_user.userprofile.username
-
             context['assigned_to_current_user'] = \
-                (context['item'].assigned_to.username == current_username)
+                (context['item'].assigned_user == current_user)
 
             try:
                 reminder = Reminder.objects.get(

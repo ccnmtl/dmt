@@ -98,6 +98,6 @@ class ProjectFeed(Feed):
              item.get_absolute_url()),
             item.title,
             item.status,
-            item.owner,
-            item.assigned_to,
+            item.owner_user.userprofile,
+            item.assigned_user.userprofile,
             item.last_mod)

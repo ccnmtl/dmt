@@ -334,7 +334,7 @@ class ItemTest(TestCase):
         i = ItemFactory(title="\r\n \r\n linebreaks")
         u2 = UserProfileFactory(status='active')
         NotifyFactory(item=i, user=u2.user)
-        i.update_email("a comment", i.owner)
+        i.update_email("a comment", i.owner_user.userprofile)
         self.assertEqual(len(mail.outbox), 1)
 
     def test_add_reminder(self):

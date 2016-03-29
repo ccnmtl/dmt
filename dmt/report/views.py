@@ -27,7 +27,8 @@ class ProjectHoursView(LoggedInMixin, View):
             'mid', 'milestone', 'user', 'hours', 'completed at']
 
         rows = [[a.item.iid, a.item.title, a.item.type,
-                 a.item.owner.username, a.item.assigned_to.username,
+                 a.item.owner_user.userprofile.username,
+                 a.item.assigned_user.userprofile.username,
                  a.item.priority, a.item.target_date,
                  interval_to_hours(a.item.estimated_time),
                  a.item.milestone.mid, a.item.milestone.name,

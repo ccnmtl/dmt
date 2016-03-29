@@ -31,8 +31,8 @@
 {% endifequal %}
 </td>
     	<td class="pr{{item.priority}}">{{item.priority_label}}</td>
-			<td><a href="{{item.owner.get_absolute_url}}">{{item.owner.fullname}}</a></td>
-			<td><a href="{{item.assigned_to.get_absolute_url}}">{{item.assigned_to.fullname}}</a></td>
+			<td><a href="{{item.owner_user.userprofile.get_absolute_url}}">{{item.owner_user.userprofile.fullname}}</a></td>
+			<td><a href="{{item.assigned_user.userprofile.get_absolute_url}}">{{item.assigned_user.userprofile.fullname}}</a></td>
     	<td class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
     	<td>{{item.last_mod|date:"Y-m-d"}}</td>
     </tr>

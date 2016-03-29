@@ -213,7 +213,7 @@ class MilestoneItemList(generics.ListCreateAPIView):
         pk = self.kwargs.get('pk', None)
         return Item.objects.filter(
             milestone__pk=pk).prefetch_related(
-            'owner', 'assigned_to',
+            'owner_user', 'assigned_user',
             'milestone')
 
 

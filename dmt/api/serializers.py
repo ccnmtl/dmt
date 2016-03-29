@@ -6,6 +6,12 @@ from dmt.main.models import (
 from rest_framework import serializers
 
 
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name')
+
+
 class ClientSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Client
@@ -18,10 +24,12 @@ class ClientSerializer(serializers.HyperlinkedModelSerializer):
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
     notifies = serializers.StringRelatedField(many=True)
+    owner_user = UserSerializer()
+    assigned_user = UserSerializer()
 
     class Meta:
         model = Item
-        fields = ('iid', 'title', 'type', 'owner', 'assigned_to',
+        fields = ('iid', 'title', 'type', 'owner_user', 'assigned_user',
                   'milestone', 'status', 'description', 'priority',
                   'r_status', 'last_mod', 'target_date', 'estimated_time',
                   'url', 'notifies')
@@ -37,12 +45,6 @@ class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
         model = Milestone
         fields = ('mid', 'name', 'target_date', 'project', 'status',
                   'description', 'item_set')
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', 'first_name', 'last_name')
 
 
 class NotifySerializer(serializers.HyperlinkedModelSerializer):

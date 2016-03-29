@@ -113,7 +113,7 @@
 
       <dt>Owner</dt>
       <dd>
-        <a href="{{object.owner.get_absolute_url}}">{{object.owner}}</a>
+        <a href="{{object.owner_user.userprofile.get_absolute_url}}">{{object.owner_user.userprofile}}</a>
         &nbsp;
         <a class="btn btn-default btn-xs" href="#" data-toggle="modal"
         data-target="#change-owner" title="change-owner"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -121,7 +121,7 @@
 
       <dt>Assigned to</dt>
       <dd>
-        <a href="{{object.assigned_to.get_absolute_url}}">{{object.assigned_to}}</a>
+        <a href="{{object.assigned_user.userprofile.get_absolute_url}}">{{object.assigned_user.userprofile}}</a>
         &nbsp;
         <a class="btn btn-default btn-xs" href="#" data-toggle="modal"
         data-target="#reassign" title="reassign item"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -596,7 +596,7 @@
                     <select name="assigned_to" class="form-control" id="assign-to-select">
                         {% for user in item.milestone.project.all_personnel_in_project %}
                         <option value="{{user.username}}"
-                                {% if user.username == item.assigned_to.username %}
+                                {% if user.username == item.assigned_user.userprofile.username %}
                                 selected="selected"
                                 {% endif %}
                         >{% firstof user.fullname user.username %}</option>
@@ -638,7 +638,7 @@
                     <select name="owner" class="form-control" id="assign-to-select">
                         {% for user in item.milestone.project.all_personnel_in_project %}
                         <option value="{{user.username}}"
-                                {% if user.username == item.owner.username %}
+                                {% if user.username == item.owner_user.userprofile.username %}
                                 selected="selected"
                                 {% endif %}>{% firstof user.fullname user.username %}</option>
                         {% endfor %}
