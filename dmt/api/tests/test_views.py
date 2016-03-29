@@ -437,6 +437,24 @@ class ExternalAddItemTests(APITestCase):
                              HTTP_REFERER=self.remote_host)
         self.assertEqual(r.status_code, 200)
 
+    def test_handles_missing_target_date(self):
+        self.post_data['target_date'] = ''
+        r = self.client.post(reverse('external-add-item'),
+                             self.post_data,
+                             REMOTE_HOST=self.remote_host)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.data.get('title'), self.title)
+        self.assertTrue(
+            'Submitted by Item Submitter <submission_email@example.com>' in
+            r.data.get('description')
+        )
+        self.assertEqual(r.data.get('type'), 'action item')
+        self.assertTrue(self.owner.username in r.data.get('owner'))
+        self.assertTrue(self.assignee.username in r.data.get('assigned_to'))
+        self.assertTrue(self.debug_info in r.data.get('description'))
+        self.assertTrue(unicode(self.milestone.pk) in r.data.get('milestone'))
+        self.assertEqual(r.data.get('estimated_time'), '01:00:00')
+
 
 class NotifyTests(APITestCase):
     def setUp(self):
