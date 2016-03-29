@@ -98,7 +98,6 @@ django-templatetag-sugar==1.0
 django-classy-tags==0.7.1
 django-taggit-templatetags2==1.4.1.ccnmtl
 django-celery==3.1.17
-django-casper==0.0.4
 django-bootstrap3==6.2.2
 django-emoji==2.0.0
 behave-django==0.3.0
