@@ -948,11 +948,13 @@ class Item(models.Model):
         max_length=12,
         choices=[('bug', 'bug'), ('action item', 'action item')])
     owner = models.ForeignKey(UserProfile, db_column='owner',
-                              related_name='owned_items')
+                              related_name='owned_items',
+                              null=True, blank=True)
     owner_user = models.ForeignKey(User, db_column='owner_user',
                                    related_name='owned_items')
     assigned_to = models.ForeignKey(UserProfile, db_column='assigned_to',
-                                    related_name='assigned_items')
+                                    related_name='assigned_items',
+                                    null=True, blank=True)
     assigned_user = models.ForeignKey(User, db_column='assigned_user',
                                       related_name='assigned_to')
     title = models.CharField(max_length=255)
