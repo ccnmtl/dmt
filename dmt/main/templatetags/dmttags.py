@@ -1,6 +1,4 @@
-import bleach
 from django import template
-from html5lib.tokenizer import HTMLTokenizer
 from dmt.main.models import InGroup
 import dmt.main.utils as utils
 
@@ -47,11 +45,7 @@ def simpleduration(duration):
 
 @register.filter(is_safe=True)
 def linkify(value):
-    return bleach.linkify(value,
-                          skip_pre=True,
-                          skip_code=True,
-                          parse_email=False,
-                          tokenizer=HTMLTokenizer)
+    return utils.linkify(value)
 
 
 @register.filter

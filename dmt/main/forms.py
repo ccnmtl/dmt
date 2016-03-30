@@ -170,6 +170,17 @@ class CommentUpdateForm(ModelForm):
         model = Comment
         fields = ['comment_src']
 
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+
+        # If the comment was created, the comment_src was never populated,
+        if instance.comment_src == '' and instance.comment != '':
+            kwargs.update(initial={
+                'comment_src': instance.comment
+            })
+
+        return super(CommentUpdateForm, self).__init__(*args, **kwargs)
+
     def save(self, commit=True):
         instance = super(CommentUpdateForm, self).save(commit=False)
         instance.comment = linkify(commonmark(instance.comment_src))

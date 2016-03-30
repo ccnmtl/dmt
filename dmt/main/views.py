@@ -234,7 +234,7 @@ class ResolveItemView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
         r_status = request.POST.get('r_status', u'FIXED')
-        comment = linkify(commonmark(request.POST.get('comment', u'')))
+        comment = request.POST.get('comment', u'')
         if (item.assigned_user == item.owner_user and
                 item.owner_user == request.user):
             # streamline self-assigned item verification
@@ -269,7 +269,7 @@ class VerifyItemView(LoggedInMixin, View):
     def post(self, request, pk):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
-        comment = linkify(commonmark(request.POST.get('comment', u'')))
+        comment = request.POST.get('comment', u'')
         item.verify(user, comment)
         item.touch()
         item.update_email("Verified\n-----\n" +
@@ -389,13 +389,14 @@ class SplitItemView(LoggedInMixin, View):
             new_items.append(new_item)
         if len(new_items) > 0:
             comment = (
-                "<p>Split into:</p>"
-                "<ul>%s</ul>" % "".join(
-                    [
-                        "<li><a href='%s'>#%d %s</a></li>" % (
-                            i.get_absolute_url(),
-                            i.iid, i.title) for i in new_items
-                    ]))
+                "Split into:\n"
+                "".join([
+                    "* [#%d %s](%s)" % (
+                        i.iid,
+                        i.title,
+                        i.get_absolute_url()
+                    ) for i in new_items
+                ]))
             item.verify(user, comment)
             item.touch()
             item.update_email(comment, user)

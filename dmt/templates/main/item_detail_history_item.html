@@ -1,0 +1,64 @@
+{% load markup %}
+{% load emoji_tags %}
+{% load dmttags %}
+
+<hr />
+<span class="pmt-anchor" id="event-{{forloop.counter}}"></span>
+<div class="row">
+    <div class="col-md-2 {{history_item.status_class}}">
+        {{history_item.status}}
+    </div>
+    <div class="col-md-3 item-history-date">
+        by <a href="{{history_item.user.get_absolute_url}}">
+        {% firstof history_item.user.fullname history_item.user.username %}
+
+        </a>
+        <br />
+        <div class="pmt-item-timestamp">
+            on
+            <a href="#event-{{forloop.counter}}">
+                <time title="{{history_item.timestamp}}">
+                    {{history_item.timestamp}}
+                </time>
+            </a>
+        </div>
+        {% if history_item.c and history_item.c.has_been_edited %}
+            <div class="pmt-item-timestamp-updated">
+                Updated
+                <time title="{{history_item.c.updated_at}}">
+                    {{history_item.c.updated_at}}
+                </time>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-7 item-comment">
+
+        {# Does this history item belong to the current user? #}
+        {% if request.user.userprofile.username == history_item.user.username %}
+            {# Is it a comment? #}
+            {% if history_item.c %}
+                <div class="btn-group pull-right" role="group">
+                    <a class="btn btn-default btn-xs"
+                       title="Edit comment"
+                       href="{% url 'comment_update' history_item.c.cid %}"
+                    ><span class="glyphicon glyphicon-pencil"></span></a>
+
+                    <a class="btn btn-default btn-xs"
+                       title="Delete comment"
+                       href="{% url 'comment_delete' history_item.c.cid %}"
+                    ><span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </div>
+            {% elif history_item.event.comment_set.first and history_item.event.is_comment_editable %}
+                <div class="btn-group pull-right" role="group">
+                    <a class="btn btn-default btn-xs"
+                       title="Edit comment"
+                       href="{% url 'comment_update' history_item.event.comment_set.first.cid %}"
+                    ><span class="glyphicon glyphicon-pencil"></span></a>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {{history_item.comment|commonmark|linkify|emoji_replace}}
+    </div>
+</div>

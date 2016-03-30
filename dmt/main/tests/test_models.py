@@ -226,6 +226,93 @@ class ItemTest(TestCase):
         self.assertEqual(
             Events.objects.filter(item=i, status='RESOLVED').count(), 1)
 
+        comment = Events.objects.filter(
+            item=i, status='RESOLVED')[0].comment_set.first()
+        self.assertEqual(
+            comment.comment,
+            '<p><strong>Resolved FIXED</strong></p>\n<p>test comment</p>\n')
+        self.assertEqual(
+            comment.comment_src,
+            '**Resolved FIXED**\n\ntest comment')
+
+    def test_verify(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserProfileFactory()
+        u2 = UserProfileFactory()
+        p.add_item(
+            type='action item', title='new item',
+            assigned_to=u, owner=u2, milestone=m,
+            priority=1, description='',
+            estimated_time='1hr',
+            status='OPEN', r_status='')
+        i = m.item_set.first()
+        i.verify(u, 'test comment')
+        self.assertEqual(
+            Events.objects.filter(item=i, status='VERIFIED').count(), 1)
+
+        comment = Events.objects.filter(
+            item=i, status='VERIFIED')[0].comment_set.first()
+        self.assertEqual(
+            comment.comment,
+            '<p><strong>Verified</strong></p>\n<p>test comment</p>\n')
+        self.assertEqual(
+            comment.comment_src,
+            '**Verified**\n\ntest comment')
+
+    def test_mark_in_progress(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserProfileFactory()
+        p.add_item(
+            type='action item', title='new item',
+            assigned_to=u, owner=u, milestone=m,
+            priority=1, description='',
+            estimated_time='1hr',
+            status='OPEN', r_status='')
+        i = m.item_set.first()
+        i.mark_in_progress(u, 'test comment')
+        self.assertEqual(
+            Events.objects.filter(item=i, status='INPROGRESS').count(), 1)
+
+        comment = Events.objects.filter(
+            item=i, status='INPROGRESS')[0].comment_set.first()
+        self.assertEqual(
+            comment.comment,
+            '<p><strong>Marked as In-progress</strong></p>\n'
+            '<p>test comment</p>\n')
+        self.assertEqual(
+            comment.comment_src,
+            '**Marked as In-progress**\n\ntest comment')
+
+    def test_reopen(self):
+        m = MilestoneFactory()
+        p = m.project
+        u = UserProfileFactory()
+        p.add_item(
+            type='action item', title='new item',
+            assigned_to=u, owner=u, milestone=m,
+            priority=1, description='',
+            estimated_time='1hr',
+            status='OPEN', r_status='')
+        i = m.item_set.first()
+        i.verify(u, 'verified')
+        i.reopen(u, 'reopening this')
+        self.assertEqual(
+            Events.objects.filter(item=i, status='VERIFIED').count(), 1)
+        self.assertEqual(
+            Events.objects.filter(item=i, status='OPEN').count(), 2)
+
+        comment = Events.objects.filter(
+            item=i, status='OPEN').last().comment_set.first()
+        self.assertEqual(
+            comment.comment,
+            '<p><strong>Reopened</strong></p>\n'
+            '<p>reopening this</p>\n')
+        self.assertEqual(
+            comment.comment_src,
+            '**Reopened**\n\nreopening this')
+
     def test_status_display(self):
         i = ItemFactory()
         self.assertEqual(i.status_display(), 'OPEN')

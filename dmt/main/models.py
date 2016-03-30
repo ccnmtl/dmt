@@ -13,7 +13,8 @@ from taggit.managers import TaggableManager
 from django.core.mail import send_mail
 from django_statsd.clients import statsd
 from simpleduration import Duration, InvalidDuration
-from dmt.main.utils import simpleduration_string
+from dmt.main.utils import linkify, simpleduration_string
+from django_markwhat.templatetags.markup import commonmark
 from .timeline import (
     TimeLineEvent, TimeLineComment,
     TimeLinePost, TimeLineActualTime, TimeLineStatus,
@@ -1080,10 +1081,12 @@ class Item(models.Model):
             status="RESOLVED",
             event_date_time=timezone.now(),
             item=self)
+        comment_src = '**Resolved {}**\n\n{}'.format(r_status, comment)
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>Resolved %s</b><br />\n%s" % (r_status, comment),
+            comment=linkify(commonmark(comment_src)),
+            comment_src=comment_src,
             add_date_time=timezone.now())
 
     def verify(self, user, comment):
@@ -1094,10 +1097,12 @@ class Item(models.Model):
             status="VERIFIED",
             event_date_time=timezone.now(),
             item=self)
+        comment_src = '**Verified**\n\n' + comment
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>Verified</b><br />\n%s" % comment,
+            comment=linkify(commonmark(comment_src)),
+            comment_src=comment_src,
             add_date_time=timezone.now())
 
     def mark_in_progress(self, user, comment):
@@ -1108,10 +1113,12 @@ class Item(models.Model):
             status="INPROGRESS",
             event_date_time=timezone.now(),
             item=self)
+        comment_src = '**Marked as In-progress**\n\n' + comment
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>Marked as In-progress</b><br />\n%s" % comment,
+            comment=linkify(commonmark(comment_src)),
+            comment_src=comment_src,
             add_date_time=timezone.now())
 
     def reopen(self, user, comment):
@@ -1122,10 +1129,12 @@ class Item(models.Model):
             status="OPEN",
             event_date_time=timezone.now(),
             item=self)
+        comment_src = '**Reopened**\n\n' + comment
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>Reopened</b><br />\n%s" % comment,
+            comment=linkify(commonmark(comment_src)),
+            comment_src=comment_src,
             add_date_time=timezone.now())
 
     def reassign(self, user, assigned_to, comment):
@@ -1136,11 +1145,13 @@ class Item(models.Model):
             status="OPEN",
             event_date_time=timezone.now(),
             item=self)
+        comment_src = '**Reassigned to {}**\n\n{}'.format(
+            assigned_to.fullname, comment)
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>Reassigned to %s</b><br />\n%s" % (
-                assigned_to.fullname, comment),
+            comment=linkify(commonmark(comment_src)),
+            comment_src=comment_src,
             add_date_time=timezone.now())
         self.add_cc(assigned_to)
 
@@ -1152,11 +1163,13 @@ class Item(models.Model):
             status="OPEN",
             event_date_time=timezone.now(),
             item=self)
+        comment_src = '**Ownership changed to {}**\n\n{}'.format(
+            owner.fullname, comment)
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment="<b>Ownership changed to %s</b><br />\n%s" % (
-                owner.fullname, comment),
+            comment=linkify(commonmark(comment_src)),
+            comment_src=comment_src,
             add_date_time=timezone.now())
         self.add_cc(owner)
 
@@ -1167,7 +1180,7 @@ class Item(models.Model):
         self.add_event(
             self.status,
             user,
-            "<b>Priority changed from %s to %s</b>" % (
+            "**Priority changed from %s to %s**" % (
                 priority_label_f(old_priority),
                 priority_label_f(priority)))
 
@@ -1176,10 +1189,12 @@ class Item(models.Model):
             status=status,
             event_date_time=timezone.now(),
             item=self)
+        comment_src = comment
         Comment.objects.create(
             event=e,
             username=user.username,
-            comment=comment,
+            comment=linkify(commonmark(comment_src)),
+            comment_src=comment_src,
             add_date_time=timezone.now())
 
     def setup_default_notification(self):
@@ -1332,6 +1347,9 @@ class HistoryEvent(HistoryItem):
         return self.event.status_class()
 
     def _get_comment(self):
+        return self.event.comment_set.first()
+
+    def get_comment(self):
         return self.event.comment_set.first()
 
     def comment(self):
@@ -1499,6 +1517,9 @@ class Events(models.Model):
         if (s == 'open'):
             s = 'dmt-' + s
         return s
+
+    def is_comment_editable(self):
+        return self.status in ['VERIFIED', 'INPROGRESS', 'OPEN']
 
 
 class InGroup(models.Model):

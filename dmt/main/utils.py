@@ -1,5 +1,7 @@
 import ntpath
 import re
+import bleach
+from html5lib.tokenizer import HTMLTokenizer
 from simpleduration import Duration, InvalidDuration
 
 
@@ -86,3 +88,12 @@ def simpleduration_string(duration):
         string += '{:d}s'.format(seconds)
 
     return string.strip()
+
+
+def linkify(value):
+    return bleach.linkify(
+        value,
+        skip_pre=True,
+        skip_code=True,
+        parse_email=False,
+        tokenizer=HTMLTokenizer)
