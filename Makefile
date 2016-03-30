@@ -1,6 +1,6 @@
 APP=dmt
 
-JS_FILES=media/js/src/ media/js/tests dmt/main/tests/js
+JS_FILES=media/js/src/ media/js/tests
 REQUIREJS=$(NODE_MODULES)/.bin/r.js
 PY_DIRS=$(APP) features
 MAX_COMPLEXITY=7
