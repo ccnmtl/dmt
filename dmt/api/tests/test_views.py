@@ -246,7 +246,7 @@ class GitUpdateViewTest(TestCase):
             self.url,
             dict(status='FIXED',
                  iid=i.iid,
-                 email=i.assigned_to.email,
+                 email=i.assigned_user.userprofile.email,
                  comment="a comment")
             )
         self.assertEqual(r.status_code, 200)
@@ -262,7 +262,7 @@ class GitUpdateViewTest(TestCase):
             self.url,
             dict(status='FIXED',
                  iid=i.iid,
-                 email=i.assigned_to.email,
+                 email=i.assigned_user.userprofile.email,
                  resolve_time='1 hour',
                  comment="a comment")
             )
@@ -278,7 +278,7 @@ class GitUpdateViewTest(TestCase):
         r = self.c.post(
             self.url,
             dict(iid=i.iid,
-                 email=i.assigned_to.email,
+                 email=i.assigned_user.userprofile.email,
                  comment="a comment")
             )
         self.assertEqual(r.status_code, 200)

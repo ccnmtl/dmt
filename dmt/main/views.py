@@ -1377,7 +1377,6 @@ class AddTrackersView(LoggedInMixin, FormSetView):
         item = Item.objects.create(
             milestone=milestone,
             type='action item',
-            owner=user.userprofile, assigned_to=user.userprofile,
             owner_user=user, assigned_user=user,
             title=task, status='VERIFIED',
             priority=1, target_date=milestone.target_date,

@@ -310,7 +310,6 @@ class AddTrackerView(APIView):
         item = Item.objects.create(
             milestone=milestone,
             type='action item',
-            owner=user, assigned_to=user,
             owner_user=user.user, assigned_user=user.user,
             title=task, status='VERIFIED',
             priority=1, target_date=milestone.target_date,

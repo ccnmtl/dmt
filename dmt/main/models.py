@@ -528,9 +528,7 @@ class Project(models.Model):
         item = Item.objects.create(
             milestone=milestone,
             type='action item',
-            owner=user,
             owner_user=user.user,
-            assigned_to=user,
             assigned_user=user.user,
             title=title,
             priority=1,
@@ -571,9 +569,7 @@ class Project(models.Model):
         item = Item.objects.create(
             milestone=milestone,
             type=type,
-            owner=owner,
             owner_user=owner.user,
-            assigned_to=assigned_to,
             assigned_user=assigned_to.user,
             title=title,
             priority=priority,
@@ -947,14 +943,8 @@ class Item(models.Model):
     type = models.CharField(
         max_length=12,
         choices=[('bug', 'bug'), ('action item', 'action item')])
-    owner = models.ForeignKey(UserProfile, db_column='owner',
-                              related_name='owned_items',
-                              null=True, blank=True)
     owner_user = models.ForeignKey(User, db_column='owner_user',
                                    related_name='owned_items')
-    assigned_to = models.ForeignKey(UserProfile, db_column='assigned_to',
-                                    related_name='assigned_items',
-                                    null=True, blank=True)
     assigned_user = models.ForeignKey(User, db_column='assigned_user',
                                       related_name='assigned_to')
     title = models.CharField(max_length=255)
@@ -1193,8 +1183,8 @@ class Item(models.Model):
             add_date_time=timezone.now())
 
     def setup_default_notification(self):
-        self.add_cc(self.owner)
-        self.add_cc(self.assigned_to)
+        self.add_cc(self.owner_user.userprofile)
+        self.add_cc(self.assigned_user.userprofile)
 
     def add_project_notification(self):
         for u in self.milestone.project.managers():
@@ -1271,10 +1261,8 @@ Please do not reply to this message.
     def clone_to_new_item(self, new_title, user):
         new_item = Item.objects.create(
             type=self.type,
-            owner=self.owner,
-            owner_user=self.owner.user,
-            assigned_to=self.assigned_to,
-            assigned_user=self.assigned_to.user,
+            owner_user=self.owner_user,
+            assigned_user=self.assigned_user,
             title=new_title,
             milestone=self.milestone,
             status='OPEN',
