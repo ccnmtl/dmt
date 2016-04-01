@@ -19,8 +19,8 @@
         {{item.target_date|date:"Y-m-d"}}
     </td>
     <td data-field="milestone">
-        <a href="{% url 'user_detail' item.assigned_to.username %}">
-            {{item.assigned_to.fullname}}
+        <a href="{% url 'user_detail' item.assigned_user.userprofile.username %}">
+            {{item.assigned_user.userprofile.fullname}}
         </a>
     </td>
     <td data-field="project">

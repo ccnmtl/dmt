@@ -299,9 +299,8 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         )
         self.assertEqual(r.status_code, 302)
 
-        items = Item.objects.filter(milestone=milestone, assigned_to=u)
+        items = Item.objects.filter(milestone=milestone, assigned_user=u.user)
         self.assertEqual(len(items), 1)
-        self.assertEqual(items[0].assigned_to, u)
         self.assertEqual(items[0].assigned_user, u.user)
         self.assertEqual(items[0].title, "Untitled")
         self.assertEqual(items[0].estimated_time, timedelta(hours=4))
@@ -319,9 +318,8 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                          "title": ""})
         self.assertEqual(r.status_code, 302)
 
-        items = Item.objects.filter(milestone=milestone, assigned_to=u)
+        items = Item.objects.filter(milestone=milestone, assigned_user=u.user)
         self.assertEqual(len(items), 1)
-        self.assertEqual(items[0].assigned_to, u)
         self.assertEqual(items[0].assigned_user, u.user)
         self.assertEqual(items[0].title, "Untitled")
         self.assertEqual(Reminder.objects.count(), 0)
@@ -344,23 +342,23 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
             })
         self.assertEqual(r.status_code, 302)
 
-        items = Item.objects.filter(milestone=milestone, assigned_to=u2)
+        items = Item.objects.filter(milestone=milestone, assigned_user=u2.user)
         self.assertEqual(len(items), 1)
-        self.assertEqual(items[0].assigned_to, u2)
         self.assertEqual(items[0].assigned_user, u2.user)
         self.assertEqual(items[0].title, "Test Action Item")
         self.assertEqual(Reminder.objects.count(), 0)
 
-        items = Item.objects.filter(milestone=milestone, assigned_to=u3)
+        items = Item.objects.filter(milestone=milestone, assigned_user=u3.user)
         self.assertEqual(len(items), 1)
-        self.assertEqual(items[0].assigned_to, u3)
         self.assertEqual(items[0].assigned_user, u3.user)
         self.assertEqual(items[0].title, "Test Action Item")
         self.assertEqual(Reminder.objects.count(), 0)
 
         self.assertNotEqual(
-            Item.objects.filter(milestone=milestone, assigned_to=u2).first(),
-            Item.objects.filter(milestone=milestone, assigned_to=u3).first())
+            Item.objects.filter(milestone=milestone,
+                                assigned_user=u2.user).first(),
+            Item.objects.filter(milestone=milestone,
+                                assigned_user=u3.user).first())
 
     def test_add_action_item_owner(self):
         u = UserProfileFactory()
@@ -373,8 +371,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                          "owner": u.username})
         self.assertEqual(r.status_code, 302)
 
-        items = Item.objects.filter(milestone=milestone, owner=u,
-                                    owner_user=u.user)
+        items = Item.objects.filter(milestone=milestone, owner_user=u.user)
         self.assertEqual(len(items), 1)
         self.assertEqual(Reminder.objects.count(), 0)
 
@@ -527,9 +524,8 @@ class TestItemUpdate(LoggedInTestMixin, TestCase):
         super(TestItemUpdate, self).setUp()
         self.c = self.client
         self.p = ProjectFactory()
-        self.item = ItemFactory(
-            owner=self.pu, owner_user=self.pu.user,
-            assigned_to=self.pu, assigned_user=self.pu.user)
+        self.item = ItemFactory(owner_user=self.pu.user,
+                                assigned_user=self.pu.user)
         self.formset_data = {
             'reminder_set-TOTAL_FORMS': 1,
             'reminder_set-INITIAL_FORMS': 0,
@@ -714,8 +710,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
 
     def test_item_view_notification_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
-        i = ItemFactory(assigned_to=self.u.userprofile,
-                        assigned_user=self.u)
+        i = ItemFactory(assigned_user=self.u)
         n = NotifyFactory(item=i, user=self.u)
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
@@ -1013,9 +1008,7 @@ class TestItemWorkflow(TestCase):
         self.assertTrue("2h 30m" in r.content)
 
     def test_resolve_self_assigned(self):
-        i = ItemFactory(owner=self.u.userprofile,
-                        owner_user=self.u,
-                        assigned_to=self.u.userprofile,
+        i = ItemFactory(owner_user=self.u,
                         assigned_user=self.u)
         r = self.c.post(
             i.get_absolute_url() + "resolve/",
@@ -1116,7 +1109,7 @@ class TestItemWorkflow(TestCase):
             project.get_absolute_url() + "add_bug/",
             dict(title='test bug', description='test',
                  priority='1', milestone=i.milestone.mid,
-                 assigned_to=i.assigned_to.username,
+                 assigned_to=i.assigned_user.userprofile.username,
                  tags="tagone, tagtwo"))
         r = self.c.get(project.get_absolute_url())
         self.assertTrue("test bug" in r.content)
@@ -1479,8 +1472,8 @@ class UserTest(TestCase):
         u = UserProfileFactory(status='active')
         # this user actually has some stuff
         p = ProjectFactory(caretaker_user=u.user)
-        assigned = ItemFactory(assigned_to=u)
-        owned = ItemFactory(owner=u, owner_user=u.user)
+        assigned = ItemFactory(assigned_user=u.user)
+        owned = ItemFactory(owner_user=u.user)
         # reassign it to the request user
         params = dict()
         params["project_%d" % p.pid] = self.u.userprofile.username
@@ -1499,7 +1492,7 @@ class UserTest(TestCase):
         self.assertEqual(p.caretaker_user, self.u)
 
         assigned = Item.objects.get(iid=assigned.iid)
-        self.assertEqual(assigned.assigned_to, self.u.userprofile)
+        self.assertEqual(assigned.assigned_user, self.u)
 
         owned = Item.objects.get(iid=owned.iid)
         self.assertEqual(owned.owner_user, self.u)
