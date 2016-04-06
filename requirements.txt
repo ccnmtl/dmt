@@ -44,7 +44,7 @@ wrapt==1.10.6
 astroid==1.4.5
 pylint==1.5.4
 six==1.10.0
-python-dateutil==2.5.1
+python-dateutil==2.5.2
 pytz==2016.3
 simpleduration==0.1.0
 fake-factory==0.5.3
