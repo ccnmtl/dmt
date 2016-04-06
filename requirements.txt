@@ -42,7 +42,7 @@ logilab-astng==0.24.3
 lazy-object-proxy==1.2.1
 wrapt==1.10.6
 astroid==1.4.5
-pylint==1.5.4
+pylint==1.5.5
 six==1.10.0
 python-dateutil==2.5.1
 pytz==2016.3
