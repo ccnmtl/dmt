@@ -712,9 +712,10 @@ WHERE a.iid = i.iid
 
     @staticmethod
     def projects_active_during(start, end, groups):
-        groups_string = ','.join([x.username for x in groups])
-        projects = Project.objects.raw("""
-SELECT DISTINCT p.pid, p.name, p.projnum
+        projects = set([])
+        for group in groups:
+            ps = Project.objects.raw("""
+SELECT p.pid, p.name, p.projnum
 FROM projects p, milestones m, items i, actual_times a, in_group g, users u
 WHERE p.pid = m.pid
     AND p.pub_view = TRUE
@@ -722,11 +723,12 @@ WHERE p.pid = m.pid
     AND i.iid = a.iid
     AND a.user_id = u.user_id
     AND g.username = u.username
-    AND g.grp = ANY (string_to_array(%s, ',')::text[])
+    AND g.grp = %s
     AND a.completed > %s
     AND a.completed <= %s
-ORDER BY p.projnum
-        """, [groups_string, start, end])
+            """, [group.username, start, end])
+            for project in ps:
+                projects.add(project)
         return projects
 
     @staticmethod
