@@ -1,6 +1,5 @@
 from datetime import timedelta
 from django.test import TestCase
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from freezegun import freeze_time
@@ -9,7 +8,6 @@ from dmt.main.tests.factories import (
     ActualTimeFactory, ItemFactory, MilestoneFactory, UserProfileFactory
 )
 from dmt.main.tests.support.mixins import LoggedInTestMixin
-import unittest
 
 
 class ActiveProjectTests(LoggedInTestMixin, TestCase):
@@ -151,29 +149,17 @@ class InprogressItemsViewTest(LoggedInTestMixin, TestCase):
 
 
 class WeeklySummaryTests(LoggedInTestMixin, TestCase):
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_weekly_summary_view(self):
         r = self.client.get(reverse('weekly_summary_report'))
         self.assertEqual(r.status_code, 200)
 
 
 class WeeklySummaryExportTests(LoggedInTestMixin, TestCase):
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_weekly_summary_export_csv_view(self):
         r = self.client.get(reverse('weekly_summary_report_export') +
                             '?format=csv')
         self.assertEqual(r.status_code, 200)
 
-    @unittest.skipUnless(
-        settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
-        "This test requires PostgreSQL")
     def test_weekly_summar_export_excel_view(self):
         r = self.client.get(reverse('weekly_summary_report_export') +
                             '?format=xlsx')
