@@ -160,7 +160,7 @@ class WeeklySummaryExportTests(LoggedInTestMixin, TestCase):
                             '?format=csv')
         self.assertEqual(r.status_code, 200)
 
-    def test_weekly_summar_export_excel_view(self):
+    def test_weekly_summary_export_excel_view(self):
         r = self.client.get(reverse('weekly_summary_report_export') +
                             '?format=xlsx')
         self.assertEqual(r.status_code, 200)
