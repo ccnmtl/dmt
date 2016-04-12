@@ -55,6 +55,7 @@ require([
     '../libs/commonmark.min',
     '../libs/linkify/linkify.min',
     '../libs/linkify/linkify-html.min',
+    '../libs/js-emoji/emoji.min',
     'select2',
 
     // src
