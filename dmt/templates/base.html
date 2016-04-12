@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/buttons.dataTables.min.css">
   <link rel="stylesheet" href="{{STATIC_URL}}css/theme.tablesorter.default.css">
   <link rel="stylesheet" href="{{STATIC_URL}}css/select2.min.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}css/emoji.css">>
   {% endcompress %}
 
   {% block css %}{% endblock %}
@@ -39,10 +40,12 @@
   <script src="{{STATIC_URL}}js/libs/datatables/dataTables.buttons.min.js"></script>
   <script src="{{STATIC_URL}}js/libs/datatables/buttons.colVis.min.js"></script>
   <script>
-    $.extend($.fn.dataTable.defaults, {
-    'paging': false,
-    'searching': false
-    });
+  window.STATIC_URL = '{{STATIC_URL}}';
+
+  $.extend($.fn.dataTable.defaults, {
+      'paging': false,
+      'searching': false
+  });
   </script>
 
   <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
