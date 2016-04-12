@@ -2,6 +2,7 @@
 {% load markup %}
 {% load waffle_tags %}
 {% load emoji_tags %}
+{% load static %}
 {% load dmttags %}
 
 {% block title %}Item #{{object.iid}}&ndash;{{object.title}}{% endblock %}
@@ -681,7 +682,7 @@
         <a href="{{attachment.src}}" title="Download this attachment"><img src="{{attachment.src}}" class="attachment-image" /></a>
         {% endif %}
     {% else %}
-        <a href="{{attachment.url}}" title="Download this attachment"><img src="/media/img/icon-document.png" class="attachment-document" /></a>
+        <a href="{{attachment.url}}" title="Download this attachment"><img src="{% static 'img/icon-document.png' %}" class="attachment-document" /></a>
     {% endif %}
     </div><!-- attachment thumbnail -->
     <div class="col-sm-10">
