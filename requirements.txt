@@ -99,7 +99,7 @@ django-classy-tags==0.7.1
 django-taggit-templatetags2==1.4.1.ccnmtl
 django-celery==3.1.17
 django-bootstrap3==7.0.1
-django-emoji==2.0.0
+django-emoji==2.1.0
 behave-django==0.3.0
 django-braces==1.8.1
 oauthlib==1.0.3
