@@ -13,11 +13,13 @@ define([
         this.$previewArea = $previewArea;
         this._startEventHandler();
         if (window.STATIC_URL) {
-            emoji.img_path = window.STATIC_URL + 'emoji-data/img-apple-64/';
+            emoji.sheet_path = window.STATIC_URL +
+                'emoji-data/sheet_apple_64.png';
         }
+        emoji.use_sheet = true;
         // Temporary workaround for img_path issue:
         // https://github.com/iamcal/js-emoji/issues/47
-        emoji.img_sets[emoji.img_set].path = emoji.img_path;
+        emoji.img_sets[emoji.img_set].sheet = emoji.sheet_path;
     };
 
     /**
