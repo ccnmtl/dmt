@@ -40,15 +40,15 @@
   <a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a>
   </div>
   {% endif %}
-  
+
   <div class="forum-title">
   <h4><a href="{{n.get_absolute_url}}">{{n.subject|emoji_replace}}</a></h4>
   </div>
-  
+
   <div class="forum-byline text-muted">
   by <a href="{{n.user.userprofile.get_absolute_url}}">{{n.user.userprofile.fullname}}</a>
-  | {{n.added}} 
-  | <a href="{{n.get_absolute_url}}#replies"><span class="glyphicon glyphicon-comment"></span> 
+  | {{n.added}}
+  | <a href="{{n.get_absolute_url}}#replies"><span class="glyphicon glyphicon-comment"></span>
   {% ifequal n.replies 0 %}
     Add reply
   {% else %}
@@ -60,7 +60,7 @@
   {% endifequal %}
   </a>
   </div>
-  
+
   {% if n.tags.count %}
   <dl class="dl-horizontal forum-tags">
     <dt>Tags</dt>
@@ -74,7 +74,7 @@
     </dd>
   </dl><!-- /.forum-tags -->
   {% endif %}
-  
+
   <div class="forum-body">
   {{n.body|commonmark|linkify|emoji_replace}}
   </div>

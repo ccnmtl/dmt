@@ -7,10 +7,10 @@
   <link href="{% bootstrap_css_url %}" rel="stylesheet">
   <script src="{{STATIC_URL}}js/libs/jquery/jquery-min.js"></script>
 
-	<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-	<script src="{% bootstrap_javascript_url %}"></script>
+    <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+    <script src="{% bootstrap_javascript_url %}"></script>
 
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 <style>
@@ -36,22 +36,22 @@
 <body>
 
 <table class="table" id="milestones">
-	<thead>
-		<tr>
+    <thead>
+        <tr>
 {% for milestone in object.open_milestones %}
 <th>{{milestone.name}}</th>
 {% endfor %}
-		</tr>
-	</thead>
+        </tr>
+    </thead>
 
-	<tbody>
-		<tr>
-{% for milestone in object.open_milestones %}			
+    <tbody>
+        <tr>
+{% for milestone in object.open_milestones %}
 <td>{{milestone.target_date}}</td>
 {% endfor %}
-		</tr>
+        </tr>
 
-		<tr>
+        <tr>
 {% for milestone in object.open_milestones %}
 <td>
 <ul class="milestone" id="milestone-{{milestone.mid}}" data-mid="{{milestone.mid}}">
@@ -63,8 +63,8 @@
 </ul>
 </td>
 {% endfor %}
-		</tr>
-	</tbody>
+        </tr>
+    </tbody>
 
 </table>
 

@@ -4,7 +4,7 @@
 
 <form action="." method="post">{% csrf_token %}
 <p>Are you sure you want to remove <strong>{% firstof user.fullname user.username %}</strong> from
-	the <b>{{project.name}}</b> Project?
+    the <b>{{project.name}}</b> Project?
 
 <input type="submit" value="Yes, remove" class="btn btn-danger" />
 

@@ -10,31 +10,31 @@
 {% if object.open_owned_items %}
 <table class="table table-condensed table-striped tablesorter tablesorter-default"
        id="user-items">
-	<thead>
-		<tr>
-			<th>Item</th>
-			<th>Priority</th>
-			<th>Target Date</th>
-			<th>Assigned To</th>
-			<th>Project</th>
-			<th>Status</th>
-		</tr>
-	</thead>
-	<tbody>
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Priority</th>
+            <th>Target Date</th>
+            <th>Assigned To</th>
+            <th>Project</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
 {% for item in object.open_owned_items %}
 <tr>
-	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-	width="14" height="14"/> {% endif %}<a href="{% url 'item_detail' item.iid %}">{{item.title|truncatechars:70}}</a></td>
-	<td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
-	<td class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
-	<td><a href="{% url 'user_detail' item.assigned_user.userprofile.username %}">{{item.assigned_user.userprofile.fullname}}</a></td>
-	<td><a href="{% url 'project_detail' item.milestone.project.pid %}">{{item.milestone.project.name}}</a></td>
+    <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+    width="14" height="14"/> {% endif %}<a href="{% url 'item_detail' item.iid %}">{{item.title|truncatechars:70}}</a></td>
+    <td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
+    <td class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
+    <td><a href="{% url 'user_detail' item.assigned_user.userprofile.username %}">{{item.assigned_user.userprofile.fullname}}</a></td>
+    <td><a href="{% url 'project_detail' item.milestone.project.pid %}">{{item.milestone.project.name}}</a></td>
 
-	<td class="{{item.status_class}}">{{item.status}}</td>
+    <td class="{{item.status_class}}">{{item.status}}</td>
 
 </tr>
 {% endfor %}
-	</tbody>
+    </tbody>
 </table>
 {% else %}
 <p>This user has no outstanding owned items</p>
@@ -45,8 +45,8 @@
 
 {% block js %}
     <script>
-        $(document).ready(function()  { 
-               $("table.tablesorter").tablesorter({sortList: [[1,0], [3,1]]}); 
+        $(document).ready(function()  {
+               $("table.tablesorter").tablesorter({sortList: [[1,0], [3,1]]});
         });
     </script>
 {% endblock %}

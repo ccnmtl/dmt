@@ -34,7 +34,7 @@
 {% endif %}
   <div class="user-profile-data clearfix" {% if object.photo_url %}style="margin-left: 140px; padding-top: 10px;"{% endif %}>
     <p><a href="edit/" class="btn btn-default btn-xs"
-												 title="edit"><span class="glyphicon glyphicon-edit"></span> Edit profile</a></p>
+                                                 title="edit"><span class="glyphicon glyphicon-edit"></span> Edit profile</a></p>
 
     <p>
     {% if object.title %}{{object.title}}<br />{% endif %}
@@ -53,7 +53,7 @@
       {% flag user_timeline %}
       <li class="object-action" title="Timeline">
         <a href="{% url 'user_timeline' object.username %}">
-	      <span class="icon-timeline"></span>
+          <span class="icon-timeline"></span>
         <span class="object-action-text hidden-xs">Timeline</span></a>
       </li>
       {% endflag %}
@@ -119,36 +119,36 @@
   <div class="tab-pane fade in active" id="items">
 {% if object.items %}
 <table class="table table-striped table-condensed tablesorter tablesorter-default table-items" id="user-items">
-	<thead>
-		<tr>
-			<th>Item</th>
-			<th class="hidden-xs">Priority</th>
-			<th>Status</th>
-			<th>Project</th>
-			<th class="hidden-xs hidden-sm">Target Date</th>
-			<th class="hidden-xs hidden-sm">Modified</th>
-		</tr>
-	</thead>
-	<tbody>
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th class="hidden-xs">Priority</th>
+            <th>Status</th>
+            <th>Project</th>
+            <th class="hidden-xs hidden-sm">Target Date</th>
+            <th class="hidden-xs hidden-sm">Modified</th>
+        </tr>
+    </thead>
+    <tbody>
 {% for item in object.items %}
 <tr>
-	<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-	width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
-	<td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
-	<td class="{{item.status_class}}">{{item.status}}</td>
-	<td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
-	<td class="{{item.target_date_status}} hidden-xs hidden-sm">{{item.target_date|date:"Y-m-d"}}</td>
-	<td class="hidden-xs hidden-sm">{{item.last_mod|date:"Y-m-d"}}</td>
+    <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+    width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
+    <td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
+    <td class="{{item.status_class}}">{{item.status}}</td>
+    <td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
+    <td class="{{item.target_date_status}} hidden-xs hidden-sm">{{item.target_date|date:"Y-m-d"}}</td>
+    <td class="hidden-xs hidden-sm">{{item.last_mod|date:"Y-m-d"}}</td>
 </tr>
 {% endfor %}
-	</tbody>
+    </tbody>
 </table>
 {% else %}
 <p>This user has no outstanding items</p>
 {% endif %}
-	</div>
+    </div>
   <div class="tab-pane fade" id="clients">
-		{% if object.clients %}
+        {% if object.clients %}
 <table class="table table-striped table-condensed">
 {% for client in object.clients %}
 <tr>
@@ -163,7 +163,7 @@
 {% else %}
 <p>There are no clients for this user.</p>
 {% endif %}
-	</div>
+    </div>
   <div class="tab-pane fade" id="projects">
   {% if object.project_set.count %}
     <div class="user-projects-set">
@@ -241,9 +241,9 @@
     </div><!-- ./user-projects-set -->
   {% endif %}
 
-	</div>
-	<div class="tab-pane fade" id="forum">
-	{% if object.recent_forum_posts %}
+    </div>
+    <div class="tab-pane fade" id="forum">
+    {% if object.recent_forum_posts %}
     {% for n in object.recent_forum_posts %}
     <div class="forum-entry">
       {% if n.project %}
@@ -273,14 +273,14 @@
       {% endif %}
       <div class="forum-body">
       {{n.body|commonmark|linkify|emoji_replace}}
-      </div>    
+      </div>
     </div><!-- /.forum-entry -->
     {% endfor %}
   {% else %}
-	  <p>There are no forum posts by this user.</p>
-	{% endif %}
-	</div><!-- Forum -->
-	<div class="tab-pane fade" id="updates">
+      <p>There are no forum posts by this user.</p>
+    {% endif %}
+    </div><!-- Forum -->
+    <div class="tab-pane fade" id="updates">
   {% if object.recent_status_updates %}
     {% for n in object.recent_status_updates %}
     <div class="status-update">
@@ -293,7 +293,7 @@
         {{n.body|commonmark|linkify|emoji_replace}}
       </div><!-- /.status-update-body -->
     </div><!-- /.status-update -->
-    
+
     {% endfor %}
   {% else %}
     <p>There are no status updates by this user.</p>
@@ -309,10 +309,10 @@
 
 {% block js %}
 <script>
-$(document).ready(function() 
-    { 
-        $("#user-items").tablesorter({sortList: [[1,1], [4,0]]}); 
-    } 
+$(document).ready(function()
+    {
+        $("#user-items").tablesorter({sortList: [[1,1], [4,0]]});
+    }
 );
 </script>
 {% endblock %}

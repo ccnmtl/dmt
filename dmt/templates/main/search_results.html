@@ -8,7 +8,7 @@
 
 {% if error %}
 <div class="alert alert-danger">Sorry, I need at least three
-	characters to search for.</div>
+    characters to search for.</div>
 {% endif %}
 
 {% if tags %}
@@ -52,7 +52,7 @@
 <ul>
 {% for milestone in milestones %}
 <li><span class="{{milestone.status_class}}">{{milestone.status}}</span> <a href="{{milestone.get_absolute_url}}">{{milestone.project.name}}:
-		{{milestone.name}}</a></li>
+        {{milestone.name}}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -84,7 +84,7 @@
 <ul>
 {% for node in nodes %}
 <li><a href="{{node.get_absolute_url}}">[{{node.added}}]
-		{{node.subject}}</a> (<a href="{{node.user.userprofile.get_absolute_url}}">{% firstof node.author.fullname node.author.username %}</a>)</li>
+        {{node.subject}}</a> (<a href="{{node.user.userprofile.get_absolute_url}}">{% firstof node.author.fullname node.author.username %}</a>)</li>
 {% endfor %}
 </ul>
 {% endif %}

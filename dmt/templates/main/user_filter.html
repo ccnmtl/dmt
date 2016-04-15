@@ -26,28 +26,28 @@
         <div class="tab-pane fade in active" id="list">
 
 <table class="table table-condensed table-striped tablesorter tablesorter-default table-sortable table-items">
-	<thead>
-		<tr>
-			<th style="white-space: nowrap;">User</th>
-			<th class="hidden-xs">Title</th>
-			<th class="hidden-xs">Hours Assigned</th>
-			<th>Email</th>
-			<th class="hidden-sm hidden-xs">Status</th>
-		</tr>
-		<tbody>
+    <thead>
+        <tr>
+            <th style="white-space: nowrap;">User</th>
+            <th class="hidden-xs">Title</th>
+            <th class="hidden-xs">Hours Assigned</th>
+            <th>Email</th>
+            <th class="hidden-sm hidden-xs">Status</th>
+        </tr>
+        <tbody>
 
 {% for user in object_list %}
 <tr>
-	<td style="white-space: nowrap;"
+    <td style="white-space: nowrap;"
         {% if user.status == 'inactive' %}class="user-inactive"{% endif %}
     >
         <a href="{{user.get_absolute_url}}"
         >{% firstof user.fullname user.username %}</a>
     </td>
-	<td class="hidden-xs">{{user.title}}</td>
+    <td class="hidden-xs">{{user.title}}</td>
   <td style="width: 140px;" class="hidden-xs">{{user.total_assigned_time|floatformat}}</td>
-	<td>{{user.email}}</td>
-	<td class="hidden-sm hidden-xs">{{user.status}}</td>
+    <td>{{user.email}}</td>
+    <td class="hidden-sm hidden-xs">{{user.status}}</td>
 </tr>
 {% endfor %}
 

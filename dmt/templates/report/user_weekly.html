@@ -28,48 +28,48 @@ User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
 <h3>Breakdown</h3>
 
 <table class="table table-striped table-condensed">
-	<thead>
-		<tr>
-			<th>Project</th>
-			<th>Time Spent on Project</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for project in active_projects %}
-		<tr>
-			<td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Time Spent on Project</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in active_projects %}
+        <tr>
+            <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
             {% with projtime=project.time|interval_to_hours %}
-			<td>{{projtime}} hour{{projtime|pluralize}}</td>
+            <td>{{projtime}} hour{{projtime|pluralize}}</td>
             {% endwith %}
-		</tr>
-		{% endfor %}
-	</tbody>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endif %}
 
 <h3>Individual Times</h3>
 
 <table class="table table-striped table-condensed">
-	<thead>
-		<tr>
-			<th>Time</th>
-			<th>Item</th>
-			<th>Completed At</th>
-			<th>Project</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for t in individual_times %}
-		<tr>
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Item</th>
+            <th>Completed At</th>
+            <th>Project</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in individual_times %}
+        <tr>
             {% with ttime=t.actual_time|interval_to_hours %}
-			<td>{{ttime}} hour{{ttime|pluralize}}</td>
+            <td>{{ttime}} hour{{ttime|pluralize}}</td>
             {% endwith %}
-			<td><a href="{{t.item.get_absolute_url}}">{{t.item.title}}</a></td>
-			<td>{{t.completed}}</td>
-			<td><a href="{{t.item.milestone.project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
-		</tr>
-		{% endfor %}
-	</tbody>
+            <td><a href="{{t.item.get_absolute_url}}">{{t.item.title}}</a></td>
+            <td>{{t.completed}}</td>
+            <td><a href="{{t.item.milestone.project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 <h3>Piegraph</h3>

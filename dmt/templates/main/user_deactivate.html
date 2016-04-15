@@ -12,24 +12,24 @@
 
 <table class="table table-striped">
 <thead>
-	<tr>
-		<th>Project</th>
-		<th>Change Caretaker to</th>
-	</tr>
+    <tr>
+        <th>Project</th>
+        <th>Change Caretaker to</th>
+    </tr>
 </thead>
 <tbody>
 {% for p in user.project_set.all %}
 <tr>
-	<td><a href="{{p.get_absolute_url}}">{{p.name}}</a></td>
-	<td>
-		<select name="project_{{p.pid}}">
-			{% for u in p.all_personnel_in_project %}
-			{% ifnotequal u.username user.username %}
-			<option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
-			{% endifnotequal %}
-			{% endfor %}
-		</select>
-	</td>
+    <td><a href="{{p.get_absolute_url}}">{{p.name}}</a></td>
+    <td>
+        <select name="project_{{p.pid}}">
+            {% for u in p.all_personnel_in_project %}
+            {% ifnotequal u.username user.username %}
+            <option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
+            {% endifnotequal %}
+            {% endfor %}
+        </select>
+    </td>
 {% endfor %}
 </tbody>
 </table>
@@ -45,25 +45,25 @@
 
 <table class="table table-striped">
 <thead>
-	<tr>
-		<th>Item</th>
-		<th>Project</th>
-		<th>Reassign To</th>
-	</tr>
+    <tr>
+        <th>Item</th>
+        <th>Project</th>
+        <th>Reassign To</th>
+    </tr>
 </thead>
 <tbody>
 {% for i in user.non_verified_assigned_items %}
 <tr>
-	<td><a href="{{i.get_absolute_url}}">{{i.title}}</a></td>
-	<td><a href="{{i.milestone.project.get_absolute_url}}">{{i.milestone.project.name}}</a></td>
-	<td><select name="item_assigned_{{i.iid}}">
-			{% for u in i.milestone.project.all_personnel_in_project %}
-			{% ifnotequal user.username u.username %}
-			<option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
-			{% endifnotequal %}
-			{% endfor %}
-			</select>
-	</td>
+    <td><a href="{{i.get_absolute_url}}">{{i.title}}</a></td>
+    <td><a href="{{i.milestone.project.get_absolute_url}}">{{i.milestone.project.name}}</a></td>
+    <td><select name="item_assigned_{{i.iid}}">
+            {% for u in i.milestone.project.all_personnel_in_project %}
+            {% ifnotequal user.username u.username %}
+            <option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
+            {% endifnotequal %}
+            {% endfor %}
+            </select>
+    </td>
 </tr>
 {% endfor %}
 </tbody>
@@ -80,26 +80,26 @@
 
 <table class="table table-striped">
 <thead>
-	<tr>
-		<th>Item</th>
-		<th>Project</th>
-		<th>Change Owner To</th>
-	</tr>
+    <tr>
+        <th>Item</th>
+        <th>Project</th>
+        <th>Change Owner To</th>
+    </tr>
 </thead>
 <tbody>
 
 {% for i in user.non_verified_owned_items %}
 <tr>
-	<td><a href="{{i.get_absolute_url}}">{{i.title}}</a></td>
-	<td><a href="{{i.milestone.project.get_absolute_url}}">{{i.milestone.project.name}}</a></td>
-	<td><select name="item_owner_{{i.iid}}">
-			{% for u in i.milestone.project.all_personnel_in_project %}
-			{% ifnotequal u.username user.username %}
-			<option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
-			{% endifnotequal %}
-			{% endfor %}
-			</select>
-	</td>
+    <td><a href="{{i.get_absolute_url}}">{{i.title}}</a></td>
+    <td><a href="{{i.milestone.project.get_absolute_url}}">{{i.milestone.project.name}}</a></td>
+    <td><select name="item_owner_{{i.iid}}">
+            {% for u in i.milestone.project.all_personnel_in_project %}
+            {% ifnotequal u.username user.username %}
+            <option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
+            {% endifnotequal %}
+            {% endfor %}
+            </select>
+    </td>
 </tr>
 {% endfor %}
 </tbody>
