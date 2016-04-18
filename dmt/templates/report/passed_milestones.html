@@ -16,18 +16,18 @@
 {% if milestones.count %}
 <table class="table table-condensed">
 <tr>
-	<th>Target Date</th>
-	<th>Estimated Time (# items)</th>
-	<th>Project</th>
-	<th>Milestone</th>
+    <th>Target Date</th>
+    <th>Estimated Time (# items)</th>
+    <th>Project</th>
+    <th>Milestone</th>
 </tr>
 {% for milestone in milestones %}
 <tr>
-	<td>{{milestone.target_date}}</td>
-	<td>{{milestone.estimated_time_remaining|floatformat}} hours
-	({{milestone.num_open_items}} items)</td>
-	<td><a href="{{milestone.project.get_absolute_url}}">{{milestone.project.name|truncatechars:40}}</a></td>
-	<td><a href="{{milestone.get_absolute_url}}">{{milestone.name|truncatechars:40}}</a></td>
+    <td>{{milestone.target_date}}</td>
+    <td>{{milestone.estimated_time_remaining|floatformat}} hours
+    ({{milestone.num_open_items}} items)</td>
+    <td><a href="{{milestone.project.get_absolute_url}}">{{milestone.project.name|truncatechars:40}}</a></td>
+    <td><a href="{{milestone.get_absolute_url}}">{{milestone.name|truncatechars:40}}</a></td>
 </tr>
 {% endfor %}
 </table>

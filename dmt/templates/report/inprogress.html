@@ -18,7 +18,7 @@
         <thead>
                 <tr>
                         <th>Item</th>
-						<th>Assigned</th>                        
+                        <th>Assigned</th>
                         <th>Priority</th>
                         <th>Project</th>
                         <th>Modified</th>
@@ -29,7 +29,7 @@
 <tr>
         <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
         width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:40}}</a></td>
-				<td><a href="{{item.assigned_user.userprofile.get_absolute_url}}">{{item.assigned_user.userprofile.fullname}}</a></td>
+                <td><a href="{{item.assigned_user.userprofile.get_absolute_url}}">{{item.assigned_user.userprofile.fullname}}</a></td>
         <td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
         <td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name|truncatechars:40}}</a></td>
         <td>{{item.last_mod|date:"Y-m-d"}}</td>

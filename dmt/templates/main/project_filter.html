@@ -29,29 +29,29 @@
 
             <table class="table table-condensed table-striped tablesorter tablesorter-default table-sortable"
                    id="projects-table">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Status</th>
-			<th>Type</th>
-			<th>Area</th>
-			<th>Approach</th>
-			<th>Scale</th>
-		</tr>
-	</thead>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th>Area</th>
+            <th>Approach</th>
+            <th>Scale</th>
+        </tr>
+    </thead>
 
-	<tbody>
-		{% for project in object_list %}
-		<tr>
-			<td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
-			<td><a href="?status={{project.status}}">{{project.status}}</a></td>
-			<td><a href="?type={{project.type|urlencode}}">{{project.type}}</a></td>
-			<td><a href="?area={{project.area|urlencode}}">{{project.area}}</a></td>
-			<td><a href="?approach={{project.approach|urlencode}}">{{project.approach}}</a></td>
-			<td><a href="?scale={{project.scale|urlencode}}">{{project.scale}}</a></td>
-		</tr>
-		{% endfor %}
-	</tbody>
+    <tbody>
+        {% for project in object_list %}
+        <tr>
+            <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
+            <td><a href="?status={{project.status}}">{{project.status}}</a></td>
+            <td><a href="?type={{project.type|urlencode}}">{{project.type}}</a></td>
+            <td><a href="?area={{project.area|urlencode}}">{{project.area}}</a></td>
+            <td><a href="?approach={{project.approach|urlencode}}">{{project.approach}}</a></td>
+            <td><a href="?scale={{project.scale|urlencode}}">{{project.scale}}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
 
 </table>
 </div>

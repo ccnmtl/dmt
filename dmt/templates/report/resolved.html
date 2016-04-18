@@ -19,7 +19,7 @@ but not verified.</p>
         <thead>
                 <tr>
                         <th>Item</th>
-												<th>Owner</th>
+                        <th>Owner</th>
                         <th>Priority</th>
                         <th>Status</th>
                         <th>Project</th>
@@ -31,7 +31,7 @@ but not verified.</p>
 <tr>
         <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
         width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:40}}</a></td>
-				<td><a href="{{item.owner_user.userprofile.get_absolute_url}}">{{item.owner_user.userprofile.fullname}}</a></td>
+                <td><a href="{{item.owner_user.userprofile.get_absolute_url}}">{{item.owner_user.userprofile.fullname}}</a></td>
         <td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
         <td class="{{item.status_class}}">{{item.r_status}}</td>
         <td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name|truncatechars:40}}</a></td>

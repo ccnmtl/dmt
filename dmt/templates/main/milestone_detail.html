@@ -23,7 +23,7 @@
 <h1 class="page-title no-margin no-padding">Milestone &#8226; {{object.name}}</h1>
 
 {% comment %}<p class="pull-right"><a href="edit/" class="btn btn-primary btn-xs"
-												 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
+                                                 title="edit"><span class="glyphicon glyphicon-edit"></span> edit</a></p>
 {% endcomment %}
 
 
@@ -40,7 +40,7 @@
 
   <div class="object-details">
     <div class="object-description">{{object.description|commonmark|linkify|emoji_replace}}</div>
-    
+
     <dl class="dl-horizontal">
       <dt>Status</dt>
       <dd><span class="{{object.status_class}}">{{ object.status }}</span>
@@ -48,10 +48,10 @@
       and <span class="late"><b>OVERDUE</b></span>
       {% endif %}
       </dd>
-      
+
       <dt>Target date</dt>
       <dd>{{object.target_date|date:"Y-m-d"}}</dd>
-      
+
       <dt>Hours:</dt>
       <dd><b>{{object.hours_completed|floatformat}}</b> completed and <b>{{object.estimated_time_remaining|floatformat}}</b> remaining,
       of <b>{{object.total_estimated_hours|floatformat}}</b> total estimated</dd>
@@ -63,32 +63,32 @@
 
 {% if object.item_set.exists %}
 <table class="table table-condensed table-striped tablesorter tablesorter-default">
-	<thead>
-		<tr>
-			<th>Title</th>
-			<th>Status</th>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
       <th class="hidden-xs">Priority</th>
       <th class="hidden-xs">Target Date</th>
       <th class="hidden-sm hidden-xs">Owner</th>
       <th class="hidden-xs">Assigned To</th>
       <th class="hidden-sm hidden-xs">Modified</th>
-		</tr>
-	</thead>
+        </tr>
+    </thead>
 
-	<tbody>
-		{% for item in object.sorted_items %}
-		<tr>
-			<td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-	           width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
-			<td class="{{item.status_class}} ">{{item.status}}</td>
-			<td class="pr{{item.priority}} hidden-xs">{{item.priority_label}}</td>
-			<td  class="hidden-xs"class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
-			<td class="hidden-sm hidden-xs"><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
-			<td class="hidden-xs"><a href="{{item.assigned_user.userprofile.get_absolute_url}}">{{item.assigned_user.userprofile}}</a></td>
-			<td class="hidden-sm hidden-xs">{{item.last_mod|date:"Y-m-d"}}</td>
-		</tr>
-		{% endfor %}
-	</tbody>
+    <tbody>
+        {% for item in object.sorted_items %}
+        <tr>
+            <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+               width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
+            <td class="{{item.status_class}} ">{{item.status}}</td>
+            <td class="pr{{item.priority}} hidden-xs">{{item.priority_label}}</td>
+            <td  class="hidden-xs"class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
+            <td class="hidden-sm hidden-xs"><a href="{{item.owner.get_absolute_url}}">{{item.owner}}</a></td>
+            <td class="hidden-xs"><a href="{{item.assigned_user.userprofile.get_absolute_url}}">{{item.assigned_user.userprofile}}</a></td>
+            <td class="hidden-sm hidden-xs">{{item.last_mod|date:"Y-m-d"}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 
 </table>
 {% endif %}
@@ -96,9 +96,9 @@
 
 {% block js %}
     <script>
-        $(document).ready(function()  { 
+        $(document).ready(function()  {
             {% if object.item_set.exists %}
-               $("table.tablesorter").tablesorter({sortList: [[1,0], [3,1]]}); 
+               $("table.tablesorter").tablesorter({sortList: [[1,0], [3,1]]});
             {% endif %}
         });
     </script>

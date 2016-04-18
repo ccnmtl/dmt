@@ -34,37 +34,37 @@
       </li>
       <li class="object-action" title="Add action item">
         <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-action-item">
-	      <span class="glyphicon glyphicon-check"></span>
+          <span class="glyphicon glyphicon-check"></span>
         <span class="object-action-text hidden-xs hidden-sm">Add action item</span></a>
       </li>
       <li class="object-action" title="Add bug">
         <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-bug">
-	      <span class="icon-add-bug"></span>
+          <span class="icon-add-bug"></span>
         <span class="object-action-text hidden-xs hidden-sm">Add bug</span></a>
       </li>
       <li class="object-action" title="Add task(s) to do">
         <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-todo">
-	      <span class="glyphicon glyphicon-tasks"></span>
+          <span class="glyphicon glyphicon-tasks"></span>
         <span class="object-action-text hidden-xs hidden-sm">Add task(s) to do</span></a>
       </li>
       <li class="object-action" title="Add tracker">
         <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-tracker">
-	      <span class="glyphicon glyphicon-time"></span>
+          <span class="glyphicon glyphicon-time"></span>
         <span class="object-action-text hidden-xs hidden-sm">Add tracker</span></a>
       </li>
       <li class="object-action" title="Update status">
         <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-update">
-	      <span class="glyphicon glyphicon-info-sign"></span>
+          <span class="glyphicon glyphicon-info-sign"></span>
         <span class="object-action-text hidden-xs hidden-sm">Update status</span></a>
       </li>
       <li class="object-action" title="Post to forum">
         <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-node">
-	      <span class="glyphicon glyphicon-comment"></span>
+          <span class="glyphicon glyphicon-comment"></span>
         <span class="object-action-text hidden-xs hidden-sm">Post to forum</span></a>
       </li>
       <li class="object-action" title="Activity feed">
         <a href="{% url 'project_feed' object.pk %}">
-	      <span class="icon-rss"></span>
+          <span class="icon-rss"></span>
         <span class="object-action-text hidden-xs hidden-sm">Activity feed</span></a>
       </li>
       {% flag project_timeline %}
@@ -73,13 +73,13 @@
         <span class="object-action-text hidden-xs hidden-sm">Timeline</span></a>
       </li>
       {% endflag %}
-			<li class="object-action" title="Project Tags">
-				<a href="{% url 'project_tag_list' object.pid %}"
-					 class="object-action-link"><span class="glyphicon glyphicon-tags"></span>
-					<span class="object-action-text hidden-xs hidden-sm">Tags</span></a>
-			</li>
+            <li class="object-action" title="Project Tags">
+                <a href="{% url 'project_tag_list' object.pid %}"
+                     class="object-action-link"><span class="glyphicon glyphicon-tags"></span>
+                    <span class="object-action-text hidden-xs hidden-sm">Tags</span></a>
+            </li>
 
-    </ul>  
+    </ul>
   </div><!-- ./object-action-set -->
 
   <div class="object-details">
@@ -140,23 +140,23 @@
 <ul class="nav nav-tabs project-tabs project-detail-tabs">
     <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
     <li><a href="#details" data-toggle="tab">Details</a></li>
-	<li><a href="#personnel" data-toggle="tab">Personnel</a></li>
+    <li><a href="#personnel" data-toggle="tab">Personnel</a></li>
     <li><a href="#milestones" data-toggle="tab">Milestones</a></li>
     <li><a href="#reports" data-toggle="tab">Reports</a></li>
-	<li><a href="#forum" data-toggle="tab">Forum</a></li>
-	<li><a href="#updates" data-toggle="tab">Status</a></li>
+    <li><a href="#forum" data-toggle="tab">Forum</a></li>
+    <li><a href="#updates" data-toggle="tab">Status</a></li>
 </ul>
 
 
 <div class="tab-content">
   <div class="tab-pane fade in active" id="overview">
-  
+
   {% if not milestones %}
   <h3 class="text-muted">There are no outstanding items for this project.</h3>
   <p>You can add a new <a href="#" data-toggle="modal"
      data-target="#add-milestone">milestone</a> or <a href="#" data-toggle="modal" data-target="#add-action-item">action item</a>.</p>
   {% endif %}
-  
+
   {% for milestone in milestones %}
   <div class="milestone-set">
     <div class="milestone-header clearfix">
@@ -185,9 +185,9 @@
       <th class="hidden-sm hidden-xs">Modified</th>
     </tr>
   </thead>
-  
+
   <tbody>
-  
+
     {% for item in milestone.active_items %}
     <tr>
       <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
@@ -207,9 +207,9 @@
   {% endif %}
   </div><!-- ./milestone-set -->
   {% endfor %}
-  
+
   </div>
-  
+
   <div class="tab-pane fade" id="details">
     <dl class="dl-horizontal">
       <dt>Status</dt>
@@ -278,7 +278,7 @@
 
     </dl>
   </div>
-  
+
   <div class="tab-pane fade" id="personnel">
     <ul>
         {% for u in object.personnel_in_project %}
@@ -306,14 +306,14 @@
         </div>
     </form>
   </div>
-  
+
   <div class="tab-pane fade" id="milestones">
-  
+
   <p class="pull-right">
   <a class="btn btn-primary btn-sm" href="#" data-toggle="modal"
      data-target="#add-milestone"><span class="glyphicon glyphicon-plus"></span>
     Add New Milestone</a></p>
-  
+
   {% if object.milestone_set.count %}
   <table class="table table-condensed table-striped tablesorter tablesorter-default"
          id="milestone-table">
@@ -325,7 +325,7 @@
       <th># Open</th>
     </tr>
   </thead>
-  
+
   <tbody>
     {% for milestone in object.milestone_set.all %}
     <tr>
@@ -336,15 +336,15 @@
     </tr>
     {% endfor %}
   </tbody>
-  
+
   </table>
   {% endif %}
   </div>
-  
+
   <div class="tab-pane fade" id="reports">
       {% include 'main/project_detail_report.html' %}
   </div>
-  
+
   <div class="tab-pane fade" id="forum">
   {% for n in object.recent_forum_posts %}
   {% ifequal n.reply_to 0 %}
@@ -354,8 +354,8 @@
       </div>
       <div class="forum-byline text-muted">
         by <a href="{{n.user.userprofile.get_absolute_url}}">{{n.user.userprofile.fullname}}</a>
-        | {{n.added}} 
-        | <a href="{{n.get_absolute_url}}#replies"><span class="glyphicon glyphicon-comment"></span> 
+        | {{n.added}}
+        | <a href="{{n.get_absolute_url}}#replies"><span class="glyphicon glyphicon-comment"></span>
         {% ifequal n.replies 0 %}
           Add reply
         {% else %}
@@ -389,7 +389,7 @@
   {% endifequal %}
   {% endfor %}
   </div>
-  
+
   <div class="tab-pane fade" id="updates">
     {% for n in object.recent_status_updates %}
     <div class="status-update" id="status-update-{{n.id}}">
@@ -417,7 +417,7 @@ $(document).ready(function() {
         });
     {% endif %}
     {% endfor %}
-        
+
     {% if object.milestone_set.count %}
         $("#milestone-table").tablesorter({
            sortList: [[1,1], [1,0]],

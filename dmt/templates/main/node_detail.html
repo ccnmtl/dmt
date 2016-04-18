@@ -15,7 +15,7 @@
 {% endif %}
 
 <div class="forum-byline text-muted">
-by <a href="{{object.user.userprofile.get_absolute_url}}">{{object.user.userprofile.fullname}}</a> 
+by <a href="{{object.user.userprofile.get_absolute_url}}">{{object.user.userprofile.fullname}}</a>
 | {{object.added}}
 | <a href="edit/" title="Edit post"><span class="glyphicon glyphicon-pencil"></span> Edit post</a>
 </div><!-- /.forum-byline -->
@@ -33,7 +33,7 @@ by <a href="{{object.user.userprofile.get_absolute_url}}">{{object.user.userprof
   {% endfor %}
   {% endif %}
   <form action="tag/" method="post">{% csrf_token %}
-  
+
   <div class="input-group input-group-sm tag-form">
   <input class="form-control" type="text" placeholder="Add tags (comma or space separated)" name="tags" />
   <span class="input-group-btn"><input type="submit" value="Tag" class="btn btn-primary" /></span>
@@ -49,25 +49,25 @@ by <a href="{{object.user.userprofile.get_absolute_url}}">{{object.user.userprof
 <div class="forum-replies">
   <a name="replies"></a>
 <ul class="nav nav-tabs">
-	{% if object.replies %}
-	<li class="active"><a href="#replies" data-toggle="tab">
+    {% if object.replies %}
+    <li class="active"><a href="#replies" data-toggle="tab">
   {% if object.replies == 1 %}
     {{object.replies}} reply
   {% else %}
     {{object.replies}} replies
   {% endif %}
-	</a></li>
-	{% endif %}
-	<li{% if not object.replies %} class="active"{% endif %}><a href="#add-reply" data-toggle="tab">Add Reply</a></li>
+    </a></li>
+    {% endif %}
+    <li{% if not object.replies %} class="active"{% endif %}><a href="#add-reply" data-toggle="tab">Add Reply</a></li>
 </ul>
-  
+
   <div class="tab-content">
     {% if object.replies %}
     <div class="tab-pane fade in active" id="replies">
       {% for reply in object.get_replies %}
       <div class="forum-reply">
         <div class="forum-byline text-muted">
-        By <a href="{{reply.user.userprofile.get_absolute_url}}">{{reply.user.userprofile.fullname}}</a> 
+        By <a href="{{reply.user.userprofile.get_absolute_url}}">{{reply.user.userprofile.fullname}}</a>
         | {{reply.added}}
         </div><!-- /.forum-byline -->
         {{reply.body|commonmark|linkify|emoji_replace}}
@@ -84,14 +84,14 @@ by <a href="{{object.user.userprofile.get_absolute_url}}">{{object.user.userprof
       <form action="reply/" method="post">{% csrf_token %}
       <fieldset>
       <div class="form-group">
-      <textarea 
-          name="body" 
-          class="form-control" 
+      <textarea
+          name="body"
+          class="form-control"
           rows="5"
           placeholder="{% if object.replies == 0 %}Start the discussion...
           {% else %}Join the discussion...{% endif %}"></textarea>
       </div>
-      
+
       <div class="pull-right"><input type="submit" value="Add Reply" class="btn btn-primary" /></div>
       </fieldset>
       </form>

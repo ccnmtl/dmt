@@ -48,12 +48,12 @@
             {% if i.user %}
             <a class="text-primary"
                href="{% url 'user_detail' i.user.username %}"
-               >{% firstof i.user.fullname i.user.username %}</a>, 
+               >{% firstof i.user.fullname i.user.username %}</a>,
             {% endif %}
-            item 
+            item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
             {% endifequal %}
-            
+
             {% ifequal i.event_type "comment" %}
                 <span class="glyphicon glyphicon-comment text-muted"></span>
             {% if i.user %}
@@ -61,10 +61,10 @@
                href="{% url 'user_detail' i.user.username %}"
                >{% firstof i.user.fullname i.user.username %}</a>
             {% endif %}
-            commented on item 
+            commented on item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
             {% endifequal %}
-            
+
             {% ifequal i.event_type "actual_time" %}
                 <span class="glyphicon glyphicon-time text-muted"></span>
             {% if i.user %}
@@ -72,14 +72,14 @@
                href="{% url 'user_detail' i.user.username %}"
                >{% firstof i.user.fullname i.user.username %}</a>
             {% endif %}
-                logged 
+                logged
             {% if i.body %}
                 <div class="event-body">{{i.body|commonmark|linkify|emoji_replace}}</div>
             {% endif %}
                 for item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
             {% endifequal %}
-            
+
             {% ifequal i.event_type "status_update" %}
                 <span class="glyphicon glyphicon-info-sign text-muted"></span>
             {% if i.user %}
@@ -92,7 +92,7 @@
                 <div class="status-body">“{{i.body|commonmark|linkify|emoji_replace}}”</div>
             {% endif %}
             {% endifequal %}
-            
+
             {% ifequal i.event_type "forum_post" %}
                 <span class="glyphicon glyphicon-comment text-muted"></span>
             {% if i.user %}
@@ -100,7 +100,7 @@
                href="{% url 'user_detail' i.user.username %}"
                >{% firstof i.user.fullname i.user.username %}</a>
             {% endif %}
-                posted a forum 
+                posted a forum
              “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
            {% endifequal %}
 
@@ -110,9 +110,9 @@
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
                 is overdue
             {% endifequal %}
-            
+
             in <a href="{{i.project.get_absolute_url}}">{{i.project.name}}</a>
-    
+
             </div>
     {% if forloop.last %}
         </div><!-- /.pmt-timeline-item -->

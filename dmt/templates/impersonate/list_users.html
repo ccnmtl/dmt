@@ -6,11 +6,11 @@
 {% if page.object_list %}
   <ul>
     {% for user in page.object_list %}
-		{% if user.is_superuser %}
+        {% if user.is_superuser %}
       <li>{{ user.username }} - Superuser (can't impersonate)</li>
-		{% else %}
+        {% else %}
       <li><a href="{% url 'impersonate-start' user.id %}{{redirect}}">{{ user.username }}</a> - Impersonate</li>
-			{% endif %}
+            {% endif %}
     {% endfor %}
   </ul>
 {% endif %}
