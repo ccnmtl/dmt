@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% load dmttags %}
 
 {% block content %}
+    <div>
+        <strong>{{ object.actual_time|simpleduration }}</strong>
+        on item: <strong>{{ object.item.title }}</strong>
+    </div>
 
 <form action="." method="post">{% csrf_token %}
 <input class="btn btn-danger" type="submit" value="Yes, delete this time"/>
