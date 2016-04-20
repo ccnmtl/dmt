@@ -49,7 +49,7 @@ require([
     'domReady',
     'jquery',
     'underscore',
-    '../libs/jquery.cookie.min',
+    '../libs/js.cookie',
     'backbone',
     'bootstrap-datepicker',
     '../libs/commonmark.min',
@@ -73,8 +73,8 @@ require([
     'forms/project_add_node_form',
     'forms/project_action_item_modals',
     'item'
-], function(domReady, $, _) {
-    var csrftoken = $.cookie('csrftoken');
+], function(domReady, $, _, Cookies) {
+    var csrftoken = Cookies.get('csrftoken');
 
     // The following is from
     // https://docs.djangoproject.com/en/1.9/ref/csrf/
