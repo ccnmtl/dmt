@@ -966,7 +966,8 @@ class Item(models.Model):
             (0, 'ICING'), (1, 'LOW'), (2, 'MEDIUM'),
             (3, 'HIGH'), (4, 'CRITICAL')])
     r_status = models.CharField(max_length=16, blank=True)
-    last_mod = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    last_mod = models.DateTimeField(auto_now=True, null=True)
     target_date = models.DateField(null=True, blank=True)
     estimated_time = models.DurationField(blank=True, null=True)
     url = models.TextField(blank=True)
@@ -1039,10 +1040,6 @@ class Item(models.Model):
 
     def reopenable(self):
         return self.status in ['RESOLVED', 'INPROGRESS', 'VERIFIED', 'CLOSED']
-
-    def touch(self):
-        self.last_mod = timezone.now()
-        self.save()
 
     def add_comment(self, user, comment_src, rendered_comment):
         Comment.objects.create(
@@ -1282,7 +1279,7 @@ Please do not reply to this message.
                 "<p>Split from <a href='%s'>#%d</a></p>" % (
                     self.type, self.get_absolute_url(),
                     self.iid)))
-        new_item.touch()
+        new_item.save()
         new_item.setup_default_notification()
         new_item.add_project_notification()
         self.copy_clients_to_new_item(new_item)

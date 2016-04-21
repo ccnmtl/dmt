@@ -169,7 +169,7 @@ class AddCommentView(LoggedInMixin, View):
             return HttpResponseRedirect(item.get_absolute_url())
 
         item.add_comment(user, body, linkify(commonmark(body)))
-        item.touch()
+        item.save()
         item.update_email(body, user)
         log_time(item, user, request)
         statsd.incr('main.comment_added')
@@ -241,7 +241,7 @@ class ResolveItemView(LoggedInMixin, View):
             item.verify(user, comment)
         else:
             item.resolve(user, r_status, comment)
-        item.touch()
+        item.save()
         item.update_email("Resolved %s\n----\n" % (r_status) +
                           request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
@@ -256,7 +256,7 @@ class InProgressItemView(LoggedInMixin, View):
         user = request.user.userprofile
         comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.mark_in_progress(user, comment)
-        item.touch()
+        item.save()
         item.update_email("Marked as in-progress\n----\n" +
                           request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
@@ -271,7 +271,7 @@ class VerifyItemView(LoggedInMixin, View):
         user = request.user.userprofile
         comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.verify(user, comment)
-        item.touch()
+        item.save()
         item.update_email("Verified\n-----\n" +
                           request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
@@ -286,7 +286,7 @@ class ReopenItemView(LoggedInMixin, View):
         user = request.user.userprofile
         comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.reopen(user, comment)
-        item.touch()
+        item.save()
         item.update_email("Reopened\n-----\n" +
                           request.POST.get('comment', u''), user)
         item.milestone.update_milestone()
@@ -304,7 +304,7 @@ class ReassignItemView(LoggedInMixin, View):
             username=request.POST.get('assigned_to', ''))
         comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.reassign(user, assigned_to, comment)
-        item.touch()
+        item.save()
         item.update_email("Reassigned\n----\n" +
                           request.POST.get('comment', u''), user)
         log_time(item, user, request)
@@ -321,7 +321,7 @@ class ChangeOwnerItemView(LoggedInMixin, View):
             username=request.POST.get('owner', ''))
         comment = linkify(commonmark(request.POST.get('comment', u'')))
         item.change_owner(user, owner, comment)
-        item.touch()
+        item.save()
         item.update_email("Owner changed\n-----\n" +
                           request.POST.get('comment', u''), user)
         log_time(item, user, request)
@@ -345,7 +345,7 @@ class TagItemView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         tags = request.POST.get('tags', u'')
         item.tags.add(*clean_tags(tags))
-        item.touch()
+        item.save()
         statsd.incr('main.tag_added')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -356,7 +356,7 @@ class ItemPriorityView(LoggedInMixin, View):
         item = get_object_or_404(Item, pk=pk)
         user = request.user.userprofile
         item.set_priority(int(priority), user)
-        item.touch()
+        item.save()
         statsd.incr('main.priority_changed')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -371,7 +371,7 @@ class RemoveTagFromItemView(LoggedInMixin, View):
             # if you're the last one out, turn off the lights...
             tag.delete()
             statsd.incr('main.tag_deleted')
-        item.touch()
+        item.save()
         statsd.incr('main.tag_removed')
         return HttpResponseRedirect(item.get_absolute_url())
 
@@ -397,7 +397,7 @@ class SplitItemView(LoggedInMixin, View):
                             i.iid, i.title) for i in new_items
                     ]))
             item.verify(user, comment)
-            item.touch()
+            item.save()
             item.update_email(comment, user)
 
         item.title = item.title + " (SPLIT)"
@@ -769,7 +769,7 @@ class DeactivateUserView(SuperUserOnlyMixin, View):
                     UserProfile,
                     username=request.POST[k])
                 item.reassign(u, assigned_to, 'deactivating ' + u.username)
-                item.touch()
+                item.save()
             if k.startswith('item_owner_'):
                 iid = k[len('item_owner_'):]
                 item = get_object_or_404(Item, iid=iid)
@@ -777,7 +777,7 @@ class DeactivateUserView(SuperUserOnlyMixin, View):
                     UserProfile,
                     username=request.POST[k])
                 item.change_owner(u, owner, 'deactivating ' + u.username)
-                item.touch()
+                item.save()
         u.remove_from_all_groups()
         return HttpResponseRedirect(
             reverse('user_detail', args=(u.username,)))

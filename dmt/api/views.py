@@ -200,7 +200,7 @@ class GitUpdateView(APIView):
                 # via form validation, but for now
                 # we just deal with it...
                 pass
-        item.touch()
+        item.save()
         data = ItemSerializer(item, context={'request': request}).data
         return Response(data)
 
