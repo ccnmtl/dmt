@@ -107,7 +107,7 @@ django-oauth-toolkit==0.9.0
 django-extra-views==0.7.1
 bleach==1.4.3.ccnmtl
 html5lib==0.9999999
-html2text==2015.6.21
+html2text==2016.4.2
 freezegun==0.3.6
 gunicorn==19.3.0
 django-storages-redux==1.3.2
