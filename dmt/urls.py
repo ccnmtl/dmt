@@ -51,7 +51,7 @@ urlpatterns = patterns(
     auth_urls,
     logout_page,
     (r'^$', IndexView.as_view()),
-    (r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^add_trackers/$', AddTrackersView.as_view(), name='add_trackers'),
     (r'^api/1.0/', include('dmt.api.urls')),
     url(r'^actualtime/(?P<uuid>[^/]+)/delete/$',
