@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load waffle_tags %}
 {% load markup %}
 {% load emoji_tags %}
 {% load dmttags %}
@@ -35,6 +36,17 @@
         <a href="edit/" class="object-action-link"><span class="glyphicon glyphicon-pencil"></span>
         <span class="object-action-text hidden-xs hidden-sm">Edit milestone</span></a>
       </li>
+      {% flag 'milestone_additem' %}
+      <li class="object-action" title="Add action item">
+          <a href="{% url 'item_create' %}?mid={{object.pk}}"
+             class="object-action-link">
+              <span class="glyphicon glyphicon-check"></span>
+              <span class="object-action-text hidden-xs hidden-sm">
+                  Add action item
+              </span>
+          </a>
+      </li>
+      {% endflag %}
     </ul>
   </div><!-- ./object-action-set -->
 

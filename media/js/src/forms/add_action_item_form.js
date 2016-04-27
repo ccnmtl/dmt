@@ -32,10 +32,11 @@ require([
             return;
         }
 
-        var $textarea = $('textarea#dmt-project-new-item-desc');
+        var $textarea = $('textarea#dmt-new-item-desc,' +
+                          '.dmt-new-item-desc>textarea');
         var preview = new MarkdownPreview(
             $textarea,
-            $('.dmt-markdown-project-item-preview')
+            $('.dmt-markdown-item-preview')
         );
 
         var $toolbar = $textarea.closest('.form-group')

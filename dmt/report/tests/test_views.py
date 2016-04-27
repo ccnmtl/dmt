@@ -66,19 +66,21 @@ class ActiveProjectExportTests(LoggedInTestMixin, TestCase):
 
 class UserWeeklyTest(LoggedInTestMixin, TestCase):
     def test_user_weekly(self):
-        r = self.client.get("/report/user/testuser/weekly/")
+        r = self.client.get(
+            reverse('user_weekly_report',
+                    args=(self.u.userprofile.username,)))
         self.assertEqual(r.status_code, 200)
 
     def test_user_weekly_date_specified(self):
-        r = self.client.get("/report/user/testuser/weekly/?date=2012-12-16")
+        r = self.client.get(
+            reverse('user_weekly_report',
+                    args=(self.u.userprofile.username,)) + '?date=2012-12-16')
         self.assertEqual(r.status_code, 200)
 
     def test_user_weekly_bogus_date(self):
-        r = self.client.get("/report/user/testuser/weekly/?date=zijf3jf093j")
-        self.assertEqual(r.status_code, 200)
-
-    def test_user_weekly_empty_date(self):
-        r = self.client.get("/report/user/testuser/weekly/?date=")
+        r = self.client.get(
+            reverse('user_weekly_report',
+                    args=(self.u.userprofile.username,)) + '?date=zijf3jf093j')
         self.assertEqual(r.status_code, 200)
 
 
@@ -88,7 +90,9 @@ class UserYearlyTest(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 302)
 
     def test_user_yearly(self):
-        r = self.client.get("/report/user/testuser/yearly/")
+        r = self.client.get(
+            reverse('user_yearly_report',
+                    args=(self.u.userprofile.username,)))
         self.assertEqual(r.status_code, 200)
 
 
