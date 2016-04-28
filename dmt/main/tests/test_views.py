@@ -249,6 +249,34 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         m = Milestone.objects.get(name="NEW TEST MILESTONE")
         self.assertEqual(m.description, "NEW DESCRIPTION")
 
+    def test_add_milestone_empty_date(self):
+        r = self.c.post(self.p.get_absolute_url() + "add_milestone/",
+                        dict(name="NEW TEST MILESTONE",
+                             description="NEW DESCRIPTION",
+                             target_date=""))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(self.p.get_absolute_url())
+        self.assertContains(
+            r,
+            'The "NEW TEST MILESTONE" milestone wasn\'t created.')
+        self.assertEqual(
+            Milestone.objects.filter(name="NEW TEST MILESTONE").count(),
+            0)
+
+    def test_add_milestone_invalid_date(self):
+        r = self.c.post(self.p.get_absolute_url() + "add_milestone/",
+                        dict(name="NEW TEST MILESTONE",
+                             description="NEW DESCRIPTION",
+                             target_date="9j0934gj09g"))
+        self.assertEqual(r.status_code, 302)
+        r = self.c.get(self.p.get_absolute_url())
+        self.assertContains(
+            r,
+            'The "NEW TEST MILESTONE" milestone wasn\'t created.')
+        self.assertEqual(
+            Milestone.objects.filter(name="NEW TEST MILESTONE").count(),
+            0)
+
     def test_add_milestone_redirects_to_milestones_page(self):
         """ PMT #103894 """
         r = self.c.post(self.p.get_absolute_url() + "add_milestone/",

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Sum
 from django.http import HttpResponse, HttpResponseRedirect
@@ -1092,12 +1092,20 @@ class ProjectAddMilestoneView(LoggedInMixin, View):
         name = request.POST.get('name', u'Untitled milestone')
         if len(name) == 0:
             name = "Untitled milestone"
-        Milestone.objects.create(
-            project=project, name=name,
-            status='OPEN',
-            description=request.POST.get('description', ''),
-            target_date=request.POST.get('target_date', timezone.now().date())
-        )
+        try:
+            Milestone.objects.create(
+                project=project, name=name,
+                status='OPEN',
+                description=request.POST.get('description', ''),
+                target_date=request.POST.get('target_date',
+                                             timezone.now().date())
+            )
+        except ValidationError, e:
+            for mesg in e.messages:
+                messages.error(
+                    self.request,
+                    'The "{}" milestone wasn\'t created. {}'.format(
+                        name, mesg))
         return HttpResponseRedirect(project.get_absolute_url() + '#milestones')
 
 
