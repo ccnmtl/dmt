@@ -1,3 +1,4 @@
+# VERSION=1.0.0
 VE ?= ./ve
 MANAGE ?= ./manage.py
 FLAKE8 ?= $(VE)/bin/flake8
