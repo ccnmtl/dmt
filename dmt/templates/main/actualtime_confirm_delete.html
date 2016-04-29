@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load dmttags %}
 
+{% block title %}
+Delete Time
+{% endblock %}
+
 {% block content %}
     <div>
         <strong>{{ object.actual_time|simpleduration }}</strong>
