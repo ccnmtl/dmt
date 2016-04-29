@@ -271,7 +271,8 @@
               {% csrf_token %}
               <input type="hidden" name="item" value="{{object.pk}}" />
               <div class="form-group">
-                  <select name="subscriber" class="form-control">
+                  <select name="subscriber" class="form-control" required="required">
+                      <option value>---------</option>
                       {% for user in potential_subscribers %}
                           <option value="{{user.username}}">
                               {% firstof user.userprofile.fullname user.username %}
