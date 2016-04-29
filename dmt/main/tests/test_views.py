@@ -746,7 +746,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         self.assertTrue(r.context['assigned_to_current_user'])
         self.assertTrue(
             r.context['notifications_enabled_for_current_user'])
-        self.assertItemsEqual(r.context['notified_users'], [n])
+        self.assertItemsEqual(r.context['notified_users'], [n.user])
 
     def test_item_view_notification_not_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
@@ -1703,3 +1703,31 @@ class TestActualTimeDeletion(TestCase):
         self.assertEqual(r.status_code, 403)
 
         ActualTime.objects.get(uuid=time.uuid)
+
+
+class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(TestItemAddSubscriberView, self).setUp()
+        self.i = ItemFactory()
+
+    def test_post_no_subscriber(self):
+        self.assertEqual(Notify.objects.count(), 0)
+        url = reverse('add_subscriber', args=(self.i.pk,))
+        r = self.client.post(url, follow=True)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'No subscriber provided.')
+        self.assertEqual(Notify.objects.count(), 0)
+
+    def test_post(self):
+        subscriber = UserFactory()
+        self.assertEqual(Notify.objects.count(), 0)
+        url = reverse('add_subscriber', args=(self.i.pk,))
+        r = self.client.post(url, {
+            'subscriber': subscriber
+        }, follow=True)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(
+            r,
+            '<strong>{}</strong> has been subscribed to this item.'.format(
+                subscriber.userprofile.fullname))
+        self.assertEqual(Notify.objects.count(), 1)

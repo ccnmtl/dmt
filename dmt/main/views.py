@@ -435,7 +435,8 @@ class ItemDetailView(LoggedInMixin, DetailView):
 
             all_notifies = Notify.objects.filter(
                 item=context['item'].iid).order_by(
-                    'user__userprofile__fullname')
+                    'user__userprofile__fullname').select_related('user')
+            notified_users = [n.user for n in all_notifies]
 
             context['workedon_total'] = context[
                 'object'].actualtime_set.aggregate(total=Sum(
@@ -447,13 +448,39 @@ class ItemDetailView(LoggedInMixin, DetailView):
             context['notifications_enabled_for_current_user'] = \
                 True if current_user_notification else False
 
-            context['notified_users'] = all_notifies
+            context['notified_users'] = notified_users
+
+            all_personnel = \
+                context['object'].milestone.project.all_personnel_in_project()
+            context['all_personnel'] = all_personnel
+            context['potential_subscribers'] = [
+                u.user for u in all_personnel if u.user not in notified_users]
 
         iid = context['object'].iid
         context['clients'] = Client.objects.filter(
             itemclient__item=iid).order_by('lastname')
 
         return context
+
+
+class ItemAddSubscriberView(LoggedInMixin, View):
+    success_message = '<strong>%s</strong> has been subscribed to this item.'
+
+    def post(self, request, pk):
+        subscriber = self.request.POST.get('subscriber')
+        if not subscriber:
+            messages.error(self.request, 'No subscriber provided.')
+            return HttpResponseRedirect(reverse('item_detail', args=[pk]))
+
+        subscriber = get_object_or_404(User, username=subscriber)
+        item = get_object_or_404(Item, pk=pk)
+
+        Notify.objects.create(user=subscriber, item=item)
+
+        messages.success(
+            self.request,
+            self.success_message % subscriber.userprofile)
+        return HttpResponseRedirect(reverse('item_detail', args=[pk]))
 
 
 class IndexView(LoggedInMixin, TemplateView):
