@@ -205,19 +205,20 @@
 
       <dt>Tags</dt>
       <dd>
-      {% if object.tags %}
-      {% for tag in object.tags.all %}
-      <span class="tag">
-      <a href="/tag/{{tag.slug}}/"><span>{{tag}}</span></a>
-      <a href="remove_tag/{{tag.slug}}/" class="remove-link">x</a>
-      </span>
-      {% endfor %}
-      {% endif %}
-      <form action="tag/" method="post">{% csrf_token %}
-      <div class="input-group input-group-sm tag-form">
-      <input class="form-control" type="text" placeholder="Add tags (comma or space separated)" name="tags" />
-      <span class="input-group-btn"><input type="submit" value="Tag" class="btn btn-primary" /></span>
-      </div>
+          {% if object.tags %}
+              {% for tag in object.tags.all %}
+                  <span class="tag">
+                      <a href="/tag/{{tag.slug}}/"><span>{{tag}}</span></a>
+                      <a href="remove_tag/{{tag.slug}}/" class="remove-link">x</a>
+                  </span>
+              {% endfor %}
+          {% endif %}
+          <form action="tag/" method="post">{% csrf_token %}
+              <div class="input-group input-group-sm tag-form">
+                  <input class="form-control" type="text" placeholder="Add tags (comma or space separated)" name="tags" />
+                  <span class="input-group-btn"><input type="submit" value="Tag" class="btn btn-primary" /></span>
+              </div>
+          </form>
       </dd>
 
       {% flag notification_ui %}
@@ -225,53 +226,67 @@
 
       <div id="item-container"></div>
 
-      <dt>&nbsp;</dt>
-      <dd>
-      <div class="input-group" id="item-notification-container">
-      <label
-      {% if assigned_to_current_user and notifications_enabled_for_current_user %}
-      class="disabled"
-      {% endif %}
-
-      for="input_notification">
-      <input
-      {% if assigned_to_current_user and notifications_enabled_for_current_user %}
-      disabled="disabled"
-      checked="checked"
-      {% elif notifications_enabled_for_current_user %}
-      checked="checked"
-      {% endif %}
-
-      class="form-control"
-      type="checkbox"
-      placeholder="add tags (comma separated)"
-      name="input_notification"
-      id="input_notification" />
-      &nbsp; Notify me of changes to this action item
-      </label>
-      </div>
-      </dd>
-
       <dt>Subscribers</dt>
       <dd>
+          <div class="input-group" id="item-notification-container">
+              <label
+                  {% if assigned_to_current_user and notifications_enabled_for_current_user %}
+                  class="disabled"
+                  {% endif %}
+
+                  for="input_notification">
+                  <input
+                      {% if assigned_to_current_user and notifications_enabled_for_current_user %}
+                      disabled="disabled"
+                      checked="checked"
+                      {% elif notifications_enabled_for_current_user %}
+                      checked="checked"
+                      {% endif %}
+
+                      class="form-control"
+                      type="checkbox"
+                      name="input_notification"
+                      id="input_notification" />
+                  &nbsp; Subscribe to this item?
+              </label>
+          </div>
+      </dd>
+      <dd>
           <ul>
-              {% for notify in notified_users %}
-              {% with userprofile=notify.user.userprofile %}
-              <li>
-                  <a href="{% url 'user_detail' userprofile.username %}"
-                  >
-                      {% firstof userprofile.fullname userprofile.username %}
-                  </a>
-              </li>
-              {% endwith %}
+              {% for user in notified_users %}
+                  <li>
+                      <a href="{% url 'user_detail' user.username %}">
+                          {% firstof user.userprofile.fullname user.username %}
+                      </a>
+                  </li>
               {% endfor %}
           </ul>
+      </dd>
+
+      <dt>Add Subscriber</dt>
+      <dd>
+          <form method="post"
+                action="{% url 'add_subscriber' object.pk %}"
+                class="form-inline">
+              {% csrf_token %}
+              <input type="hidden" name="item" value="{{object.pk}}" />
+              <div class="form-group">
+                  <select name="subscriber" class="form-control">
+                      {% for user in potential_subscribers %}
+                          <option value="{{user.username}}">
+                              {% firstof user.userprofile.fullname user.username %}
+                          </option>
+                      {% endfor %}
+                  </select>
+                  <button type="submit"
+                          class="btn btn-primary">Add</button>
+              </div>
+          </form>
       </dd>
 
       <script type="text/template" id="item-template">
       </script>
       {% endflag %}
-      </form>
     </dl>
 
   </div><!-- /.item-details -->
@@ -595,7 +610,7 @@
                 <div class="form-group">
                     <label for="assign-to-select">Assign To</label>
                     <select name="assigned_to" class="form-control" id="assign-to-select">
-                        {% for user in item.milestone.project.all_personnel_in_project %}
+                        {% for user in all_personnel %}
                         <option value="{{user.username}}"
                                 {% if user.username == item.assigned_user.userprofile.username %}
                                 selected="selected"
@@ -637,7 +652,7 @@
                 <div class="form-group">
                     <label for="assign-to-select">Owner</label>
                     <select name="owner" class="form-control" id="assign-to-select">
-                        {% for user in item.milestone.project.all_personnel_in_project %}
+                        {% for user in all_personnel %}
                         <option value="{{user.username}}"
                                 {% if user.username == item.owner_user.userprofile.username %}
                                 selected="selected"
