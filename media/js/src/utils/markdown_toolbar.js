@@ -36,8 +36,8 @@ define([
                 me.lastText = text;
                 text = mtc.render(
                     buttonData, selectionStart, selectionEnd, text);
-                selectionStart += mtc.prefixLength;
-                selectionEnd += mtc.prefixLength;
+                selectionStart = mtc.selectionStart;
+                selectionEnd = mtc.selectionEnd;
                 me.lastHotkey = buttonData.hotkey;
             }
 
