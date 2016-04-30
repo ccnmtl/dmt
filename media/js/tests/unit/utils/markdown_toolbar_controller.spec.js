@@ -53,7 +53,6 @@ define([
         strictEqual(c.selectionStart, 8);
         strictEqual(c.selectionEnd, 8);
 
-
         text = 'abcdef';
         rendered = '**abcdef**';
         c = new MarkdownToolbarController();
