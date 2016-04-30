@@ -2,6 +2,9 @@ define([
     'jquery'
 ], function($) {
     var MarkdownToolbarController = function() {
+        this.prefixLength = null;
+        this.selectionStart = null;
+        this.selectionEnd = null;
     };
 
     MarkdownToolbarController.prototype.render = function(
@@ -33,6 +36,14 @@ define([
                     selectionStart, selectionEnd, this.prefixLength,
                     d, text);
             }
+        }
+
+        if (d.multiline) {
+            this.selectionStart = 0;
+            this.selectionEnd = text.length;
+        } else {
+            this.selectionStart = selectionStart + this.prefixLength;
+            this.selectionEnd = selectionEnd + this.prefixLength;
         }
 
         return text;

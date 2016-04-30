@@ -50,21 +50,30 @@ define([
         var rendered = 'abcdef****';
         var c = new MarkdownToolbarController();
         strictEqual(c.render(data, 6, 6, text), rendered);
+        strictEqual(c.selectionStart, 8);
+        strictEqual(c.selectionEnd, 8);
+
 
         text = 'abcdef';
         rendered = '**abcdef**';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, 6, text), rendered);
+        strictEqual(c.selectionStart, 2);
+        strictEqual(c.selectionEnd, 8);
 
         text = 'abcdef\nabcdef\n';
         rendered = '**abcdef**\nabcdef\n';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, 6, text), rendered);
+        strictEqual(c.selectionStart, 2);
+        strictEqual(c.selectionEnd, 8);
 
         text = 'abcdef\nabcdef\n';
         rendered = '**abcdef\nabcdef**\n';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, 13, text), rendered);
+        strictEqual(c.selectionStart, 2);
+        strictEqual(c.selectionEnd, 15);
     });
 
     test('should render code selections correctly', function() {
@@ -78,21 +87,29 @@ define([
         var rendered = 'abcdef``';
         var c = new MarkdownToolbarController();
         strictEqual(c.render(data, 6, 6, text), rendered);
+        strictEqual(c.selectionStart, 7);
+        strictEqual(c.selectionEnd, 7);
 
         text = 'abcdef';
         rendered = '`abcdef`';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, 6, text), rendered);
+        strictEqual(c.selectionStart, 1);
+        strictEqual(c.selectionEnd, 7);
 
         text = 'abcdef\nabcdef\n';
         rendered = '`abcdef`\nabcdef\n';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, 6, text), rendered);
+        strictEqual(c.selectionStart, 1);
+        strictEqual(c.selectionEnd, 7);
 
         text = 'abcdef\nabcdef\n';
         rendered = '```\nabcdef\nabcdef\n\n```';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, 13, text), rendered);
+        strictEqual(c.selectionStart, 4);
+        strictEqual(c.selectionEnd, 17);
     });
 
     test('should render lists correctly', function() {
@@ -104,24 +121,35 @@ define([
         var rendered = 'abcdef- ';
         var c = new MarkdownToolbarController();
         strictEqual(c.render(data, text.length, text.length, text), rendered);
+        strictEqual(c.selectionStart, 0);
+        strictEqual(c.selectionEnd, 8);
 
         text = 'abcdef';
         rendered = '- abcdef';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, text.length, text), rendered);
+        strictEqual(c.selectionStart, 0);
+        strictEqual(c.selectionEnd, 8);
 
-        text = 'abcdef\nabcdef\n';
-        rendered = '- abcdef\n\nabcdef\n';
+        text = 'abcdef\nabcdef';
+        rendered = '- abcdef\n- abcdef';
         c = new MarkdownToolbarController();
-        //strictEqual(c.render(data, 0, 6, text), rendered);
+        strictEqual(c.render(data, 0, 13, text), rendered);
+        strictEqual(c.selectionStart, 0);
+        strictEqual(c.selectionEnd, 17);
 
         text = 'abcdef\nabcdef\n';
         rendered = '- abcdef\n- abcdef\n- ';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, text.length, text), rendered);
+        strictEqual(c.selectionStart, 0);
+        strictEqual(c.selectionEnd, 20);
+
         text = 'abcd\nabcd\nabc';
         rendered = '- abcd\n- abcd\n- abc';
         c = new MarkdownToolbarController();
         strictEqual(c.render(data, 0, text.length, text), rendered);
+        strictEqual(c.selectionStart, 0);
+        strictEqual(c.selectionEnd, 19);
     });
 });
