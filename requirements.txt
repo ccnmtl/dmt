@@ -45,7 +45,7 @@ astroid==1.4.5
 pylint==1.5.5
 six==1.10.0
 python-dateutil==2.5.3
-pytz==2016.3
+pytz==2016.4
 simpleduration==0.1.0
 fake-factory==0.5.3
 factory_boy==2.6.1
