@@ -26,7 +26,7 @@ pexpect==4.0.1
 pickleshare==0.5
 simplegeneric==0.8.1
 path.py==8.1.2
-ipython==4.1.2
+ipython==4.2.0
 ipdb==0.9.0
 isodate==0.5.4
 SPARQLWrapper==1.6.4
