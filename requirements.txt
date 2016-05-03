@@ -20,7 +20,7 @@ fuzzywuzzy==0.10.0
 sure==1.2.24
 traitlets==4.2.1
 ipython_genutils==0.1.0
-decorator==4.0.4
+decorator==4.0.9
 ptyprocess==0.5
 pexpect==4.0.1
 pickleshare==0.5
