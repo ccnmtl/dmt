@@ -255,7 +255,7 @@
           <ul>
               {% for user in notified_users %}
                   <li>
-                      <a href="{% url 'user_detail' user.username %}">
+                      <a href="{% url 'user_detail' user.userprofile.username %}">
                           {% firstof user.userprofile.fullname user.username %}
                       </a>
                   </li>
