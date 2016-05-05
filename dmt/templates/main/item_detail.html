@@ -263,27 +263,29 @@
           </ul>
       </dd>
 
-      <dt>Add Subscriber</dt>
-      <dd>
-          <form method="post"
-                action="{% url 'add_subscriber' object.pk %}"
-                class="form-inline">
-              {% csrf_token %}
-              <input type="hidden" name="item" value="{{object.pk}}" />
-              <div class="form-group">
-                  <select name="subscriber" class="form-control" required="required">
-                      <option value>---------</option>
-                      {% for user in potential_subscribers %}
-                          <option value="{{user.username}}">
-                              {% firstof user.userprofile.fullname user.username %}
-                          </option>
-                      {% endfor %}
-                  </select>
-                  <button type="submit"
-                          class="btn btn-primary">Add</button>
-              </div>
-          </form>
-      </dd>
+      {% if potential_subscribers %}
+          <dt>Add Subscriber</dt>
+          <dd>
+              <form method="post"
+                    action="{% url 'add_subscriber' object.pk %}"
+                    class="form-inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="item" value="{{object.pk}}" />
+                  <div class="form-group">
+                      <select name="subscriber" class="form-control" required="required">
+                          <option value>---------</option>
+                          {% for user in potential_subscribers %}
+                              <option value="{{user.username}}">
+                                  {% firstof user.userprofile.fullname user.username %}
+                              </option>
+                          {% endfor %}
+                      </select>
+                      <button type="submit"
+                              class="btn btn-primary">Add</button>
+                  </div>
+              </form>
+          </dd>
+      {% endif %}
 
       <script type="text/template" id="item-template">
       </script>
