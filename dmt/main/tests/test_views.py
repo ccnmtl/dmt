@@ -13,6 +13,7 @@ from .factories import (
     StatusUpdateFactory, NotifyFactory, GroupFactory,
     AttachmentFactory)
 from django.conf import settings
+from django.core import mail
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
@@ -1717,6 +1718,7 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, 'No subscriber provided.')
         self.assertEqual(Notify.objects.count(), 0)
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_post(self):
         subscriber = UserFactory()
@@ -1731,3 +1733,30 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
             '<strong>{}</strong> has been subscribed to this item.'.format(
                 subscriber.userprofile.fullname))
         self.assertEqual(Notify.objects.count(), 1)
+        self.assertEqual(len(mail.outbox), 1)
+
+        email = mail.outbox[0]
+        self.assertEqual(email.subject, '[PMT Item] {}'.format(self.i.title))
+
+        body = '{} has subscribed you to this PMT item:\n\t{}\n'.format(
+            unicode(self.u.userprofile),
+            'https://pmt.ccnmtl.columbia.edu{}'.format(
+                self.i.get_absolute_url()))
+        self.assertEqual(email.body, body)
+
+        self.assertEqual(email.to, [subscriber.email])
+
+    def test_post_subscribe_self(self):
+        subscriber = self.u
+        self.assertEqual(Notify.objects.count(), 0)
+        url = reverse('add_subscriber', args=(self.i.pk,))
+        r = self.client.post(url, {
+            'subscriber': subscriber
+        }, follow=True)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(
+            r,
+            '<strong>{}</strong> has been subscribed to this item.'.format(
+                unicode(subscriber.userprofile)))
+        self.assertEqual(Notify.objects.count(), 1)
+        self.assertEqual(len(mail.outbox), 0)
