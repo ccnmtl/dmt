@@ -1285,6 +1285,19 @@ Please do not reply to this message.
         self.copy_clients_to_new_item(new_item)
         return new_item
 
+    def send_new_subscriber_mail(self, user, subscriber):
+        body = '{} has subscribed you to this PMT item:\n\t{}\n'.format(
+            unicode(user.userprofile),
+            'https://pmt.ccnmtl.columbia.edu{}'.format(
+                self.get_absolute_url()))
+
+        send_mail(
+            '[PMT Item] {}'.format(self.title),
+            body,
+            settings.SERVER_EMAIL,
+            [subscriber.email],
+            fail_silently=settings.DEBUG)
+
 
 def truncate_string(full_string, length=20):
     if len(full_string) > length:

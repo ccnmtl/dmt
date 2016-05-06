@@ -480,6 +480,10 @@ class ItemAddSubscriberView(LoggedInMixin, View):
         messages.success(
             self.request,
             self.success_message % subscriber.userprofile)
+
+        if request.user != subscriber:
+            item.send_new_subscriber_mail(request.user, subscriber)
+
         return HttpResponseRedirect(reverse('item_detail', args=[pk]))
 
 
