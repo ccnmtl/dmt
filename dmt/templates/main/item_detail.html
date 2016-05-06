@@ -164,7 +164,7 @@
           <dt>Time logged</dt>
           <dd>
               <div>Total: {{workedon_total|simpleduration}}</div>
-      {% for at in object.actualtime_set.all %}
+      {% for at in times %}
       <ul class="time-logged">
           <li>
               {{at.actual_time|simpleduration}}
