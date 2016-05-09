@@ -23,6 +23,7 @@ ipython_genutils==0.1.0
 decorator==4.0.9
 ptyprocess==0.5
 pexpect==4.0.1
+pathlib2==2.1.0
 pickleshare==0.7.2
 simplegeneric==0.8.1
 path.py==8.2.1
