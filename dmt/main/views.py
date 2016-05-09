@@ -459,6 +459,8 @@ class ItemDetailView(LoggedInMixin, DetailView):
         iid = context['object'].iid
         context['clients'] = Client.objects.filter(
             itemclient__item=iid).order_by('lastname')
+        context['times'] = context['object'].actualtime_set.order_by(
+            'completed')
 
         return context
 
