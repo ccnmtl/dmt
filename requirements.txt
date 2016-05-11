@@ -21,7 +21,7 @@ sure==1.2.24
 traitlets==4.2.1
 ipython_genutils==0.1.0
 decorator==4.0.9
-ptyprocess==0.5
+ptyprocess==0.5.1
 pexpect==4.0.1
 pathlib2==2.1.0
 pickleshare==0.7.2
