@@ -15,6 +15,7 @@ from django.template import RequestContext
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -481,7 +482,7 @@ class ItemAddSubscriberView(LoggedInMixin, View):
 
         messages.success(
             self.request,
-            self.success_message % subscriber.userprofile)
+            mark_safe(self.success_message % subscriber.userprofile))
 
         if request.user != subscriber:
             item.send_new_subscriber_mail(request.user, subscriber)
@@ -1137,8 +1138,8 @@ class ProjectAddMilestoneView(LoggedInMixin, View):
             for mesg in e.messages:
                 messages.error(
                     self.request,
-                    'The "{}" milestone wasn\'t created. {}'.format(
-                        name, mesg))
+                    mark_safe('The "{}" milestone wasn\'t created. {}'.format(
+                        name, mesg)))
         return HttpResponseRedirect(project.get_absolute_url() + '#milestones')
 
 

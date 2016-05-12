@@ -224,21 +224,9 @@
 {% endblock %}
 
     <div id="content">
-            {% if not request.user.is_anonymous %}
-        {% if messages %}
-        <div class="dmt-messages">
-            {% for message in messages %}
-            <div
-                 {% if message.tags %}
-                 class="alert alert-{{message.tags}}"
-                 {% endif %}
-                 >
-                {{ message|safe }}
-            </div>
-            {% endfor %}
-        </div>
+        {% if not request.user.is_anonymous %}
+            {% bootstrap_messages %}
         {% endif %}
-      {% endif %}
       <div class="row-fluid">
         <div class="span12" id="right-content">
             {% block pagetitle %}{% endblock %}
