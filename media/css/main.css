@@ -533,13 +533,6 @@ span.attachment-action-text {
     background-color: #e8f0f8;
 }
 
-.dmt-messages p {
-    max-width: 768px;
-    margin: 0 auto;
-    margin-bottom: 15px;
-    padding: 15px;
-}
-
 /* Top navigation with logo */
 
 .navbar-dmt {
