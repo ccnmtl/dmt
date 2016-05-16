@@ -88,7 +88,11 @@ class UserProfile(models.Model):
             user=self.user,
             completed__gt=start,
             completed__lte=end
-        ).select_related('item', 'item__milestone', 'item__milestone__project')
+        ).select_related(
+            'item',
+            'item__milestone',
+            'item__milestone__project'
+        ).order_by('completed')
 
     def total_resolve_times(self):
         return interval_sum(
