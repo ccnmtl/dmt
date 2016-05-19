@@ -31,7 +31,7 @@ backports.shutil_get_terminal_size==1.0.0
 ipython==4.2.0
 ipdb==0.10.0
 isodate==0.5.4
-SPARQLWrapper==1.6.4
+SPARQLWrapper==1.7.6
 rdflib==4.2.1
 selenium==2.47.3
 coverage==4.0.3
