@@ -22,7 +22,7 @@ from factory.fuzzy import FuzzyInteger
 from waffle.models import Flag
 from dmt.main.models import UserProfile as PMTUser
 from dmt.main.models import (
-    ActualTime,
+    ActualTime, Events,
     Attachment, Comment, Item, ItemClient, Milestone, Project,
     Client, Notify, Reminder
 )
@@ -309,8 +309,10 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         milestone.project.add_personnel(self.u.userprofile, auth='manager')
         r = self.c.get(milestone.project.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(
-            'value="testuser" selected="selected"' in r.content)
+        self.assertContains(
+            r,
+            'value="{}" selected="selected"'.format(
+                self.u.userprofile.username))
         self.assertEqual(Reminder.objects.count(), 0)
 
     def test_add_action_item(self):
@@ -1760,3 +1762,104 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
                 unicode(subscriber.userprofile)))
         self.assertEqual(Notify.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 0)
+
+
+class TestItemCreateView(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(TestItemCreateView, self).setUp()
+        self.milestone = MilestoneFactory()
+        self.form_data = {
+            'title': 'My Action Item',
+            'project': self.milestone.project.pk,
+            'milestone': self.milestone.pk,
+            'owner_user': self.u.pk,
+            'assigned_user': self.u.pk,
+            'priority': 1,
+            'target_date': self.milestone.target_date,
+            'estimated_time': '3h',
+            'tags': ['testtag'],
+            'description': 'item description',
+            'status': 'OPEN',
+            'type': 'action item',
+        }
+
+    def test_get_with_milestone(self):
+        url = reverse('item_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200)
+
+    def test_get_no_milestone(self):
+        url = reverse('item_create')
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.context['messages']), 1)
+        m = list(r.context['messages'])[0]
+        self.assertEqual(m.message, 'Couldn\'t find project or milestone.')
+
+    def test_post(self):
+        inactive_user = UserFactory(is_active=False)
+        active_user = UserFactory()
+        self.form_data['assigned_user'] = inactive_user
+        url = reverse('item_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertFormError(
+            r, 'form', 'assigned_user',
+            'Select a valid choice. That choice is not '
+            'one of the available choices.')
+
+        self.form_data['assigned_user'] = active_user.pk
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(Item.objects.count(), 1)
+        item = Item.objects.first()
+        self.assertEqual(Events.objects.filter(item=item).count(), 1)
+        event = Events.objects.filter(item=item).first()
+        self.assertEqual(event.status, 'OPEN')
+        self.assertEqual(len(mail.outbox), 1)
+        email = mail.outbox[0]
+        self.assertEqual(
+            email.subject,
+            '[PMT Item: {}] Attn: {} - {}'.format(
+                item.milestone.project.name,
+                active_user.userprofile.fullname,
+                item.title))
+        self.assertIn(item.milestone.project.name, email.body)
+        self.assertIn(item.milestone.name, email.body)
+        self.assertIn(active_user.userprofile.fullname, email.body)
+        self.assertIn('Action item added', email.body)
+
+        self.assertEqual(item.milestone.project, self.milestone.project)
+        self.assertEqual(item.milestone, self.milestone)
+        self.assertEqual(item.owner_user, self.u)
+        self.assertEqual(item.assigned_user, active_user)
+        self.assertEqual(item.priority, 1)
+        self.assertEqual(item.target_date, self.milestone.target_date)
+        self.assertEqual(item.estimated_time, timedelta(hours=3))
+        self.assertEqual(item.tags.first().name, 'testtag')
+        self.assertEqual(item.description, 'item description')
+
+    def test_post_no_milestone_in_url(self):
+        del self.form_data['milestone']
+        url = reverse('item_create')
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertFormError(r, 'form', 'milestone', 'This field is required.')
+
+    def test_post_no_milestone(self):
+        del self.form_data['milestone']
+        url = reverse('item_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertFormError(r, 'form', 'milestone', 'This field is required.')
+
+    def test_post_no_project(self):
+        del self.form_data['project']
+        url = reverse('item_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertFormError(r, 'form', 'project', 'This field is required.')

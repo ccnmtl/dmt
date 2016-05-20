@@ -1,54 +1,41 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
 
-{% block title %}Edit Item #{{object.iid}}&ndash;{{object.title}}{% endblock %}
-{% block extraclass %} class="object-form item-form"{% endblock %}
+{% block title %}Add Action Item{% endblock %}
+{% block extraclass %} class="item-form"{% endblock %}
 
 
 {% block content %}
-<h1 class="page-title clearfix">Edit Item #{{object.iid}} &#8226; {% if object.is_bug %}BUG:{% endif %} {{object.title}}</h1>
-
-<br />
-
-<div class="item-box clearfix">
-  <div class="item-action-set clearfix" style="margin-top: 0;">
-    <ul>
-      <li class="item-action" title="Move to another project">
-        <a href="{% url 'item-move-project' object.iid %}" class="item-action-link"><span class="glyphicon glyphicon-transfer"></span>
-        <span class="item-action-text hidden-xs hidden-sm">Move to another project</span></a>
-      </li>
-      <li class="item-action" title="Delete item">
-        <a href="{{object.get_absolute_url}}delete/" class="item-action-link"><span class="glyphicon glyphicon-trash"></span>
-        <span class="item-action-text hidden-xs hidden-sm">Delete item</span></a>
-      </li>
-    </ul>
-  </div><!-- ./item-action-set -->
-
-
-  <div class="item-details">
-    <form action="." method="post">{% csrf_token %}
-        <fieldset>
-            {% bootstrap_form form %}
-        </fieldset>
-        <fieldset>
-            <h3>
-                Manage Reminder
-                <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
-            </h3>
-            <p>
-                The reminder will email you at the specified time before
-                this item's target date.
-            </p>
-            {% for inline in inlines %}
-            {% bootstrap_formset inline %}
-            {% endfor %}
-        </fieldset>
-        <div class="button-set">
-            <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-    </form>
-  </div><!-- /.item-details -->
-</div><!-- /.item-box -->
-
+    <div class="clearfix"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <h1>Add Action Item</h1>
+        {% bootstrap_form_errors form %}
+        <form action=".?pid={{project.pk}}" method="post" class="form" id="add-action-item-form">
+            {% csrf_token %}
+            {% bootstrap_field form.title form_group_class='form-group col-md-12' %}
+            {% bootstrap_field form.project form_group_class='form-group col-md-12' %}
+            {% bootstrap_field form.milestone form_group_class='form-group col-md-12' %}
+            {% bootstrap_field form.owner_user form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.assigned_user form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.priority form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.target_date form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.estimated_time form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.tags form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.status %}
+            {% bootstrap_field form.type %}
+            <div class="form-group col-md-12">
+                {% include 'main/markdown_toolbar.html' %}
+                {% bootstrap_field form.description show_label=False form_group_class='' field_class='dmt-new-item-desc' %}
+                <div class="form-group">
+                    <div class="instructions">
+                        Description preview:
+                    </div>
+                    <div class="dmt-markdown-item-preview dmt-markdown-preview"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            {% buttons submit='Create' %}{% endbuttons %}
+        </form>
+    </div>
 {% endblock %}

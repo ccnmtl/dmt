@@ -586,7 +586,8 @@ class Project(models.Model):
 
         item.add_reminder(reminder_duration, current_user)
 
-        item.add_event('OPEN', owner, "<b>%s added</b>" % type.capitalize())
+        item.add_event('OPEN', owner,
+                       "<strong>%s added</strong>" % type.capitalize())
         if tags:
             item.tags.add(*tags)
         item.setup_default_notification()

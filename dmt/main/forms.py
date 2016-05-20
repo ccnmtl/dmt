@@ -2,6 +2,7 @@ import re
 from datetime import timedelta
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from django.forms import ModelForm, TextInput, URLInput
 from django_markwhat.templatetags.markup import commonmark
@@ -116,7 +117,10 @@ class MilestoneUpdateForm(ModelForm):
 
 class SimpleDurationField(forms.DurationField):
     def prepare_value(self, value):
-        return simpleduration_string(value)
+        try:
+            return simpleduration_string(value)
+        except AttributeError:
+            return simpleduration_string(self.clean(value))
 
     def clean(self, value):
         try:
@@ -145,7 +149,78 @@ class RemindersInlineFormSet(InlineFormSet):
     max_num = 1
 
 
+class UserModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        if obj.first_name and obj.last_name:
+            return '{} {}'.format(obj.first_name, obj.last_name)
+        else:
+            return obj.username
+
+
+class ItemCreateForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = [
+            'title',
+            'project',
+            'milestone',
+            'owner_user',
+            'assigned_user',
+            'priority',
+            'target_date',
+            'estimated_time',
+            'tags',
+            'description',
+            'status',
+            'type',
+        ]
+
+    owner_user = UserModelChoiceField(
+        label='Owner',
+        queryset=User.objects.filter(is_active=True).order_by(
+            'last_name').order_by('first_name'))
+    assigned_user = UserModelChoiceField(
+        label='Assigned To',
+        queryset=User.objects.filter(is_active=True).order_by(
+            'last_name').order_by('first_name'))
+    project = forms.ModelChoiceField(
+        queryset=Project.objects.all())
+    estimated_time = SimpleDurationField(
+        help_text='Enter time and unit. For example: <code>2h</code>',
+        initial='1h')
+
+    def __init__(self, *args, **kwargs):
+        r = super(ItemCreateForm, self).__init__(*args, **kwargs)
+        self.fields['priority'].initial = 1
+        self.fields['tags'].required = False
+        self.fields['tags'].widget.is_required = False
+
+        self.fields['status'].widget = forms.HiddenInput()
+        self.fields['status'].initial = 'OPEN'
+        self.fields['type'].widget = forms.HiddenInput()
+        self.fields['type'].initial = 'action item'
+
+        return r
+
+    def save(self, commit=True):
+        instance = super(ItemCreateForm, self).save(commit=commit)
+        instance.add_event('OPEN', instance.owner_user,
+                           '<strong>Action item added</strong>')
+        instance.setup_default_notification()
+        instance.add_project_notification()
+        instance.update_email(
+            'Action item added\n----\n%s' % instance.description,
+            instance.owner_user.userprofile,
+            skip_self=True)
+        instance.milestone.update_milestone()
+        return instance
+
+
 class ItemUpdateForm(ModelForm):
+    estimated_time = SimpleDurationField(
+        help_text='Enter time and unit. For example: <code>2h 30m</code>',
+        initial='1h')
+
     def __init__(self, *args, **kwargs):
         super(ItemUpdateForm, self).__init__(*args, **kwargs)
         passed_item = kwargs.get('instance')
@@ -153,10 +228,6 @@ class ItemUpdateForm(ModelForm):
         project = Project.objects.get(milestone=milestone)
         project_milestones = project.milestone_set.all()
         self.fields['milestone'].queryset = project_milestones
-        self.fields['estimated_time'] = SimpleDurationField(
-            required=False,
-            help_text='Enter time and unit. For example: <code>2h 30m</code>',
-            initial='1h')
 
     class Meta:
         model = Item
