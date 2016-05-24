@@ -42,6 +42,7 @@ INSTALLED_APPS += [  # noqa
     'taggit_templatetags2',
     'djcelery',
     'bootstrap3',
+    'notebook',
     'emoji',
     'dmt.main',
     'dmt.report',
