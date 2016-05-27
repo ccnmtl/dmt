@@ -83,8 +83,10 @@
 
         <li class="dropdown">
             <a href="{% url 'user_detail' request.user.userprofile.username %}">
-                <img src="{{request.user.userprofile.photo_url}}"
-                     class="img-circle user-avatar">
+                {% if request.user.userprofile.photo_url %}
+                    <img src="{{request.user.userprofile.photo_url}}"
+                         class="img-circle user-avatar">
+                {% endif %}
             </a>
             <a class="dropdown-toggle username" data-toggle="dropdown" href="#">{% if request.user.userprofile.photo_url %}
             {% else %}
