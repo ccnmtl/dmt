@@ -184,6 +184,7 @@ class ItemCreateForm(ModelForm):
         queryset=User.objects.filter(is_active=True).order_by(
             'last_name').order_by('first_name'))
     project = forms.ModelChoiceField(
+        disabled=True,
         queryset=Project.objects.all())
     estimated_time = SimpleDurationField(
         help_text='Enter time and unit. For example: <code>2h</code>',
