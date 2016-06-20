@@ -49,6 +49,7 @@ INSTALLED_APPS += [  # noqa
     'behave_django',
     'oauth2_provider',
     's3sign',
+    'crispy_forms',
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
