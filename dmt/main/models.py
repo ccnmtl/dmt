@@ -1615,7 +1615,10 @@ class Comment(models.Model):
         ordering = ['add_date_time', ]
 
     def user(self):
-        return UserProfile.objects.get(username=self.username)
+        try:
+            return UserProfile.objects.get(username=self.username)
+        except UserProfile.DoesNotExist:
+            return User.objects.get(username=self.username).userprofile
 
     def user_is_owner(self, user):
         """Return True if user is comment owner."""
