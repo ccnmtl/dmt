@@ -361,6 +361,18 @@ class CommentTest(TestCase):
             self.c.save()
             self.assertTrue(self.c.has_been_edited())
 
+    def test_user_accepts_user_or_userprofile(self):
+        u = UserFactory()
+        self.c.username = u.username
+        self.c.save()
+        self.assertEqual(self.c.user(), u.userprofile)
+
+        c = CommentFactory()
+        up = UserProfileFactory()
+        c.username = up.username
+        c.save()
+        self.assertEqual(c.user(), up)
+
 
 class HistoryItemTest(TestCase):
     def test_status(self):
