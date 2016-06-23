@@ -205,7 +205,7 @@ class ItemCreateForm(ModelForm):
 
     def save(self, commit=True):
         instance = super(ItemCreateForm, self).save(commit=commit)
-        instance.add_event('OPEN', instance.owner_user,
+        instance.add_event('OPEN', instance.owner_user.userprofile,
                            '<strong>Action item added</strong>')
         instance.setup_default_notification()
         instance.add_project_notification()
