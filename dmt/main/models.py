@@ -1609,6 +1609,7 @@ class Comment(models.Model):
     event = models.ForeignKey(Events, null=True, db_column='event', blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+    author = models.ForeignKey(User, null=True, blank=True)
 
     class Meta:
         db_table = u'comments'
