@@ -1133,7 +1133,6 @@ class Item(models.Model):
             add_date_time=timezone.now())
 
     def reassign(self, user, assigned_to, comment):
-        self.assigned_to = assigned_to
         self.assigned_user = assigned_to.user
         self.save()
         e = Events.objects.create(
@@ -1149,7 +1148,6 @@ class Item(models.Model):
         self.add_cc(assigned_to)
 
     def change_owner(self, user, owner, comment):
-        self.owner = owner
         self.owner_user = owner.user
         self.save()
         e = Events.objects.create(
