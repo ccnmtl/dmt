@@ -1050,6 +1050,7 @@ class Item(models.Model):
         Comment.objects.create(
             item=self,
             username=user.username,
+            author=user.user,
             comment_src=comment_src,
             comment=rendered_comment,
             add_date_time=timezone.now())
@@ -1087,6 +1088,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
+            author=user.user,
             comment="<b>Resolved %s</b><br />\n%s" % (r_status, comment),
             add_date_time=timezone.now())
 
@@ -1101,6 +1103,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
+            author=user.user,
             comment="<b>Verified</b><br />\n%s" % comment,
             add_date_time=timezone.now())
 
@@ -1115,6 +1118,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
+            author=user.user,
             comment="<b>Marked as In-progress</b><br />\n%s" % comment,
             add_date_time=timezone.now())
 
@@ -1129,6 +1133,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
+            author=user.user,
             comment="<b>Reopened</b><br />\n%s" % comment,
             add_date_time=timezone.now())
 
@@ -1142,6 +1147,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
+            author=user.user,
             comment="<b>Reassigned to %s</b><br />\n%s" % (
                 assigned_to.fullname, comment),
             add_date_time=timezone.now())
@@ -1157,6 +1163,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
+            author=user.user,
             comment="<b>Ownership changed to %s</b><br />\n%s" % (
                 owner.fullname, comment),
             add_date_time=timezone.now())
@@ -1181,6 +1188,7 @@ class Item(models.Model):
         Comment.objects.create(
             event=e,
             username=user.username,
+            author=user.user,
             comment=comment,
             add_date_time=timezone.now())
 
