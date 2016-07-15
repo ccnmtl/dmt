@@ -2,7 +2,7 @@
 Django==1.9.7
 future==0.15.2
 CommonMark==0.7.0
-psycopg2==2.6.1
+psycopg2==2.6.2
 versiontools==1.9.1
 statsd==3.2.1
 pep8==1.7.0
