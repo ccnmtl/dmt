@@ -48,7 +48,7 @@ astroid==1.4.6
 pylint==1.5.6
 six==1.10.0
 python-dateutil==2.5.3
-pytz==2016.4
+pytz==2016.6
 simpleduration==0.1.0
 ipaddress==1.0.16
 fake-factory==0.5.8
