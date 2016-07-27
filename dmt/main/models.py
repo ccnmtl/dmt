@@ -646,7 +646,7 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
         subject = "[PMT Forum: %s] %s" % (self.name, node.subject)
 
         statsd.incr('main.email_sent')
-        send_mail(clean_subject(subject), body, user.email,
+        send_mail(clean_subject(subject), body, settings.SERVER_EMAIL,
                   addresses, fail_silently=settings.DEBUG)
 
     def personnel_in_project(self):
@@ -1252,7 +1252,7 @@ Please do not reply to this message.
         else:
             addresses = [u.email for u in self.users_to_email()]
 
-        send_mail(clean_subject(email_subj), email_body, user.email,
+        send_mail(clean_subject(email_subj), email_body, settings.SERVER_EMAIL,
                   addresses, fail_silently=settings.DEBUG)
         statsd.incr('main.email_sent')
 
@@ -1489,7 +1489,7 @@ class Node(models.Model):
             "To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n\r"
             % (self.get_absolute_url()))
 
-        send_mail(clean_subject(subject), body, user.email,
+        send_mail(clean_subject(subject), body, settings.SERVER_EMAIL,
                   [self.user.userprofile.email], fail_silently=settings.DEBUG)
         statsd.incr('main.email_sent')
 
