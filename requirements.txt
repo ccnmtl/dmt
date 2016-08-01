@@ -80,7 +80,7 @@ unicodecsv==0.14.1
 XlsxWriter==0.9.3
 splinter==0.7.3
 shortuuid==0.4.3
-contextlib2==0.5.3
+contextlib2==0.5.4
 tblib==1.3.0
 
 djangowind==0.15.0
