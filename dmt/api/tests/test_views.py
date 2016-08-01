@@ -381,7 +381,7 @@ class ExternalAddItemTests(APITestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.data.get('title'), self.title)
         self.assertTrue(
-            'Submitted by Item Submitter <submission_email@example.com>' in
+            'Submitted by Item Submitter < submission_email@example.com >' in
             r.data.get('description')
         )
         self.assertEqual(r.data.get('type'), 'action item')
@@ -447,7 +447,7 @@ class ExternalAddItemTests(APITestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.data.get('title'), self.title)
         self.assertTrue(
-            'Submitted by Item Submitter <submission_email@example.com>' in
+            'Submitted by Item Submitter < submission_email@example.com >' in
             r.data.get('description')
         )
         self.assertEqual(r.data.get('type'), 'action item')
