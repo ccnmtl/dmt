@@ -127,7 +127,7 @@ def get_description(description, debug_info, name, email):
         description += '\n-----\n\nDEBUG INFO:\n' + debug_info + '\n'
 
     description += '\n-----\n\nSubmitted by ' \
-                   + name + ' <' + email + '>\n'
+                   + name + ' < ' + email + ' >\n'
     return description
 
 
