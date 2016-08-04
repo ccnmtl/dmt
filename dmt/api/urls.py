@@ -1,4 +1,4 @@
-from django.conf.urls import include, patterns, url
+from django.conf.urls import include, url
 
 from rest_framework import routers
 
@@ -19,12 +19,11 @@ router.register(r'projects', ProjectViewSet)
 router.register(r'milestones', MilestoneViewSet)
 router.register(r'items', ItemViewSet)
 
-urlpatterns = patterns(
-    '',
-    (r'^', include(router.urls)),
+urlpatterns = [
+    url(r'^', include(router.urls)),
     url(r'^notify/(?P<pk>\d+)/$', NotifyView.as_view(), name='notify'),
-    url(r'^api-auth/',
-        include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework')),
     url(r'^projects/(?P<pk>\d+)/milestones/$',
         ProjectMilestoneList.as_view(), name='project-milestones'),
     url(r'^milestones/(?P<pk>\d+)/items/$',
@@ -35,4 +34,4 @@ urlpatterns = patterns(
     url(r'^git/$', GitUpdateView.as_view(), name='git-update'),
     url(r'^external_add_item/$', ExternalAddItemView.as_view(),
         name='external-add-item'),
-)
+]

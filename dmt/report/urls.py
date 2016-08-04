@@ -1,10 +1,9 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.views.generic import TemplateView
 import dmt.report.views as views
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="report/report_list.html"),
         name='report_list'),
 
@@ -29,7 +28,7 @@ urlpatterns = patterns(
     url(r'^staff/export\w{0,50}$', views.StaffReportExportView.as_view(),
         name='staff_report_export'),
 
-    (r'^staff/previous/$', views.StaffReportPreviousWeekView.as_view()),
+    url(r'^staff/previous/$', views.StaffReportPreviousWeekView.as_view()),
 
     url(r'^weekly_summary/$', views.WeeklySummaryView.as_view(),
         name='weekly_summary_report'),
@@ -43,4 +42,4 @@ urlpatterns = patterns(
         name='inprogress_items_report'),
     url(r'^passed_milestones/$', views.PassedMilestonesView.as_view(),
         name='passed_milestones_report'),
-)
+]
