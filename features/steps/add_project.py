@@ -66,8 +66,9 @@ def i_create_a_new_project_with_date(context, date):
     b.get(context.browser_url("/project/create/"))
     e = b.find_element_by_xpath("//input[@name='name']")
     e.send_keys('new project')
-    b.find_element_by_id("id_pub_view_0").click()
+    b.find_element_by_id(
+        "id_pub_view_0").location_once_scrolled_into_view.click()
     e = b.find_element_by_xpath("//input[@name='target_date']")
-    e.send_keys(date)
+    e.location_once_scrolled_into_view.send_keys(date)
     e.submit()
     context.project_url = b.current_url
