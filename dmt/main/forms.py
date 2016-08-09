@@ -164,6 +164,7 @@ class ItemCreateForm(ModelForm):
             'title',
             'project',
             'milestone',
+            'created_by',
             'owner_user',
             'assigned_user',
             'priority',
@@ -234,7 +235,7 @@ class ItemUpdateForm(ModelForm):
         model = Item
         exclude = ['iid', 'owner', 'owner_user', 'assigned_user',
                    'assigned_to', 'status', 'r_status', 'last_mod',
-                   'tags', 'priority', 'url']
+                   'tags', 'priority', 'url', 'created_by']
 
 
 class CommentUpdateForm(ModelForm):

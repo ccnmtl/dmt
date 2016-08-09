@@ -13,6 +13,7 @@
         {% bootstrap_form_errors form %}
         <form action=".?pid={{project.pk}}" method="post" class="form" id="add-action-item-form">
             {% csrf_token %}
+            <input name="created_by" value="{{ request.user.pk }}" type="hidden" />
             {% bootstrap_field form.title form_group_class='form-group col-md-12' %}
             {% bootstrap_field form.project form_group_class='form-group col-md-12' %}
             {% bootstrap_field form.milestone form_group_class='form-group col-md-12' %}

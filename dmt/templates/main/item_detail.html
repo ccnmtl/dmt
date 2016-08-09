@@ -112,6 +112,15 @@
         </div>
       </dd>
 
+      {% if object.created_by %}
+      <dt>Created By</dt>
+      <dd>
+          <a href="{{object.created_by.userprofile.get_absolute_url}}">
+              {{object.created_by.userprofile}}
+          </a>
+      </dd>
+      {% endif %}
+
       <dt>Owner</dt>
       <dd>
         <a href="{{object.owner_user.userprofile.get_absolute_url}}">{{object.owner_user.userprofile}}</a>
