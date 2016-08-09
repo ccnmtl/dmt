@@ -8,7 +8,7 @@ statsd==3.2.1
 pep8==1.7.0
 pyflakes==1.2.3
 pycodestyle==2.0.0
-flake8==3.0.3
+flake8==3.0.4
 mccabe==0.5.2
 certifi==2016.8.2
 pyparsing==2.1.5
