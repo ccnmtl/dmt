@@ -1772,6 +1772,7 @@ class TestItemCreateView(LoggedInTestMixin, TestCase):
             'title': 'My Action Item',
             'project': self.milestone.project.pk,
             'milestone': self.milestone.pk,
+            'created_by': self.u.pk,
             'owner_user': self.u.pk,
             'assigned_user': self.u.pk,
             'priority': 1,
@@ -1833,6 +1834,7 @@ class TestItemCreateView(LoggedInTestMixin, TestCase):
         self.assertEqual(item.milestone.project, self.milestone.project)
         self.assertEqual(item.milestone, self.milestone)
         self.assertEqual(item.owner_user, self.u)
+        self.assertEqual(item.created_by, self.u)
         self.assertEqual(item.assigned_user, active_user)
         self.assertEqual(item.priority, 1)
         self.assertEqual(item.target_date, self.milestone.target_date)

@@ -593,6 +593,22 @@ class ProjectTest(TestCase):
         r = p.personnel_in_project()
         self.assertEqual(r, [g.grp, u])
 
+    def test_add_item_created_by(self):
+        m = MilestoneFactory()
+        p = m.project
+        current_user = UserFactory()
+        u = UserProfileFactory()
+        p.add_item(
+            type='action item', title='new item',
+            assigned_to=u, owner=u, milestone=m,
+            current_user=current_user,
+            priority=1, description='',
+            estimated_time='2 hours',
+            status='OPEN', r_status='')
+        self.assertEqual(m.item_set.count(), 1)
+        item = m.item_set.first()
+        self.assertEqual(item.created_by, current_user)
+
     def test_add_item_invalid_duration(self):
         m = MilestoneFactory()
         p = m.project

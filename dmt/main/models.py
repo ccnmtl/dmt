@@ -575,6 +575,7 @@ class Project(models.Model):
             type=type,
             owner_user=owner.user,
             assigned_user=assigned_to.user,
+            created_by=current_user,
             title=title,
             priority=priority,
             status=status,
@@ -954,6 +955,7 @@ class Item(models.Model):
                                    related_name='owned_items')
     assigned_user = models.ForeignKey(User, db_column='assigned_user',
                                       related_name='assigned_to')
+    created_by = models.ForeignKey(User, null=True)
     title = models.CharField(max_length=255)
     milestone = models.ForeignKey(Milestone, db_column='mid', db_index=True)
     status = models.CharField(
