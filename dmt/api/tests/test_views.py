@@ -461,6 +461,13 @@ class ExternalAddItemTests(APITestCase):
         self.assertTrue(unicode(self.milestone.pk) in r.data.get('milestone'))
         self.assertEqual(r.data.get('estimated_time'), '01:00:00')
 
+    def test_post_no_pid(self):
+        del self.post_data['pid']
+        r = self.client.post(reverse('external-add-item'),
+                             self.post_data,
+                             HTTP_REFERER=self.remote_host)
+        self.assertEqual(r.status_code, 200)
+
 
 class NotifyTests(APITestCase):
     def setUp(self):
