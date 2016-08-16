@@ -96,8 +96,14 @@ class ExternalAddItemView(APIView):
         redirect_url = request.data.get('redirect_url', '')
         append_iid = request.data.get('append_iid', '')
         description = get_description(description, debug_info, name, email)
-        project = get_object_or_404(Project, pid=pid)
-        milestone = get_milestone(mid, project)
+
+        if mid and not pid:
+            milestone = get_object_or_404(Milestone, mid=mid)
+            project = milestone.project
+            pid = project.pk
+        else:
+            project = get_object_or_404(Project, pid=pid)
+            milestone = get_milestone(mid, project)
 
         assignee = get_assignee(assignee_username, project)
         owner = get_owner(owner_username, project)
