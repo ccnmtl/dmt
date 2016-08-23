@@ -56,7 +56,7 @@ class StatusUpdateFeed(Feed):
         return item.author.userprofile.fullname
 
     def item_author_email(self, item):
-        return item.author.userprofile.email
+        return item.author.userprofile.get_email()
 
     def item_pubdate(self, item):
         return item.added

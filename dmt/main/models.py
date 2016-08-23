@@ -254,7 +254,7 @@ class UserProfile(models.Model):
         send_mail(
             "PMT Weekly Report",
             body, settings.SERVER_EMAIL,
-            [self.email], fail_silently=settings.DEBUG)
+            [self.get_email()], fail_silently=settings.DEBUG)
 
     def send_reminder(self, reminder):
         body = (
@@ -267,7 +267,7 @@ class UserProfile(models.Model):
             '[PMT Reminder] {}'.format(reminder.item.title),
             body,
             settings.SERVER_EMAIL,
-            [self.email],
+            [self.get_email()],
             fail_silently=settings.DEBUG)
 
     def weekly_report_email_body(self, hours_logged, behind):
@@ -347,7 +347,7 @@ class UserProfile(models.Model):
         ).order_by('target_date').select_related('project')
 
     def get_email(self):
-        return (self.email or self.user.email)
+        return self.email or self.user.email
 
 
 def create_user_profile(sender, instance, created, **kwargs):
@@ -645,7 +645,7 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
             body,
             node.get_absolute_url())
         addresses = [
-            u.email for u in self.all_personnel_in_project()
+            u.get_email() for u in self.all_personnel_in_project()
             if u != user]
         subject = "[PMT Forum: %s] %s" % (self.name, node.subject)
 
@@ -1312,7 +1312,7 @@ Please do not reply to this message.
             '[PMT Item] {}'.format(self.title),
             body,
             settings.SERVER_EMAIL,
-            [subscriber.email],
+            [subscriber.userprofile.get_email()],
             fail_silently=settings.DEBUG)
 
 
@@ -1496,7 +1496,8 @@ class Node(models.Model):
             % (self.get_absolute_url()))
 
         send_mail(clean_subject(subject), body, settings.SERVER_EMAIL,
-                  [self.user.userprofile.email], fail_silently=settings.DEBUG)
+                  [self.user.userprofile.get_email()],
+                  fail_silently=settings.DEBUG)
         statsd.incr('main.email_sent')
 
     def touch(self):

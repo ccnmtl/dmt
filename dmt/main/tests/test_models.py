@@ -149,6 +149,12 @@ class UserModelTest(TestCase):
         r = self.u.subscribed_items()
         self.assertEqual(len(r), 0)
 
+    def test_get_email(self):
+        u = UserProfileFactory(email='')
+        u.user.email = "foo@example.com"
+        u.user.save()
+        self.assertEqual(u.get_email(), u.user.email)
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):
