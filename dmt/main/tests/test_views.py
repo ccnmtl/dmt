@@ -1746,7 +1746,7 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
                 self.i.get_absolute_url()))
         self.assertEqual(email.body, body)
 
-        self.assertEqual(email.to, [subscriber.email])
+        self.assertEqual(email.to, [subscriber.userprofile.get_email()])
 
     def test_post_subscribe_self(self):
         subscriber = self.u
