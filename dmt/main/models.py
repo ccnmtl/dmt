@@ -13,7 +13,8 @@ from taggit.managers import TaggableManager
 from django.core.mail import send_mail
 from django_statsd.clients import statsd
 from simpleduration import Duration, InvalidDuration
-from dmt.main.utils import simpleduration_string
+from smtplib import SMTPRecipientsRefused, SMTPDataError
+from dmt.main.utils import log_sentry_error, simpleduration_string
 from .timeline import (
     TimeLineEvent, TimeLineComment,
     TimeLinePost, TimeLineActualTime, TimeLineStatus,
@@ -1254,9 +1255,13 @@ Please do not reply to this message.
         else:
             addresses = [u.email for u in self.users_to_email()]
 
-        send_mail(clean_subject(email_subj), email_body, settings.SERVER_EMAIL,
-                  addresses, fail_silently=settings.DEBUG)
-        statsd.incr('main.email_sent')
+        try:
+            send_mail(clean_subject(email_subj), email_body,
+                      settings.SERVER_EMAIL, addresses,
+                      fail_silently=settings.DEBUG)
+            statsd.incr('main.email_sent')
+        except (SMTPDataError, SMTPRecipientsRefused) as e:
+            log_sentry_error(str(e))
 
     def users_to_email(self, skip=None):
         return [

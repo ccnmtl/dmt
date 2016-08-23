@@ -1,6 +1,8 @@
 import ntpath
 import re
 from simpleduration import Duration, InvalidDuration
+from raven import Client
+from django.conf import settings
 
 
 def new_duration(timestr):
@@ -86,3 +88,13 @@ def simpleduration_string(duration):
         string += '{:d}s'.format(seconds)
 
     return string.strip()
+
+
+def log_sentry_error(msg):
+    try:
+        client = Client(settings.RAVEN_CONFIG['dsn'])
+    except (AttributeError, KeyError):
+        # If RAVEN_CONFIG isn't set, we can't log the error.
+        return
+
+    return client.captureMessage(msg)
