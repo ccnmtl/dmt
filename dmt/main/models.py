@@ -346,6 +346,9 @@ class UserProfile(models.Model):
             target_date__lt=timezone.now(),
         ).order_by('target_date').select_related('project')
 
+    def get_email(self):
+        return (self.email or self.user.email)
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -1250,17 +1253,18 @@ Please do not reply to this message.
             body
         )
         if skip_self:
-            addresses = [u.email for u in self.users_to_email(user)]
+            addresses = self.users_to_email(user)
         else:
-            addresses = [u.email for u in self.users_to_email()]
+            addresses = self.users_to_email()
 
         send_mail(clean_subject(email_subj), email_body, settings.SERVER_EMAIL,
                   addresses, fail_silently=settings.DEBUG)
         statsd.incr('main.email_sent')
 
     def users_to_email(self, skip=None):
+        """Returns a list of email addresses."""
         return [
-            n.user.userprofile
+            n.user.userprofile.get_email()
             for n in Notify.objects.filter(item=self)
             if (n.user.userprofile.status == 'active' and
                 not n.user.userprofile.grp and
