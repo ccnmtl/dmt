@@ -347,7 +347,7 @@ class UserProfile(models.Model):
         ).order_by('target_date').select_related('project')
 
     def get_email(self):
-        return (self.email or self.user.email)
+        return self.email or self.user.email
 
 
 def create_user_profile(sender, instance, created, **kwargs):
