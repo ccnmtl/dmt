@@ -23,7 +23,7 @@ traitlets==4.2.2
 ipython_genutils==0.1.0
 decorator==4.0.10
 ptyprocess==0.5.1
-pexpect==4.2.0
+pexpect==4.2.1
 pathlib2==2.1.0
 pickleshare==0.7.4
 simplegeneric==0.8.1
@@ -90,7 +90,7 @@ rcssmin==1.0.6  # django-compressor
 rjsmin==1.0.12  # django-compressor
 django-compressor==2.1
 django-statsd-mozilla==0.3.16
-raven==5.24.3
+raven==5.25.0
 django-debug-toolbar==1.5
 django-waffle==0.11.1
 django-jenkins==0.19.0
@@ -102,7 +102,7 @@ django-impersonate==1.0.1
 django-filter==0.14.0
 django-crispy-forms==1.6.0
 djangorestframework==3.4.3
-django-taggit==0.20.2
+django-taggit==0.21.0
 django-templatetag-sugar==1.0
 django-classy-tags==0.7.2
 django-taggit-templatetags2==1.4.1.ccnmtl
