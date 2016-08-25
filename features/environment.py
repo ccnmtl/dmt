@@ -1,5 +1,4 @@
 import urlparse
-from behave_django import environment
 from selenium import webdriver
 
 
@@ -24,14 +23,6 @@ def before_all(context):
 
 def after_all(context):
     context.browser.quit()
-
-
-def before_scenario(context, scenario):
-    environment.before_scenario(context, scenario)
-
-
-def after_scenario(context, scenario):
-    environment.after_scenario(context, scenario)
 
 
 def after_step(context, step):
