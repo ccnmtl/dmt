@@ -15,7 +15,7 @@
 {% endif %}
 
 <div class="forum-byline text-muted">
-by <a href="{{object.user.userprofile.get_absolute_url}}">{{object.user.userprofile.fullname}}</a>
+by <a href="{{object.user.userprofile.get_absolute_url}}">{{ object.user.userprofile.get_fullname }}</a>
 | {{object.added}}
 | <a href="edit/" title="Edit post"><span class="glyphicon glyphicon-pencil"></span> Edit post</a>
 </div><!-- /.forum-byline -->
@@ -67,7 +67,7 @@ by <a href="{{object.user.userprofile.get_absolute_url}}">{{object.user.userprof
       {% for reply in object.get_replies %}
       <div class="forum-reply">
         <div class="forum-byline text-muted">
-        By <a href="{{reply.user.userprofile.get_absolute_url}}">{{reply.user.userprofile.fullname}}</a>
+        By <a href="{{reply.user.userprofile.get_absolute_url}}">{{reply.user.userprofile.get_fullname}}</a>
         | {{reply.added}}
         </div><!-- /.forum-byline -->
         {{reply.body|commonmark|linkify|emoji_replace}}

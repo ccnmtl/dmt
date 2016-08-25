@@ -35,7 +35,7 @@
 {% for su in statusupdate_list %}
 <div class="status-update">
   <div class="status-update-byline">
-    <b><a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a></b> | <a href="{{su.author.userprofile.get_absolute_url}}">{{su.author.userprofile.fullname}}</a>
+    <b><a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a></b> | <a href="{{su.author.userprofile.get_absolute_url}}">{{su.author.userprofile.get_fullname}}</a>
     &#8226;
     {{su.added.date}}
     &nbsp;

@@ -1336,7 +1336,7 @@ class TestFeeds(TestCase):
         self.assertEquals(r.status_code, 200)
         self.assertTrue("<author>{} ({})</author>".format(
             s.author.userprofile.email,
-            s.author.userprofile.fullname) in r.content)
+            s.author.userprofile.get_fullname()) in r.content)
         self.assertTrue("<pubDate>{}</pubDate>".format(
             s.added.strftime("%a, %02d %b %Y %H:%M:%S %z")) in r.content)
 
@@ -1733,7 +1733,7 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
         self.assertContains(
             r,
             '<strong>{}</strong> has been subscribed to this item.'.format(
-                subscriber.userprofile.fullname))
+                subscriber.userprofile.get_fullname()))
         self.assertEqual(Notify.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
 
@@ -1824,11 +1824,11 @@ class TestItemCreateView(LoggedInTestMixin, TestCase):
             email.subject,
             '[PMT Item: {}] Attn: {} - {}'.format(
                 item.milestone.project.name,
-                active_user.userprofile.fullname,
+                active_user.userprofile.get_fullname(),
                 item.title))
         self.assertIn(item.milestone.project.name, email.body)
         self.assertIn(item.milestone.name, email.body)
-        self.assertIn(active_user.userprofile.fullname, email.body)
+        self.assertIn(active_user.userprofile.get_fullname(), email.body)
         self.assertIn('Action item added', email.body)
 
         self.assertEqual(item.milestone.project, self.milestone.project)

@@ -179,7 +179,7 @@
               {{at.actual_time|simpleduration}}
               <a href="{{at.user.userprofile.get_absolute_url}}"
               >
-                  {% firstof at.user.userprofile.fullname at.user.userprofile.username %}
+                  {{ at.user.userprofile.get_fullname }}
               </a>
               {{at.completed}}
               {% if at.user == request.user %}
@@ -265,7 +265,7 @@
               {% for user in notified_users %}
                   <li>
                       <a href="{% url 'user_detail' user.userprofile.username %}">
-                          {% firstof user.userprofile.fullname user.username %}
+                          {{ user.userprofile.get_fullname }}
                       </a>
                   </li>
               {% endfor %}
@@ -285,7 +285,7 @@
                           <option value>---------</option>
                           {% for user in potential_subscribers %}
                               <option value="{{user.username}}">
-                                  {% firstof user.userprofile.fullname user.username %}
+                                  {{ user.userprofile.get_fullname }}
                               </option>
                           {% endfor %}
                       </select>
@@ -725,7 +725,7 @@
 
         <div class="attachment-byline text-muted">
             Uploaded by <a href="{% url 'user_detail' attachment.user.userprofile.username %}">
-            {% firstof attachment.user.userprofile.fullname attachment.user.userprofile.username %}
+            {{ attachment.user.userprofile.get_fullname }}
             </a>
         on {{attachment.last_mod}}
         </div>

@@ -27,7 +27,10 @@
     width="14" height="14"/> {% endif %}<a href="{% url 'item_detail' item.iid %}">{{item.title|truncatechars:70}}</a></td>
     <td class="pr{{item.priority}}"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
     <td class="{{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
-    <td><a href="{% url 'user_detail' item.assigned_user.userprofile.username %}">{{item.assigned_user.userprofile.fullname}}</a></td>
+    <td>
+        <a href="{% url 'user_detail' item.assigned_user.userprofile.username %}"
+        >{{ item.assigned_user.userprofile.get_fullname }}</a>
+    </td>
     <td><a href="{% url 'project_detail' item.milestone.project.pid %}">{{item.milestone.project.name}}</a></td>
 
     <td class="{{item.status_class}}">{{item.status}}</td>
