@@ -24,7 +24,7 @@
         <tr>
             <td>
                 <a href="{% url 'user_detail' u.userprofile.username %}"
-                   >{{ u.userprofile.fullname }}</a>
+                   >{{ u.userprofile.get_fullname }}</a>
             </td>
             <td>{{ u.hours_logged|interval_to_hours }}</td>
             <td>{{ u.last_worked_on }}</td>

@@ -50,7 +50,7 @@
 <td><a href="?school={{client.school|urlencode}}">{{client.school}}</a></td>
 <td><a href="?department={{client.department|urlencode}}">{{client.department}}</a></td>
 <td>{{client.registration_date}}</td>
-<td><a href="{{client.user.userprofile.get_absolute_url}}">{{client.user.userprofile.fullname}}</a></td>
+<td><a href="{{client.user.userprofile.get_absolute_url}}">{{client.user.userprofile.get_fullname}}</a></td>
 <td>{{client.status}}</td>
 </tr>
 {% endfor %}

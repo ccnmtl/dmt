@@ -20,7 +20,7 @@
     </td>
     <td data-field="milestone">
         <a href="{% url 'user_detail' item.assigned_user.userprofile.username %}">
-            {{item.assigned_user.userprofile.fullname}}
+            {{ item.assigned_user.userprofile.get_fullname }}
         </a>
     </td>
     <td data-field="project">

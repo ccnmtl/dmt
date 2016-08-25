@@ -25,7 +25,7 @@ class ForumFeed(Feed):
             "\">%s</a></b> @ %s</small><br />%s") % (
                 settings.BASE_URL,
                 item.user.userprofile.get_absolute_url(),
-                item.user.userprofile.fullname, item.added, item.body)
+                item.user.userprofile.get_fullname(), item.added, item.body)
 
     def item_link(self, item):
         return settings.BASE_URL + item.get_absolute_url()
@@ -53,7 +53,7 @@ class StatusUpdateFeed(Feed):
                 "#status-" + str(item.id))
 
     def item_author_name(self, item):
-        return item.author.userprofile.fullname
+        return item.author.userprofile.get_fullname()
 
     def item_author_email(self, item):
         return item.author.userprofile.get_email()

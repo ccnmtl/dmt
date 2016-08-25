@@ -155,6 +155,10 @@ class UserModelTest(TestCase):
         u.user.save()
         self.assertEqual(u.get_email(), u.user.email)
 
+    def test_get_fullname(self):
+        u = UserProfileFactory(fullname='')
+        self.assertEqual(u.get_fullname(), u.username)
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):

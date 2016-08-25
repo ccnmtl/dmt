@@ -349,6 +349,9 @@ class UserProfile(models.Model):
     def get_email(self):
         return self.email or self.user.email
 
+    def get_fullname(self):
+        return self.fullname or self.username
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -1225,7 +1228,7 @@ class Item(models.Model):
         # TODO: handle no user specified
         email_subj = "[PMT Item: %s] Attn: %s - %s" % (
             truncate_string(self.milestone.project.name),
-            self.assigned_user.userprofile.fullname,
+            self.assigned_user.userprofile.get_fullname(),
             truncate_string(self.title))
         email_body = """
 Item:\t%s
@@ -1246,7 +1249,7 @@ Please do not reply to this message.
             self.title,
             user.fullname,
             self.target_date,
-            self.assigned_user.userprofile.fullname,
+            self.assigned_user.userprofile.get_fullname(),
             self.milestone.project.name,
             self.milestone.name,
             self.get_absolute_url(),
@@ -1667,7 +1670,7 @@ class StatusUpdate(models.Model):
 
     def __unicode__(self):
         return "%s - %s" % (self.project.name,
-                            self.author.userprofile.fullname)
+                            self.author.userprofile.get_fullname())
 
 
 class Reminder(models.Model):

@@ -255,7 +255,7 @@
       <h4><a href="{{n.get_absolute_url}}">{{n.subject|emoji_replace}}</a></h4>
       </div>
       <div class="forum-byline text-muted">
-      by {{n.user.userprofile.fullname}}
+      by {{ n.user.userprofile.get_fullname }}}
       | {{n.added}}
       </div>
       {% if n.tags.count %}
@@ -285,7 +285,7 @@
     {% for n in object.recent_status_updates %}
     <div class="status-update">
       <div class="status-update-byline">
-        <b><a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a></b> | {{n.author.userprofile.fullname}}
+        <b><a href="{{n.project.get_absolute_url}}">{{n.project.name}}</a></b> | {{n.author.userprofile.get_fullname}}
         &#8226;
         {{n.added.date}}
       </div><!-- /.status-update-byline -->

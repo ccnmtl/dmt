@@ -74,7 +74,7 @@
 <table class="table table-condensed">
 {% for user in active_users %}
 <tr>
-    <td><a href="{{user.get_absolute_url}}">{% firstof user.fullname user.username %}</a></td>
+    <td><a href="{{user.get_absolute_url}}">{{ user.get_fullname }}</a></td>
   <td><b>{{user.recent_hours|floatformat}}</b> hours logged</td>
 </tr>
 {% endfor %}
@@ -93,7 +93,7 @@
  {{su.body|commonmark|linkify|emoji_replace}}
 </div>
 <div class="col-md-3">
- &mdash; <a href="{{su.author.userprofile.get_absolute_url}}">{{su.author.userprofile.fullname}}</a>
+ &mdash; <a href="{{su.author.userprofile.get_absolute_url}}">{{ su.author.userprofile.get_fullname }}</a>
  ({{su.added.date}})
 </div>
 </div>
