@@ -104,7 +104,7 @@ django-crispy-forms==1.6.0
 djangorestframework==3.4.6
 django-taggit==0.21.0
 django-templatetag-sugar==1.0
-django-classy-tags==0.7.2
+django-classy-tags==0.8.0
 django-taggit-templatetags2==1.4.1.ccnmtl
 django-celery==3.1.17
 django-bootstrap3==7.0.1
