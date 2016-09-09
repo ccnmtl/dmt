@@ -1421,22 +1421,30 @@ class GroupTest(TestCase):
         self.assertTrue(str(self.group) in response.content)
 
     def test_group_detail(self):
+        inactive_user = UserProfileFactory(
+            username='inactive_user', status='inactive')
+        inactive_user.primary_group = self.group.grp
+        inactive_user.save()
+
         response = self.client.get(
             reverse('group_detail', args=(self.group.grp.username,)))
         self.assertEqual(response.status_code, 200)
 
         self.assertTrue(
             self.u.userprofile in response.context['primary_members'])
+        self.assertNotIn(inactive_user, response.context['primary_members'])
         self.assertEqual(
             response.context['primary_members'].count(), 1)
 
         self.assertTrue(
             self.group.username in response.context['other_members'])
+        self.assertNotIn(inactive_user, response.context['other_members'])
         self.assertEqual(
             response.context['other_members'].count(), 1)
 
         self.assertTrue(
             self.u.userprofile in response.context['eligible_users'])
+        self.assertNotIn(inactive_user, response.context['eligible_users'])
         self.assertEqual(
             response.context['eligible_users'].count(), 1)
 

@@ -1384,18 +1384,19 @@ class GroupDetailView(LoggedInMixin, DetailView):
         group = ctx.get('object')
 
         primary_members = UserProfile.objects.filter(
-            primary_group=ctx.get('object')).order_by('fullname')
+            primary_group=ctx.get('object')
+        ).exclude(status='inactive').order_by('fullname')
 
         other_members = UserProfile.objects.filter(
             ingroup__grp=group
-        ).order_by('fullname')
+        ).exclude(status='inactive').order_by('fullname')
 
         eligible_users = UserProfile.objects.filter(
             status='active'
         ).filter(
             ~Q(pk__in=other_members),
             ~Q(pk=group.pk),
-        )
+        ).exclude(status='inactive')
 
         ctx.update({
             'primary_members': primary_members,
