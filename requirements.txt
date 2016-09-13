@@ -19,7 +19,7 @@ BeautifulSoup==3.2.1
 lxml==3.6.4
 fuzzywuzzy==0.11.1
 sure==1.4.0
-traitlets==4.2.2
+traitlets==4.3.0
 ipython_genutils==0.1.0
 decorator==4.0.10
 ptyprocess==0.5.1
