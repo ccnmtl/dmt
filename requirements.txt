@@ -11,7 +11,7 @@ pycodestyle==2.0.0
 flake8==3.0.4
 mccabe==0.5.2
 certifi==2016.8.31
-pyparsing==2.1.8
+pyparsing==2.1.9
 backports.ssl_match_hostname==3.5.0.1
 tornado==4.4.1
 cssselect==0.9.2
