@@ -78,7 +78,3 @@ MESSAGE_TAGS = {
 
 SERVER_EMAIL = 'pmt@ccnmtl.columbia.edu'
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
-
-BOOTSTRAP3 = {
-    'base_url': '//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/',
-}
