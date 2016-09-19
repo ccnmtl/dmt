@@ -54,7 +54,7 @@ python-dateutil==2.5.3
 pytz==2016.6.1
 simpleduration==0.1.0
 ipaddress==1.0.17
-fake-factory==0.6.0
+fake-factory==0.7.2
 factory_boy==2.7.0
 ldap3==1.4.0
 anyjson==0.3.3
