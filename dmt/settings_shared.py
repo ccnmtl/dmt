@@ -25,9 +25,9 @@ PROJECT_APPS = [
     'dmt.report',
 ]
 
-TEMPLATE_CONTEXT_PROCESSORS += [  # noqa
-    'dmt.main.contextprocessors.graphite_base_processor',
-]
+TEMPLATES[0]['OPTIONS']['context_processors'].append(  # noqa
+    'dmt.main.contextprocessors.graphite_base_processor'
+)
 
 MIDDLEWARE_CLASSES += [  # noqa
     'django.middleware.csrf.CsrfViewMiddleware',
