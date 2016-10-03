@@ -479,6 +479,10 @@ class ItemAddSubscriberView(LoggedInMixin, View):
         subscriber = get_object_or_404(User, username=subscriber)
         item = get_object_or_404(Item, pk=pk)
 
+        if Notify.objects.filter(user=subscriber, item=item).exists():
+            # already an entry
+            return HttpResponseRedirect(reverse('item_detail', args=[pk]))
+
         Notify.objects.create(user=subscriber, item=item)
 
         messages.success(
