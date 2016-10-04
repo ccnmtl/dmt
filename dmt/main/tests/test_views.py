@@ -1771,6 +1771,16 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
         self.assertEqual(Notify.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 0)
 
+    def test_post_already_subscribed(self):
+        n = NotifyFactory(item=self.i)
+        self.assertEqual(Notify.objects.count(), 1)
+        url = reverse('add_subscriber', args=(self.i.pk,))
+        r = self.client.post(url, {
+            'subscriber': n.user.username
+        })
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(Notify.objects.count(), 1)
+
 
 class TestItemCreateView(LoggedInTestMixin, TestCase):
     def setUp(self):
