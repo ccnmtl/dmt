@@ -362,6 +362,9 @@ $(document).ready(function() {
             ],
             visibility: true
         }],
+        language: {
+            search: "Filter"
+        },
         searching: true
     });
     table.order([1, 'desc'], [3, 'asc']).draw();
@@ -378,7 +381,9 @@ $(document).ready(function() {
              ],
              visibility: true
          }],
-         
+         language: {
+             search: "Filter"
+         },
          searching: true
      });
      ownedTable.order([1, 'desc'], [2, 'asc']).draw()
@@ -395,7 +400,9 @@ $(document).ready(function() {
                  ],
                  visibility: true
              }],
-             
+             language: {
+                 search: "Filter"
+             },
              searching: true
          });
      subscribedTable.order([1, 'desc'], [2, 'asc']).draw()
