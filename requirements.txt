@@ -102,7 +102,7 @@ django-stagingcontext==0.1.0
 django-ga-context==0.1.0
 django-impersonate==1.0.1
 django-filter==0.15.3
-django-crispy-forms==1.6.0
+django-crispy-forms==1.6.1
 djangorestframework==3.4.6
 django-taggit==0.21.3
 django-templatetag-sugar==1.0
