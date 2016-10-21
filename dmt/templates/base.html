@@ -147,6 +147,27 @@
                 <li><a href="{% url 'my_project_list' %}">My projects</a></li>
                 <li><a href="{% url 'project_list' %}">All projects</a></li>
                 <li><a href="{% url 'project_create' %}"><span class="glyphicon glyphicon-plus-sign"></span> Create new project</a></li>
+
+                {% if request.user.projectpin_set.count %}
+                    <li class="divider"></li>
+                    <li>
+                        <p class="navbar-text">
+                            <strong><span class="glyphicon glyphicon-pushpin"></span> Your pinned projects</strong>
+                            <span class="glyphicon glyphicon-question-mark"
+                                  aria-hidden="true"
+                                  data-toggle="tooltip"
+                                  title="These are the projects you've pinned."
+                            ></span>
+                        </p>
+                    </li>
+                    {% for pin in request.user.projectpin_set.all %}
+                        <li><a href="{% url 'project_detail' pin.project.pk %}">
+                            {{pin.project.name|truncatechars:40}}
+                        </a></li>
+                    {% endfor %}
+                {% endif %}
+
+
                 {% if request.user.userprofile.has_recent_active_projects %}
                 <li class="divider"></li>
                 <li>

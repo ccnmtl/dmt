@@ -549,6 +549,14 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         r = self.c.get(p.get_absolute_url() + "edit/")
         self.assertEqual(r.status_code, 200)
 
+    def test_toggle_pin(self):
+        p = ProjectFactory()
+        self.assertEqual(p.projectpin_set.filter(user=self.u).count(), 0)
+        self.c.post(reverse('project-pin', args=(p.pk,)))
+        self.assertEqual(p.projectpin_set.filter(user=self.u).count(), 1)
+        self.c.post(reverse('project-pin', args=(p.pk,)))
+        self.assertEqual(p.projectpin_set.filter(user=self.u).count(), 0)
+
 
 class TestItemUpdate(LoggedInTestMixin, TestCase):
     def setUp(self):
