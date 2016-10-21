@@ -735,6 +735,10 @@ class ProjectTest(TestCase):
         self.assertEqual(projects.count(), 4,
                          'Private projects must be hidden from reports.')
 
+    def test_attachments(self):
+        a = AttachmentFactory()
+        self.assertEqual(a.item.milestone.project.attachments().count(), 1)
+
 
 class TestProjectPin(TestCase):
     def test_toggle_pin(self):

@@ -3,6 +3,7 @@
 {% load waffle_tags %}
 {% load emoji_tags %}
 {% load dmttags %}
+{% load static %}
 
 {% block title %}Project: {{object.name}}{% endblock %}
 
@@ -17,62 +18,63 @@
 
 {% block content %}
 
-<h1 class="page-title">Project &#8226; {{object.name}}</h1>
+    <h1 class="page-title">Project &#8226; {{object.name}}</h1>
 
-<div class="object-box clearfix">
-  <div class="object-action-set clearfix">
-    <ul>
-      {% flag project_board %}
-      <li class="object-action" title="Board view">
-        <a href="{% url 'project_board' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-th-large"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Board view</span></a>
-      </li>
+    <div class="object-box clearfix">
+        <div class="object-action-set clearfix">
+            <ul>
+                {% flag project_board %}
+                <li class="object-action" title="Board view">
+                    <a href="{% url 'project_board' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-th-large"></span>
+                        <span class="object-action-text hidden-xs hidden-sm">Board view</span></a>
+                </li>
       {% endflag %}
       <li class="object-action" title="Edit project">
-        <a href="edit/" class="object-action-link"><span class="glyphicon glyphicon-pencil"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Edit project</span></a>
+          <a href="edit/" class="object-action-link"><span class="glyphicon glyphicon-pencil"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Edit project</span></a>
       </li>
       <li class="object-action" title="Add action item">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-action-item">
-          <span class="glyphicon glyphicon-check"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Add action item</span></a>
+          <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-action-item">
+              <span class="glyphicon glyphicon-check"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Add action item</span></a>
       </li>
       <li class="object-action" title="Add bug">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-bug">
-          <span class="icon-add-bug"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Add bug</span></a>
+          <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-bug">
+              <span class="icon-add-bug"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Add bug</span></a>
       </li>
       <li class="object-action" title="Add task(s) to do">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-todo">
-          <span class="glyphicon glyphicon-tasks"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Add task(s) to do</span></a>
+          <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-todo">
+              <span class="glyphicon glyphicon-tasks"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Add task(s) to do</span></a>
       </li>
       <li class="object-action" title="Add tracker">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-tracker">
-          <span class="glyphicon glyphicon-time"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Add tracker</span></a>
+          <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-tracker">
+              <span class="glyphicon glyphicon-time"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Add tracker</span></a>
       </li>
       <li class="object-action" title="Update status">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-update">
-          <span class="glyphicon glyphicon-info-sign"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Update status</span></a>
+          <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-update">
+              <span class="glyphicon glyphicon-info-sign"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Update status</span></a>
       </li>
       <li class="object-action" title="Post to forum">
-        <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-node">
-          <span class="glyphicon glyphicon-comment"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Post to forum</span></a>
+          <a href="#" class="object-action-link" data-toggle="modal" data-target="#add-node">
+              <span class="glyphicon glyphicon-comment"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Post to forum</span></a>
       </li>
       <li class="object-action" title="Activity feed">
-        <a href="{% url 'project_feed' object.pk %}">
-          <span class="icon-rss"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Activity feed</span></a>
+          <a href="{% url 'project_feed' object.pk %}">
+              <span class="icon-rss"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Activity feed</span></a>
       </li>
       {% flag project_timeline %}
       <li class="object-action" title="Timeline">
-        <a href="{% url 'project_timeline' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-list"></span>
-        <span class="object-action-text hidden-xs hidden-sm">Timeline</span></a>
+          <a href="{% url 'project_timeline' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-list"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Timeline</span></a>
       </li>
       {% endflag %}
+<<<<<<< HEAD
             <li class="object-action" title="Project Tags">
                 <a href="{% url 'project_tag_list' object.pid %}"
                      class="object-action-link"><span class="glyphicon glyphicon-tags"></span>
@@ -145,6 +147,7 @@
     <li><a href="#reports" data-toggle="tab">Reports</a></li>
     <li><a href="#forum" data-toggle="tab">Forum</a></li>
     <li><a href="#updates" data-toggle="tab">Status</a></li>
+    <li><a href="#attachments" data-toggle="tab">Attachments</a></li>
 </ul>
 
 
@@ -418,6 +421,59 @@
     </div><!-- /.status-update -->
     {% endfor %}
   </div>
+
+  <div class="tab-pane fade" id="attachments">
+      {% if object.attachments.count %}
+          <h3>Item Attachments</h3>
+          {% for attachment in object.attachments %}
+              <div class="row">
+                  <div class="col-sm-2" class="attachment-thumbnail">
+                      {% if attachment.image %}
+                          {% if attachment.url %}
+                              <a href="{{attachment.url}}" title="Download this attachment"><img src="{{attachment.url}}" class="attachment-image" /></a>
+                          {% else %}
+                              <a href="{{attachment.src}}" title="Download this attachment"><img src="{{attachment.src}}" class="attachment-image" /></a>
+                          {% endif %}
+                      {% else %}
+                          <a href="{{attachment.url}}" title="Download this attachment"><img src="{% static 'img/icon-document.png' %}" class="attachment-document" /></a>
+                      {% endif %}
+                  </div><!-- attachment thumbnail -->
+                  <div class="col-sm-10">
+                      <div class="attachment-title">
+                          {% if attachment.url %}
+                              <h4>
+                                  <a href="{{attachment.url}}" title="Download this attachment">{{attachment.title|default:attachment.filename}}</a>
+                                  [{% if attachment.item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+                                                                       width="14" height="14"/> {% endif %} <a href="{{attachment.item.get_absolute_url}}">{{attachment.item.title|truncatechars:70|emoji_replace}}</a>]
+                              </h4>
+                          {% else %}
+                              <h4>
+                                  <a href="{{attachment.src}}" title="Download this attachment">{{attachment.title|default:attachment.filename}}</a>
+                                  [{% if attachment.item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+                                                                       width="14" height="14"/> {% endif %} <a href="{{attachment.item.get_absolute_url}}">{{attachment.item.title|truncatechars:70|emoji_replace}}</a>]
+                              </h4>
+                          {% endif %}
+
+
+                      </div>
+
+                      <div class="attachment-byline text-muted">
+                          Uploaded by <a href="{% url 'user_detail' attachment.user.userprofile.username %}">
+                          {{ attachment.user.userprofile.get_fullname }}
+                          </a>
+                          on {{attachment.last_mod}}
+                      </div>
+                      <div class="attachment-description">
+                          {{attachment.description|commonmark|linkify|emoji_replace}}
+                      </div>
+                  </div><!-- attachment details -->
+              </div><!-- /.row -->
+          {% endfor %}
+      {% else %}
+          <p>No item attachments</p>
+      {% endif %}
+  </div>
+  
 </div>
 {% endblock %}
 
