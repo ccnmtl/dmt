@@ -840,6 +840,14 @@ WHERE p.pid = m.pid
         return all_events
 
 
+class ProjectPin(models.Model):
+    project = models.ForeignKey(Project)
+    user = models.ForeignKey(User)
+
+    class Meta:
+        ordering = ['project__name']
+
+
 class Document(models.Model):
     did = models.AutoField(primary_key=True)
     pid = models.ForeignKey(Project, db_column='pid')
