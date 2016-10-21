@@ -715,7 +715,16 @@ class ProjectDetailView(LoggedInMixin, DaterangeMixin, DetailView):
                  for u in ctx['users_active_in_range']]) / 3600, 2)
         ctx['personnel_form'] = ProjectPersonnelForm(
             pid=ctx['object'].pid)
+        ctx['pinned'] = self.object.projectpin_set.filter(
+            user=self.request.user).exists()
         return ctx
+
+
+class ProjectPinView(LoggedInMixin, View):
+    def post(self, request, pk):
+        project = get_object_or_404(Project, pk=pk)
+        project.toggle_pin(request.user)
+        return HttpResponseRedirect(reverse('project_detail', args=(pk,)))
 
 
 class ProjectTimeLineView(LoggedInMixin, DaterangeMixin, DetailView):

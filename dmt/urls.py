@@ -33,7 +33,8 @@ from dmt.main.views import (
     DeleteAttachmentView, GroupCreateView,
     DeactivateUserView, ItemMoveProjectView, RemoveUserFromGroupView,
     AddUserToGroupView, MilestoneDeleteView, OwnedItemsView,
-    ItemSetMilestoneView, MergeTagView, ItemAddSubscriberView
+    ItemSetMilestoneView, MergeTagView, ItemAddSubscriberView,
+    ProjectPinView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
@@ -126,6 +127,8 @@ urlpatterns = [
         name='project_create'),
     url(r'^project/(?P<pk>\d+)/$', ProjectDetailView.as_view(),
         name='project_detail'),
+    url(r'^project/(?P<pk>\d+)/pin/$', ProjectPinView.as_view(),
+        name='project-pin'),
     url(r'^project/(?P<pk>\d+)/board/$', ProjectDetailView.as_view(
         template_name="main/project_board.html"),
         name='project_board'),

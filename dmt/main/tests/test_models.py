@@ -736,6 +736,20 @@ class ProjectTest(TestCase):
                          'Private projects must be hidden from reports.')
 
 
+class TestProjectPin(TestCase):
+    def test_toggle_pin(self):
+        p = ProjectFactory()
+        u = UserFactory()
+
+        self.assertEqual(p.projectpin_set.count(), 0)
+
+        p.toggle_pin(u)
+        self.assertEqual(p.projectpin_set.count(), 1)
+
+        p.toggle_pin(u)
+        self.assertEqual(p.projectpin_set.count(), 0)
+
+
 class TestAttachment(TestCase):
     def test_image(self):
         a = AttachmentFactory(type='jpg')

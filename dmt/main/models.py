@@ -839,6 +839,20 @@ WHERE p.pid = m.pid
         all_events.reverse()
         return all_events
 
+    def toggle_pin(self, user):
+        if self.projectpin_set.filter(user=user).exists():
+            self.projectpin_set.filter(user=user).delete()
+        else:
+            self.projectpin_set.create(user=user)
+
+
+class ProjectPin(models.Model):
+    project = models.ForeignKey(Project)
+    user = models.ForeignKey(User)
+
+    class Meta:
+        ordering = ['project__name']
+
 
 class Document(models.Model):
     did = models.AutoField(primary_key=True)
