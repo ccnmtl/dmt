@@ -845,6 +845,11 @@ WHERE p.pid = m.pid
         else:
             self.projectpin_set.create(user=user)
 
+    def attachments(self):
+        return Attachment.objects.filter(
+            item__milestone__project=self).order_by(
+                '-last_mod')
+
 
 class ProjectPin(models.Model):
     project = models.ForeignKey(Project)
