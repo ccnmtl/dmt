@@ -2,7 +2,7 @@ language: python
 sudo: false
 addons:
   postgresql: "9.3"
-  firefox: "38.8.0esr"
+  firefox: "45.4.0esr"
 python:
   - "2.7"
 before_install:
