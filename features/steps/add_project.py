@@ -1,5 +1,6 @@
-from behave import when, then
 import time
+from behave import when, then
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 @when(u'I create a new project')
@@ -20,8 +21,14 @@ def i_am_on_the_personnel_for_the_project(context):
     """ expects 'project_url' and 'user' in context """
     b = context.browser
     assert b.current_url == context.project_url
+    WebDriverWait(b, 5).until(
+        lambda x: x.find_element_by_xpath("//a[@href='#personnel']"))
+    time.sleep(2)
     e = b.find_element_by_xpath("//a[@href='#personnel']")
     e.click()
+    WebDriverWait(b, 5).until(
+        lambda x: x.find_element_by_class_name('personnel'))
+    time.sleep(2)
 
     for a in b.find_elements_by_css_selector(
             "ul li span.personnel a"):
@@ -37,9 +44,15 @@ def the_project_has_a_milestone_named(context, name):
     """ expects 'project_url' in context """
     b = context.browser
     assert b.current_url == context.project_url
-    e = b.find_element_by_xpath("//a[@href='#milestones']")
-    e.click()
-    time.sleep(2)  # wait for jquery fade in
+    WebDriverWait(b, 5).until(
+        lambda x: x.find_element_by_xpath("//a[@href='#milestones']"))
+    time.sleep(2)
+    milestones = b.find_element_by_xpath("//a[@href='#milestones']")
+    milestones.click()
+    WebDriverWait(b, 5).until(
+        lambda x: x.find_element_by_id('milestone-table'))
+    time.sleep(2)
+
     for tr in b.find_elements_by_css_selector("#milestone-table tr")[1:]:
         for link in tr.find_elements_by_tag_name("a"):
             if link.text == name:
