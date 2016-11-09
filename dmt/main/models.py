@@ -507,6 +507,13 @@ class Project(models.Model):
     def remove_personnel(self, user):
         WorksOn.objects.filter(project=self, user=user.user).delete()
 
+    def ensure_caretaker_in_personnel(self):
+        """ if the caretaker is not in the list of project personnel,
+        add them """
+        if WorksOn.objects.filter(project=self,
+                                  user=self.caretaker_user).count() < 1:
+            self.add_personnel(self.caretaker_user.userprofile, auth='manager')
+
     def all_users_not_in_project(self):
         already_in = set(
             [w.user.userprofile

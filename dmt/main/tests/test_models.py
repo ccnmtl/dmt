@@ -474,6 +474,12 @@ class ProjectTest(TestCase):
         p = ProjectFactory()
         self.assertEqual(p.managers(), [])
 
+    def test_ensure_caretaker_in_personnel(self):
+        p = ProjectFactory()
+        self.assertEqual(p.managers(), [])
+        p.ensure_caretaker_in_personnel()
+        self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
+
     def test_developers_empty(self):
         p = ProjectFactory()
         self.assertEqual(p.developers(), [])
