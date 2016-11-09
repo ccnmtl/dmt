@@ -506,6 +506,7 @@ class Project(models.Model):
 
     def remove_personnel(self, user):
         WorksOn.objects.filter(project=self, user=user.user).delete()
+        self.ensure_caretaker_in_personnel()
 
     def ensure_caretaker_in_personnel(self):
         """ if the caretaker is not in the list of project personnel,

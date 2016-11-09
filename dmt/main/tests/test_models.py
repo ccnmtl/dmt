@@ -582,7 +582,7 @@ class ProjectTest(TestCase):
         p.add_manager(u)
         self.assertEqual(p.managers(), [u])
         p.remove_personnel(u)
-        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [])
 
