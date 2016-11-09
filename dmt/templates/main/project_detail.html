@@ -298,14 +298,8 @@
   <div class="tab-pane fade" id="personnel">
     <ul>
         {% for u in object.personnel_in_project %}
-            <li>
-                <span class="personnel">
-                    <a href="{{u.get_absolute_url}}">{% firstof u.user.get_full_name u.user.username %}</a>{% if u.user.id == object.caretaker_user.id %}
-                        (Caretaker) {% else %}
-                        <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
-                           title="remove user from project" class="remove-link">[remove]</a>
-                </span>{% endif %}
-            </li>
+            <li><span class="personnel"><a href="{{u.get_absolute_url}}">{% firstof u.user.get_full_name u.user.username %}</a>{% if u.user.id == object.caretaker_user.id %} (Caretaker) {% endif %} <a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
+        title="remove user from project" class="remove-link">[remove]</a></span></li>
         {% endfor %}
     </ul>
 
