@@ -16,7 +16,7 @@ from simpleduration import Duration
 from dmt.main.utils import simpleduration_string
 from dmt.main.models import (
     ActualTime, Events, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
-    truncate_string, HistoryEvent, Reminder, Project
+    truncate_string, HistoryEvent, Reminder, Project, WorksOn
 )
 
 
@@ -472,10 +472,11 @@ class ProjectTest(TestCase):
 
     def test_managers_empty(self):
         p = ProjectFactory()
-        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
 
     def test_ensure_caretaker_in_personnel(self):
         p = ProjectFactory()
+        WorksOn.objects.filter(project=p, user=p.caretaker_user).delete()
         self.assertEqual(p.managers(), [])
         p.ensure_caretaker_in_personnel()
         self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
@@ -506,7 +507,8 @@ class ProjectTest(TestCase):
         p = ProjectFactory()
         u = UserProfileFactory()
         p.add_manager(u)
-        self.assertEqual(p.managers(), [u])
+        self.assertEqual(set(p.managers()),
+                         set([u, p.caretaker_user.userprofile]))
 
     def test_developers(self):
         p = ProjectFactory()
@@ -524,28 +526,30 @@ class ProjectTest(TestCase):
         p = ProjectFactory()
         u = UserProfileFactory()
         p.add_manager(u)
-        self.assertEqual(p.managers(), [u])
+        self.assertEqual(set(p.managers()),
+                         set([u, p.caretaker_user.userprofile]))
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [])
         p.add_developer(u)
-        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
         self.assertEqual(p.developers(), [u])
         self.assertEqual(p.guests(), [])
         p.add_guest(u)
-        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [u])
 
         p.add_manager(u)
-        self.assertEqual(p.managers(), [u])
+        self.assertEqual(set(p.managers()),
+                         set([u, p.caretaker_user.userprofile]))
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [])
         p.add_developer(u)
-        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
         self.assertEqual(p.developers(), [u])
         self.assertEqual(p.guests(), [])
         p.add_guest(u)
-        self.assertEqual(p.managers(), [])
+        self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [u])
 
@@ -553,7 +557,8 @@ class ProjectTest(TestCase):
         p = ProjectFactory()
         u = UserProfileFactory()
         p.add_manager(u)
-        self.assertEqual(p.managers(), [u])
+        self.assertEqual(set(p.managers()),
+                         set([u, p.caretaker_user.userprofile]))
         p.remove_personnel(u)
         self.assertEqual(p.managers(), [p.caretaker_user.userprofile])
         self.assertEqual(p.developers(), [])
@@ -580,7 +585,7 @@ class ProjectTest(TestCase):
         p.add_manager(u)
         p.add_manager(g.grp)
         r = p.personnel_in_project()
-        self.assertEqual(r, [g.grp, u])
+        self.assertEqual(set(r), set([g.grp, u, p.caretaker_user.userprofile]))
 
     def test_add_item_created_by(self):
         m = MilestoneFactory()

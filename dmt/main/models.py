@@ -845,6 +845,12 @@ WHERE p.pid = m.pid
                 '-last_mod')
 
 
+def project_save_hook(sender, instance, created, **kwargs):
+    instance.ensure_caretaker_in_personnel()
+
+post_save.connect(project_save_hook, sender=Project)
+
+
 class ProjectPin(models.Model):
     project = models.ForeignKey(Project)
     user = models.ForeignKey(User)

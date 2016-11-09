@@ -22,4 +22,3 @@ class ProjectPersonnelFormTest(TestCase):
         self.assertTrue(u1 in personnel_in_form)
         self.assertTrue(u2 in personnel_in_form)
         self.assertFalse(u3 in personnel_in_form)
-        self.assertTrue(p.caretaker_user.userprofile in personnel_in_form)
