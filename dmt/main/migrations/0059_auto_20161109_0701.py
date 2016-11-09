@@ -4,10 +4,19 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
+def ensure_caretaker_in_personnel(p, w):
+    if w.objects.filter(project=p,
+                        user=p.caretaker_user).count() < 1:
+        user = p.caretaker_user.userprofile
+        w.objects.filter(project=p, user=user.user).delete()
+        w.objects.create(project=p, auth="manager", user=user.user)
+
+
 def update_caretaker_personnel(apps, schema_editor):
     Project = apps.get_model("main", "Project")
+    WorksOn = apps.get_model("main", "WorksOn")
     for p in Project.objects.all():
-        p.ensure_caretaker_in_personnel()
+        ensure_caretaker_in_personnel(p, WorksOn)
 
 
 class Migration(migrations.Migration):
