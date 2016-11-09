@@ -520,33 +520,6 @@ class ProjectTest(TestCase):
         p.add_guest(u)
         self.assertEqual(p.guests(), [u])
 
-    def test_set_managers(self):
-        p = ProjectFactory()
-        u1 = UserProfileFactory()
-        u2 = UserProfileFactory()
-        p.set_managers([u1, u2])
-        self.assertEqual(p.managers(), [u1, u2])
-        p.set_managers([u1])
-        self.assertEqual(p.managers(), [u1])
-
-    def test_set_developers(self):
-        p = ProjectFactory()
-        u1 = UserProfileFactory()
-        u2 = UserProfileFactory()
-        p.set_developers([u1, u2])
-        self.assertEqual(p.developers(), [u1, u2])
-        p.set_developers([u1])
-        self.assertEqual(p.developers(), [u1])
-
-    def test_set_guests(self):
-        p = ProjectFactory()
-        u1 = UserProfileFactory()
-        u2 = UserProfileFactory()
-        p.set_guests([u1, u2])
-        self.assertEqual(p.guests(), [u1, u2])
-        p.set_guests([u1])
-        self.assertEqual(p.guests(), [u1])
-
     def test_only_one_role_allowed(self):
         p = ProjectFactory()
         u = UserProfileFactory()
@@ -563,15 +536,15 @@ class ProjectTest(TestCase):
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [u])
 
-        p.set_managers([u])
+        p.add_manager(u)
         self.assertEqual(p.managers(), [u])
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [])
-        p.set_developers([u])
+        p.add_developer(u)
         self.assertEqual(p.managers(), [])
         self.assertEqual(p.developers(), [u])
         self.assertEqual(p.guests(), [])
-        p.set_guests([u])
+        p.add_guest(u)
         self.assertEqual(p.managers(), [])
         self.assertEqual(p.developers(), [])
         self.assertEqual(p.guests(), [u])

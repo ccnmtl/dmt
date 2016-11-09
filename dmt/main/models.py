@@ -490,20 +490,6 @@ class Project(models.Model):
         WorksOn.objects.create(project=self, auth=auth,
                                user=user.user)
 
-    def set_personnel(self, users, auth='guest'):
-        WorksOn.objects.filter(project=self, auth=auth).delete()
-        for u in users:
-            self.add_personnel(u, auth)
-
-    def set_managers(self, users):
-        self.set_personnel(users, auth='manager')
-
-    def set_developers(self, users):
-        self.set_personnel(users, auth='developer')
-
-    def set_guests(self, users):
-        self.set_personnel(users, auth='guest')
-
     def remove_personnel(self, user):
         WorksOn.objects.filter(project=self, user=user.user).delete()
         self.ensure_caretaker_in_personnel()
