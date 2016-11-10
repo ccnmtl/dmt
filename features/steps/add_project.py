@@ -29,10 +29,10 @@ def i_am_on_the_personnel_for_the_project(context):
     WebDriverWait(b, 5).until(
         lambda x: x.find_element_by_class_name('personnel'))
     time.sleep(2)
-
     for a in b.find_elements_by_css_selector(
             "ul li span.personnel a"):
-        if a.text == context.user.get_full_name():
+        if (a.text == context.user.get_full_name()
+                or a.text == context.user.username):
             return
     else:
         # made it through without finding the user
