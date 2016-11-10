@@ -490,22 +490,16 @@ class Project(models.Model):
         WorksOn.objects.create(project=self, auth=auth,
                                user=user.user)
 
-    def set_personnel(self, users, auth='guest'):
-        WorksOn.objects.filter(project=self, auth=auth).delete()
-        for u in users:
-            self.add_personnel(u, auth)
-
-    def set_managers(self, users):
-        self.set_personnel(users, auth='manager')
-
-    def set_developers(self, users):
-        self.set_personnel(users, auth='developer')
-
-    def set_guests(self, users):
-        self.set_personnel(users, auth='guest')
-
     def remove_personnel(self, user):
         WorksOn.objects.filter(project=self, user=user.user).delete()
+        self.ensure_caretaker_in_personnel()
+
+    def ensure_caretaker_in_personnel(self):
+        """ if the caretaker is not in the list of project personnel,
+        add them """
+        if WorksOn.objects.filter(project=self,
+                                  user=self.caretaker_user).count() < 1:
+            self.add_manager(self.caretaker_user.userprofile)
 
     def all_users_not_in_project(self):
         already_in = set(
@@ -849,6 +843,12 @@ WHERE p.pid = m.pid
         return Attachment.objects.filter(
             item__milestone__project=self).order_by(
                 '-last_mod')
+
+
+def project_save_hook(sender, instance, created, **kwargs):
+    instance.ensure_caretaker_in_personnel()
+
+post_save.connect(project_save_hook, sender=Project)
 
 
 class ProjectPin(models.Model):

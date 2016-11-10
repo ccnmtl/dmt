@@ -648,7 +648,6 @@ class ProjectCreateView(LoggedInMixin, CreateView):
     form_class = ProjectCreateForm
 
     def form_valid(self, form):
-        current_user = self.request.user.userprofile
         form.instance.caretaker_user = self.request.user
         form.instance.save()
 
@@ -671,9 +670,6 @@ class ProjectCreateView(LoggedInMixin, CreateView):
                 'Items in this milestone will not ' +
                 'appear on a homepage or in time ' +
                 'estimates.')
-
-            # Add project creator to the project personnel list
-            form.instance.add_personnel(current_user, auth='manager')
             return super(ProjectCreateView, self).form_valid(form)
         except forms.ValidationError, e:
             form.errors['target_date'] = [e.message]
