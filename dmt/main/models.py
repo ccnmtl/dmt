@@ -4,13 +4,11 @@ from django.contrib.auth.models import User
 from django.db import connection, models
 from django.db.models import Max, Q, Sum
 from django.db.models.signals import post_save
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from datetime import datetime, timedelta
 from dateutil import parser
 from taggit.managers import TaggableManager
-from django.core.mail import send_mail
 from django_statsd.clients import statsd
 from simpleduration import Duration, InvalidDuration
 from dmt.main.utils import simpleduration_string
@@ -18,6 +16,7 @@ from .timeline import (
     TimeLineEvent, TimeLineComment,
     TimeLinePost, TimeLineActualTime, TimeLineStatus,
     TimeLineMilestone)
+from .tasks import send_email
 import re
 import textwrap
 
@@ -251,10 +250,7 @@ class UserProfile(models.Model):
     def send_weekly_report(self):
         r = self.progress_report()
         body = self.weekly_report_email_body(r['hours_logged'], r['behind'])
-        send_mail(
-            "PMT Weekly Report",
-            body, settings.SERVER_EMAIL,
-            [self.get_email()], fail_silently=settings.DEBUG)
+        send_email.delay("PMT Weekly Report", body, [self.get_email()])
 
     def send_reminder(self, reminder):
         body = (
@@ -263,12 +259,9 @@ class UserProfile(models.Model):
             'https://pmt.ccnmtl.columbia.edu{}'.format(
                 reminder.item.get_absolute_url()))
 
-        send_mail(
+        send_email.delay(
             '[PMT Reminder] {}'.format(reminder.item.title),
-            body,
-            settings.SERVER_EMAIL,
-            [self.get_email()],
-            fail_silently=settings.DEBUG)
+            body, [self.get_email()])
 
     def weekly_report_email_body(self, hours_logged, behind):
         if behind:
@@ -647,8 +640,8 @@ To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
         subject = "[PMT Forum: %s] %s" % (self.name, node.subject)
 
         statsd.incr('main.email_sent')
-        send_mail(clean_subject(subject), body, settings.SERVER_EMAIL,
-                  addresses, fail_silently=settings.DEBUG)
+        send_email.delay(clean_subject(subject), body,
+                         addresses)
 
     def personnel_in_project(self):
         """ return list of all users/groups in project
@@ -1279,8 +1272,7 @@ Please do not reply to this message.
         else:
             addresses = self.users_to_email()
 
-        send_mail(clean_subject(email_subj), email_body, settings.SERVER_EMAIL,
-                  addresses, fail_silently=settings.DEBUG)
+        send_email.delay(clean_subject(email_subj), email_body, addresses)
         statsd.incr('main.email_sent')
 
     def users_to_email(self, skip=None):
@@ -1330,12 +1322,9 @@ Please do not reply to this message.
             'https://pmt.ccnmtl.columbia.edu{}'.format(
                 self.get_absolute_url()))
 
-        send_mail(
+        send_email.delay(
             '[PMT Item] {}'.format(self.title),
-            body,
-            settings.SERVER_EMAIL,
-            [subscriber.userprofile.get_email()],
-            fail_silently=settings.DEBUG)
+            body, [subscriber.userprofile.get_email()])
 
 
 def truncate_string(full_string, length=20):
@@ -1517,9 +1506,8 @@ class Node(models.Model):
             "To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n\r"
             % (self.get_absolute_url()))
 
-        send_mail(clean_subject(subject), body, settings.SERVER_EMAIL,
-                  [self.user.userprofile.get_email()],
-                  fail_silently=settings.DEBUG)
+        send_email.delay(clean_subject(subject), body,
+                         [self.user.userprofile.get_email()])
         statsd.incr('main.email_sent')
 
     def touch(self):
