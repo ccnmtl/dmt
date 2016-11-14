@@ -2,19 +2,17 @@ import pytz
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
 from django.conf import settings
+from django.core.mail import send_mail
 from django.db import connection
 from django.utils import timezone
 from django_statsd.clients import statsd
 from datetime import datetime, timedelta
 import time
-from dmt.main.models import (
-    Item, ActualTime, interval_sum,
-    UserProfile, Milestone, Reminder
-)
 from pytz import AmbiguousTimeError
 
 
 def get_item_counts_by_status():
+    from .models import Item
     data = dict()
     data['total'] = Item.objects.count()
     data['open'] = Item.objects.filter(status='OPEN').count()
@@ -40,6 +38,7 @@ def item_stats_report():
 
 
 def item_counts():
+    from .models import Item, interval_sum
     d = dict()
     d['total_open_items'] = Item.objects.filter(
         status__in=['OPEN', 'INPROGRESS'])
@@ -77,6 +76,7 @@ def estimates_report():
 
 
 def hours_logged(weeks=1):
+    from .models import ActualTime, interval_sum
     now = timezone.now()
     one_week_ago = now - timedelta(weeks=weeks)
     # active projects
@@ -145,6 +145,7 @@ def total_hours_estimated_vs_logged():
 
 @periodic_task(run_every=crontab(hour=1, minute=0, day_of_week='*'))
 def close_passed_milestones():
+    from .models import Milestone
     now = timezone.now()
     for milestone in Milestone.objects.filter(
             status='OPEN', target_date__lt=now):
@@ -153,12 +154,14 @@ def close_passed_milestones():
 
 @periodic_task(run_every=crontab(hour=12, minute=0, day_of_week='fri'))
 def weekly_report_emails():
+    from .models import UserProfile
     for user in UserProfile.objects.filter(status='active', grp=False):
         user_weekly_report_email.delay(username=user.username)
 
 
 @task
 def user_weekly_report_email(username):
+    from .models import UserProfile
     u = UserProfile.objects.get(username=username)
     u.send_weekly_report()
 
@@ -180,6 +183,7 @@ def send_reminder_emails():
     """
     # Find all reminders where the item has a target date,
     # and the user is active, and the item is not verified.
+    from .models import Reminder
     reminders = Reminder.objects.filter(
         item__target_date__isnull=False,
         user__is_active=True
@@ -204,6 +208,7 @@ def bump_someday_maybe_target_dates():
     should never actually reach a target date.
     so once a day, we take any that are upcoming
     and push them far into the future again. """
+    from .models import Milestone
     now = timezone.now()
     upcoming = now + timedelta(weeks=4)
     future = now + timedelta(weeks=52)
@@ -213,3 +218,11 @@ def bump_someday_maybe_target_dates():
             status='OPEN'):
         m.target_date = future.date()
         m.save()
+
+
+@task
+def send_email(subject, body, to_addresses):
+    send_mail(
+        subject,
+        body, settings.SERVER_EMAIL,
+        to_addresses, fail_silently=settings.DEBUG)
