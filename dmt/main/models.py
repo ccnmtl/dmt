@@ -558,7 +558,7 @@ class Project(models.Model):
         try:
             # Attempt to parse the date.
             target_date = parser.parse(target_date).date()
-        except AttributeError:
+        except TypeError:
             # If we can't parse it, it must be a datetime object, so let it
             # through.
             pass
