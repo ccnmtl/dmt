@@ -1,4 +1,7 @@
 import pytz
+import random
+import smtplib
+import time
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
 from django.conf import settings
@@ -7,8 +10,20 @@ from django.db import connection
 from django.utils import timezone
 from django_statsd.clients import statsd
 from datetime import datetime, timedelta
-import time
 from pytz import AmbiguousTimeError
+
+
+def exp_backoff(tries):
+    """ exponential backoff with jitter
+
+    back off 2^1, then 2^2, 2^3 (seconds), etc.
+
+    add a 10% jitter to prevent thundering herd.
+
+    """
+    backoff = 2 ** tries
+    jitter = random.uniform(0, backoff * .1)
+    return int(backoff + jitter)
 
 
 def get_item_counts_by_status():
@@ -220,9 +235,15 @@ def bump_someday_maybe_target_dates():
         m.save()
 
 
-@task
-def send_email(subject, body, to_addresses):
-    send_mail(
-        subject,
-        body, settings.SERVER_EMAIL,
-        to_addresses, fail_silently=settings.DEBUG)
+@task(ignore_results=True, bind=True, max_retries=None)
+def send_email(self, subject, body, to_addresses):
+    try:
+        send_mail(
+            subject,
+            body, settings.SERVER_EMAIL,
+            to_addresses, fail_silently=settings.DEBUG)
+    except smtplib.SMTPAuthenticationError as exc:
+        if self.request.retries > settings.EMAIL_MAX_RETRIES:
+            raise exc
+        else:
+            self.retry(exc=exc, countdown=exp_backoff(self.request.retries))
