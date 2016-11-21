@@ -56,7 +56,7 @@ simpleduration==0.1.0
 ipaddress==1.0.17
 fake-factory==0.7.2
 factory_boy==2.7.0
-ldap3==2.1.0
+ldap3==2.1.1
 anyjson==0.3.3
 
 vine==1.1.3
