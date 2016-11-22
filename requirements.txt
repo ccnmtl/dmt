@@ -1,6 +1,7 @@
 --index-url https://pypi.ccnmtl.columbia.edu/
 Django==1.9.10
-future==0.15.2
+configparser==3.5.0
+future==0.16.0
 CommonMark==0.7.2
 psycopg2==2.6.2
 versiontools==1.9.1
