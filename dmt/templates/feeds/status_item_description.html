@@ -1,0 +1,4 @@
+{% load markup %}
+{% load dmttags %}
+{% load emoji_tags %}
+{{obj.body|commonmark|linkify|emoji_replace}}
