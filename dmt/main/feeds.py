@@ -34,19 +34,13 @@ class ForumFeed(Feed):
 class StatusUpdateFeed(Feed):
     title = "PMT Status Updates"
     description = "recent status updates"
+    description_template = "feeds/status_item_description.html"
 
     def link(self):
         return settings.BASE_URL + "/status/"
 
     def items(self):
         return StatusUpdate.objects.order_by("-added")[:30]
-
-    def item_description(self, item):
-        return """<a href="%s">%s</a>:  %s""" % (
-            (settings.BASE_URL +
-             item.project.get_absolute_url()),
-            item.project.name,
-            item.body)
 
     def item_link(self, item):
         return (settings.BASE_URL + item.project.get_absolute_url() +
