@@ -52,7 +52,7 @@ astroid==1.4.8
 pylint==1.6.4
 six==1.10.0
 python-dateutil==2.6.0
-pytz==2016.7
+pytz==2016.10
 simpleduration==0.1.0
 ipaddress==1.0.17
 Faker==0.7.3
