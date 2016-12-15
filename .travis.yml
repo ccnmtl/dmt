@@ -1,7 +1,8 @@
 language: python
+dist: trusty
 sudo: false
 addons:
-  postgresql: "9.3"
+  postgresql: "9.6"
   firefox: "45.4.0esr"
 python:
   - "2.7"
