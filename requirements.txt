@@ -17,7 +17,7 @@ backports.ssl_match_hostname==3.5.0.1
 tornado==4.4.2
 cssselect==1.0.0
 BeautifulSoup==3.2.1
-lxml==3.7.0
+lxml==3.7.1
 fuzzywuzzy==0.14.0
 sure==1.4.0
 traitlets==4.3.1
