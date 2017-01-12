@@ -15,7 +15,7 @@ certifi==2016.9.26
 pyparsing==2.1.10
 backports.ssl_match_hostname==3.5.0.1
 tornado==4.4.2
-cssselect==1.0.0
+cssselect==1.0.1
 BeautifulSoup==3.2.1
 lxml==3.7.2
 fuzzywuzzy==0.14.0
