@@ -11,7 +11,7 @@
 <div class="col-xs-6">
 
 <ul class="list-group">
-<li class="list-group-item"><img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.estimates.non_sm&target=ccnmtl.app.gauges.dmt.estimates.sm&_salt=1369503684.499&height=50&colorList=%236699cc%2C%23cccccc&hideLegend=true&hideAxes=true&yMin=0&width=450&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=all&from=-8months"
+<li class="list-group-item"><img src="{{GRAPHITE_BASE}}?target=stats.app.gauges.dmt.estimates.non_sm&target=stats.app.gauges.dmt.estimates.sm&_salt=1369503684.499&height=50&colorList=%236699cc%2C%23cccccc&hideLegend=true&hideAxes=true&yMin=0&width=450&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=all&from=-8months"
          width="450" height="50" />
 </li>
 <li class="list-group-item"><b>{{non_sm_hours_estimated|floatformat}}</b> hours estimated in <b>{{open_non_sm_items}}</b> items</li>
@@ -22,7 +22,7 @@
 </div>
 <div class="col-xs-6">
 <ul class="list-group">
-<li class="list-group-item"><img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.hours.one_week&_salt=1369503684.499&height=50&colorList=%236699cc%2C%23cccccc&hideLegend=true&hideAxes=true&yMin=0&width=450&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=all&from=-8months"
+<li class="list-group-item"><img src="{{GRAPHITE_BASE}}?target=stats.app.gauges.dmt.hours.one_week&_salt=1369503684.499&height=50&colorList=%236699cc%2C%23cccccc&hideLegend=true&hideAxes=true&yMin=0&width=450&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=all&from=-8months"
          width="450" height="50" />
 </li>
 <li class="list-group-item"><b>{{breakdowns.0|floatformat}}</b> hours logged this week</li>
@@ -60,7 +60,7 @@
 <tr>
     <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
   <td><b>{{project.recent_hours|floatformat}}</b> hours logged</td>
-    <td><img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=10&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=50&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-8months"
+    <td><img src="{{GRAPHITE_BASE}}?target=stats.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=stats.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=10&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=50&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-8months"
          width="50" height="10" /></td>
 </tr>
 {% endfor %}
