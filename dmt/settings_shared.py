@@ -25,9 +25,10 @@ PROJECT_APPS = [
     'dmt.report',
 ]
 
-TEMPLATES[0]['OPTIONS']['context_processors'].append(  # noqa
-    'dmt.main.contextprocessors.graphite_base_processor'
-)
+TEMPLATES[0]['OPTIONS']['context_processors'].extend([  # noqa
+    'dmt.main.contextprocessors.graphite_base_processor',
+    'dmt.main.contextprocessors.dashboard_graph_timespan',
+])
 
 MIDDLEWARE_CLASSES += [  # noqa
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -80,3 +81,5 @@ SERVER_EMAIL = 'pmt@ccnmtl.columbia.edu'
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
 
 EMAIL_MAX_RETRIES = 10
+
+DASHBOARD_GRAPH_TIMESPAN = '1weeks'
