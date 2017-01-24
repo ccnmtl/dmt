@@ -10,7 +10,7 @@ pep8==1.7.0
 pyflakes==1.5.0
 pycodestyle==2.0
 flake8==3.2.1
-mccabe==0.5.3
+mccabe==0.6.0
 certifi==2016.9.26
 pyparsing==2.1.10
 backports.ssl_match_hostname==3.5.0.1
