@@ -1892,3 +1892,104 @@ class TestItemCreateView(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
         self.assertFormError(r, 'form', 'project', 'This field is required.')
+
+
+class TestBugCreateView(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(TestBugCreateView, self).setUp()
+        self.milestone = MilestoneFactory()
+        self.form_data = {
+            'title': 'My Bug',
+            'project': self.milestone.project.pk,
+            'milestone': self.milestone.pk,
+            'created_by': self.u.pk,
+            'owner_user': self.u.pk,
+            'assigned_user': self.u.pk,
+            'priority': 1,
+            'target_date': self.milestone.target_date,
+            'tags': ['testtag'],
+            'description': 'item description',
+            'status': 'OPEN',
+            'type': 'bug',
+        }
+
+    def test_get_with_milestone(self):
+        url = reverse('bug_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200)
+
+    def test_get_no_milestone(self):
+        url = reverse('bug_create')
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.context['messages']), 1)
+        m = list(r.context['messages'])[0]
+        self.assertEqual(m.message, 'Couldn\'t find project or milestone.')
+
+    def test_post(self):
+        inactive_user = UserFactory(is_active=False)
+        active_user = UserFactory()
+        self.form_data['assigned_user'] = inactive_user
+        url = reverse('bug_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertFormError(
+            r, 'form', 'assigned_user',
+            'Select a valid choice. That choice is not '
+            'one of the available choices.')
+
+        self.form_data['assigned_user'] = active_user.pk
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(Item.objects.count(), 1)
+        item = Item.objects.first()
+        self.assertEqual(Events.objects.filter(item=item).count(), 1)
+        event = Events.objects.filter(item=item).first()
+        self.assertEqual(event.status, 'OPEN')
+        self.assertEqual(len(mail.outbox), 1)
+        email = mail.outbox[0]
+        self.assertEqual(
+            email.subject,
+            '[PMT Item: {}] Attn: {} - {}'.format(
+                item.milestone.project.name,
+                active_user.userprofile.get_fullname(),
+                item.title))
+        self.assertIn(item.milestone.project.name, email.body)
+        self.assertIn(item.milestone.name, email.body)
+        self.assertIn(active_user.userprofile.get_fullname(), email.body)
+        self.assertIn('My Bug', email.body)
+
+        self.assertEqual(item.milestone.project, self.milestone.project)
+        self.assertEqual(item.milestone, self.milestone)
+        self.assertEqual(item.owner_user, self.u)
+        self.assertEqual(item.created_by, self.u)
+        self.assertEqual(item.assigned_user, active_user)
+        self.assertEqual(item.priority, 1)
+        self.assertEqual(item.target_date, self.milestone.target_date)
+        self.assertEqual(item.tags.first().name, 'testtag')
+        self.assertEqual(item.description, 'item description')
+
+    def test_post_no_milestone_in_url(self):
+        del self.form_data['milestone']
+        url = reverse('bug_create')
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertFormError(r, 'form', 'milestone', 'This field is required.')
+
+    def test_post_no_milestone(self):
+        del self.form_data['milestone']
+        url = reverse('bug_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertFormError(r, 'form', 'milestone', 'This field is required.')
+
+    def test_post_no_project(self):
+        del self.form_data['project']
+        url = reverse('bug_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertFormError(r, 'form', 'project', 'This field is required.')

@@ -218,6 +218,61 @@ class ItemCreateForm(ModelForm):
         return instance
 
 
+class BugCreateForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = [
+            'title',
+            'project',
+            'milestone',
+            'created_by',
+            'owner_user',
+            'assigned_user',
+            'priority',
+            'target_date',
+            'tags',
+            'description',
+            'status',
+            'type',
+        ]
+
+    owner_user = forms.ModelChoiceField(
+        queryset=User.objects.filter(is_active=True))
+    assigned_user = UserModelChoiceField(
+        label='Assigned To',
+        queryset=User.objects.filter(is_active=True).order_by(
+            'last_name').order_by('first_name'))
+    project = forms.ModelChoiceField(
+        queryset=Project.objects.all(),
+        widget=forms.Select(attrs={'readonly': 'readonly'}))
+
+    def __init__(self, *args, **kwargs):
+        r = super(BugCreateForm, self).__init__(*args, **kwargs)
+        self.fields['priority'].initial = 1
+        self.fields['tags'].required = False
+        self.fields['tags'].widget.is_required = False
+
+        self.fields['status'].widget = forms.HiddenInput()
+        self.fields['status'].initial = 'OPEN'
+        self.fields['type'].widget = forms.HiddenInput()
+        self.fields['type'].initial = 'bug'
+
+        return r
+
+    def save(self, commit=True):
+        instance = super(BugCreateForm, self).save(commit=commit)
+        instance.add_event('OPEN', instance.created_by.userprofile,
+                           '<strong>Bug added</strong>')
+        instance.setup_default_notification()
+        instance.add_project_notification()
+        instance.update_email(
+            'Bug added\n----\n%s' % instance.description,
+            instance.created_by.userprofile,
+            skip_self=True)
+        instance.milestone.update_milestone()
+        return instance
+
+
 class ItemUpdateForm(ModelForm):
     estimated_time = SimpleDurationField(
         help_text='Enter time and unit. For example: <code>2h 30m</code>',
