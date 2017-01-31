@@ -18,7 +18,15 @@ from dmt.report.utils import ReportFileGenerator
 class ProjectHoursView(LoggedInMixin, View):
     def get(self, request, pk):
         p = get_object_or_404(Project, pk=pk)
-        actual_times = p.all_actual_times()
+
+        if request.GET.get('interval_start') and \
+           request.GET.get('interval_end'):
+            actual_times = p.actual_times_between(
+                request.GET.get('interval_start'),
+                request.GET.get('interval_end'))
+        else:
+            actual_times = p.all_actual_times()
+
         filename = "project-hours-%d" % p.pid
 
         column_names = [

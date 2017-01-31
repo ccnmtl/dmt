@@ -39,8 +39,8 @@
 <ul>
     <li>
         Export project hours logged:
-        <a href="{% url 'project-hours-report' project.pid %}?format=csv">CSV</a>
+        <a href="{% url 'project-hours-report' project.pid %}?format=csv&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}">CSV</a>
         or
-        <a href="{% url 'project-hours-report' project.pid %}?format=xls">XLS</a>
+        <a href="{% url 'project-hours-report' project.pid %}?format=xls&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}">XLS</a>
     </li>
 </ul>

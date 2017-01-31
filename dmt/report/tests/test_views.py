@@ -179,9 +179,20 @@ class PassedMilestonesViewTests(LoggedInTestMixin, TestCase):
 
 
 class ProjectHoursViewTests(LoggedInTestMixin, TestCase):
-    def test_report(self):
+    def test_get(self):
         i = ItemFactory()
         p = i.milestone.project
         r = self.client.get(
-            reverse('project-hours-report', args=[p.pid]) + "?format=csv")
+            reverse('project-hours-report', args=[p.pid]) + '?format=csv')
+        self.assertEqual(r.status_code, 200)
+
+    def test_get_with_interval_params(self):
+        i = ItemFactory()
+        p = i.milestone.project
+        r = self.client.get(
+            reverse('project-hours-report', args=[p.pid]), {
+                'format': 'csv',
+                'interval_start': '2015-12-01',
+                'interval_end': '2016-02-01',
+            })
         self.assertEqual(r.status_code, 200)
