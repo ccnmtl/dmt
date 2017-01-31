@@ -751,6 +751,13 @@ WHERE p.pid = m.pid
         except IndexError:
             return None
 
+    def actual_times_between(self, interval_start, interval_end):
+        return ActualTime.objects.filter(
+            item__milestone__project=self,
+            completed__gte=interval_start,
+            completed__lte=interval_end
+        ).order_by('completed')
+
     def all_actual_times(self):
         return ActualTime.objects.filter(
             item__milestone__project=self,
