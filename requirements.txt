@@ -108,7 +108,7 @@ django-impersonate==1.1
 django-filter==0.15.3
 django-crispy-forms==1.6.1
 djangorestframework==3.4.6
-django-taggit==0.21.3
+django-taggit==0.22.0
 django-templatetag-sugar==1.0
 django-classy-tags==0.8.0
 django-taggit-templatetags2==1.4.1.ccnmtl
