@@ -2,6 +2,7 @@
 {% load markup %}
 {% load emoji_tags %}
 {% load dmttags %}
+{% load waffle_tags %}
 
 {% block title %}Milestone&ndash;{{object.name}}{% endblock %}
 {% block extraclass %} class="milestone-page"{% endblock %}
@@ -44,6 +45,17 @@
               </span>
           </a>
       </li>
+      {% flag bug_form %}
+      <li class="object-action" title="Add bug">
+          <a href="{% url 'bug_create' %}?mid={{object.pk}}"
+             class="object-action-link">
+              <span class="icon-add-bug"></span>
+              <span class="object-action-text hidden-xs hidden-sm">
+                  Add bug
+              </span>
+          </a>
+      </li>
+      {% endflag %}
     </ul>
   </div><!-- ./object-action-set -->
 

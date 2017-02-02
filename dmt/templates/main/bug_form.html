@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}Add Bug{% endblock %}
+{% block extraclass %} class="item-form"{% endblock %}
+
+
+{% block content %}
+    <div class="clearfix"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <h1>Add Bug</h1>
+        {% bootstrap_form_errors form %}
+        <form action=".?pid={{project.pk}}" method="post" class="form" id="add-action-item-form">
+            {% csrf_token %}
+            <input name="created_by" value="{{ request.user.pk }}" type="hidden" />
+            {% bootstrap_field form.title form_group_class='form-group col-md-12' %}
+            {% bootstrap_field form.project form_group_class='form-group col-md-12' %}
+            {% bootstrap_field form.milestone form_group_class='form-group col-md-12' %}
+            {% bootstrap_field form.assigned_user form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.priority form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.target_date form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.tags form_group_class='form-group col-md-6' %}
+            {% bootstrap_field form.status %}
+            {% bootstrap_field form.type %}
+            {% bootstrap_field form.owner_user form_group_class='hidden' %}
+            <div class="form-group col-md-12">
+                {% include 'main/markdown_toolbar.html' %}
+                {% bootstrap_field form.description show_label=False form_group_class='' field_class='dmt-new-item-desc' %}
+                <div class="form-group">
+                    <div class="instructions">
+                        Description preview:
+                    </div>
+                    <div class="dmt-markdown-item-preview dmt-markdown-preview"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            {% buttons submit='Create' %}{% endbuttons %}
+        </form>
+    </div>
+{% endblock %}

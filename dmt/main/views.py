@@ -34,7 +34,7 @@ from dmt.main.models import interval_sum
 from dmt.main.filters import ClientFilter, ProjectFilter, UserFilter
 from dmt.main.forms import (
     AddTrackerForm, CommentUpdateForm,
-    ItemCreateForm, ItemUpdateForm,
+    ItemCreateForm, BugCreateForm, ItemUpdateForm,
     RemindersInlineFormSet,
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm, ProjectPersonnelForm
@@ -875,6 +875,52 @@ class ItemCreateView(LoggedInMixin, CreateView):
             fields['owner_user'].initial = self.request.user
 
         fields['assigned_user'].queryset = personnel_qs
+
+        return ctx
+
+
+class BugCreateView(LoggedInMixin, CreateView):
+    model = Item
+    template_name = 'main/bug_form.html'
+    form_class = BugCreateForm
+
+    def get_success_url(self):
+        return reverse('item_detail', args=(self.object.pk,))
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BugCreateView, self).get_context_data(**kwargs)
+        mid = self.request.GET.get('mid')
+        pid = self.request.GET.get('pid')
+        fields = ctx['form'].fields
+
+        if mid:
+            milestone = get_object_or_404(Milestone, mid=mid)
+            project = milestone.project
+            ctx['project'] = project
+            fields['milestone'].initial = milestone.mid
+            fields['target_date'].initial = milestone.target_date
+        elif pid:
+            project = get_object_or_404(Project, pid=pid)
+            ctx['project'] = project
+        else:
+            messages.error(self.request,
+                           'Couldn\'t find project or milestone.')
+            return ctx
+
+        project_milestones = project.milestone_set.order_by('-target_date')
+        fields['milestone'].queryset = project_milestones
+
+        fields['project'].initial = project.pid
+        fields['project'].queryset = Project.objects.filter(pid=project.pid)
+
+        personnel = project.all_personnel_in_project()
+        personnel_qs = User.objects.filter(
+            id__in=[up.user.pk for up in personnel]
+        ).order_by('last_name').order_by('first_name')
+
+        fields['assigned_user'].queryset = personnel_qs
+
+        fields['owner_user'].initial = self.request.user
 
         return ctx
 
