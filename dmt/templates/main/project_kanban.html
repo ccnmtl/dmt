@@ -29,7 +29,7 @@
              text-align: right;
          }
 
-         .pr0 .item-title { background-color: #eee; }         
+         .pr0 .item-title { background-color: #eee; }
          .pr1 .item-title { background-color: #eff; }
          .pr2 .item-title { background-color: #cfc; }
          .pr3 .item-title { background-color: #fec; }
@@ -38,7 +38,6 @@
          table#milestones {
              background-color: #fff;
          }
-         
         </style>
 {% endblock %}
 
@@ -55,7 +54,12 @@
                 </tr>
                 <tr>
                     <td>
-                        {{milestone.target_date}}                        
+                        <dl class="dl-horizontal">
+                            <dt>Target Date:</dt><dd>{{milestone.target_date}}</dd>
+                            <dt>Total Hours Estimated:</dt><dd>{{milestone.total_estimated_hours|floatformat}}</dd>
+                            <dt>Completed:</dt><dd>{{milestone.hours_completed|floatformat}}</dd>
+                            <dt>Remaining:</dt><dd>{{milestone.estimated_time_remaining|floatformat}}</dd>
+                        </dl>
                     </td>
                     <td>
                         {% for item in milestone.open_items %}
