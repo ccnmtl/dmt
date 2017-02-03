@@ -92,12 +92,34 @@
                         {% endfor %}
                     </td>
                     <td>
-                        {% for item in milestone.verified_items %}
-                            <div class="item pr{{item.priority}}" id="item-{{item.iid}}" data-iid="{{item.iid}}">
-                                {% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
-                                                         width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a>
-                        </div>
-                        {% endfor %}
+                        {% with verified=milestone.verified_items %}
+                            <a id="show-{{milestone.mid}}" href="#"><span class="glyphicon glyphicon-chevron-right"></span> show {{verified.count}} items</a>
+                            <a id="hide-{{milestone.mid}}" href="#"><span class="glyphicon glyphicon-chevron-down"></span> hide {{verified.count}} items</a>
+                            <div id="verified-{{milestone.mid}}">
+                                {% for item in verified %}
+                                    <div class="item pr{{item.priority}}" id="item-{{item.iid}}" data-iid="{{item.iid}}">
+                                        {% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+                                                                 width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <script>
+                             $(document).ready(function(){
+                                 $('#verified-{{milestone.mid}}').hide();
+                                 $('#hide-{{milestone.mid}}').hide();
+                                 $('#show-{{milestone.mid}}').click(function(){
+                                     $('#verified-{{milestone.mid}}').show();
+                                     $('#show-{{milestone.mid}}').hide();
+                                     $('#hide-{{milestone.mid}}').show();
+                                 });
+                                 $('#hide-{{milestone.mid}}').click(function(){
+                                     $('#verified-{{milestone.mid}}').hide();
+                                     $('#show-{{milestone.mid}}').show();
+                                     $('#hide-{{milestone.mid}}').hide();
+                                 });
+                             });
+                            </script>
+                        {% endwith %}
                     </td>
                 </tr>
             {% endfor %}
