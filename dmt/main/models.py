@@ -887,45 +887,28 @@ class Milestone(models.Model):
         db_table = u'milestones'
         ordering = ['target_date', 'name', ]
 
-    def active_items(self):
+    def filter_items_by_status(self, statuses):
         return Item.objects.filter(
             milestone=self,
-            status__in=['OPEN', 'RESOLVED', 'INPROGRESS']
+            status__in=statuses
         ).order_by('-target_date').select_related(
             'owner_user', 'assigned_user',
             'owner_user__userprofile', 'assigned_user__userprofile')
+
+    def active_items(self):
+        return self.filter_items_by_status(['OPEN', 'RESOLVED', 'INPROGRESS'])
 
     def open_items(self):
-        return Item.objects.filter(
-            milestone=self,
-            status__in=['OPEN']
-        ).order_by('-target_date').select_related(
-            'owner_user', 'assigned_user',
-            'owner_user__userprofile', 'assigned_user__userprofile')
+        return self.filter_items_by_status(['OPEN'])
 
     def inprogress_items(self):
-        return Item.objects.filter(
-            milestone=self,
-            status__in=['INPROGRESS']
-        ).order_by('-target_date').select_related(
-            'owner_user', 'assigned_user',
-            'owner_user__userprofile', 'assigned_user__userprofile')
+        return self.filter_items_by_status(['INPROGRESS'])
 
     def resolved_items(self):
-        return Item.objects.filter(
-            milestone=self,
-            status__in=['RESOLVED']
-        ).order_by('-target_date').select_related(
-            'owner_user', 'assigned_user',
-            'owner_user__userprofile', 'assigned_user__userprofile')
+        return self.filter_items_by_status(['RESOLVED'])
 
     def verified_items(self):
-        return Item.objects.filter(
-            milestone=self,
-            status__in=['VERIFIED']
-        ).order_by('-target_date').select_related(
-            'owner_user', 'assigned_user',
-            'owner_user__userprofile', 'assigned_user__userprofile')
+        return self.filter_items_by_status(['VERIFIED'])
 
     def get_absolute_url(self):
         return "/milestone/%d/" % self.mid
