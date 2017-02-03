@@ -895,6 +895,38 @@ class Milestone(models.Model):
             'owner_user', 'assigned_user',
             'owner_user__userprofile', 'assigned_user__userprofile')
 
+    def open_items(self):
+        return Item.objects.filter(
+            milestone=self,
+            status__in=['OPEN']
+        ).order_by('-target_date').select_related(
+            'owner_user', 'assigned_user',
+            'owner_user__userprofile', 'assigned_user__userprofile')
+
+    def inprogress_items(self):
+        return Item.objects.filter(
+            milestone=self,
+            status__in=['INPROGRESS']
+        ).order_by('-target_date').select_related(
+            'owner_user', 'assigned_user',
+            'owner_user__userprofile', 'assigned_user__userprofile')
+
+    def resolved_items(self):
+        return Item.objects.filter(
+            milestone=self,
+            status__in=['RESOLVED']
+        ).order_by('-target_date').select_related(
+            'owner_user', 'assigned_user',
+            'owner_user__userprofile', 'assigned_user__userprofile')
+
+    def verified_items(self):
+        return Item.objects.filter(
+            milestone=self,
+            status__in=['VERIFIED']
+        ).order_by('-target_date').select_related(
+            'owner_user', 'assigned_user',
+            'owner_user__userprofile', 'assigned_user__userprofile')
+
     def get_absolute_url(self):
         return "/milestone/%d/" % self.mid
 
