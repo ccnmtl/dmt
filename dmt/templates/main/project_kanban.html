@@ -44,21 +44,19 @@
 
 {% block content %}
         <table class="table table-condensed" id="milestones">
-            <thead>
+            <tbody>
+            {% for milestone in object.open_milestones %}
                 <tr>
-                    <th>Milestone</th>
+                    <th>{{milestone.name}}</th>
                     <th><span class="dmt-open">OPEN</span></th>
                     <th><span class="inprogress">IN PROGRESS</span></th>
                     <th><span class="resolved">RESOLVED</span></th>
                     <th><span class="verified">VERIFIED</span></th>
                 </tr>
-            </thead>
-            <tbody>
-            {% for milestone in object.open_milestones %}
                 <tr>
-                    <th>{{milestone.name}}<br />
-                        {{milestone.target_date}}
-                    </th>
+                    <td>
+                        {{milestone.target_date}}                        
+                    </td>
                     <td>
                         {% for item in milestone.open_items %}
                             <div class="item pr{{item.priority}}" id="item-{{item.iid}}" data-iid="{{item.iid}}">
