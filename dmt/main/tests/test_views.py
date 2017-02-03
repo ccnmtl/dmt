@@ -162,6 +162,11 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, 'id="milestones"')
 
+    def test_project_kanban(self):
+        r = self.c.get(reverse('project_kanban', args=[self.p.pid]))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, 'id="milestones"')
+
     def test_project_report_page(self):
         r = self.c.get(self.p.get_absolute_url() + '#reports')
         self.assertEqual(r.status_code, 200)

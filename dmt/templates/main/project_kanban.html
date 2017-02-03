@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}Project: {{object.name}}{% endblock %}
+
+{% block extraclass %} class="project-page"{% endblock %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+
+{% block css %}
+        <style>
+         .item {
+             width: 175px;
+             border: #666 solid 1px;
+             padding: 5px;
+             margin: 5px;
+         }
+         .milestone {
+             background-color: #eee;
+             list-style-type: none;
+             padding: 5px;
+         }
+         .item-user {
+             text-align: right;
+         }
+
+         .pr0 .item-title { background-color: #eee; }         
+         .pr1 .item-title { background-color: #eff; }
+         .pr2 .item-title { background-color: #cfc; }
+         .pr3 .item-title { background-color: #fec; }
+         .pr4 .item-title { background-color: #fcc; }
+
+         table#milestones {
+             background-color: #fff;
+         }
+         
+        </style>
+{% endblock %}
+
+{% block content %}
+        <table class="table table-condensed" id="milestones">
+            <thead>
+                <tr>
+                    <th>Milestone</th>
+                    <th><span class="dmt-open">OPEN</span></th>
+                    <th><span class="inprogress">IN PROGRESS</span></th>
+                    <th><span class="resolved">RESOLVED</span></th>
+                    <th><span class="verified">VERIFIED</span></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for milestone in object.open_milestones %}
+                <tr>
+                    <th>{{milestone.name}}<br />
+                        {{milestone.target_date}}
+                    </th>
+                    <td>
+                        {% for item in milestone.open_items %}
+                            <div class="item pr{{item.priority}}" id="item-{{item.iid}}" data-iid="{{item.iid}}">
+                                <div class="item-title">{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+                                                                                 width="14" height="14"/> {% endif %}
+                                <a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></div>
+                                <div class="item-user">
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> <a href="{{item.assigned_user.userprofile.get_absolute_url}}"
+                                                                                                      >{{ item.assigned_user.userprofile.get_fullname }}</a></div>
+                            </div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for item in milestone.inprogress_items %}
+                            <div class="item pr{{item.priority}}" id="item-{{item.iid}}" data-iid="{{item.iid}}">
+                                <div class="item-title">{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+                                                                                 width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></div>
+                                <div class="item-user">
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> <a href="{{item.assigned_user.userprofile.get_absolute_url}}"
+                                                                                                      >{{ item.assigned_user.userprofile.get_fullname }}</a></div>
+                            </div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for item in milestone.resolved_items %}
+                            <div class="item pr{{item.priority}}" id="item-{{item.iid}}" data-iid="{{item.iid}}">
+                                <div class="item-title">{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+                                                                                 width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a></div>
+                                <div class="item-user">
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> <a href="{{item.owner_user.userprofile.get_absolute_url}}"
+                                                                                                      >{{ item.owner_user.userprofile.get_fullname }}</a></div>                                
+                            </div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for item in milestone.verified_items %}
+                            <div class="item pr{{item.priority}}" id="item-{{item.iid}}" data-iid="{{item.iid}}">
+                                {% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+                                                         width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70}}</a>
+                        </div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

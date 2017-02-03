@@ -133,6 +133,9 @@ urlpatterns = [
     url(r'^project/(?P<pk>\d+)/board/$', ProjectDetailView.as_view(
         template_name="main/project_board.html"),
         name='project_board'),
+    url(r'^project/(?P<pk>\d+)/kanban/$', ProjectDetailView.as_view(
+        template_name="main/project_kanban.html"),
+        name='project_kanban'),
     url(r'^project/(?P<pk>\d+)/timeline/$', ProjectTimeLineView.as_view(),
         name='project_timeline'),
     url(r'^project/(?P<pk>\d+)/add_bug/$',

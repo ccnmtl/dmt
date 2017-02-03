@@ -199,6 +199,61 @@ class MilestoneTest(TestCase):
         m = MilestoneFactory()
         self.assertEqual(m.estimated_time_remaining(), 0.)
 
+    def test_active_items(self):
+        i = ItemFactory(status='OPEN')
+        i2 = ItemFactory(status='INPROGRESS', milestone=i.milestone)
+        i3 = ItemFactory(status='RESOLVED', milestone=i.milestone)
+        i4 = ItemFactory(status='VERIFIED', milestone=i.milestone)
+        r = i.milestone.active_items()
+        self.assertIn(i, r)
+        self.assertIn(i2, r)
+        self.assertIn(i3, r)
+        self.assertNotIn(i4, r)
+
+    def test_open_items(self):
+        i = ItemFactory(status='OPEN')
+        i2 = ItemFactory(status='INPROGRESS', milestone=i.milestone)
+        i3 = ItemFactory(status='RESOLVED', milestone=i.milestone)
+        i4 = ItemFactory(status='VERIFIED', milestone=i.milestone)
+        r = i.milestone.open_items()
+        self.assertIn(i, r)
+        self.assertNotIn(i2, r)
+        self.assertNotIn(i3, r)
+        self.assertNotIn(i4, r)
+
+    def test_inprogress_items(self):
+        i = ItemFactory(status='OPEN')
+        i2 = ItemFactory(status='INPROGRESS', milestone=i.milestone)
+        i3 = ItemFactory(status='RESOLVED', milestone=i.milestone)
+        i4 = ItemFactory(status='VERIFIED', milestone=i.milestone)
+        r = i.milestone.inprogress_items()
+        self.assertNotIn(i, r)
+        self.assertIn(i2, r)
+        self.assertNotIn(i3, r)
+        self.assertNotIn(i4, r)
+
+    def test_resolved_items(self):
+        i = ItemFactory(status='OPEN')
+        i2 = ItemFactory(status='INPROGRESS', milestone=i.milestone)
+        i3 = ItemFactory(status='RESOLVED', milestone=i.milestone)
+        i4 = ItemFactory(status='VERIFIED', milestone=i.milestone)
+        r = i.milestone.resolved_items()
+        self.assertNotIn(i, r)
+        self.assertNotIn(i2, r)
+        self.assertIn(i3, r)
+        self.assertNotIn(i4, r)
+
+    def test_verified_items(self):
+        i = ItemFactory(status='OPEN')
+        i2 = ItemFactory(status='INPROGRESS', milestone=i.milestone)
+        i3 = ItemFactory(status='RESOLVED', milestone=i.milestone)
+        i4 = ItemFactory(status='VERIFIED', milestone=i.milestone)
+        r = i.milestone.verified_items()
+        self.assertNotIn(i, r)
+        self.assertNotIn(i2, r)
+        self.assertNotIn(i3, r)
+        self.assertIn(i4, r)
+
 
 class ItemTest(TestCase):
     def test_gau(self):
