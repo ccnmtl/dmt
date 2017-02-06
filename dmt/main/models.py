@@ -520,6 +520,28 @@ class Project(models.Model):
         # milestone.
         return self.milestone_set.all().order_by("-target_date")[0]
 
+    def ensure_someday_maybe_is_furthest(self):
+        if not self.milestone_set.exists():
+            # there are no milestones, nothing we can do
+            return
+        r = self.milestone_set.all().exclude(name="Someday/Maybe")
+        if not r.exists():
+            # Someday/Maybe milestone is only one in project
+            return
+        m = r.order_by("-target_date").first()
+        sm = self.someday_maybe_milestone()
+        if not sm:
+            # no someday/maybe milestone!
+            # maybe should add an assert here
+            return
+        if sm.target_date < m.target_date:
+            # make it a solid year further out than the other milestone
+            sm.target_date = m.target_date + timedelta(years=1)
+            sm.save()
+
+    def somemday_maybe_milestone(self):
+        return self.milestone_set.filter(name="Someday/Maybe").first()
+
     def add_todo(self, user, title, tags=None):
         milestone = self.upcoming_milestone()
         item = Item.objects.create(

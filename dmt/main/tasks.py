@@ -219,11 +219,16 @@ def send_reminder_emails():
 
 @periodic_task(run_every=crontab(hour=0, minute=0))
 def bump_someday_maybe_target_dates():
-    """ Someday/Maybe milestones are "special" and
-    should never actually reach a target date.
-    so once a day, we take any that are upcoming
-    and push them far into the future again. """
-    from .models import Milestone
+
+    """Someday/Maybe milestones are "special" and should never actually
+    reach a target date.  so once a day, we take any that are upcoming
+    and push them far into the future again.
+
+    They should also never be the next upcoming milestone on a project
+    unless that project doesn't have any other milestones.
+    """
+
+    from .models import Milestone, Project
     now = timezone.now()
     upcoming = now + timedelta(weeks=4)
     future = now + timedelta(weeks=52)
@@ -233,6 +238,8 @@ def bump_someday_maybe_target_dates():
             status='OPEN'):
         m.target_date = future.date()
         m.save()
+    for p in Project.objects.all():
+        p.ensure_someday_maybe_is_furthest()
 
 
 @task(ignore_results=True, bind=True, max_retries=None)
