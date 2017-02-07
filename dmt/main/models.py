@@ -539,7 +539,7 @@ class Project(models.Model):
             sm.target_date = m.target_date + timedelta(years=1)
             sm.save()
 
-    def somemday_maybe_milestone(self):
+    def someday_maybe_milestone(self):
         return self.milestone_set.filter(name="Someday/Maybe").first()
 
     def add_todo(self, user, title, tags=None):
