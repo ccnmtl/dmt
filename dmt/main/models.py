@@ -536,7 +536,7 @@ class Project(models.Model):
             return
         if sm.target_date < m.target_date:
             # make it a solid year further out than the other milestone
-            sm.target_date = m.target_date + timedelta(years=1)
+            sm.target_date = m.target_date + timedelta(days=365)
             sm.save()
 
     def someday_maybe_milestone(self):
