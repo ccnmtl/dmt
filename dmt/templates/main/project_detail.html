@@ -23,6 +23,11 @@
     <div class="object-box clearfix">
         <div class="object-action-set clearfix">
             <ul>
+                <li class="object-action" title="Kanban view">
+                    <a href="{% url 'project_kanban' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-th-large"></span>
+                        <span class="object-action-text hidden-xs hidden-sm">Kanban view</span></a>
+                </li>
+
                 {% flag project_board %}
                 <li class="object-action" title="Board view">
                     <a href="{% url 'project_board' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-th-large"></span>
