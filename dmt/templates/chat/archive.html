@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Archive for <a href="{{project.get_absolute_url}}">{{project.name}}</a></h1>
+
+{% for date in room.unique_dates %}
+{% ifchanged date.year %}
+<div class="row year-row pull-right bg-primary">{{date.year}}</div>
+{% endifchanged %}
+{% ifchanged date.month %}
+<div class="row month-row bg-primary">{{date|date:"M"}}</div>
+{% endifchanged %}
+<div class="row">
+    <a href="{{date.year}}-{{date.month}}-{{date.day}}/">{{ date|date:"M d" }}</a></div>
+{% empty %}
+    <p>This project has no messages</p>
+{% endfor %}
+
+{% endblock %}

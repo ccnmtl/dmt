@@ -189,6 +189,7 @@ urlpatterns = [
     url(r'^_impersonate/', include('impersonate.urls')),
     url(r'^stats/$', TemplateView.as_view(template_name="stats.html")),
     url(r'^smoketest/', include('smoketest.urls')),
+    url(r'^chat/', include('dmt.chat.urls')),
     url(r'^uploads/(?P<path>.*)$',
         'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 ]

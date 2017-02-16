@@ -2,6 +2,8 @@
 import djcelery
 import os.path
 import sys
+import zmqproxy
+
 from ccnmtlsettings.shared import common
 from django.contrib import messages
 
@@ -23,6 +25,7 @@ PROJECT_APPS = [
     'dmt.api',
     'dmt.main',
     'dmt.report',
+    'dmt.chat',
 ]
 
 TEMPLATES[0]['OPTIONS']['context_processors'].extend([  # noqa
@@ -47,6 +50,7 @@ INSTALLED_APPS += [  # noqa
     'dmt.main',
     'dmt.report',
     'dmt.api',
+    'dmt.chat',
     'behave_django',
     'oauth2_provider',
     's3sign',
@@ -83,3 +87,12 @@ DEFAULT_FROM_EMAIL = SERVER_EMAIL
 EMAIL_MAX_RETRIES = 10
 
 DASHBOARD_GRAPH_TIMESPAN = '1weeks'
+BROKER_PROXY = zmqproxy.ZMQProxy
+ZMQ_APPNAME = 'dmt'
+
+WINDSOCK_BROKER_URL = "tcp://localhost:5555"
+WINDSOCK_WEBSOCKETS_BASE = "ws://localhost:5050/socket/"
+WINDSOCK_SECRET = "6f1d916c-7761-4874-8d5b-8f8f93d20bf2"
+
+if 'test' in sys.argv or 'jenkins' in sys.argv or 'behave' in sys.argv:
+    BROKER_PROXY = zmqproxy.DummyProxy

@@ -1,0 +1,111 @@
+import time
+import hmac
+import hashlib
+import json
+
+from datetime import datetime
+from random import randint
+
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.generic.base import TemplateView, View
+
+from dmt.main.models import Project
+from .models import Room, Message
+
+
+def gen_token(request, pid):
+    username = request.user.username
+    sub_prefix = "%s.project_%d" % (settings.ZMQ_APPNAME, int(pid))
+    pub_prefix = sub_prefix + "." + username
+    now = int(time.mktime(datetime.now().timetuple()))
+    salt = randint(0, 2 ** 20)
+    ip_address = (request.META.get("HTTP_X_FORWARDED_FOR", "") or
+                  request.META.get("REMOTE_ADDR", ""))
+
+    hmc = hmac.new(settings.WINDSOCK_SECRET,
+                   '%s:%s:%s:%d:%d:%s' % (username, sub_prefix,
+                                          pub_prefix, now, salt,
+                                          ip_address),
+                   hashlib.sha1).hexdigest()
+    return '%s:%s:%s:%d:%d:%s:%s' % (username, sub_prefix,
+                                     pub_prefix, now, salt,
+                                     ip_address, hmc)
+
+
+class Chat(TemplateView):
+    template_name = "chat/chat.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(Chat, self).get_context_data(**kwargs)
+        pid = self.kwargs.get('pid', None)
+        project = get_object_or_404(Project, pid=pid)
+        context['project'] = project
+        context['room'] = Room(project=project)
+        context['token'] = gen_token(self.request, pid)
+        context['websockets_base'] = settings.WINDSOCK_WEBSOCKETS_BASE
+        return context
+
+
+class FreshToken(View):
+    def get(self, request, pid):
+        project = get_object_or_404(Project, pid=pid)
+        return JsonResponse(dict(token=gen_token(request, project.pid)))
+
+
+class ChatPost(View):
+    def post(self, request, pid):
+        project = get_object_or_404(Project, pid=pid)
+        text = request.POST.get('text', '')
+        if text:
+            m = Message.objects.create(project=project, user=request.user,
+                                       text=text)
+            # send out over zmq
+
+            # the message we are broadcasting
+            md = dict(project_pid=project.pid,
+                      username=m.user.username,
+                      message_text=m.text)
+            # an envelope that contains that message serialized
+            # and the address that we are publishing to
+            e = dict(address="%s.project_%d" %
+                     (settings.ZMQ_APPNAME, project.pid),
+                     content=json.dumps(md))
+
+            broker = settings.BROKER_PROXY()
+            broker.send(json.dumps(e))
+
+        return HttpResponseRedirect(reverse('project-chat', args=[pid]))
+
+
+class ChatArchive(TemplateView):
+    template_name = "chat/archive.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ChatArchive, self).get_context_data(**kwargs)
+        pid = self.kwargs.get('pid', None)
+        project = get_object_or_404(Project, pid=pid)
+        context['project'] = project
+        context['room'] = Room(project=project)
+        return context
+
+
+class ChatArchiveDate(TemplateView):
+    template_name = "chat/archive_date.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ChatArchiveDate, self).get_context_data(**kwargs)
+        pid = self.kwargs.get('pid', None)
+        date = self.kwargs.get('date', None)
+        project = get_object_or_404(Project, pid=pid)
+        (year, month, day) = date.split('-')
+        d = datetime(year=int(year), month=int(month), day=int(day))
+        context['messages'] = project.message_set.filter(
+            added__year=year,
+            added__month=month,
+            added__day=day)
+        context['date'] = d
+        context['project'] = project
+        return context

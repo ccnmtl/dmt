@@ -1,0 +1,7 @@
+{
+  "Secret": "6f1d916c-7761-4874-8d5b-8f8f93d20bf2",
+  "ReqSocket": "tcp://broker:5555",
+  "SubSocket": "tcp://broker:5556",
+  "WebSocketPort": ":5050",
+  "SubKey": ""
+}

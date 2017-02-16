@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% load emoji_tags %}
+{% load dmttags %}
+
+
+{% block content %}
+<h1>Archive for {{date.date}}: <a href="{{project.get_absolute_url}}">{{project.name}}</a></h1>
+
+<div id="log">
+{% for message in messages %}
+<div class="row" id="message-{{message.id}}">
+        <div class="col-md-1 timestamp"><a href="{{message.get_absolute_url}}">{{message.added|date:"H:i"}}</a></div>
+        <div class="col-md-2 nick">&lt;{{message.user.username}}&gt;</div>
+        <div class="col-md-5 ircmessage">{{message.text|commonmark|linkify|emoji_replace}}</div>
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}

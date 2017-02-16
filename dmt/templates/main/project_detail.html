@@ -34,6 +34,11 @@
                         <span class="object-action-text hidden-xs hidden-sm">Board view</span></a>
                 </li>
       {% endflag %}
+      <li class="object-action" title="Project Chat">
+          <a href="{% url 'project-chat' object.pid %}" class="object-action-link"><span class="glyphicon glyphicon-tent"></span>
+              <span class="object-action-text hidden-xs hidden-sm">Project Chat</span></a>
+      </li>
+      
       <li class="object-action" title="Edit project">
           <a href="edit/" class="object-action-link"><span class="glyphicon glyphicon-pencil"></span>
               <span class="object-action-text hidden-xs hidden-sm">Edit project</span></a>
