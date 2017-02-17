@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -12,13 +14,25 @@ class Room(object):
     general `Project` model, keeping all the chat
     specific functionality in here"""
 
+    max_recent_chats = 50
+
     def __init__(self, project):
         self.project = project
 
     def recent_messages(self):
-        """ just the most recent messages, chronological order """
-        messages = list(self.project.message_set.all().order_by("-added")[:10])
-        messages.reverse()
+        """ just the most recent messages, chronological order
+
+        all chats from the last 24 hours or N, whichever is greater
+        """
+        now = datetime.now()
+        day_ago = now - timedelta(hours=24)
+
+        last_days = set(self.project.message_set.filter(added__gt=day_ago))
+        last_n = set(list(self.project.message_set.all()
+                          .order_by("-added"))[:self.max_recent_chats])
+        messages = last_days.union(last_n)
+
+        messages = sorted(list(messages), key=lambda x: x.added)
         return messages
 
     def unique_dates(self):
