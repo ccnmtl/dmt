@@ -1,6 +1,8 @@
 import json
 import unittest
 
+from datetime import datetime
+
 from django.core.urlresolvers import reverse
 from django.test import RequestFactory
 
@@ -56,7 +58,7 @@ class TestViews(unittest.TestCase):
         self.assertEqual(response.context_data['project'], m.project)
 
     def test_archive_date(self):
-        m = MessageFactory()
+        m = MessageFactory(added=datetime(year=2017, month=1, day=1))
         request = RequestFactory().get(m.get_absolute_url())
         response = ChatArchiveDate.as_view()(
             request, pid=m.project.pid,
