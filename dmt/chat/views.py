@@ -67,6 +67,8 @@ class ChatPost(View):
             # the message we are broadcasting
             md = dict(project_pid=project.pid,
                       username=m.user.username,
+                      fullname=m.user.get_full_name(),
+                      userURL=m.user.userprofile.get_absolute_url(),
                       message_text=m.text)
             # an envelope that contains that message serialized
             # and the address that we are publishing to
