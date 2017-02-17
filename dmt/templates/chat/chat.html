@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load compress %}
+{% load markup %}
+{% load emoji_tags %}
+{% load dmttags %}
+
+{% block js %}
+<script>
+ // make some basics available to javascript
+ window.username = '{{request.user.username}}';
+ window.freshTokenURL = '{% url 'project-chat-fresh-token' project.pid %}';
+ window.token = '{{token}}';
+ window.websocketsBase = '{{websockets_base}}';
+ window.postURL = '{% url 'project-chat-post' project.pid %}';
+</script>
+{% compress js %}
+<script src="{{STATIC_URL}}js/src/chat.js"></script>
+{% endcompress %}
+
+{% endblock %}
+
+{% block content %}
+    <h1><a href="{{project.get_absolute_url}}">{{project.name}}</a></h1>
+<p><a href="{% url 'project-chat-archive' project.pid %}">Archive</a></p>
+
+<div id="log">
+    {% for message in room.recent_messages %}
+        {% ifchanged message.added.date %}
+            <div class="row">
+                <div class="col-md-12 bg-info">
+                    {{message.added.date}}
+                </div>
+            </div>
+        {% endifchanged %}
+<div class="row">
+        <div class="col-md-1 timestamp">{{message.added|date:"H:i"}}</div>
+        <div class="col-md-2 nick">&lt;{{message.user.username}}&gt;</div>
+        <div class="col-md-9 ircmessage">{{message.text|commonmark|linkify|emoji_replace}}</div>
+</div>
+{% endfor %}
+</div>
+
+<form id="msg_form" class="form-inline post-form">
+{% csrf_token %}
+    <input id="text-input" size="80" type="text" name="text" class="input-xxlarge">
+<input type="submit" class="btn" value="Post" />
+</form>
+
+{% endblock %}

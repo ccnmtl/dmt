@@ -2,6 +2,16 @@ db:
   image: postgres
 rabbitmq:
   image: rabbitmq
+broker:
+  image: thraxil/windsock-broker
+windsock:
+  image: thraxil/windsock
+  ports:
+    - "5050:5050"
+  links:
+    - broker
+  volumes:
+    - ./windsock-docker.json:/go/src/github.com/thraxil/windsock/windsock-docker.json    
 web:
   image: ccnmtl/dmt
   command: manage runserver 0.0.0.0:8000
@@ -14,6 +24,7 @@ web:
   links:
     - db
     - rabbitmq
+    - broker
 celery:
   image: ccnmtl/dmt
   command: worker
