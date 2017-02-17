@@ -102,7 +102,7 @@ class ChatArchiveDate(TemplateView):
         project = get_object_or_404(Project, pid=pid)
         (year, month, day) = date.split('-')
         d = datetime(year=int(year), month=int(month), day=int(day))
-        context['messages'] = project.message_set.filter(
+        context['chat_messages'] = project.message_set.filter(
             added__year=year,
             added__month=month,
             added__day=day)

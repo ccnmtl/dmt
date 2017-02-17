@@ -8,7 +8,7 @@
 <h1>Archive for {{date.date}}: <a href="{{project.get_absolute_url}}">{{project.name}}</a></h1>
 
 <div id="log">
-{% for message in messages %}
+{% for message in chat_messages %}
 <div class="row" id="message-{{message.id}}">
         <div class="col-md-1 timestamp"><a href="{{message.get_absolute_url}}">{{message.added|date:"H:i"}}</a></div>
         <div class="col-md-2 nick">&lt;{{message.user.username}}&gt;</div>
