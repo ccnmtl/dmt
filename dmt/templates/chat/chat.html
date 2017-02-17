@@ -34,7 +34,7 @@
         {% endifchanged %}
 <div class="row">
         <div class="col-md-1 timestamp">{{message.added|date:"H:i"}}</div>
-        <div class="col-md-2 nick">&lt;{{message.user.username}}&gt;</div>
+        <div class="col-md-2 nick"><a href="{% url 'user_detail' message.user.userprofile.username %}">{{message.user.get_full_name}}</a></div>
         <div class="col-md-9 ircmessage">{{message.text|commonmark|linkify|emoji_replace}}</div>
 </div>
 {% endfor %}

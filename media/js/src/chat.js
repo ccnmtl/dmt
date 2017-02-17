@@ -91,8 +91,8 @@ $(function() {
         }
         entry.append('<div class="col-md-1 timestamp">' + hours + ':' +
                      minutes + '</div>');
-        entry.append('<div class="col-md-2 nick">&lt;' + data.username +
-                     '&gt;</div>');
+        entry.append('<div class="col-md-2 nick"><a href="' + data.userURL +
+                     '">' + data.fullname + '</a></div>');
         var attr = 'message_text';
         entry.append('<div class="col-md-9 ircmessage">' + data[attr] +
                      '</div>');
