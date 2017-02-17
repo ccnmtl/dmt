@@ -64,4 +64,4 @@ class TestViews(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(response.context_data['project'], m.project)
-        self.assertTrue(m in response.context_data['messages'])
+        self.assertTrue(m in response.context_data['chat_messages'])
