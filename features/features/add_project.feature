@@ -14,8 +14,3 @@ in order to isolate a set of items/milestones from other projects.
     When I create a new project with final release date "2020-01-01"
     Then the project has a milestone named "Final Release"
      And the milestone has target date "2020-01-01"
-
-  Scenario: Someday/Maybe Milestone is automatically created
-    Given I am logged in
-    When I create a new project
-    Then the project has a milestone named "Someday/Maybe"
