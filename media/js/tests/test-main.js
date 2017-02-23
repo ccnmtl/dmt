@@ -30,6 +30,7 @@ require.config({
     map: {
         '*': {
             'models/notify': 'src/models/notify',
+            'utils/markdown_renderer': 'src/utils/markdown_renderer',
             'utils/markdown_preview': 'src/utils/markdown_preview'
         }
     },

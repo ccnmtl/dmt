@@ -59,11 +59,13 @@ require([
     'select2',
 
     // src
+    'utils/markdown_renderer',
     'utils/markdown_preview',
     'utils/markdown_toolbar_controller',
     'utils/markdown_toolbar',
     'utils/utils',
     'client_edit',
+    'chat',
     'forms/add_time_form',
     'forms/add_tracker_form',
     'forms/comment_form',

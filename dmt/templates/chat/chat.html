@@ -13,10 +13,6 @@
  window.websocketsBase = '{{websockets_base}}';
  window.postURL = '{% url 'project-chat-post' project.pid %}';
 </script>
-{% compress js %}
-<script src="{{STATIC_URL}}js/src/chat.js"></script>
-{% endcompress %}
-
 {% endblock %}
 
 {% block content %}
