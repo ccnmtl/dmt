@@ -279,14 +279,15 @@ Raven.setUserContext({
 {% endif %}
 </script>
 
+{% block main_requirejs %}
 <script
-     {% if debug %}
-     data-main="{{STATIC_URL}}js/src/main.js"
-     {% else %}
-     data-main="{{STATIC_URL}}main-built.js"
-     {% endif %}
-     src="{{STATIC_URL}}js/libs/require/require.js"></script>
-
+    {% if debug %}
+    data-main="{{STATIC_URL}}js/src/main.js"
+    {% else %}
+    data-main="{{STATIC_URL}}main-built.js"
+    {% endif %}
+    src="{{STATIC_URL}}js/libs/require/require.js"></script>
+{% endblock %}
 {% block js %}{% endblock %}
 
 {% if STAGING_ENV %}

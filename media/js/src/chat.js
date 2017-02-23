@@ -1,4 +1,59 @@
-$(function() {
+/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
+
+require.config({
+    map: {
+        // This configures jquery to not export the $ and jQuery global
+        // variables.
+        '*': {
+            'jquery': 'jquery-private'
+        },
+        'jquery-private': {
+            'jquery': 'jquery'
+        }
+    },
+    paths: {
+        // Major libraries
+        jquery: '../libs/jquery/jquery-min',
+        'jquery-private': '../libs/jquery/jquery-private',
+
+        // Require.js plugins
+        text: '../libs/require/text',
+        domReady: '../libs/require/domReady'
+    },
+    urlArgs: 'bust=' +  (new Date()).getTime()
+});
+
+require([
+    'domReady',
+    'jquery',
+    '../libs/commonmark.min',
+    '../libs/linkify/linkify.min',
+    '../libs/linkify/linkify-html.min',
+    '../libs/js-emoji/emoji.min'
+], function(domReady, $, commonmark, linkify, linkifyHtml, emoji) {
+
+    var renderMarkdown = function(text) {
+        var reader = new commonmark.Parser();
+        var writer = new commonmark.HtmlRenderer();
+        if (window.STATIC_URL) {
+            emoji.sheet_path = window.STATIC_URL +
+                'emoji-data/sheet_apple_64.png';
+        }
+        emoji.use_sheet = true;
+        // Temporary workaround for img_path issue:
+        // https://github.com/iamcal/js-emoji/issues/47
+        emoji.img_sets[emoji.img_set].sheet = emoji.sheet_path;
+
+        var parsed = reader.parse(text);
+        var rendered = writer.render(parsed);
+        if (typeof window.linkifyHtml === 'function') {
+            rendered = window.linkifyHtml(rendered);
+        }
+        if (typeof emoji.replace_colons === 'function') {
+            rendered = emoji.replace_colons(rendered);
+        }
+        return rendered;
+    };
 
     function getCookie(name) {
         var cookieValue = null;
@@ -94,8 +149,8 @@ $(function() {
         entry.append('<div class="col-md-2 nick"><a href="' + data.userURL +
                      '">' + data.fullname + '</a></div>');
         var attr = 'message_text';
-        entry.append('<div class="col-md-9 ircmessage">' + data[attr] +
-                     '</div>');
+        entry.append('<div class="col-md-9 ircmessage">' +
+                     renderMarkdown(data[attr]) + '</div>');
         appendLog(entry);
     };
 
@@ -108,26 +163,28 @@ $(function() {
         }
     }
 
-    $('#msg_form').submit(function() {
-        var msg = $('#text-input');
-        $.ajax({
-            type: 'POST',
-            url: window.postURL,
-            data: {'text': msg.val()},
-            success: function() {
-                msg.val('');
-            },
-            error: function() {
-                alert('post failed');
-            }
+    domReady(function() {
+        $('#msg_form').submit(function() {
+            var msg = $('#text-input');
+            $.ajax({
+                type: 'POST',
+                url: window.postURL,
+                data: {'text': msg.val()},
+                success: function() {
+                    msg.val('');
+                },
+                error: function() {
+                    alert('post failed');
+                }
+            });
+            return false;
         });
-        return false;
-    });
 
-    if (window.WebSocket) {
-        connectSocket();
-    } else {
-        appendLog($('<div><b>Your browser does not support ' +
-                    'WebSockets.</b></div>'));
-    }
+        if (window.WebSocket) {
+            connectSocket();
+        } else {
+            appendLog($('<div><b>Your browser does not support ' +
+                        'WebSockets.</b></div>'));
+        }
+    });
 });

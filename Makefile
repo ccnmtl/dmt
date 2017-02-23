@@ -24,4 +24,11 @@ compose-migrate:
 media/main-built.js: $(JS_SENTINAL) build.js media/js/src media/js/libs
 	$(REQUIREJS) -o build.js
 
+media/chat-built.js: $(JS_SENTINAL) chat-build.js media/js/src/chat.js media/js/libs
+	$(REQUIREJS) -o chat-build.js
+
 travis: $(JS_SENTINAL) parallel-tests jstest integration
+
+js: media/main-built.js media/chat-built.js
+
+.PHONY: js
