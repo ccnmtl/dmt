@@ -1,3 +1,5 @@
+/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
+
 define([
     '../../libs/commonmark.min',
     '../../libs/js-emoji/emoji.min',
