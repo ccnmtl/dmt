@@ -1,3 +1,28 @@
+/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
+
+require.config({
+    map: {
+        // This configures jquery to not export the $ and jQuery global
+        // variables.
+        '*': {
+            'jquery': 'jquery-private'
+        },
+        'jquery-private': {
+            'jquery': 'jquery'
+        }
+    },
+    paths: {
+        // Major libraries
+        jquery: '../libs/jquery/jquery-min',
+        'jquery-private': '../libs/jquery/jquery-private',
+
+        // Require.js plugins
+        text: '../libs/require/text',
+        domReady: '../libs/require/domReady'
+    },
+    urlArgs: 'bust=' +  (new Date()).getTime()
+});
+
 require([
     'domReady',
     'jquery',
@@ -83,10 +108,6 @@ require([
     };
 
     domReady(function() {
-        if ($('#msg_form').length < 1) {
-            return;
-        }
-
         $('#msg_form').submit(function() {
             var msg = $('#text-input');
             $.ajax({
