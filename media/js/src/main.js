@@ -59,6 +59,7 @@ require([
     'select2',
 
     // src
+    'utils/markdown_renderer',
     'utils/markdown_preview',
     'utils/markdown_toolbar_controller',
     'utils/markdown_toolbar',

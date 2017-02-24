@@ -1,41 +1,40 @@
-$(function() {
+/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
 
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(
-                        cookie.substring(name.length + 1));
-                    break;
-                }
-            }
+require.config({
+    map: {
+        // This configures jquery to not export the $ and jQuery global
+        // variables.
+        '*': {
+            'jquery': 'jquery-private'
+        },
+        'jquery-private': {
+            'jquery': 'jquery'
         }
-        return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
+    },
+    paths: {
+        // Major libraries
+        jquery: '../libs/jquery/jquery-min',
+        'jquery-private': '../libs/jquery/jquery-private',
 
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader('X-CSRFToken', csrftoken);
-            }
-        }
-    });
+        // Require.js plugins
+        text: '../libs/require/text',
+        domReady: '../libs/require/domReady'
+    },
+    urlArgs: 'bust=' +  (new Date()).getTime()
+});
 
+require([
+    'domReady',
+    'jquery',
+    'utils/markdown_renderer'
+], function(domReady, $, MarkdownRenderer) {
     var conn;
     var log = $('#log');
 
     var currentRefresh = 1000;
     var defaultRefresh = 1000;
     var maxRefresh = 1000 * 5 * 60; // 5 minutes
+    var renderer = new MarkdownRenderer();
 
     var updateToken = function() {
         $.ajax({
@@ -60,8 +59,8 @@ $(function() {
             currentRefresh = maxRefresh;
         }
         appendLog($(
-            '<div class="alert"><b>Connection closed. trying again in ' +
-                currentRefresh / 1000 + ' seconds</b></div>'));
+            '<div class="alert"><strong>Connection closed. trying again in ' +
+                currentRefresh / 1000 + ' seconds</strong></div>'));
         setTimeout(connectSocket,currentRefresh);
     };
 
@@ -71,8 +70,8 @@ $(function() {
         conn.onmessage = onMessage;
         conn.onopen = function(evt) {
             currentRefresh = defaultRefresh;
-            appendLog($('<div class="alert alert-info"><b>' +
-                        'Connected to server.</b></div>'));
+            appendLog($('<div class="alert alert-info"><strong>' +
+                        'Connected to server.</strong></div>'));
         };
     };
 
@@ -94,40 +93,42 @@ $(function() {
         entry.append('<div class="col-md-2 nick"><a href="' + data.userURL +
                      '">' + data.fullname + '</a></div>');
         var attr = 'message_text';
-        entry.append('<div class="col-md-9 ircmessage">' + data[attr] +
-                     '</div>');
+        entry.append('<div class="col-md-9 ircmessage">' +
+                     renderer.render(data[attr]) + '</div>');
         appendLog(entry);
     };
 
-    function appendLog(msg) {
+    var appendLog = function(msg) {
         var d = log[0];
         var doScroll = d.scrollTop === d.scrollHeight - d.clientHeight;
         msg.appendTo(log);
         if (doScroll) {
             d.scrollTop = d.scrollHeight - d.clientHeight;
         }
-    }
+    };
 
-    $('#msg_form').submit(function() {
-        var msg = $('#text-input');
-        $.ajax({
-            type: 'POST',
-            url: window.postURL,
-            data: {'text': msg.val()},
-            success: function() {
-                msg.val('');
-            },
-            error: function() {
-                alert('post failed');
-            }
+    domReady(function() {
+        $('#msg_form').submit(function() {
+            var msg = $('#text-input');
+            $.ajax({
+                type: 'POST',
+                url: window.postURL,
+                data: {'text': msg.val()},
+                success: function() {
+                    msg.val('');
+                },
+                error: function() {
+                    alert('post failed');
+                }
+            });
+            return false;
         });
-        return false;
-    });
 
-    if (window.WebSocket) {
-        connectSocket();
-    } else {
-        appendLog($('<div><b>Your browser does not support ' +
-                    'WebSockets.</b></div>'));
-    }
+        if (window.WebSocket) {
+            connectSocket();
+        } else {
+            appendLog($('<div><strong>Your browser does not support ' +
+                        'WebSockets.</strong></div>'));
+        }
+    });
 });
