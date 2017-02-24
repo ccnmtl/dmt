@@ -4,6 +4,15 @@
 {% load emoji_tags %}
 {% load dmttags %}
 
+{% block main_requirejs %}
+    <script
+        {% if debug %}
+        data-main="{{STATIC_URL}}js/src/chat.js"
+        {% else %}
+        data-main="{{STATIC_URL}}chat-built.js"
+        {% endif %}
+        src="{{STATIC_URL}}js/libs/require/require.js"></script>
+{% endblock %}
 {% block js %}
 <script>
  // make some basics available to javascript
@@ -13,9 +22,6 @@
  window.websocketsBase = '{{websockets_base}}';
  window.postURL = '{% url 'project-chat-post' project.pid %}';
 </script>
-{% compress js %}
-<script src="{{STATIC_URL}}js/src/chat.js"></script>
-{% endcompress %}
 
 {% endblock %}
 
