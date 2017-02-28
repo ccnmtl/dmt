@@ -1514,3 +1514,10 @@ select#project-personnel-input {
     fill: currentColor;
 }
 /* end markdown-toolbar buttons */
+
+#chat-message-form #text-input {
+		/* for some reason, the usual bootstrap
+        class="form-control" is not making
+        it take up the whole column. */
+		width: 100%;
+}
