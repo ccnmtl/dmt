@@ -249,7 +249,10 @@ def send_email(self, subject, body, to_addresses):
             subject,
             body, settings.SERVER_EMAIL,
             to_addresses, fail_silently=settings.DEBUG)
-    except smtplib.SMTPAuthenticationError as exc:
+    except (smtplib.SMTPAuthenticationError,
+            smtplib.SMTPServerDisconnected,
+            smtplib.SMTPConnectError,
+            smtplib.SMTPDataError) as exc:
         if self.request.retries > settings.EMAIL_MAX_RETRIES:
             raise exc
         else:
