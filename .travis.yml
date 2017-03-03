@@ -3,7 +3,7 @@ dist: trusty
 sudo: false
 addons:
   postgresql: "9.6"
-  firefox: "45.4.0esr"
+  firefox: "45.7.0esr"
 python:
   - "2.7"
 before_install:
