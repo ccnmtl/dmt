@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
+{% load markup %}
+{% load emoji_tags %}
+{% load dmttags %}
+
 
 {% block title %}Search Results: {{q}}{% endblock %}
 
@@ -87,6 +91,19 @@
         {{node.subject}}</a> (<a href="{{node.user.userprofile.get_absolute_url}}">{% firstof node.author.fullname node.author.username %}</a>)</li>
 {% endfor %}
 </ul>
+{% endif %}
+
+{% if chat_messages %}
+    <p>Chat Messages</p>
+    <ul>
+    {% for message in chat_messages %}
+        <li>
+            [<a href="{% url 'project-chat' message.project.pid %}">{{message.project.name}}</a>]
+            <a href="{{message.get_absolute_url}}">{{message.added}} - {{message.user.get_full_name}}</a>: 
+            <blockquote>{{message.text|commonmark|linkify|emoji_replace}}</blockquote>
+        </li>
+    {% endfor %}
+    </ul>
 {% endif %}
 
 {% endblock %}
