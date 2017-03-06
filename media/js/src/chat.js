@@ -134,6 +134,60 @@ require([
         setTimeout(heartBeat, heartbeatInterval);
     };
 
+    var downgradeRecent = function(now) {
+        // if we haven't seen a user in 2 * heartbeatInterval
+        // downgrade to 'recent'
+        for (var username in usersPresent) {
+            if (usersPresent.hasOwnProperty(username)) {
+                var e = usersPresent[username];
+                if ((now - e.lastSeen) > (2 * heartbeatInterval)) {
+                    usersPresent[username].status = 'recent';
+                }
+            }
+        }
+    };
+
+    var downgradeGone = function(now) {
+        // any that haven't been seen in 5 * interval
+        // get downgraded to 'gone'
+        for (var username in usersPresent) {
+            if (usersPresent.hasOwnProperty(username)) {
+                var e = usersPresent[username];
+                if ((now - e.lastSeen) > (5 * heartbeatInterval)) {
+                    usersPresent[username].status = 'gone';
+                }
+            }
+        }
+    };
+
+    var removeAfterTen = function(now) {
+        // remove any users that haven't been heard from
+        // in 10 * heartbeatInterval
+        var toRemove = [];
+        for (var username in usersPresent) {
+            if (usersPresent.hasOwnProperty(username)) {
+                var e = usersPresent[username];
+                if ((now - e.lastSeen) > (10 * heartbeatInterval)) {
+                    toRemove.push(username);
+                }
+            }
+        }
+
+        for (var i = 0; i < toRemove.length; i++) {
+            delete usersPresent[toRemove[i]];
+        }
+    }
+    
+    var purgeOffline = function() {
+        var now = Date.now();
+        downgradeRecent(now);
+        downgradeGone(now);
+        removeAfterTen(now);
+
+        // trigger the next purge
+        setTimeout(purgeOffline, heartbeatInterval);
+    };
+
     var onMessage = function(evt) {
         var envelope = JSON.parse(evt.data);
         var data = JSON.parse(envelope.content);
@@ -191,6 +245,7 @@ require([
         if (window.WebSocket) {
             connectSocket();
             heartBeat();
+            purgeOffline();
         } else {
             appendLog($('<div><strong>Your browser does not support ' +
                         'WebSockets.</strong></div>'));
