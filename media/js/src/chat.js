@@ -65,7 +65,7 @@ require([
     var defaultRefresh = 1000;
     var maxRefresh = 1000 * 5 * 60; // 5 minutes
     var renderer = new MarkdownRenderer();
-    var heartbeatInterval = 10 * 1000;
+    var heartbeatInterval = 60 * 1000;
 
     // indexed by username
     //   each entry is dict with status, fullname, lastHB time
