@@ -176,13 +176,45 @@ require([
         for (var i = 0; i < toRemove.length; i++) {
             delete usersPresent[toRemove[i]];
         }
-    }
-    
+    };
+
+    var displayPresence = function() {
+        var $presenceBox = $('#presence');
+        $presenceBox.empty();
+        if (Object.keys(usersPresent).length === 0) {
+            $presenceBox.addClass('hidden');
+            $presenceBox.removeClass('show');
+        } else {
+            $presenceBox.addClass('show');
+            $presenceBox.removeClass('hidden');
+        }
+        $presenceBox.append($('<div class="panel-heading">Users Online</div>'));
+        var $inner = $('<div class="panel-body"></div>');
+        $presenceBox.append($inner);
+
+        for (var username in usersPresent) {
+            if (usersPresent.hasOwnProperty(username)) {
+                var e = usersPresent[username];
+                var entry = $('<div/>');
+                if (e.status === 'online') {
+                    entry.addClass('bg-success');
+                } else if (e.status === 'recent') {
+                    entry.addClass('bg-warning');
+                } else {
+                    entry.addClass('bg-danger');
+                }
+                entry.append(e.fullname);
+                $inner.append(entry);
+            }
+        }
+    };
+
     var purgeOffline = function() {
         var now = Date.now();
         downgradeRecent(now);
         downgradeGone(now);
         removeAfterTen(now);
+        displayPresence();
 
         // trigger the next purge
         setTimeout(purgeOffline, heartbeatInterval);
@@ -194,6 +226,7 @@ require([
 
         if ('heartbeat' in data) {
             seen(data.username, data.fullname);
+            displayPresence();
             return;
         }
 
