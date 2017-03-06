@@ -65,6 +65,7 @@ require([
     var defaultRefresh = 1000;
     var maxRefresh = 1000 * 5 * 60; // 5 minutes
     var renderer = new MarkdownRenderer();
+    var heartbeatInterval = 10 * 1000;
 
     var updateToken = function() {
         $.ajax({
@@ -118,7 +119,7 @@ require([
                 console.log('heartbeat failed');
             }
         });
-        setTimeout(heartBeat, 10 * 1000);
+        setTimeout(heartBeat, heartbeatInterval);
     };
 
     var onMessage = function(evt) {
