@@ -105,9 +105,30 @@ require([
         };
     };
 
+    var heartBeat = function() {
+        console.log("heartbeat");
+        $.ajax({
+            type: 'POST',
+            url: window.heartbeatURL,
+            data: {},
+            success: function() {
+                console.log("heartbeat succeeded");
+            },
+            error: function() {
+                console.log('heartbeat failed');
+            }
+        });
+        setTimeout(heartBeat, 10 * 1000);
+    };
+
     var onMessage = function(evt) {
         var envelope = JSON.parse(evt.data);
         var data = JSON.parse(envelope.content);
+
+        if ('heartbeat' in data) {
+            console.log("heartbeat received");
+            return;
+        }
 
         var entry = $('<div/>');
         entry.addClass('row');
@@ -156,6 +177,7 @@ require([
 
         if (window.WebSocket) {
             connectSocket();
+            heartBeat();
         } else {
             appendLog($('<div><strong>Your browser does not support ' +
                         'WebSockets.</strong></div>'));

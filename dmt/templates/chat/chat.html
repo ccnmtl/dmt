@@ -24,6 +24,7 @@
  window.token = '{{token}}';
  window.websocketsBase = '{{websockets_base}}';
  window.postURL = '{% url 'project-chat-post' project.pid %}';
+ window.heartbeatURL = '{% url 'project-chat-heartbeat' project.pid %}';
 </script>
 {% endblock %}
 
