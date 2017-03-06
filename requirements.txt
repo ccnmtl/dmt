@@ -128,7 +128,7 @@ django-extra-views==0.8.0
 bleach==1.4.3.ccnmtl
 html5lib==0.9999999
 freezegun==0.3.8
-gunicorn==19.6.0
+gunicorn==19.7.0
 django-storages==1.5.2
 django-cacheds3storage==0.1.2
 django-markwhat==1.5.1
