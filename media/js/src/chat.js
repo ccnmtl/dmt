@@ -247,6 +247,10 @@ require([
         entry.append('<div class="col-md-9 ircmessage">' +
                      renderer.render(data[attr]) + '</div>');
         appendLog(entry);
+        // if we get a message from a user, that's
+        // as good as a heartbeat
+        seen(data.username, data.fullname);
+        displayPresence();
     };
 
     var appendLog = function(msg) {
