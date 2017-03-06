@@ -67,6 +67,20 @@ require([
     var renderer = new MarkdownRenderer();
     var heartbeatInterval = 10 * 1000;
 
+    // indexed by username
+    //   each entry is dict with status, fullname, lastHB time
+    //   and any other fields we want to store there
+    var usersPresent = {};
+
+    var seen = function(username, fullname) {
+        var timestamp = Date.now();
+        usersPresent[username] = {
+            'fullname': fullname,
+            'lastSeen': timestamp,
+            'status': 'online'
+        };
+    };
+
     var updateToken = function() {
         $.ajax({
             url: window.freshTokenURL,
@@ -107,18 +121,16 @@ require([
     };
 
     var heartBeat = function() {
-        console.log("heartbeat");
         $.ajax({
             type: 'POST',
             url: window.heartbeatURL,
             data: {},
-            success: function() {
-                console.log("heartbeat succeeded");
-            },
             error: function() {
-                console.log('heartbeat failed');
+                appendLog($('<div class="alert"><strong>' +
+                            'Heartbeat failed.</strong></div>'));
             }
         });
+        // trigger the next heartbeat
         setTimeout(heartBeat, heartbeatInterval);
     };
 
@@ -127,7 +139,7 @@ require([
         var data = JSON.parse(envelope.content);
 
         if ('heartbeat' in data) {
-            console.log("heartbeat received");
+            seen(data.username, data.fullname);
             return;
         }
 
