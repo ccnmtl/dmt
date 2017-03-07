@@ -6,7 +6,6 @@ require([
     domReady(function() {
         var $daterange = $('.input-daterange');
         var $form = $daterange.closest('form');
-        var $submitButton = $form.find('button[type="submit"]');
 
         $daterange.on('change', function(e) {
             var start = $form.find('input[name="interval_start"]').val();

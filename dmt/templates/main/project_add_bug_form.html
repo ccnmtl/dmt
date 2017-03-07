@@ -31,9 +31,9 @@
 
                     <div class="form-group">
                         <script>
-                            var milestoneBugTargets = [];
+                            window.milestoneBugTargets = [];
                             {% for milestone in object.milestone_set.all %}
-                                milestoneBugTargets.push(
+                                window.milestoneBugTargets.push(
                                     new Date('{{milestone.target_date.isoformat}}')
                                 );
                             {% endfor %}

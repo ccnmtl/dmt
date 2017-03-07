@@ -18,6 +18,6 @@ require([
 
         var $toolbar = $textarea.closest('.form-group')
             .find('.js-toolbar.toolbar-commenting');
-        var toolbar = new MarkdownToolbar($toolbar, $textarea, preview);
+        new MarkdownToolbar($toolbar, $textarea, preview);
     });
 });

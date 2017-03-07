@@ -14,7 +14,7 @@ require([
         var preview = new MarkdownPreview(
             $textarea, $('.dmt-markdown-preview'));
 
-        var toolbar = new MarkdownToolbar(
+        new MarkdownToolbar(
             $('#pmt-add-comment-form .js-toolbar.toolbar-commenting'),
             $textarea,
             preview
