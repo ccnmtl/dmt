@@ -8,7 +8,7 @@ from random import randint
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView, View
 
@@ -80,6 +80,27 @@ class ChatPost(View):
             broker.send(json.dumps(e))
 
         return HttpResponseRedirect(reverse('project-chat', args=[pid]))
+
+
+class ChatHeartBeat(View):
+    def post(self, request, pid):
+        project = get_object_or_404(Project, pid=pid)
+        # # send out over zmq
+
+        # the message we are broadcasting
+        md = dict(project_pid=project.pid,
+                  username=request.user.username,
+                  fullname=request.user.get_full_name(),
+                  heartbeat=True)
+        # an envelope that contains that message serialized
+        # and the address that we are publishing to
+        e = dict(address="%s.project_%d" %
+                 (settings.ZMQ_APPNAME, project.pid),
+                 content=json.dumps(md))
+
+        broker = settings.BROKER_PROXY()
+        broker.send(json.dumps(e))
+        return HttpResponse("ok")
 
 
 class ChatArchive(TemplateView):

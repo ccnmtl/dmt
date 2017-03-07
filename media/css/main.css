@@ -1521,3 +1521,7 @@ select#project-personnel-input {
         it take up the whole column. */
 		width: 100%;
 }
+
+#presence {
+		width: 150px;
+}
