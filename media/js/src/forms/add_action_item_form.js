@@ -13,10 +13,10 @@ require([
         var $selectEl = $('#add-action-item-form #action_item-milestone');
 
         // Get target dates from a global :-/
-        if (typeof milestoneActionItemTargets === 'undefined') {
+        if (typeof window.milestoneActionItemTargets === 'undefined') {
             return;
         }
-        var targetDates = milestoneActionItemTargets;
+        var targetDates = window.milestoneActionItemTargets;
 
         // Refresh target date when page loads
         formUtils.refreshTargetDate($selectEl, targetDates);
@@ -41,7 +41,7 @@ require([
 
         var $toolbar = $textarea.closest('.form-group')
             .find('.js-toolbar.toolbar-commenting');
-        var toolbar = new MarkdownToolbar($toolbar, $textarea, preview);
+        new MarkdownToolbar($toolbar, $textarea, preview);
 
         setupDateSwitcher();
 
