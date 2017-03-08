@@ -14,3 +14,4 @@ node_modules
 npm-debug.log
 karma-test-results.xml
 wheelhouse
+media/*built.js
