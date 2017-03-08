@@ -16,6 +16,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 before_script:
   - psql -c 'create database ci_test;' -U postgres
+  - node --version
 script:
   - make travis
   - make behave
