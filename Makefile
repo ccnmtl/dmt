@@ -5,7 +5,7 @@ REQUIREJS=$(NODE_MODULES)/.bin/r.js
 PY_DIRS=$(APP) features
 MAX_COMPLEXITY=7
 
-all: jstest eslint jenkins
+all: jstest eslint js jenkins
 
 include *.mk
 
