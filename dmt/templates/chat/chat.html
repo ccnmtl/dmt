@@ -36,15 +36,15 @@
     {% for message in room.recent_messages %}
         {% ifchanged message.added.date %}
             <div class="row">
-                <div class="col-md-12 bg-info">
+                <div class="col-sm-12 bg-info">
                     {{message.added.date}}
                 </div>
             </div>
         {% endifchanged %}
 <div class="row">
-        <div class="col-md-1 timestamp">{{message.added|date:"H:i"}}</div>
-        <div class="col-md-2 nick"><a href="{% url 'user_detail' message.user.userprofile.username %}">{{message.user.get_full_name}}</a></div>
-        <div class="col-md-9 ircmessage">{{message.text|commonmark|linkify|emoji_replace}}</div>
+        <div class="col-sm-1 timestamp">{{message.added|date:"H:i"}}</div>
+        <div class="col-sm-2 nick"><a href="{% url 'user_detail' message.user.userprofile.username %}">{{message.user.get_full_name}}</a></div>
+        <div class="col-sm-9 ircmessage">{{message.text|commonmark|linkify|emoji_replace}}</div>
 </div>
 {% endfor %}
 </div>
@@ -52,8 +52,8 @@
 <form id="msg_form" class="form-inline post-form">
     {% csrf_token %}
     <div class="row" id="chat-message-form">
-        <div class="col-md-3"><input type="submit" class="btn btn-primary" value="Post" /></div>
-        <div class="col-md-9">
+        <div class="col-sm-3"><input type="submit" class="btn btn-primary" value="Post" /></div>
+        <div class="col-sm-9">
             <input type="text" id="text-input" name="text" class="form-control" />
         </div>
     </div>
