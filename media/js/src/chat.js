@@ -239,12 +239,12 @@ require([
         if (minutes < 10) {
             minutes = '0' + minutes;
         }
-        entry.append('<div class="col-md-1 timestamp">' + hours + ':' +
+        entry.append('<div class="col-sm-1 timestamp">' + hours + ':' +
                      minutes + '</div>');
-        entry.append('<div class="col-md-2 nick"><a href="' + data.userURL +
+        entry.append('<div class="col-sm-2 nick"><a href="' + data.userURL +
                      '">' + data.fullname + '</a></div>');
         var attr = 'message_text';
-        entry.append('<div class="col-md-9 ircmessage">' +
+        entry.append('<div class="col-sm-9 ircmessage">' +
                      renderer.render(data[attr]) + '</div>');
         appendLog(entry);
         // if we get a message from a user, that's
