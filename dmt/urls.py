@@ -5,8 +5,7 @@ import djangowind.views
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
-from django.http import HttpResponse
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView
 
 from dmt.main.views import (
     AddTrackersView, SearchView,
@@ -39,12 +38,6 @@ from dmt.main.views import (
     ProjectPinView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
-
-
-class PublicView(View):
-    """ dummy public view for selenium test purposes """
-    def get(self, request):
-        return HttpResponse("<html><body>dummy public view</body></html>")
 
 
 redirect_after_logout = getattr(settings, 'LOGOUT_REDIRECT_URL', None)
@@ -199,7 +192,6 @@ urlpatterns = [
     url(r'^stats/$', TemplateView.as_view(template_name="stats.html")),
     url(r'^smoketest/', include('smoketest.urls')),
     url(r'^chat/', include('dmt.chat.urls')),
-    url(r'^__public__/$', PublicView.as_view(), name='selenium-public-view'),
     url(r'^uploads/(?P<path>.*)$',
         django.views.static.serve, {'document_root': settings.MEDIA_ROOT}),
 ]
