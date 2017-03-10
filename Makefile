@@ -2,15 +2,12 @@ APP=dmt
 
 JS_FILES=media/js/src/ media/js/tests
 REQUIREJS=$(NODE_MODULES)/.bin/r.js
-PY_DIRS=$(APP) features
+PY_DIRS=$(APP)
 MAX_COMPLEXITY=7
 
 all: jstest eslint js jenkins
 
 include *.mk
-
-behave: check
-	$(MANAGE) behave
 
 integration: check $(JS_SENTINAL)
 	$(MANAGE) test --settings=$(APP).settings_integration

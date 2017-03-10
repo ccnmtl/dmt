@@ -1,4 +1,5 @@
 import django.contrib.auth.views
+import django.views.static
 import djangowind.views
 
 from django.conf.urls import include, url
@@ -37,6 +38,7 @@ from dmt.main.views import (
     ProjectPinView,
 )
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
+
 
 redirect_after_logout = getattr(settings, 'LOGOUT_REDIRECT_URL', None)
 auth_urls = url(r'^accounts/', include('django.contrib.auth.urls'))
@@ -191,7 +193,7 @@ urlpatterns = [
     url(r'^smoketest/', include('smoketest.urls')),
     url(r'^chat/', include('dmt.chat.urls')),
     url(r'^uploads/(?P<path>.*)$',
-        'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+        django.views.static.serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 
 if settings.DEBUG:

@@ -1251,7 +1251,7 @@ class TestForum(TestCase):
     def test_node_reply_with_no_project(self):
         n = NodeFactory(replies=0)
         n.project = None
-        n.project_id = 0
+        n.project_id = None
         n.save()
         r = self.c.post(
             n.get_absolute_url() + "reply/",

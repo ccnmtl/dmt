@@ -3,20 +3,11 @@ dist: trusty
 sudo: false
 addons:
   postgresql: "9.6"
-  firefox: "45.4.0esr"
 python:
   - "2.7"
-before_install:
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-linux64.tar.gz
-  - mkdir geckodriver
-  - tar -xzf geckodriver-v0.13.0-linux64.tar.gz -C geckodriver
-  - export PATH=$PATH:$PWD/geckodriver
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
 before_script:
   - psql -c 'create database ci_test;' -U postgres
 script:
   - make travis
-  - make behave
 notifications:
   slack: ccnmtl:GizSNscLWJLldjQrffB8mwgm
