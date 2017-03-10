@@ -13,10 +13,10 @@ require([
         var $selectEl = $('#add-bug-form #bug-milestone');
 
         // Get target dates from a global :-/
-        if (typeof milestoneBugTargets === 'undefined') {
+        if (typeof window.milestoneBugTargets === 'undefined') {
             return;
         }
-        var targetDates = milestoneBugTargets;
+        var targetDates = window.milestoneBugTargets;
 
         // Refresh target date when page loads
         formUtils.refreshTargetDate($selectEl, targetDates);
@@ -40,7 +40,7 @@ require([
 
         var $toolbar = $textarea.closest('.form-group')
             .find('.js-toolbar.toolbar-commenting');
-        var toolbar = new MarkdownToolbar($toolbar, $textarea, preview);
+        new MarkdownToolbar($toolbar, $textarea, preview);
 
         setupDateSwitcher();
     });

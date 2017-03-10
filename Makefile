@@ -5,7 +5,7 @@ REQUIREJS=$(NODE_MODULES)/.bin/r.js
 PY_DIRS=$(APP) features
 MAX_COMPLEXITY=7
 
-all: jstest jenkins
+all: jstest eslint js jenkins
 
 include *.mk
 
@@ -30,5 +30,8 @@ media/chat-built.js: $(JS_SENTINAL) chat-build.js media/js/src/chat.js media/js/
 travis: $(JS_SENTINAL) parallel-tests jstest integration
 
 js: media/main-built.js media/chat-built.js
+
+eslint: $(JS_SENTINAL) media/js/src
+	$(NODE_MODULES)/.bin/eslint media/js/src/**
 
 .PHONY: js

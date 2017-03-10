@@ -17,9 +17,9 @@
                     </div>
                     <div class="form-group">
                         <script>
-                            var milestoneActionItemTargets = [];
+                            window.milestoneActionItemTargets = [];
                             {% for milestone in object.milestone_set.all %}
-                                milestoneActionItemTargets.push(
+                                window.milestoneActionItemTargets.push(
                                     new Date('{{milestone.target_date.isoformat}}')
                                 );
                             {% endfor %}
