@@ -30,9 +30,7 @@ def logged_in(context):
     # can only set a cookie for the domain we are on
     # so, in case this is the very first step to run,
     # we have to visit some page on the site first.
-    # a 404 loads quickly and shouldn't involve the databases,
-    # so we reduce the chances of a race on the sqlite driver.
-    b.get(context.browser_url("/some_404_page/"))
+    b.get(context.browser_url("/__public__/"))
     b.find_element_by_xpath("//body")
     user, s = create_pre_authenticated_session()
     b.add_cookie({'name': settings.SESSION_COOKIE_NAME, 'value': s})
