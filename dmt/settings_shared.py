@@ -51,7 +51,6 @@ INSTALLED_APPS += [  # noqa
     'dmt.report',
     'dmt.api',
     'dmt.chat',
-    'behave_django',
     'oauth2_provider',
     's3sign',
     'crispy_forms',
@@ -94,5 +93,5 @@ WINDSOCK_BROKER_URL = "tcp://localhost:5555"
 WINDSOCK_WEBSOCKETS_BASE = "ws://localhost:5050/socket/"
 WINDSOCK_SECRET = "6f1d916c-7761-4874-8d5b-8f8f93d20bf2"
 
-if 'test' in sys.argv or 'jenkins' in sys.argv or 'behave' in sys.argv:
+if 'test' in sys.argv or 'jenkins' in sys.argv:
     BROKER_PROXY = zmqproxy.DummyProxy
