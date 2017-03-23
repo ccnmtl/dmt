@@ -971,7 +971,6 @@ padding: 4px;
 .milestone-page .table>thead>tr>th,
 .table-sortable>thead>tr>th,
 .table-items>thead>tr>th {
-    min-width: 90px;
     max-width: 110px;
     border-left: 1px solid #ddd;
     border-collapse: collapse;

@@ -3,6 +3,7 @@
 {% load emoji_tags %}
 {% load dmttags %}
 {% load waffle_tags %}
+{% load static %}
 
 {% block title %}Milestone&ndash;{{object.name}}{% endblock %}
 {% block extraclass %} class="milestone-page"{% endblock %}
@@ -83,22 +84,61 @@
 
 
 {% if object.item_set.exists %}
+<form method="post">{% csrf_token %}
+    <div class="actions form-inline">
+        <label>
+            Action: <select name="action" required="" class="form-control input-sm">
+            <option value="" selected="selected">---------</option>
+            <option value="assign_selected">Re-assign selected</option>
+            </select>
+        </label>
+        <label class="assign-to hidden">
+            Re-assign to: <select name="assigned_to" class="form-control input-sm">
+            <option value="" selected="selected">---------</option>
+            {% for user in object.project.all_personnel_in_project %}
+                <option value="{{user.username}}"
+                        {% if user.username == item.assigned_user.userprofile.username %}
+                        selected="selected"
+                        {% endif %}
+                >{% firstof user.fullname user.username %}</option>
+            {% endfor %}
+            </select>
+        </label>
+        <button type="submit" class="btn btn-primary btn-sm"
+                title="Run the selected action">Go</button>
+
+        <span class="action-counter help-block"
+              data-actions-icnt="{{object.item_set.count}}"
+              style="display: inline;">
+            0 of {{object.item_set.count}} selected
+        </span>
+    </div>
 <table class="table table-condensed table-striped tablesorter tablesorter-default">
     <thead>
         <tr>
+            <th scope="col" class="action-checkbox-column" data-sorter="false">
+                <div class="text"><span><input type="checkbox" id="action-toggle"></span></div>
+                <div class="clear"></div>
+            </th>
             <th>Title</th>
             <th>Status</th>
-      <th class="hidden-xs">Priority</th>
-      <th class="hidden-xs">Target Date</th>
-      <th class="hidden-sm hidden-xs">Owner</th>
-      <th class="hidden-xs">Assigned To</th>
-      <th class="hidden-sm hidden-xs">Modified</th>
+            <th class="hidden-xs">Priority</th>
+            <th class="hidden-xs">Target Date</th>
+            <th class="hidden-sm hidden-xs">Owner</th>
+            <th class="hidden-xs">Assigned To</th>
+            <th class="hidden-sm hidden-xs">Modified</th>
         </tr>
     </thead>
 
     <tbody>
         {% for item in object.sorted_items %}
-        <tr>
+            <tr>
+                <td class="action-checkbox">
+                    <input class="action-select"
+                           name="_selected_action"
+                           type="checkbox"
+                           value="{{item.pk}}">
+                </td>
             <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
                width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
             <td class="{{item.status_class}} ">{{item.status}}</td>
@@ -116,15 +156,35 @@
     </tbody>
 
 </table>
+</form>
 {% endif %}
 {% endblock %}
 
 {% block js %}
+    {{ block.super }}
     <script>
         $(document).ready(function()  {
             {% if object.item_set.exists %}
-               $("table.tablesorter").tablesorter({sortList: [[1,0], [3,1]]});
+            $("table.tablesorter").tablesorter({
+                sortList: [[2,0], [4,1]]
+            });
             {% endif %}
+            $('select[name="action"]').change(function(e) {
+                var selected = $(this).find(':selected')[0].value;
+                if (selected === 'assign_selected') {
+                    $('.assign-to').removeClass('hidden');
+                } else {
+                    $('.assign-to').addClass('hidden');
+                }
+            });
         });
     </script>
+
+    <script src="/admin/jsi18n/"></script>
+    <script>
+    // A modified version of django's admin/js/jquery.init.js
+    var django = django || {};
+    django.jQuery = jQuery;
+    </script>
+    <script type="text/javascript" src="{% static 'admin/js/actions.js' %}"></script>
 {% endblock %}
