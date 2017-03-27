@@ -10,8 +10,6 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q, Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.utils.decorators import method_decorator
@@ -1549,7 +1547,7 @@ class AddTrackersView(LoggedInMixin, FormSetView):
 
 
 def server_error(request, template_name='500.html'):
-    return render_to_response(
+    return render(
+        request,
         template_name,
-        context_instance=RequestContext(request),
     )
