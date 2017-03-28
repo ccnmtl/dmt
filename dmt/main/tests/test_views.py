@@ -716,12 +716,6 @@ class TestMilestoneViews(TestCase):
         self.assertTrue(m.name in r.content)
         self.assertTrue(m.get_absolute_url() in r.content)
 
-    def test_milestone_page(self):
-        m = MilestoneFactory()
-        r = self.c.get(m.get_absolute_url())
-        self.assertEqual(r.status_code, 200)
-        self.assertTrue(m.name in r.content)
-
     def test_milestone_index(self):
         r = self.c.get("/milestone/")
         self.assertEqual(r.status_code, 200)
@@ -739,6 +733,84 @@ class TestMilestoneViews(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get(p.get_absolute_url())
         self.assertFalse(m.name in r.content)
+
+
+class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
+    def setUp(self):
+        super(TestMilestoneDetailView, self).setUp()
+        self.m = MilestoneFactory()
+
+    def test_get(self):
+        r = self.client.get(self.m.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, self.m.name)
+
+    def test_get_with_items(self):
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        self.assertEqual(self.m.active_items().count(), 3)
+
+        r = self.client.get(self.m.get_absolute_url())
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, self.m.name)
+
+        # Assert that the milestone page displays its items
+        items = self.m.active_items().order_by('title')
+        self.assertContains(r, items[0].title)
+        self.assertContains(r, items[1].title)
+        self.assertContains(r, items[2].title)
+
+    def test_post_with_none_selected(self):
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        self.assertEqual(self.m.active_items().count(), 3)
+
+        assignee = UserFactory()
+
+        r = self.client.post(self.m.get_absolute_url(), {
+            'assigned_to': assignee.userprofile.pk,
+        })
+        self.assertEqual(r.status_code, 302)
+
+        items = self.m.active_items().order_by('title')
+        self.assertNotEqual(items[0].assigned_user, assignee)
+        self.assertNotEqual(items[1].assigned_user, assignee)
+        self.assertNotEqual(items[2].assigned_user, assignee)
+
+        r = self.client.get(r.url)
+        self.assertEqual(r.status_code, 200)
+        self.assertNotContains(
+            r,
+            'Assigned the following items to <strong>{}</strong>:'.format(
+                assignee.userprofile.get_fullname()))
+
+    def test_post_with_two_selected(self):
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        self.assertEqual(self.m.active_items().count(), 3)
+
+        assignee = UserFactory()
+
+        items = self.m.active_items().order_by('title')
+        r = self.client.post(self.m.get_absolute_url(), {
+            'assigned_to': assignee.userprofile.pk,
+            '_selected_action': [items[0].pk, items[2].pk],
+        })
+        self.assertEqual(r.status_code, 302)
+
+        self.assertEqual(items[0].assigned_user, assignee)
+        self.assertNotEqual(items[1].assigned_user, assignee)
+        self.assertEqual(items[2].assigned_user, assignee)
+
+        r = self.client.get(r.url)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(
+            r,
+            'Assigned the following items to <strong>{}</strong>:'.format(
+                assignee.userprofile.get_fullname()))
 
 
 class TestItemViews(LoggedInTestMixin, TestCase):

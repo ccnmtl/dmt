@@ -614,6 +614,30 @@ class NodeDeleteView(LoggedInMixin, DeleteView):
 class MilestoneDetailView(LoggedInMixin, DetailView):
     model = Milestone
 
+    def post(self, request, *args, **kwargs):
+        items = request.POST.getlist('_selected_action')
+        assign_to = request.POST.get('assigned_to')
+
+        assignee = get_object_or_404(UserProfile, username=assign_to)
+
+        item_names = []
+        for pk in items:
+            item = get_object_or_404(Item, iid=pk)
+            item.reassign(request.user.userprofile, assignee, '')
+            item_names.append(
+                '<a href="{}">{}</a>'.format(
+                    item.get_absolute_url(), item.title))
+
+        if len(item_names) > 0:
+            msg = 'Assigned the following items to ' + \
+                  '<strong>{}</strong>: {}'.format(
+                      assignee.get_fullname(),
+                      ', '.join(item_names))
+            messages.success(request, mark_safe(msg))
+
+        return HttpResponseRedirect(
+            reverse('milestone_detail', args=args, kwargs=kwargs))
+
 
 class GroupCreateView(LoggedInMixin, View):
     def post(self, request):
