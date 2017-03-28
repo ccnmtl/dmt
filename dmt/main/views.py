@@ -614,7 +614,7 @@ class NodeDeleteView(LoggedInMixin, DeleteView):
 class MilestoneDetailView(LoggedInMixin, DetailView):
     model = Milestone
 
-    def post(self, request, pk):
+    def post(self, request, *args, **kwargs):
         items = request.POST.getlist('_selected_action')
         assign_to = request.POST.get('assigned_to')
 
@@ -628,13 +628,15 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
                 '<a href="{}">{}</a>'.format(
                     item.get_absolute_url(), item.title))
 
-        msg = 'Assigned the following items to <strong>{}</strong>: {}'.format(
-            assignee.get_fullname(),
-            ', '.join(item_names))
+        if len(item_names) > 0:
+            msg = 'Assigned the following items to ' + \
+                  '<strong>{}</strong>: {}'.format(
+                      assignee.get_fullname(),
+                      ', '.join(item_names))
+            messages.success(request, mark_safe(msg))
 
-        messages.success(request, mark_safe(msg))
-
-        return super(MilestoneDetailView, self).get(request, pk)
+        return HttpResponseRedirect(
+            reverse('milestone_detail', args=args, kwargs=kwargs))
 
 
 class GroupCreateView(LoggedInMixin, View):
