@@ -27,7 +27,8 @@ class StaffReportCalculator(object):
                 continue
 
             # Find all users whose primary group is the selected group.
-            users = UserProfile.objects.filter(primary_group=group_user)
+            users = UserProfile.objects.filter(primary_group=group_user,
+                                               status='active')
 
             for user in users:
                 user_time = user.interval_time(start, end)
