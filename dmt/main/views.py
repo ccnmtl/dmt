@@ -619,7 +619,6 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
         item_names = []
         for pk in items:
             item = get_object_or_404(Item, iid=pk)
-            print(item.milestone)
             item.milestone = new_milestone
             item.save()
             item_names.append(
