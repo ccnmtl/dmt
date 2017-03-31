@@ -614,16 +614,31 @@ class NodeDeleteView(LoggedInMixin, DeleteView):
 class MilestoneDetailView(LoggedInMixin, DetailView):
     model = Milestone
 
-    def post(self, request, *args, **kwargs):
-        items = request.POST.getlist('_selected_action')
-        assign_to = request.POST.get('assigned_to')
-
-        assignee = get_object_or_404(UserProfile, username=assign_to)
-
+    @staticmethod
+    def move_items(request, items, new_milestone):
         item_names = []
         for pk in items:
             item = get_object_or_404(Item, iid=pk)
-            item.reassign(request.user.userprofile, assignee, '')
+            print(item.milestone)
+            item.milestone = new_milestone
+            item.save()
+            item_names.append(
+                '<a href="{}">{}</a>'.format(
+                    item.get_absolute_url(), item.title))
+
+        if len(item_names) > 0:
+            msg = 'Moved the following items to ' + \
+                  '<strong>{}</strong>: {}'.format(
+                      new_milestone.name,
+                      ', '.join(item_names))
+            messages.success(request, mark_safe(msg))
+
+    @staticmethod
+    def reassign_items(request, items, new_assignee):
+        item_names = []
+        for pk in items:
+            item = get_object_or_404(Item, iid=pk)
+            item.reassign(request.user.userprofile, new_assignee, '')
             item_names.append(
                 '<a href="{}">{}</a>'.format(
                     item.get_absolute_url(), item.title))
@@ -631,9 +646,22 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
         if len(item_names) > 0:
             msg = 'Assigned the following items to ' + \
                   '<strong>{}</strong>: {}'.format(
-                      assignee.get_fullname(),
+                      new_assignee.get_fullname(),
                       ', '.join(item_names))
             messages.success(request, mark_safe(msg))
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get('action')
+        items = request.POST.getlist('_selected_action')
+
+        if action == 'move':
+            milestone_id = request.POST.get('move_to')
+            milestone = get_object_or_404(Milestone, mid=milestone_id)
+            self.move_items(request, items, milestone)
+        elif action == 'assign':
+            assign_to = request.POST.get('assigned_to')
+            assignee = get_object_or_404(UserProfile, username=assign_to)
+            self.reassign_items(request, items, assignee)
 
         return HttpResponseRedirect(
             reverse('milestone_detail', args=args, kwargs=kwargs))

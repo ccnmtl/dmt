@@ -761,7 +761,7 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
         self.assertContains(r, items[1].title)
         self.assertContains(r, items[2].title)
 
-    def test_post_with_none_selected(self):
+    def test_post_reassign_with_none_selected(self):
         ItemFactory(milestone=self.m)
         ItemFactory(milestone=self.m)
         ItemFactory(milestone=self.m)
@@ -770,6 +770,7 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
         assignee = UserFactory()
 
         r = self.client.post(self.m.get_absolute_url(), {
+            'action': 'assigned_to',
             'assigned_to': assignee.userprofile.pk,
         })
         self.assertEqual(r.status_code, 302)
@@ -786,7 +787,7 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
             'Assigned the following items to <strong>{}</strong>:'.format(
                 assignee.userprofile.get_fullname()))
 
-    def test_post_with_two_selected(self):
+    def test_post_reassign_with_two_selected(self):
         ItemFactory(milestone=self.m)
         ItemFactory(milestone=self.m)
         ItemFactory(milestone=self.m)
@@ -796,6 +797,7 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
 
         items = self.m.active_items().order_by('title')
         r = self.client.post(self.m.get_absolute_url(), {
+            'action': 'assign',
             'assigned_to': assignee.userprofile.pk,
             '_selected_action': [items[0].pk, items[2].pk],
         })
@@ -811,6 +813,33 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
             r,
             'Assigned the following items to <strong>{}</strong>:'.format(
                 assignee.userprofile.get_fullname()))
+
+    def test_post_move_with_two_selected(self):
+        m2 = MilestoneFactory(project=self.m.project)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        self.assertEqual(self.m.active_items().count(), 3)
+
+        items = self.m.active_items().order_by('title')
+        r = self.client.post(self.m.get_absolute_url(), {
+            'action': 'move',
+            'move_to': m2.mid,
+            '_selected_action': [items[0].pk, items[2].pk],
+        })
+        self.assertEqual(r.status_code, 302)
+
+        m1_items = self.m.active_items().order_by('title')
+        m2_items = m2.active_items().order_by('title')
+        self.assertEqual(m1_items.count(), 1)
+        self.assertEqual(m2_items.count(), 2)
+
+        r = self.client.get(r.url)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(
+            r,
+            'Moved the following items to <strong>{}</strong>:'.format(
+                m2.name))
 
 
 class TestItemViews(LoggedInTestMixin, TestCase):
