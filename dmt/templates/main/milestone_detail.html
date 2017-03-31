@@ -89,18 +89,23 @@
         <label>
             Action: <select name="action" required="" class="form-control input-sm">
             <option value="" selected="selected">---------</option>
-            <option value="assign_selected">Re-assign selected</option>
+            <option value="move">Move selected</option>
+            <option value="assign">Re-assign selected</option>
             </select>
         </label>
         <label class="assign-to hidden">
             Re-assign to: <select name="assigned_to" class="form-control input-sm">
             <option value="" selected="selected">---------</option>
             {% for user in object.project.all_personnel_in_project %}
-                <option value="{{user.username}}"
-                        {% if user.username == item.assigned_user.userprofile.username %}
-                        selected="selected"
-                        {% endif %}
-                >{% firstof user.fullname user.username %}</option>
+                <option value="{{user.username}}">{% firstof user.fullname user.username %}</option>
+            {% endfor %}
+            </select>
+        </label>
+        <label class="move-to-milestone hidden">
+            Move to: <select name="move_to" class="form-control input-sm">
+            <option value="" selected="selected">---------</option>
+            {% for m in object.project.open_milestones %}
+                <option value="{{m.pk}}">{{ m.name }}</option>
             {% endfor %}
             </select>
         </label>
@@ -171,10 +176,14 @@
             {% endif %}
             $('select[name="action"]').change(function(e) {
                 var selected = $(this).find(':selected')[0].value;
-                if (selected === 'assign_selected') {
+                if (selected === 'assign') {
+                    $('.move-to-milestone').addClass('hidden');
                     $('.assign-to').removeClass('hidden');
-                } else {
+                } else if (selected === 'move') {
                     $('.assign-to').addClass('hidden');
+                    $('.move-to-milestone').removeClass('hidden');
+                } else {
+                    $('.assign-to,.move-to-milestone').addClass('hidden');
                 }
             });
         });
