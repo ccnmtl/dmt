@@ -226,6 +226,14 @@ dd:hover .priority-select { visibility: visible; }
 
 .tablesorter tbody tr td:nth-child(1) { max-width: 400px; }
 
+.tablesorter-default td {
+    background-color: inherit !important;
+}
+
+.tablesorter tr.selected {
+    background-color: #ffffcc !important;
+}
+
 /* ------ Add Action Item ------ */
 
 .form-group-col-2 {
