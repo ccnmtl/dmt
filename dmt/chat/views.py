@@ -55,21 +55,65 @@ class FreshToken(View):
         return JsonResponse(dict(token=gen_token(request, project.pid)))
 
 
+class ActionProcessor(object):
+    """ process the text
+
+    this is the point where we look for "special" messages
+    that represent actions rather than just plain
+    text messages. eg, "/todo" or "/tracker"
+    actions.
+
+    if none of those appear, we just store the message
+    and return the text.
+
+    if there's an action, we do the expected action
+    and return the text that should be displayed in
+    the channel (eg, "TODO created in project...", etc.)
+
+    this will also be a useful place to hang text transformation
+    functions, like replacing "#1234" with a link to the specified
+    PMT
+    """
+    def __init__(self, project, user):
+        self.project = project
+        self.user = user
+        # future work: switch these to regexps like
+        # django's url router. for now, just simple
+        # prefix matching will do...
+        self.actions = [
+            ('/todo ', self.add_todo),
+        ]
+
+    def process(self, text):
+        self.text = text
+        for prefix, action in self.actions:
+            if text.startswith(prefix):
+                self.text = action()
+        Message.objects.create(project=self.project, user=self.user,
+                               text=self.text)
+        return self.text
+
+    def add_todo(self):
+        title = self.text[len('/todo '):]
+        item = self.project.add_todo(self.user.userprofile, title)
+        return "TODO created: [%s](%s)" % (title, item.get_absolute_url())
+
+
 class ChatPost(View):
     def post(self, request, pid):
         project = get_object_or_404(Project, pid=pid)
         text = request.POST.get('text', '')
         if text:
-            m = Message.objects.create(project=project, user=request.user,
-                                       text=text)
+            p = ActionProcessor(project, request.user)
+            text = p.process(text)
             # send out over zmq
 
             # the message we are broadcasting
             md = dict(project_pid=project.pid,
-                      username=m.user.username,
-                      fullname=m.user.get_full_name(),
-                      userURL=m.user.userprofile.get_absolute_url(),
-                      message_text=m.text)
+                      username=p.user.username,
+                      fullname=p.user.get_full_name(),
+                      userURL=p.user.userprofile.get_absolute_url(),
+                      message_text=text)
             # an envelope that contains that message serialized
             # and the address that we are publishing to
             e = dict(address="%s.project_%d" %

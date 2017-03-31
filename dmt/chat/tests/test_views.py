@@ -6,6 +6,8 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.test import RequestFactory
 
+from dmt.main.models import Item
+
 from .factories import MessageFactory
 from ..views import Chat, FreshToken, ChatPost, ChatArchive, ChatArchiveDate
 from ..models import Message
@@ -46,6 +48,27 @@ class TestViews(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Message.objects.filter(
             text=text, project=m.project, user=m.user).count(), 1)
+
+    def test_chat_post_add_todo(self):
+        m = MessageFactory()
+        # the project needs a milestone before
+        # we can create a TODO
+        m.project.add_milestone('a milestone', '2000-01-01', '')
+        text = '/todo new todo from chat'
+        request = RequestFactory().post(
+            reverse('project-chat-post', args=[m.project.pid]),
+            data=dict(text=text))
+        request.user = m.user
+        response = ChatPost.as_view()(
+            request, pid=m.project.pid)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Message.objects.filter(
+            text__startswith='TODO created', project=m.project,
+            user=m.user).count(), 1)
+        self.assertEqual(Item.objects.filter(
+            title='new todo from chat',
+            owner_user=m.user, assigned_user=m.user,
+        ).count(), 1)
 
     def test_archive(self):
         m = MessageFactory()

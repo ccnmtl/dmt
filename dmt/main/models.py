@@ -561,6 +561,7 @@ class Project(models.Model):
         if tags:
             item.tags.add(*tags)
         milestone.update_milestone()
+        return item
 
     def add_item(self, type='action item', title="",
                  assigned_to=None, owner=None, milestone=None,
