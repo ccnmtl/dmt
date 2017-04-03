@@ -39,7 +39,7 @@ from dmt.main.forms import (
     ProjectUpdateForm, MilestoneUpdateForm, ProjectPersonnelForm
 )
 from dmt.main.templatetags.dmttags import linkify
-from dmt.main.utils import new_duration, safe_basename, simpleduration_string
+from .utils import safe_basename, simpleduration_string
 
 from django_markwhat.templatetags.markup import commonmark
 from dateutil.relativedelta import relativedelta
@@ -1568,26 +1568,7 @@ class AddTrackersView(LoggedInMixin, FormSetView):
         time = form.cleaned_data.get('time', '1 hour')
         client_uni = form.cleaned_data.get('client_uni')
 
-        d = new_duration(time)
-        td = d.timedelta()
-
-        milestone = project.upcoming_milestone()
-        item = Item.objects.create(
-            milestone=milestone,
-            type='action item',
-            owner_user=user, assigned_user=user,
-            title=task, status='VERIFIED',
-            priority=1, target_date=milestone.target_date,
-            last_mod=timezone.now(),
-            estimated_time=td)
-
-        if client_uni:
-            r = Client.objects.filter(email=client_uni + "@columbia.edu")
-            if r.exists():
-                item.add_clients([r.first()])
-
-        item.add_resolve_time(user.userprofile, td)
-
+        project.add_tracker(user, task, time, client_uni)
         messages.success(
             self.request,
             self.success_message % dict(

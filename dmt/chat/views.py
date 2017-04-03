@@ -83,6 +83,7 @@ class ActionProcessor(object):
         # prefix matching will do...
         self.actions = [
             ('/todo ', self.add_todo),
+            ('/tracker ', self.add_tracker),
         ]
 
         self.filters = [
@@ -127,6 +128,14 @@ class ActionProcessor(object):
                 # just ignore it
                 pass
         return text
+
+    def add_tracker(self):
+        if ':' not in self.text:
+            return self.text
+        (title, d) = self.text[len('/tracker '):].split(':')
+        item = self.project.add_tracker(self.user, title, d)
+        return "TRACKER added: [%s: %s](%s)" % (
+            title, d, item.get_absolute_url())
 
 
 class ChatPost(View):
