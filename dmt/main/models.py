@@ -148,6 +148,8 @@ class UserProfile(models.Model):
             status__in=['OPEN', 'UNASSIGNED', 'INPROGRESS', 'RESOLVED']
         ).exclude(
             assigned_user=self.user
+        ).exclude(
+            milestone__name='Someday/Maybe'
         ).order_by('-priority', '-target_date').select_related(
             'milestone', 'milestone__project', 'assigned_user')
 

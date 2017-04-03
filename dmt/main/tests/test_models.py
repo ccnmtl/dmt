@@ -159,6 +159,23 @@ class UserModelTest(TestCase):
         u = UserProfileFactory(fullname='')
         self.assertEqual(u.get_fullname(), u.username)
 
+    def test_open_owned_items(self):
+        profile = UserProfileFactory()
+
+        # not the owner
+        ItemFactory(assigned_user=profile.user)
+
+        # owned but in the Someday/Maybe milestone
+        s = MilestoneFactory(name='Someday/Maybe')
+        ItemFactory(owner_user=profile.user, milestone=s)
+
+        # owned
+        i = ItemFactory(owner_user=profile.user)
+
+        qs = profile.open_owned_items()
+        self.assertEquals(qs.count(), 1)
+        self.assertEquals(qs.first(), i)
+
 
 class ProjectUserTest(TestCase):
     def test_completed_time_for_interval(self):
