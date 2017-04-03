@@ -70,6 +70,27 @@ class TestViews(unittest.TestCase):
             owner_user=m.user, assigned_user=m.user,
         ).count(), 1)
 
+    def test_chat_post_add_tracker(self):
+        m = MessageFactory()
+        # the project needs a milestone before
+        # we can create a tracker
+        m.project.add_milestone('a milestone', '2000-01-01', '')
+        text = '/tracker new tracker from chat: 2 hours'
+        request = RequestFactory().post(
+            reverse('project-chat-post', args=[m.project.pid]),
+            data=dict(text=text))
+        request.user = m.user
+        response = ChatPost.as_view()(
+            request, pid=m.project.pid)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Message.objects.filter(
+            text__startswith='TRACKER added', project=m.project,
+            user=m.user).count(), 1)
+        self.assertEqual(Item.objects.filter(
+            title='new tracker from chat',
+            owner_user=m.user, assigned_user=m.user,
+        ).count(), 1)
+
     def test_archive(self):
         m = MessageFactory()
         request = RequestFactory().get(reverse('project-chat-archive',
