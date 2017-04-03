@@ -11,7 +11,7 @@ from dateutil import parser
 from taggit.managers import TaggableManager
 from django_statsd.clients import statsd
 from simpleduration import Duration, InvalidDuration
-from dmt.main.utils import simpleduration_string
+from .utils import simpleduration_string, new_duration
 from .timeline import (
     TimeLineEvent, TimeLineComment,
     TimeLinePost, TimeLineActualTime, TimeLineStatus,
@@ -616,6 +616,28 @@ class Project(models.Model):
             skip_self=(not email_everyone),
         )
         milestone.update_milestone()
+        return item
+
+    def add_tracker(self, user, title, time, client_uni=None):
+        d = new_duration(time)
+        td = d.timedelta()
+
+        milestone = self.upcoming_milestone()
+        item = Item.objects.create(
+            milestone=milestone,
+            type='action item',
+            owner_user=user, assigned_user=user,
+            title=title, status='VERIFIED',
+            priority=1, target_date=milestone.target_date,
+            last_mod=timezone.now(),
+            estimated_time=td)
+
+        if client_uni:
+            r = Client.objects.filter(email=client_uni + "@columbia.edu")
+            if r.exists():
+                item.add_clients([r.first()])
+
+        item.add_resolve_time(user.userprofile, td)
         return item
 
     def recent_forum_posts(self, count=10):
