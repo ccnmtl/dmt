@@ -2,6 +2,7 @@ import time
 import hmac
 import hashlib
 import json
+import re
 
 from datetime import datetime
 from random import randint
@@ -12,7 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView, View
 
-from dmt.main.models import Project
+from dmt.main.models import Project, Item
 from .models import Room, Message
 
 
@@ -85,11 +86,19 @@ class ActionProcessor(object):
             ('/tracker ', self.add_tracker),
         ]
 
+        self.filters = [
+            self.auto_link_iids,
+        ]
+
     def process(self, text):
         self.text = text
         for prefix, action in self.actions:
             if text.startswith(prefix):
                 self.text = action()
+
+        for f in self.filters:
+            self.text = f(self.text)
+
         Message.objects.create(project=self.project, user=self.user,
                                text=self.text)
         return self.text
@@ -98,6 +107,27 @@ class ActionProcessor(object):
         title = self.text[len('/todo '):]
         item = self.project.add_todo(self.user.userprofile, title)
         return "TODO created: [%s](%s)" % (title, item.get_absolute_url())
+
+    def auto_link_iids(self, text):
+        """ replace any `#1234` type things with a link to the PMT item """
+
+        """ \B and \b word boundaries are on there to
+        avoid detecting, eg, hashes on URLs.
+
+        so in '#123 foo#124 and #125bar' only the '#123' will match
+        """
+        for iid in re.findall(r'\B\#(\d+)\b', text):
+            try:
+                item = Item.objects.get(iid=iid)
+                title = "#%s: %s" % (iid, item.title)
+                url = item.get_absolute_url()
+                link = "[%s](%s)" % (title, url)
+                text = re.sub(r'\B\#' + iid + r'\b', link, text)
+            except Item.DoesNotExist:
+                # someone mentioned a non-existant iid
+                # just ignore it
+                pass
+        return text
 
     def add_tracker(self):
         if ':' not in self.text:
