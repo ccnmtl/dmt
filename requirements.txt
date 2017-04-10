@@ -60,7 +60,7 @@ python-dateutil==2.6.0
 pytz==2017.2
 simpleduration==0.1.0
 ipaddress==1.0.18
-Faker==0.7.10
+Faker==0.7.11
 factory_boy==2.8.1
 ldap3==2.2.2
 anyjson==0.3.3
