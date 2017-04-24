@@ -37,7 +37,7 @@ wcwidth==0.1.7
 prompt_toolkit==1.0.14
 pygments==2.2.0
 ipython==5.3.0
-ipdb==0.10.2
+ipdb==0.10.3
 isodate==0.5.4
 SPARQLWrapper==1.8.0
 rdflib==4.2.2
