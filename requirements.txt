@@ -46,7 +46,7 @@ coverage==4.4
 pyasn1==0.2.3
 pyOpenSSL==17.0.0
 ndg-httpsclient==0.4.2
-requests==2.13.0
+requests==2.14.2
 packaging==16.8
 appdirs==1.4.3
 logilab-common==1.4.0
