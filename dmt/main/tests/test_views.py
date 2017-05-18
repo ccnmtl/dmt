@@ -838,7 +838,7 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertContains(
             r,
-            'Moved the following items to <strong>{}</strong>:'.format(
+            u'Moved the following items to <strong>{}</strong>:'.format(
                 m2.name))
 
     def test_post_move_with_unicode(self):
@@ -864,8 +864,7 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
         r = self.client.get(r.url)
         self.assertEqual(r.status_code, 200)
         self.assertContains(
-            r,
-            'Moved the following items to <strong>{}</strong>:'.format(
+            r, u'Moved the following items to <strong>{}</strong>:'.format(
                 m2.name))
 
 
