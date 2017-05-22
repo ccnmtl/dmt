@@ -838,7 +838,33 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertContains(
             r,
-            'Moved the following items to <strong>{}</strong>:'.format(
+            u'Moved the following items to <strong>{}</strong>:'.format(
+                m2.name))
+
+    def test_post_move_with_unicode(self):
+        """ see PMT #111049 """
+        m2 = MilestoneFactory(project=self.m.project,
+                              name=u'\u201d')
+        ItemFactory(milestone=self.m, title=u'\u201d')
+        self.assertEqual(self.m.active_items().count(), 1)
+
+        items = self.m.active_items().order_by('title')
+        r = self.client.post(self.m.get_absolute_url(), {
+            'action': 'move',
+            'move_to': m2.mid,
+            '_selected_action': [items[0].pk],
+        })
+        self.assertEqual(r.status_code, 302)
+
+        m1_items = self.m.active_items().order_by('title')
+        m2_items = m2.active_items().order_by('title')
+        self.assertEqual(m1_items.count(), 0)
+        self.assertEqual(m2_items.count(), 1)
+
+        r = self.client.get(r.url)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(
+            r, u'Moved the following items to <strong>{}</strong>:'.format(
                 m2.name))
 
 
