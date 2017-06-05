@@ -103,7 +103,7 @@ rcssmin==1.0.6  # django-compressor
 rjsmin==1.0.12  # django-compressor
 django-compressor==2.1.1
 django-statsd-mozilla==0.3.16
-raven==6.0.0
+raven==6.1.0
 django-debug-toolbar==1.8
 django-waffle==0.11.1
 django-jenkins==0.110.0
