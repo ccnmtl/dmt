@@ -358,6 +358,7 @@ def create_user_profile(sender, instance, created, **kwargs):
             status='active',
         )
 
+
 post_save.connect(create_user_profile, sender=User)
 
 
@@ -393,6 +394,7 @@ def interval_sum(intervals):
 # Avoid BadHeaderError - The subject can't contain newlines.
 def clean_subject(s):
     return s.replace('\n', ' ').replace('\r', '')
+
 
 PROJECT_STATUS_CHOICES = [
     "New", "Development", "Deployment", "Defunct",
@@ -894,6 +896,7 @@ WHERE p.pid = m.pid
 
 def project_save_hook(sender, instance, created, **kwargs):
     instance.ensure_caretaker_in_personnel()
+
 
 post_save.connect(project_save_hook, sender=Project)
 
