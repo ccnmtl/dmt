@@ -24,7 +24,7 @@ sure==1.4.6
 traitlets==4.3.2
 ipython_genutils==0.2.0
 decorator==4.0.11
-ptyprocess==0.5.1
+ptyprocess==0.5.2
 pexpect==4.2.1
 scandir==1.5
 pathlib2==2.3.0
