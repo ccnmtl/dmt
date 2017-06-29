@@ -19,7 +19,7 @@ class ClientFilter(FilterSet):
     user = ModelChoiceFilter(
         queryset=User.objects.filter(
             ~Q(username__startswith='grp_')
-        ))
+        ).order_by('username'))
 
     class Meta:
         model = Client
