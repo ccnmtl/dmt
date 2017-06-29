@@ -31,7 +31,8 @@ class ProjectFilter(FilterSet):
     name = CharFilter(label='Project Name', lookup_expr='icontains')
     projnum = NumberFilter(label='Project Number')
     caretaker_user = ModelChoiceFilter(
-        queryset=User.objects.filter(~Q(username__startswith='grp_')))
+        queryset=User.objects.filter(
+            ~Q(username__startswith='grp_')).order_by('username'))
     description = CharFilter(lookup_expr='icontains')
 
     class Meta:
