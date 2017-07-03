@@ -212,7 +212,7 @@ def send_reminder_emails():
         target_datetime = datetime.combine(
             r.item.target_date, datetime.min.time())
         aware_target = pytz.timezone(settings.TIME_ZONE).localize(
-            target_datetime, is_dst=None)
+            target_datetime)
         if ((aware_target - r.reminder_time) < (now + five_mins)):
             reminder_email.delay(reminder=r)
 

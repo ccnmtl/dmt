@@ -53,9 +53,9 @@ class DaterangeMixin(object):
 
         # Convert to TZ-aware, based on the current timezone.
         aware_start = pytz.timezone(settings.TIME_ZONE).localize(
-            naive_start, is_dst=None)
+            naive_start)
         aware_end = pytz.timezone(settings.TIME_ZONE).localize(
-            naive_end, is_dst=None)
+            naive_end)
 
         self.interval_start = aware_start
         self.interval_end = aware_end

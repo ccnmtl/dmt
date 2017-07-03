@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.views.generic.base import TemplateView, View
 
 from dmt.main.models import Project, Item
@@ -21,7 +22,7 @@ def gen_token(request, pid):
     username = request.user.username
     sub_prefix = "%s.project_%d" % (settings.ZMQ_APPNAME, int(pid))
     pub_prefix = sub_prefix + "." + username
-    now = int(time.mktime(datetime.now().timetuple()))
+    now = int(time.mktime(timezone.now().timetuple()))
     salt = randint(0, 2 ** 20)
     ip_address = (request.META.get("HTTP_X_FORWARDED_FOR", "") or
                   request.META.get("REMOTE_ADDR", ""))

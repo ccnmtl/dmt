@@ -2,6 +2,7 @@ from django import forms
 from django.test import TestCase
 from django.core import mail
 from django.utils import timezone
+from django.utils.timezone import utc
 import unittest
 from freezegun import freeze_time
 from dmt.main.tests.factories import (
@@ -47,8 +48,8 @@ class UserModelTest(TestCase):
     def test_weekly_report(self):
         at = ActualTimeFactory()
         u = at.user.userprofile
-        start = datetime(year=2013, month=12, day=16)
-        end = datetime(year=2013, month=12, day=23)
+        start = datetime(year=2013, month=12, day=16).replace(tzinfo=utc)
+        end = datetime(year=2013, month=12, day=23).replace(tzinfo=utc)
         r = u.weekly_report(start, end)
         self.assertEqual(len(r['active_projects']), 1)
 
@@ -182,8 +183,8 @@ class ProjectUserTest(TestCase):
         u = UserProfileFactory()
         p = ProjectFactory()
         pu = ProjectUser(p, u)
-        start = datetime(year=2013, month=12, day=16)
-        end = datetime(year=2013, month=12, day=23)
+        start = datetime(year=2013, month=12, day=16).replace(tzinfo=utc)
+        end = datetime(year=2013, month=12, day=23).replace(tzinfo=utc)
         r = pu.completed_time_for_interval(start, end)
         self.assertEqual(r.total_seconds(), 0.0)
 
@@ -784,8 +785,8 @@ class ProjectTest(TestCase):
         p.pub_view = False
         p.save()
 
-        start = datetime(year=2016, month=1, day=3)
-        end = datetime(year=2016, month=1, day=5)
+        start = datetime(year=2016, month=1, day=3).replace(tzinfo=utc)
+        end = datetime(year=2016, month=1, day=5).replace(tzinfo=utc)
         projects = Project.projects_active_between(start, end)
 
         self.assertEqual(projects.count(), 4,

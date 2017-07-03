@@ -1,9 +1,11 @@
-from datetime import timedelta
+import pytz
+from datetime import datetime, timedelta
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, View
 from django.utils import timezone
-
+from django.utils.dateparse import parse_date
 from dmt.main.mixins import DaterangeMixin
 from dmt.main.models import UserProfile, Item, Milestone, Project
 from dmt.main.views import LoggedInMixin
@@ -21,9 +23,15 @@ class ProjectHoursView(LoggedInMixin, View):
 
         if request.GET.get('interval_start') and \
            request.GET.get('interval_end'):
-            actual_times = p.actual_times_between(
-                request.GET.get('interval_start'),
-                request.GET.get('interval_end'))
+            interval_start = pytz.timezone(settings.TIME_ZONE).localize(
+                datetime.combine(
+                    parse_date(request.GET.get('interval_start')),
+                    datetime.min.time()))
+            interval_end = pytz.timezone(settings.TIME_ZONE).localize(
+                datetime.combine(
+                    parse_date(request.GET.get('interval_end')),
+                    datetime.max.time()))
+            actual_times = p.actual_times_between(interval_start, interval_end)
         else:
             actual_times = p.all_actual_times()
 

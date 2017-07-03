@@ -1,5 +1,7 @@
+import pytz
 import uuid
 from django import forms
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import connection, models
 from django.db.models import Max, Q, Sum
@@ -233,7 +235,8 @@ class UserProfile(models.Model):
     def progress_report(self):
         now = timezone.now()
         monday = now + timedelta(days=-now.weekday())
-        week_start = datetime.combine(monday, datetime.min.time())
+        week_start = pytz.timezone(settings.TIME_ZONE).localize(
+            datetime.combine(monday, datetime.min.time()))
         hours_logged = self.interval_time(
             week_start,
             week_start + timedelta(days=7))
@@ -291,9 +294,12 @@ class UserProfile(models.Model):
         if start is None:
             start = end - timedelta(weeks=1)
 
+        start_date = pytz.timezone(settings.TIME_ZONE).localize(
+            datetime.combine(start.date(), datetime.min.time()))
+
         events = Comment.objects.filter(
             username=self.username,
-            add_date_time__gte=start.date(),
+            add_date_time__gte=start_date,
             add_date_time__lte=end,
         ).exclude(event=None).select_related(
             'event__item', 'event__item__milestone',
@@ -304,28 +310,28 @@ class UserProfile(models.Model):
         comments = Comment.objects.filter(
             username=self.username,
             event=None,
-            add_date_time__gte=start.date(),
+            add_date_time__gte=start_date,
             add_date_time__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project')
         all_events.extend([TimeLineComment(c) for c in comments])
 
         actual_times = ActualTime.objects.filter(
             user=self.user,
-            completed__gte=start.date(),
+            completed__gte=start_date,
             completed__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project')
         all_events.extend([TimeLineActualTime(a) for a in actual_times])
 
         statuses = StatusUpdate.objects.filter(
             author=self.user,
-            added__gte=start.date(),
+            added__gte=start_date,
             added__lte=end,
         ).select_related('project')
         all_events.extend([TimeLineStatus(s) for s in statuses])
 
         posts = Node.objects.filter(
             user=self.user,
-            added__gte=start.date(),
+            added__gte=start_date,
             added__lte=end,
         ).select_related('project')
         all_events.extend([TimeLinePost(p) for p in posts])
@@ -833,9 +839,12 @@ WHERE p.pid = m.pid
         if start is None:
             start = end - timedelta(weeks=1)
 
+        start_date = pytz.timezone(settings.TIME_ZONE).localize(
+            datetime.combine(start.date(), datetime.min.time()))
+
         events = Comment.objects.filter(
             event__item__milestone__project=self,
-            add_date_time__gte=start.date(),
+            add_date_time__gte=start_date,
             add_date_time__lte=end,
         ).select_related('event__item', 'event__item__milestone',
                          'event__item__milestone__project',
@@ -844,14 +853,14 @@ WHERE p.pid = m.pid
 
         comments = Comment.objects.filter(
             item__milestone__project=self,
-            add_date_time__gte=start.date(),
+            add_date_time__gte=start_date,
             add_date_time__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project')
         all_events.extend([TimeLineComment(c) for c in comments])
 
         actual_times = ActualTime.objects.filter(
             item__milestone__project=self,
-            completed__gte=start.date(),
+            completed__gte=start_date,
             completed__lte=end,
         ).select_related('item', 'item__milestone', 'item__milestone__project',
                          'user')
@@ -859,21 +868,21 @@ WHERE p.pid = m.pid
 
         statuses = StatusUpdate.objects.filter(
             project=self,
-            added__gte=start.date(),
+            added__gte=start_date,
             added__lte=end,
         ).select_related('project', 'author')
         all_events.extend([TimeLineStatus(s) for s in statuses])
 
         posts = Node.objects.filter(
             project=self,
-            added__gte=start.date(),
+            added__gte=start_date,
             added__lte=end,
         ).select_related('project', 'user')
         all_events.extend([TimeLinePost(p) for p in posts])
 
         milestones = Milestone.objects.filter(
             project=self,
-            target_date__gte=start.date(),
+            target_date__gte=start_date,
             target_date__lte=end,
         )
         all_events.extend(TimeLineMilestone(m) for m in milestones)
