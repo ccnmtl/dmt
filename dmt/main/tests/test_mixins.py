@@ -38,10 +38,10 @@ class DaterangeMixinTests(TestCase):
         naive_today = datetime.combine(
             parse_datetime('2016-01-02 00:00:00'), datetime.min.time())
         aware_today = pytz.timezone(settings.TIME_ZONE).localize(
-            naive_today, is_dst=None)
+            naive_today)
         naive_end = datetime.combine(aware_today, datetime.max.time())
         aware_end = pytz.timezone(settings.TIME_ZONE).localize(
-            naive_end, is_dst=None)
+            naive_end)
 
         self.mixin._today = today_date
         self.mixin.get_params()
@@ -61,10 +61,10 @@ class DaterangeMixinTests(TestCase):
             parse_datetime('2016-02-01 00:00:00'),
             datetime.max.time())
         aware_end = pytz.timezone(settings.TIME_ZONE).localize(
-            naive_end, is_dst=None)
+            naive_end)
         naive_start = datetime.combine(
             aware_end - relativedelta(months=1), datetime.min.time())
         aware_start = pytz.timezone(settings.TIME_ZONE).localize(
-            naive_start, is_dst=None)
+            naive_start)
         self.assertEqual(self.mixin.interval_start, aware_start)
         self.assertEqual(self.mixin.interval_end, aware_end)

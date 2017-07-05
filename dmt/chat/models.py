@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
-
+from datetime import timedelta
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -24,7 +24,7 @@ class Room(object):
 
         all chats from the last 24 hours or N, whichever is greater
         """
-        now = datetime.now()
+        now = timezone.now()
         day_ago = now - timedelta(hours=24)
 
         last_days = set(self.project.message_set.filter(added__gt=day_ago))

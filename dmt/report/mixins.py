@@ -23,8 +23,7 @@ class PrevNextWeekMixin(object):
             naive = datetime.combine(naive, datetime.min.time())
             # Make the datetime tz-aware as documented here:
             # https://docs.djangoproject.com/en/1.8/topics/i18n/timezones/#usage
-            aware = pytz.timezone(settings.TIME_ZONE).localize(naive,
-                                                               is_dst=None)
+            aware = pytz.timezone(settings.TIME_ZONE).localize(naive)
         else:
             # There was no date param in the URL, so use now.
             aware = timezone.now()
@@ -41,7 +40,8 @@ class PrevNextWeekMixin(object):
         self.now = now
         # Set week_start to the beginning of Monday.
         monday = now + timedelta(days=-self.now.weekday())
-        self.week_start = datetime.combine(monday, datetime.min.time())
+        self.week_start = pytz.timezone(settings.TIME_ZONE).localize(
+            datetime.combine(monday, datetime.min.time()))
 
         # This week ends at 11:59:59 on Sunday night.
         self.week_end = self.week_start + timedelta(days=6,
