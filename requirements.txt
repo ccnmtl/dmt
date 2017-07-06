@@ -89,7 +89,7 @@ recordtype==1.1
 urlparse2==1.1.1
 sqlparse==0.2.3
 requirements/src/whitelistaffilmapper-0.1.0-py2-none-any.whl
-boto==2.47.0
+boto==2.48.0
 unicodecsv==0.14.1
 XlsxWriter==0.9.8
 splinter==0.7.5
