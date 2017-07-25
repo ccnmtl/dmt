@@ -50,7 +50,7 @@ chardet==3.0.4
 idna==2.5
 urllib3==1.21.1
 
-requests==2.18.1
+requests==2.18.2
 packaging==16.8
 appdirs==1.4.3
 logilab-common==1.4.1
