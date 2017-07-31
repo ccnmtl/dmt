@@ -15,7 +15,7 @@
     "karma-junit-reporter": "~0.3.8",
     "karma-phantomjs-launcher": "~1.0.0",
     "karma-qunit": "~1.2.1",
-    "karma-requirejs": "~0.2.6",
+    "karma-requirejs": "~1.1.0",
     "karma-sinon": "~1.0.4",
     "phantomjs-prebuilt": "~2.1.4",
     "qunitjs": "~2.4.0",
