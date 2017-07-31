@@ -15,3 +15,4 @@ npm-debug.log
 karma-test-results.xml
 wheelhouse
 media/*built.js
+.settings

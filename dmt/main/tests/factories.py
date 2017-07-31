@@ -33,9 +33,9 @@ class UserFactory(factory.DjangoModelFactory):
     userprofile = factory.RelatedFactory(UserProfileFactory, 'user')
 
     @classmethod
-    def _generate(cls, create, attrs):
+    def _create(cls, model_class, *args, **kwargs):
         post_save.disconnect(create_user_profile, User)
-        user = super(UserFactory, cls)._generate(create, attrs)
+        user = super(UserFactory, cls)._create(model_class, *args, **kwargs)
         post_save.connect(create_user_profile, User)
         return user
 
