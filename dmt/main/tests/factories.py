@@ -15,6 +15,7 @@ from dmt.main.models import create_user_profile
 class UserProfileFactory(factory.DjangoModelFactory):
     class Meta:
         model = UserProfile
+        django_get_or_create = ('user',)
 
     username = factory.Sequence(lambda n: 'user{0}'.format(n))
     fullname = factory.Sequence(lambda n: 'User {0}'.format(n))
