@@ -814,6 +814,33 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
             'Assigned the following items to <strong>{}</strong>:'.format(
                 assignee.userprofile.get_fullname()))
 
+    def test_post_move_with_no_target_milestone(self):
+        m2 = MilestoneFactory(project=self.m.project)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        self.assertEqual(self.m.active_items().count(), 3)
+
+        items = self.m.active_items().order_by('title')
+        r = self.client.post(self.m.get_absolute_url(), {
+            'action': 'move',
+            'move_to': '',
+            '_selected_action': [items[0].pk, items[2].pk],
+        })
+        self.assertEqual(r.status_code, 302)
+
+        m1_items = self.m.active_items().order_by('title')
+        m2_items = m2.active_items().order_by('title')
+        self.assertEqual(m1_items.count(), 3)
+        self.assertEqual(m2_items.count(), 0)
+
+        r = self.client.get(r.url)
+        self.assertEqual(r.status_code, 200)
+        self.assertNotContains(
+            r,
+            u'Moved the following items to <strong>{}</strong>:'.format(
+                m2.name))
+
     def test_post_move_with_two_selected(self):
         m2 = MilestoneFactory(project=self.m.project)
         ItemFactory(milestone=self.m)

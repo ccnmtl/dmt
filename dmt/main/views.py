@@ -654,11 +654,11 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
         action = request.POST.get('action')
         items = request.POST.getlist('_selected_action')
 
-        if action == 'move':
+        if action == 'move' and request.POST.get('move_to'):
             milestone_id = request.POST.get('move_to')
             milestone = get_object_or_404(Milestone, mid=milestone_id)
             self.move_items(request, items, milestone)
-        elif action == 'assign':
+        elif action == 'assign' and request.POST.get('assigned_to'):
             assign_to = request.POST.get('assigned_to')
             assignee = get_object_or_404(UserProfile, username=assign_to)
             self.reassign_items(request, items, assignee)
