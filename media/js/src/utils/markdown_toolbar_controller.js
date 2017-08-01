@@ -30,7 +30,7 @@ define([
         if (selectedText.match(/\n/) &&
             d.blockPrefix &&
             d.blockSuffix
-           ) {
+        ) {
             if (d.blockPrefix) {
                 text = this.renderBlockPrefix(
                     selectionStart, selectionEnd, d, text);
