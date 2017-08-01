@@ -7,8 +7,8 @@
     "test": "karma start"
   },
   "devDependencies": {
-    "eslint": "~3.17.1",
-    "jscs": "~2.10.1",
+    "eslint": "~4.3.0",
+    "jscs": "~3.0.7",
     "jshint": "~2.9.1",
     "karma": "~1.3.0",
     "karma-html2js-preprocessor": "~0.1.0",

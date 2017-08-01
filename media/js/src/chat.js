@@ -106,7 +106,7 @@ require([
         appendLog($(
             '<div class="alert"><strong>Connection closed. trying again in ' +
                 currentRefresh / 1000 + ' seconds</strong></div>'));
-        setTimeout(connectSocket,currentRefresh);
+        setTimeout(connectSocket, currentRefresh);
     };
 
     var connectSocket = function() {
