@@ -50,7 +50,7 @@ define([
             // Refresh the preview view if it exists.
             if (me.markdownPreview &&
                 typeof me.markdownPreview.refresh === 'function'
-               ) {
+            ) {
                 me.markdownPreview.refresh(me.$textarea.val());
             }
         });

@@ -48,16 +48,21 @@ define([
                 this.model.set('school', this.$('.school-input').val());
                 this.model.set('email', this.$('.email-input').val());
                 this.model.set('phone', this.$('.phone-input').val());
-                this.model.set('phone_mobile',
-                               this.$('.phone_mobile-input').val());
-                this.model.set('phone_other',
-                               this.$('.phone_other-input').val());
-                this.model.set('email_secondary',
-                               this.$('.email_secondary-input').val());
-                this.model.set('registration_date',
-                               this.$('.registration_date-input').val());
-                this.model.set('website_url',
-                               this.$('.website_url-input').val());
+                this.model.set(
+                    'phone_mobile',
+                    this.$('.phone_mobile-input').val());
+                this.model.set(
+                    'phone_other',
+                    this.$('.phone_other-input').val());
+                this.model.set(
+                    'email_secondary',
+                    this.$('.email_secondary-input').val());
+                this.model.set(
+                    'registration_date',
+                    this.$('.registration_date-input').val());
+                this.model.set(
+                    'website_url',
+                    this.$('.website_url-input').val());
                 this.model.save();
             }
         });
