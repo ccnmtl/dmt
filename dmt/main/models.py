@@ -921,7 +921,7 @@ class ProjectPin(models.Model):
 class Document(models.Model):
     did = models.AutoField(primary_key=True)
     pid = models.ForeignKey(Project, db_column='pid')
-    filename = models.CharField(max_length=128, blank=True)
+    filename = models.CharField(max_length=255, blank=True)
     title = models.CharField(max_length=128, blank=True)
     type = models.CharField(max_length=8, blank=True)
     url = models.CharField(max_length=256, blank=True)
@@ -1677,7 +1677,7 @@ WHERE a.user_id = u.user_id AND g.username = u.username
 
 class Attachment(models.Model):
     item = models.ForeignKey(Item, db_column='item_id')
-    filename = models.CharField(max_length=128, blank=True)
+    filename = models.CharField(max_length=255, blank=True)
     title = models.CharField(max_length=128, blank=True)
     type = models.CharField(max_length=8, blank=True)
     url = models.CharField(max_length=256, blank=True)
