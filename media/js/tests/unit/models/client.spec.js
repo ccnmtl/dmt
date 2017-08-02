@@ -1,3 +1,5 @@
+/* eslint-env qunit */
+/* global sinon */
 define(
     ['jquery', '../../../src/models/client'],
     function($, Client) {
@@ -21,10 +23,13 @@ define(
             client.save();
 
             assert.ok($.ajax.calledOnce, 'made an ajax request');
-            assert.strictEqual($.ajax.getCall(0).args[0].url, '/drf/clients/7/',
-                         'called correct url');
-            assert.ok($.ajax.getCall(0).args[0].data.match(email),
-                      'has correct data in payload');
+            assert.strictEqual(
+                $.ajax.getCall(0).args[0].url,
+                '/drf/clients/7/',
+                'called correct url');
+            assert.ok(
+                $.ajax.getCall(0).args[0].data.match(email),
+                'has correct data in payload');
         });
 
         QUnit.test('url() should return correct url', function(assert) {

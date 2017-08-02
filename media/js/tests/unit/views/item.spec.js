@@ -1,3 +1,4 @@
+/* eslint-env qunit */
 define(
     [
         'jquery',
