@@ -33,7 +33,7 @@
     </td>
     <td><a href="{% url 'project_detail' item.milestone.project.pid %}">{{item.milestone.project.name}}</a></td>
 
-    <td class="{{item.status_class}}">{{item.status}}</td>
+    <td class="{{item.status_class}}">{% firstof item.r_status item.status %}</td>
 
 </tr>
 {% endfor %}
