@@ -18,7 +18,7 @@
     "karma-requirejs": "~0.2.6",
     "karma-sinon": "~1.0.4",
     "phantomjs-prebuilt": "~2.1.4",
-    "qunitjs": "~1.23.0",
+    "qunitjs": "~2.4.0",
     "requirejs": "~2.3.2",
     "sinon": "~2.4.1",
     "sinon-qunit": "~2.0.0"
