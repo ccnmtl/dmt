@@ -20,7 +20,7 @@
     "phantomjs-prebuilt": "~2.1.4",
     "qunitjs": "~1.23.0",
     "requirejs": "~2.3.2",
-    "sinon": "~1.17.2",
+    "sinon": "~2.4.1",
     "sinon-qunit": "~2.0.0"
   },
   "repository": {
