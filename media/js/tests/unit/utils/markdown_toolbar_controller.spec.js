@@ -1,3 +1,4 @@
+/* eslint-env qunit */
 define([
     '../../../src/utils/markdown_toolbar_controller'
 ], function(MarkdownToolbarController) {
@@ -119,7 +120,9 @@ define([
         };
         var rendered = 'abcdef- ';
         var c = new MarkdownToolbarController();
-        assert.strictEqual(c.render(data, text.length, text.length, text), rendered);
+        assert.strictEqual(
+            c.render(data, text.length, text.length, text),
+            rendered);
         assert.strictEqual(c.selectionStart, 0);
         assert.strictEqual(c.selectionEnd, 8);
 
@@ -160,7 +163,9 @@ define([
         };
         var rendered = 'abcdef1. ';
         var c = new MarkdownToolbarController();
-        assert.strictEqual(c.render(data, text.length, text.length, text), rendered);
+        assert.strictEqual(
+            c.render(data, text.length, text.length, text),
+            rendered);
         assert.strictEqual(c.selectionStart, 0);
         assert.strictEqual(c.selectionEnd, 9);
 

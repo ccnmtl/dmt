@@ -28,7 +28,4 @@ travis: $(JS_SENTINAL) parallel-tests jstest integration
 
 js: media/main-built.js media/chat-built.js
 
-eslint: $(JS_SENTINAL) media/js/src
-	$(NODE_MODULES)/.bin/eslint media/js/src/**
-
 .PHONY: js
