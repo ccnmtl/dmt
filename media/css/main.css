@@ -1220,11 +1220,11 @@ padding: 4px;
 
 .event-body, .status-body { display: inline; }
 .event-body>p {
-	display: none;
 	margin: 0;
 	padding: 0;
 	border: 0;
-}.event-body p:first-child { display: inline-block; }
+}
+.event-body p:first-child { display: inline-block; }
 .event-body p:first-child b { font-weight: normal !important; }
 
 .status-body>p {
