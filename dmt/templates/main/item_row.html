@@ -29,6 +29,6 @@
         </a>
     </td>
     <td data-field="status" class="{{item.status_class}} hidden-xs hidden-sm">
-        {{item.status}}
+        {% firstof item.r_status item.status %}
     </td>
 </tr>

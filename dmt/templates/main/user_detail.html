@@ -135,7 +135,7 @@
     <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
     width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title|truncatechars:70|emoji_replace}}</a></td>
     <td class="pr{{item.priority}} hidden-xs"><span class="invisible">{{item.priority}}</span>{{item.priority_label}}</td>
-    <td class="{{item.status_class}}">{{item.status}}</td>
+    <td class="{{item.status_class}}">{% firstof item.r_status item.status %}</td>
     <td><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
     <td class="{{item.target_date_status}} hidden-xs hidden-sm">{{item.target_date|date:"Y-m-d"}}</td>
     <td class="hidden-xs hidden-sm">{{item.last_mod|date:"Y-m-d"}}</td>
