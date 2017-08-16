@@ -54,7 +54,7 @@ module.exports = {
         "scanjs-rules/call_connect": 1,
         "scanjs-rules/call_eval": 1,
         "scanjs-rules/call_execScript": 1,
-        "scanjs-rules/call_hide": 1,
+        "scanjs-rules/call_hide": 0, /* hide used often. overly cautious */
         "scanjs-rules/call_open_remote=true": 1,
         "scanjs-rules/call_parseFromString": 1,
         "scanjs-rules/call_setImmediate": 1,
@@ -73,18 +73,18 @@ module.exports = {
         "scanjs-rules/property_mgmt": 1,
         "scanjs-rules/property_sessionStorage": 1,
 
-        'security/detect-buffer-noassert': 'warn',
-        'security/detect-child-process': 'warn',
-        'security/detect-disable-mustache-escape': 'warn',
-        'security/detect-eval-with-expression': 'warn',
-        'security/detect-new-buffer': 'warn',
-        'security/detect-no-csrf-before-method-override': 'warn',
-        'security/detect-non-literal-fs-filename': 'warn',
-        'security/detect-non-literal-regexp': 'warn',
-        'security/detect-non-literal-require': 'warn',
-        'security/detect-object-injection': 'warn',
-        'security/detect-possible-timing-attacks': 'warn',
-        'security/detect-pseudoRandomBytes': 'warn',
-        'security/detect-unsafe-regex': 'warn'
+        'security/detect-buffer-noassert': 1,
+        'security/detect-child-process': 1,
+        'security/detect-disable-mustache-escape': 1,
+        'security/detect-eval-with-expression': 1,
+        'security/detect-new-buffer': 1,
+        'security/detect-no-csrf-before-method-override': 1,
+        'security/detect-non-literal-fs-filename': 1,
+        'security/detect-non-literal-regexp': 1,
+        'security/detect-non-literal-require': 0, /* requirejs conflict */
+        'security/detect-object-injection': 0, /* several false positives */
+        'security/detect-possible-timing-attacks': 1,
+        'security/detect-pseudoRandomBytes': 1,
+        'security/detect-unsafe-regex': 1
     }
 };
