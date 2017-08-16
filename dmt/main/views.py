@@ -75,13 +75,10 @@ class SearchView(LoggedInMixin, TemplateView):
                 q=q)
 
         item_id = ''
-        try:
-            # Parse the item id if someone searched for, e.g. #9876
-            match = re.match(r'^#(\d+)$', q)
-            if match:
-                item_id = match.groups()[0]
-        except:
-            pass
+        # Parse the item id if someone searched for, e.g. #9876
+        match = re.match(r'^#(\d+)$', q)
+        if match:
+            item_id = match.groups()[0]
 
         return dict(
             q=q,
@@ -488,7 +485,7 @@ class ItemAddSubscriberView(LoggedInMixin, View):
 
         messages.success(
             self.request,
-            mark_safe(self.success_message % subscriber.userprofile))
+            mark_safe(self.success_message % subscriber.userprofile))  # nosec
 
         if request.user != subscriber:
             item.send_new_subscriber_mail(request.user, subscriber)
@@ -631,7 +628,7 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
                   '<strong>{}</strong>: {}'.format(
                       new_milestone.name,
                       ', '.join(item_names))
-            messages.success(request, mark_safe(msg))
+            messages.success(request, mark_safe(msg))  # nosec
 
     @staticmethod
     def reassign_items(request, items, new_assignee):
@@ -648,7 +645,7 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
                   '<strong>{}</strong>: {}'.format(
                       new_assignee.get_fullname(),
                       ', '.join(item_names))
-            messages.success(request, mark_safe(msg))
+            messages.success(request, mark_safe(msg))  # nosec
 
     def post(self, request, *args, **kwargs):
         action = request.POST.get('action')
@@ -1294,8 +1291,9 @@ class ProjectAddMilestoneView(LoggedInMixin, View):
             for mesg in e.messages:
                 messages.error(
                     self.request,
-                    mark_safe('The "{}" milestone wasn\'t created. {}'.format(
-                        name, mesg)))
+                    mark_safe(  # nosec
+                        'The "{}" milestone wasn\'t created. {}'.format(
+                            name, mesg)))
         return HttpResponseRedirect(project.get_absolute_url() + '#milestones')
 
 
