@@ -1,6 +1,9 @@
 from datetime import datetime
+
 from django.template.defaultfilters import pluralize
 from django.utils import timezone
+from pytz import AmbiguousTimeError, NonExistentTimeError
+
 from dmt.main.utils import interval_to_hours
 
 
@@ -12,17 +15,17 @@ class TimeLineItem(object):
         try:
             if timezone.is_naive(my_timestamp):
                 my_timestamp = timezone.make_aware(my_timestamp)
-        except:
+        except (AmbiguousTimeError, NonExistentTimeError, AttributeError):
             # If an exception is raised, then it's not actually
             # a timestamp, it could be an int for testing purposes,
             # so let the comparison go through.
-            pass
+            pass  # nosec
 
         try:
             if timezone.is_naive(other_timestamp):
                 other_timestamp = timezone.make_aware(other_timestamp)
-        except:
-            pass
+        except (AmbiguousTimeError, NonExistentTimeError, AttributeError):
+            pass  # nosec
 
         return my_timestamp < other_timestamp
 

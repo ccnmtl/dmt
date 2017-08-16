@@ -10,6 +10,7 @@
 VE ?= ./ve
 MANAGE ?= ./manage.py
 FLAKE8 ?= $(VE)/bin/flake8
+BANDIT ?= $(VE)/bin/bandit
 REQUIREMENTS ?= requirements.txt
 SYS_PYTHON ?= python
 PIP ?= $(VE)/bin/pip
@@ -22,7 +23,7 @@ INTERFACE ?= localhost
 RUNSERVER_PORT ?= 8000
 PY_DIRS ?= $(APP)
 
-jenkins: check flake8 test jshint jscs
+jenkins: check flake8 test eslint jshint jscs bandit
 
 $(PY_SENTINAL): $(REQUIREMENTS) $(VIRTUALENV) $(SUPPORT_DIR)*
 	rm -rf $(VE)
@@ -37,6 +38,9 @@ test: $(PY_SENTINAL)
 
 parallel-tests: $(PY_SENTINAL)
 	$(MANAGE) test --parallel
+
+bandit: $(PY_SENTINAL)
+	$(BANDIT) --ini ./.bandit -r $(PY_DIRS)
 
 flake8: $(PY_SENTINAL)
 	$(FLAKE8) $(PY_DIRS) --max-complexity=$(MAX_COMPLEXITY)

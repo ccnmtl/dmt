@@ -22,7 +22,7 @@ def exp_backoff(tries):
 
     """
     backoff = 2 ** tries
-    jitter = random.uniform(0, backoff * .1)
+    jitter = random.uniform(0, backoff * .1)  # nosec
     return int(backoff + jitter)
 
 

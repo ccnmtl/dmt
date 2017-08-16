@@ -23,7 +23,7 @@ def gen_token(request, pid):
     sub_prefix = "%s.project_%d" % (settings.ZMQ_APPNAME, int(pid))
     pub_prefix = sub_prefix + "." + username
     now = int(time.mktime(timezone.now().timetuple()))
-    salt = randint(0, 2 ** 20)
+    salt = randint(0, 2 ** 20)  # nosec
     ip_address = (request.META.get("HTTP_X_FORWARDED_FOR", "") or
                   request.META.get("REMOTE_ADDR", ""))
 
