@@ -1,10 +1,7 @@
 import json
-import unittest
-
-from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.test import RequestFactory
+from django.test import TestCase, RequestFactory
 
 from dmt.main.models import Item
 
@@ -13,7 +10,7 @@ from ..views import Chat, FreshToken, ChatPost, ChatArchive, ChatArchiveDate
 from ..models import Message
 
 
-class TestViews(unittest.TestCase):
+class TestViews(TestCase):
     def test_chat(self):
         m = MessageFactory()
         request = RequestFactory().get(reverse('project-chat',
@@ -102,12 +99,14 @@ class TestViews(unittest.TestCase):
         self.assertEqual(response.context_data['project'], m.project)
 
     def test_archive_date(self):
-        m = MessageFactory(added=datetime(year=2017, month=1, day=1))
-        request = RequestFactory().get(m.get_absolute_url())
-        response = ChatArchiveDate.as_view()(
-            request, pid=m.project.pid,
-            date="{}-{}-{}".format(m.added.year, m.added.month, m.added.day))
-        self.assertEqual(response.status_code, 200)
+        with self.settings(USE_TZ=False):
+            m = MessageFactory()
+            request = RequestFactory().get(m.get_absolute_url())
+            response = ChatArchiveDate.as_view()(
+                request, pid=m.project.pid,
+                date="{}-{}-{}".format(
+                    m.added.year, m.added.month, m.added.day))
+            self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(response.context_data['project'], m.project)
-        self.assertTrue(m in response.context_data['chat_messages'])
+            self.assertEqual(response.context_data['project'], m.project)
+            self.assertTrue(m in response.context_data['chat_messages'])

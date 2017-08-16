@@ -1505,7 +1505,7 @@ class TestFeeds(TestCase):
             s.author.userprofile.email,
             s.author.userprofile.get_fullname()) in r.content)
         self.assertTrue("<pubDate>{}</pubDate>".format(
-            s.added.strftime("%a, %02d %b %Y %H:%M:%S %z")) in r.content)
+            s.added.strftime("%a, %d %b %Y %H:%M:%S %z")) in r.content)
         self.assertTrue("<content:encoded>" in r.content)
 
     def test_project_feed(self):
