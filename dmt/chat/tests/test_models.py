@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.test import TestCase
 from .factories import MessageFactory
 from ..models import Room
@@ -22,6 +20,8 @@ class TestRoom(TestCase):
         self.assertTrue(m in r.recent_messages())
 
     def test_unique_dates(self):
-        m = MessageFactory(added=datetime(year=2017, month=1, day=1))
-        r = Room(project=m.project)
-        self.assertTrue(m.added.date() in [d.date() for d in r.unique_dates()])
+        with self.settings(USE_TZ=False):
+            m = MessageFactory()
+            r = Room(project=m.project)
+            self.assertTrue(
+                m.added.date() in [d.date() for d in r.unique_dates()])
