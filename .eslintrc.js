@@ -13,7 +13,6 @@ module.exports = {
         "eslint:recommended",
         "plugin:security/recommended"
     ],  
-    "extends": "eslint:recommended",
     "rules": {
         "indent": [
             "error",
