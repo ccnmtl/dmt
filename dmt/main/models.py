@@ -84,6 +84,15 @@ class UserProfile(models.Model):
             'AND a.completed < %s', [self.user.id, start, now])
         return sorted(set(list(projects)), key=lambda x: x.name.lower())
 
+    def resolved_items_for_interval(self, start, end):
+        # TODO - can this query return Items instead of Comments?
+        return Comment.objects.filter(
+            Q(event__status='RESOLVED') | Q(event__status='VERIFIED'),
+            author=self.user,
+            created_at__gt=start,
+            created_at__lt=end
+        ).select_related('item').order_by('updated_at')
+
     def resolve_times_for_interval(self, start, end):
         return ActualTime.objects.filter(
             user=self.user,
@@ -126,10 +135,13 @@ class UserProfile(models.Model):
             max_time = max(ptime, max_time)
             total_time += ptime
             project.time = ptime
+        resolved_item_comments = self.resolved_items_for_interval(
+            week_start, week_end)
         return dict(
             active_projects=active_projects,
             max_time=max_time,
             total_time=total_time,
+            resolved_item_comments=resolved_item_comments,
             individual_times=self.resolve_times_for_interval(
                 week_start, week_end),
         )
