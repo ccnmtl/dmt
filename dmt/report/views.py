@@ -111,7 +111,7 @@ class UserYearlyView(LoggedInMixin, TemplateView):
         now = timezone.now()
         interval_start = now + timedelta(days=-365)
         interval_end = now
-        data = user.weekly_report(interval_start, interval_end)
+        data = user.report(interval_start, interval_end)
         data.update(dict(u=user, now=now,
                          interval_start=interval_start.date,
                          interval_end=interval_end.date,
@@ -127,7 +127,7 @@ class UserWeeklyView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
         context = super(UserWeeklyView, self).get_context_data(**kwargs)
         username = kwargs['pk']
         user = get_object_or_404(UserProfile, username=username)
-        data = user.weekly_report(self.week_start, self.week_end)
+        data = user.report(self.week_start, self.week_end)
         data.update(dict(u=user, now=self.now,
                          week_start=self.week_start.date,
                          week_end=self.week_end.date,

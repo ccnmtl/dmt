@@ -122,9 +122,7 @@ class UserProfile(models.Model):
             [a.actual_time
              for a in self.resolve_times_for_interval(start, end)])
 
-    def weekly_report(self, week_start, week_end):
-        # TODO: rename to something more generic now that this is
-        # used for more than just weekly reports
+    def report(self, week_start, week_end):
         active_projects = self.active_projects(week_start, week_end)
         # google pie chart needs max
         max_time = timedelta()
