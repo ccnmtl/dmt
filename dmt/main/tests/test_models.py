@@ -45,12 +45,12 @@ class UserModelTest(TestCase):
         u = UserProfileFactory(status='inactive')
         self.assertFalse(u.active())
 
-    def test_weekly_report(self):
+    def test_report(self):
         at = ActualTimeFactory()
         u = at.user.userprofile
         start = datetime(year=2013, month=12, day=16).replace(tzinfo=utc)
         end = datetime(year=2013, month=12, day=23).replace(tzinfo=utc)
-        r = u.weekly_report(start, end)
+        r = u.report(start, end)
         self.assertEqual(len(r['active_projects']), 1)
 
     def test_manager_on(self):
