@@ -22,7 +22,18 @@ User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
   <li><a href="?date={{next_week.year}}-{{next_week.month}}-{{next_week.day}}">next week</a></li>
 </ul>
 
-<p><b>Total time for this week:</b> {{ total_time|interval_to_hours }} hours.
+<p>
+    Stats for this week:
+    <ul>
+        <li>
+            Total time: <strong>{{ total_time|interval_to_hours }} hours</strong>
+        </li>
+        <li>
+            Resolved items: <strong>{{ resolved_item_comments|length }}</strong>
+        </li>
+    </ul>
+</p>
+
 
 {% if active_projects %}
 <h3>Breakdown</h3>
@@ -47,7 +58,7 @@ User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
 </table>
 {% endif %}
 
-<h3>Individual Times</h3>
+<h3>Events</h3>
 
 <table class="table table-striped table-condensed">
     <thead>
@@ -69,12 +80,15 @@ User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
             <td><a href="{{t.item.milestone.project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
         </tr>
         {% endfor %}
+        {% for c in resolved_item_comments %}
+        <tr>
+            <td>0 hours</td>
+            <td><a href="{{c.event.item.get_absolute_url}}">{{c.event.item.title}}</a></td>
+            <td>{{c.created_at}}</td>
+            <td><a href="{{c.event.item.milestone.project.get_absolute_url}}">{{c.event.item.milestone.project}}</a></td>
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
-
-<h3>Piegraph</h3>
-
-<img src="https://chart.googleapis.com/chart?cht=p3&amp;chco=3366ff&amp;chp=1&amp;chs=800x300&amp;chds=0,{{max_time|interval_to_hours}}&amp;chd=t:{% for project in active_projects %}{{project.time|interval_to_hours}}{% if not forloop.last %},{% endif %}{% endfor %}&amp;chl={% for project in active_projects %}{{project.name|urlencode}}|{% endfor %}"
-   width="800" height="300" alt="" />
 
 {% endblock %}
