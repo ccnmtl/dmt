@@ -70,23 +70,23 @@ User Weekly Report: {{u.fullname}} ({{week_start}} to {{week_end}})
         </tr>
     </thead>
     <tbody>
-        {% for t in individual_times %}
-        <tr>
-            {% with ttime=t.actual_time|interval_to_hours %}
-            <td>{{ttime}} hour{{ttime|pluralize}}</td>
-            {% endwith %}
-            <td><a href="{{t.item.get_absolute_url}}">{{t.item.title}}</a></td>
-            <td>{{t.completed}}</td>
-            <td><a href="{{t.item.milestone.project.get_absolute_url}}">{{t.item.milestone.project}}</a></td>
-        </tr>
-        {% endfor %}
-        {% for c in resolved_item_comments %}
-        <tr>
-            <td>0 hours</td>
-            <td><a href="{{c.event.item.get_absolute_url}}">{{c.event.item.title}}</a></td>
-            <td>{{c.created_at}}</td>
-            <td><a href="{{c.event.item.milestone.project.get_absolute_url}}">{{c.event.item.milestone.project}}</a></td>
-        </tr>
+        {% for e in events %}
+            <tr>
+                <td>
+                    {% if e.time == 'VERIFIED' %}
+                        0h - <span class="verified">VERIFIED</span>
+                    {% elif e.time == 'RESOLVED' %}
+                        0h - <span class="resolved">RESOLVED</span>
+                    {% else %}
+                        {% with etime=e.time|interval_to_hours %}
+                            {{etime}} hour{{etime|pluralize}}
+                        {% endwith %}
+                    {% endif %}
+                </td>
+                <td><a href="{{e.item.get_absolute_url}}">{{e.item.title}}</a></td>
+                <td>{{e.created_at}}</td>
+                <td><a href="{{e.project.get_absolute_url}}">{{e.project}}</a></td>
+            </tr>
         {% endfor %}
     </tbody>
 </table>
