@@ -122,6 +122,27 @@ class UserProfile(models.Model):
             [a.actual_time
              for a in self.resolve_times_for_interval(start, end)])
 
+    @staticmethod
+    def _make_report_events(comment_events, individual_times):
+        """Normalize events and times for display on the user report."""
+        events = []
+        for c in comment_events:
+            item = c.event.item
+            events.append({
+                'item': item,
+                'created_at': c.created_at,
+                'project': item.milestone.project,
+                'time': c.event.status,
+            })
+        for t in individual_times:
+            events.append({
+                'item': t.item,
+                'created_at': t.completed,
+                'project': t.item.milestone.project,
+                'time': t.actual_time,
+            })
+        return sorted(events, key=lambda x: x.get('created_at'))
+
     def report(self, week_start, week_end):
         active_projects = self.active_projects(week_start, week_end)
         # google pie chart needs max
@@ -133,15 +154,20 @@ class UserProfile(models.Model):
             max_time = max(ptime, max_time)
             total_time += ptime
             project.time = ptime
+
         resolved_item_comments = self.resolved_items_for_interval(
             week_start, week_end)
+        individual_times = self.resolve_times_for_interval(
+            week_start, week_end)
+        events = self._make_report_events(
+            resolved_item_comments, individual_times)
+
         return dict(
             active_projects=active_projects,
             max_time=max_time,
             total_time=total_time,
             resolved_item_comments=resolved_item_comments,
-            individual_times=self.resolve_times_for_interval(
-                week_start, week_end),
+            events=events
         )
 
     def open_assigned_items(self):

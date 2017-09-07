@@ -17,7 +17,8 @@ from simpleduration import Duration
 from dmt.main.utils import simpleduration_string
 from dmt.main.models import (
     ActualTime, Events, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
-    truncate_string, HistoryEvent, Reminder, Project, WorksOn
+    truncate_string, HistoryEvent, Reminder, Project, WorksOn,
+    Comment
 )
 
 
@@ -44,6 +45,12 @@ class UserModelTest(TestCase):
         self.assertTrue(u.active())
         u = UserProfileFactory(status='inactive')
         self.assertFalse(u.active())
+
+    def test_make_report_events(self):
+        events = self.u._make_report_events(
+            Comment.objects.none(),
+            ActualTime.objects.none())
+        self.assertEqual(len(events), 0)
 
     def test_report(self):
         at = ActualTimeFactory()
