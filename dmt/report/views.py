@@ -150,33 +150,36 @@ class StaffReportView(LoggedInMixin, DaterangeMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StaffReportView, self).get_context_data(**kwargs)
-        calc = StaffReportCalculator(['designers', 'programmers', 'video',
-                                      'educationaltechnologists',
-                                      'management'])
-        context.update(dict(interval_start=self.interval_start,
-                            interval_end=self.interval_end))
+
+        calc = StaffReportCalculator(
+            UserProfile.objects.filter(status='active', grp=False))
+
         data = calc.calc(self.interval_start, self.interval_end)
-        context.update(data)
+
+        context.update({
+            'interval_start': self.interval_start,
+            'interval_end': self.interval_end,
+            'users': data
+        })
         return context
 
 
 class StaffReportExportView(LoggedInMixin, DaterangeMixin, View):
     def get(self, request, *args, **kwargs):
         self.get_params()
-        calc = StaffReportCalculator(['designers', 'programmers', 'video',
-                                      'educationaltechnologists',
-                                      'management'])
+        calc = StaffReportCalculator(
+            UserProfile.objects.filter(status='active', grp=False))
         data = calc.calc(self.interval_start, self.interval_end)
 
         start_str = self.interval_start.strftime('%Y%m%d')
         end_str = self.interval_end.strftime('%Y%m%d')
         filename = "staff-report-%s-%s" % (start_str, end_str)
 
-        column_names = ['Staff Member', 'Group', 'Hours Logged']
+        column_names = ['Staff Member', 'Hours Logged']
 
-        rows = [[x['user'].fullname, x['group_name'],
-                 interval_to_hours(x['user_time'])]
-                for x in data['users']]
+        rows = [
+            [x['user'].fullname, interval_to_hours(x['user_time'])]
+            for x in data]
 
         generator = ReportFileGenerator()
         return generator.generate(
