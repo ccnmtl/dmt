@@ -30,12 +30,6 @@ urlpatterns = [
 
     url(r'^staff/previous/$', views.StaffReportPreviousWeekView.as_view()),
 
-    url(r'^weekly_summary/$', views.WeeklySummaryView.as_view(),
-        name='weekly_summary_report'),
-    url(r'^weekly_summary/export\w{0,50}$',
-        views.WeeklySummaryExportView.as_view(),
-        name='weekly_summary_report_export'),
-
     url(r'^resolved/$', views.ResolvedView.as_view(),
         name='resolved_items_report'),
     url(r'^inprogress/$', views.InprogressView.as_view(),

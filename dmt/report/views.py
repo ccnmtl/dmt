@@ -12,7 +12,7 @@ from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
 from dmt.report.models import (
     ActiveProjectsCalculator, StaffReportCalculator,
-    WeeklySummaryReportCalculator)
+)
 from dmt.report.mixins import PrevNextWeekMixin
 from dmt.report.utils import ReportFileGenerator
 
@@ -177,59 +177,6 @@ class StaffReportExportView(LoggedInMixin, DaterangeMixin, View):
         rows = [[x['user'].fullname, x['group_name'],
                  interval_to_hours(x['user_time'])]
                 for x in data['users']]
-
-        generator = ReportFileGenerator()
-        return generator.generate(
-            column_names, rows, filename, self.request.GET.get('format'))
-
-
-class WeeklySummaryView(LoggedInMixin, PrevNextWeekMixin, TemplateView):
-    template_name = 'report/weekly_summary.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(WeeklySummaryView, self).get_context_data(**kwargs)
-
-        calc = WeeklySummaryReportCalculator(['designers', 'programmers',
-                                              'educationaltechnologists',
-                                              'video', 'management'])
-        data = calc.calc(self.week_start, self.week_end)
-        context.update(data)
-
-        context.update(dict(now=self.now, now_str=self.now_str,
-                            week_start=self.week_start.date,
-                            week_end=self.week_end.date,
-                            prev_week=self.prev_week.date,
-                            prev_week_str=self.prev_week_str,
-                            next_week=self.next_week.date,
-                            next_week_str=self.next_week_str))
-        return context
-
-
-class WeeklySummaryExportView(LoggedInMixin, PrevNextWeekMixin, View):
-    def get(self, request, **kwargs):
-        self.get_params()
-
-        groups = ['designers', 'programmers', 'educationaltechnologists',
-                  'video', 'management']
-        report = WeeklySummaryReportCalculator(groups)
-        data = report.calc(self.week_start, self.week_end)
-
-        start_str = self.week_start.strftime('%Y%m%d')
-        end_str = self.week_end.strftime('%Y%m%d')
-        filename = "weekly-summary-report-%s-%s" % (start_str, end_str)
-
-        column_names = ['Project'] + [x.capitalize() for x in groups] + \
-                       ['Project Total']
-
-        rows = []
-        for project in data['project_times']:
-            row = [project['name']]
-
-            for grouptime in project['group_times']:
-                row.append(interval_to_hours(grouptime))
-
-            row.append(interval_to_hours(project['total_time']))
-            rows.append(row)
 
         generator = ReportFileGenerator()
         return generator.generate(

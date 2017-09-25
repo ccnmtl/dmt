@@ -152,24 +152,6 @@ class InprogressItemsViewTest(LoggedInTestMixin, TestCase):
         self.assertTrue(i.title in r.content)
 
 
-class WeeklySummaryTests(LoggedInTestMixin, TestCase):
-    def test_weekly_summary_view(self):
-        r = self.client.get(reverse('weekly_summary_report'))
-        self.assertEqual(r.status_code, 200)
-
-
-class WeeklySummaryExportTests(LoggedInTestMixin, TestCase):
-    def test_weekly_summary_export_csv_view(self):
-        r = self.client.get(reverse('weekly_summary_report_export') +
-                            '?format=csv')
-        self.assertEqual(r.status_code, 200)
-
-    def test_weekly_summary_export_excel_view(self):
-        r = self.client.get(reverse('weekly_summary_report_export') +
-                            '?format=xlsx')
-        self.assertEqual(r.status_code, 200)
-
-
 class PassedMilestonesViewTests(LoggedInTestMixin, TestCase):
     def test_report(self):
         m = MilestoneFactory(target_date='2000-01-01', status='OPEN')
