@@ -467,6 +467,7 @@ class Project(models.Model):
     approach = models.CharField(max_length=50, blank=True)
     scale = models.CharField(max_length=20, blank=True)
     distrib = models.CharField("Distribution", max_length=20, blank=True)
+    internal = models.BooleanField(default=False)
 
     class Meta:
         db_table = u'projects'
