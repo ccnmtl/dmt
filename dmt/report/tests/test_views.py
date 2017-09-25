@@ -3,7 +3,6 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from freezegun import freeze_time
-from dmt.main.models import InGroup
 from dmt.main.tests.factories import (
     ActualTimeFactory, ItemFactory, MilestoneFactory, UserProfileFactory
 )
@@ -99,9 +98,7 @@ class UserYearlyTest(LoggedInTestMixin, TestCase):
 class StaffReportTest(LoggedInTestMixin, TestCase):
     def setUp(self):
         super(StaffReportTest, self).setUp()
-        self.pg = UserProfileFactory(username='grp_programmers',
-                                     fullname='programmers (group)')
-        InGroup.objects.create(grp=self.pg, username=self.pu)
+        UserProfileFactory()
 
     def test_staff_report_date_specified(self):
         r = self.client.get("/report/staff/?date=2012-12-16")
