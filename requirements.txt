@@ -87,7 +87,7 @@ wsgi_intercept==1.5.0
 mechanize==0.3.5
 recordtype==1.1
 urlparse2==1.1.1
-sqlparse==0.2.3
+sqlparse==0.2.4
 requirements/src/whitelistaffilmapper-0.1.0-py2-none-any.whl
 boto==2.48.0
 unicodecsv==0.14.1
