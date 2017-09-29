@@ -16,4 +16,3 @@ karma-test-results.xml
 wheelhouse
 media/*built.js
 .settings
-package-lock.json
