@@ -3,7 +3,9 @@ from django.test import TestCase
 from django.utils import timezone
 from dmt.main.models import UserProfile
 from dmt.main.tests.factories import UserProfileFactory
-from dmt.report.models import ActiveProjectsCalculator, StaffReportCalculator
+from dmt.report.calculators import (
+    ActiveProjectsCalculator, StaffReportCalculator
+)
 
 
 class ActiveProjectsCalculatorTests(TestCase):

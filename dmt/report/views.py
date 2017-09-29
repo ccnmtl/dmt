@@ -10,7 +10,7 @@ from dmt.main.mixins import DaterangeMixin
 from dmt.main.models import UserProfile, Item, Milestone, Project
 from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
-from dmt.report.models import (
+from dmt.report.calculators import (
     ActiveProjectsCalculator, StaffReportCalculator,
 )
 from dmt.report.mixins import PrevNextWeekMixin
