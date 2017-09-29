@@ -148,7 +148,26 @@
                 <li><a href="{% url 'project_list' %}">All projects</a></li>
                 <li><a href="{% url 'project_create' %}"><span class="glyphicon glyphicon-plus-sign"></span> Create new project</a></li>
 
-                {% if request.user.projectpin_set.count %}
+                {% if request.user.userprofile.internal_projects.exists %}
+                    <li class="divider"></li>
+                    <li>
+                        <p class="navbar-text">
+                            <strong>Internal projects</strong>
+                            <span class="glyphicon glyphicon-question-sign"
+                                  aria-hidden="true"
+                                  data-toggle="tooltip"
+                                  title="These are our department-wide internal projects."
+                            ></span>
+                        </p>
+                    </li>
+                    {% for p in request.user.userprofile.internal_projects %}
+                        <li><a href="{% url 'project_detail' p.pk %}">
+                            {{p.name|truncatechars:40}}
+                        </a></li>
+                    {% endfor %}
+                {% endif %}
+
+                {% if request.user.projectpin_set.exists %}
                     <li class="divider"></li>
                     <li>
                         <p class="navbar-text">

@@ -389,6 +389,10 @@ class UserProfile(models.Model):
     def get_fullname(self):
         return self.fullname or self.username
 
+    @staticmethod
+    def internal_projects():
+        return Project.objects.filter(internal=True)
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
