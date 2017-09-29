@@ -31,6 +31,7 @@
 <table class="table table-striped table-condensed tablesorter tablesorter-default" id="staff-report">
     <thead>
         <th>Staff Member</th>
+        <th>Items Resolved</th>
         <th>Hours Logged</th>
     </thead>
     <tbody>
@@ -41,6 +42,7 @@
                     {% firstof user.user.fullname user.user.username %}
                 </a>
             </td>
+            <td>{{user.resolved_items}}</td>
             <td>{{user.user_time|interval_to_hours}}</td>
         </tr>
         {% endfor %}
@@ -52,7 +54,10 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    $("#staff-report").tablesorter({sortList: [[0,0]]});
+    $("#staff-report").tablesorter({
+        // Sort by items resolved, descending.
+        sortList: [[1, 1]]
+    });
 });
 </script>
 {% endblock %}
