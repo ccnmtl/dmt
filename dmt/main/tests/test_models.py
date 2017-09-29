@@ -106,15 +106,41 @@ class UserModelTest(TestCase):
         self.assertEqual(u.group_fullname(), "foo")
 
     def test_weekly_report_email_body(self):
-        r = self.u.weekly_report_email_body(1.0, True)
+        r = self.u.weekly_report_email_body({
+            'resolved_items': 0,
+            'hours_logged': 0,
+        })
         self.assertEqual(
             r,
-            """This week you have only logged 1.0 hours.\n\n"""
-            """Now is a good time to take care of that.\n""")
-        r = self.u.weekly_report_email_body(1.0, False)
+            ('This week, you have resolved 0 items while logging '
+             '0.0 hours. Review your full weekly report here:\n'
+             'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
+             '\n\n'
+             'From your dashboard, you have 0 Outstanding Items. (Of these, '
+             '0 have a Resolved status and need your verification to close '
+             'the ticket.'
+             '\n\n'
+             '(Note: PMT Weekly reports end on Sundays at 23:59.)')
+            .format(self.u.username)
+        )
+
+        r = self.u.weekly_report_email_body({
+            'resolved_items': 0,
+            'hours_logged': 1,
+        })
         self.assertEqual(
             r,
-            """You've logged 1.0 hours this week. Good job!\n""")
+            ('This week, you have resolved 0 items while logging '
+             '1.0 hours. Review your full weekly report here:\n'
+             'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
+             '\n\n'
+             'From your dashboard, you have 0 Outstanding Items. (Of these, '
+             '0 have a Resolved status and need your verification to close '
+             'the ticket.'
+             '\n\n'
+             '(Note: PMT Weekly reports end on Sundays at 23:59.)')
+            .format(self.u.username)
+        )
 
     def test_send_weekly_report(self):
         self.u.send_weekly_report()
@@ -157,8 +183,7 @@ class UserModelTest(TestCase):
         d = self.u.progress_report()
         self.assertEqual(d['hours_logged'], 0)
         self.assertEqual(d['week_percentage'], 0)
-        self.assertTrue('target_hours' in d)
-        self.assertTrue('target_percentage' in d)
+        self.assertEqual(d['resolved_items'], 0)
 
     def test_subscribed_items(self):
         r = self.u.subscribed_items()

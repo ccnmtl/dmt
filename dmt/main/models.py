@@ -273,25 +273,26 @@ class UserProfile(models.Model):
         monday = now + timedelta(days=-now.weekday())
         week_start = pytz.timezone(settings.TIME_ZONE).localize(
             datetime.combine(monday, datetime.min.time()))
-        hours_logged = self.interval_time(
-            week_start,
-            week_start + timedelta(days=7))
+        week_end = week_start + timedelta(days=7)
+
+        hours_logged = self.interval_time(week_start, week_end)
         hours_logged = hours_logged.total_seconds() / 3600.
         week_percentage = min(
             int((hours_logged / 35.) * 100),
             100)
-        target_hours = min(now.weekday(), 5) * 7
-        target_percentage = min(int((target_hours / 35.) * 100), 100)
-        return dict(hours_logged=hours_logged,
-                    week_percentage=week_percentage,
-                    target_hours=target_hours,
-                    target_percentage=target_percentage,
-                    behind=week_percentage < (target_percentage - 20))
+        resolved_items = self.resolved_items_for_interval(
+            week_start, week_end).count()
+
+        return {
+            'hours_logged': hours_logged,
+            'week_percentage': week_percentage,
+            'resolved_items': resolved_items,
+        }
 
     def send_weekly_report(self):
         r = self.progress_report()
-        body = self.weekly_report_email_body(r['hours_logged'], r['behind'])
-        send_email.delay("PMT Weekly Report", body, [self.get_email()])
+        body = self.weekly_report_email_body(r)
+        send_email.delay('PMT Weekly Report', body, [self.get_email()])
 
     def send_reminder(self, reminder):
         body = (
@@ -304,16 +305,25 @@ class UserProfile(models.Model):
             '[PMT Reminder] {}'.format(reminder.item.title),
             body, [self.get_email()])
 
-    def weekly_report_email_body(self, hours_logged, behind):
-        if behind:
-            return (
-                """This week you have only logged %.1f hours.\n\n"""
-                """Now is a good time to take care of that.\n"""
-                % hours_logged)
-        else:
-            return (
-                """You've logged %.1f hours this week. Good job!\n"""
-                % hours_logged)
+    def weekly_report_email_body(self, report):
+        s = (
+            'This week, you have resolved {} items while logging '
+            '{:.1f} hours. Review your full weekly report here:\n'
+            'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
+            '\n\n'
+            'From your dashboard, you have {} Outstanding Items. (Of these, '
+            '{} have a Resolved status and need your verification to close '
+            'the ticket.'
+            '\n\n'
+            '(Note: PMT Weekly reports end on Sundays at 23:59.)'
+        ).format(
+            report['resolved_items'],
+            report['hours_logged'],
+            self.username,
+            len(self.items()),
+            self.open_owned_items().count())
+
+        return s
 
     def group_fullname(self):
         f = self.fullname
