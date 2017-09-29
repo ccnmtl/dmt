@@ -21,6 +21,8 @@ class StaffReportCalculator(object):
         for user in self.users:
             user_data.append({
                 'user': user,
+                'resolved_items': user.resolved_items_for_interval(
+                    start, end).count(),
                 'user_time': user.interval_time(start, end),
             })
         return user_data
