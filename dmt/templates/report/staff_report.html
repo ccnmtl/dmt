@@ -55,8 +55,8 @@
 <script>
 $(document).ready(function() {
     $("#staff-report").tablesorter({
-        // Sort by items resolved, descending.
-        sortList: [[1, 1]]
+        // Sort by items resolved, descending, then hours logged, descending.
+        sortList: [[1, 1], [2, 1]]
     });
 });
 </script>
