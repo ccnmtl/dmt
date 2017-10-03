@@ -20,7 +20,7 @@ cssselect==1.0.1
 BeautifulSoup==3.2.1
 lxml==4.0.0
 fuzzywuzzy==0.15.1
-sure==1.4.6
+sure==1.4.7
 traitlets==4.3.2
 ipython_genutils==0.2.0
 decorator==4.1.2
