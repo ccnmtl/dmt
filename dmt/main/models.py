@@ -321,7 +321,7 @@ class UserProfile(models.Model):
             report['hours_logged'],
             self.username,
             len(self.items()),
-            self.open_owned_items().count())
+            self.resolved_owned_items().count())
 
         return s
 
