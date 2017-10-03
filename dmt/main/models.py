@@ -313,7 +313,7 @@ class UserProfile(models.Model):
             '\n\n'
             'From your dashboard, you have {} Outstanding Items. (Of these, '
             '{} have a Resolved status and need your verification to close '
-            'the ticket.'
+            'the ticket.)'
             '\n\n'
             '(Note: PMT Weekly reports end on Sundays at 23:59.)'
         ).format(

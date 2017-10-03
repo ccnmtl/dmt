@@ -118,7 +118,7 @@ class UserModelTest(TestCase):
              '\n\n'
              'From your dashboard, you have 0 Outstanding Items. (Of these, '
              '0 have a Resolved status and need your verification to close '
-             'the ticket.'
+             'the ticket.)'
              '\n\n'
              '(Note: PMT Weekly reports end on Sundays at 23:59.)')
             .format(self.u.username)
@@ -136,7 +136,7 @@ class UserModelTest(TestCase):
              '\n\n'
              'From your dashboard, you have 0 Outstanding Items. (Of these, '
              '0 have a Resolved status and need your verification to close '
-             'the ticket.'
+             'the ticket.)'
              '\n\n'
              '(Note: PMT Weekly reports end on Sundays at 23:59.)')
             .format(self.u.username)
