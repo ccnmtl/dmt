@@ -307,15 +307,15 @@ class UserProfile(models.Model):
 
     def weekly_report_email_body(self, report):
         s = (
-            'This week, you have resolved {} items while logging '
-            '{:.1f} hours. Review your full weekly report here:\n'
+            'Thus far this week, you have resolved {} item(s) while logging '
+            '{:.1f} hours. Review your weekly report here:\n'
             'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
             '\n\n'
-            'From your dashboard, you have {} Outstanding Items. (Of these, '
-            '{} have a Resolved status and need your verification to close '
-            'the ticket.)'
+            'Your dashboard shows {} Outstanding Items. Of these, '
+            '{} have a Resolved status and just need your verification to close '
+            'the ticket.'
             '\n\n'
-            '(Note: PMT Weekly reports end on Sundays at 23:59.)'
+            '(PMT Weekly reports end on Sundays at 23:59.)'
         ).format(
             report['resolved_items'],
             report['hours_logged'],

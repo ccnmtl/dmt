@@ -112,15 +112,15 @@ class UserModelTest(TestCase):
         })
         self.assertEqual(
             r,
-            ('This week, you have resolved 0 items while logging '
-             '0.0 hours. Review your full weekly report here:\n'
+            ('Thus far this week, you have resolved 0 item(s) while logging '
+             '0.0 hours. Review your weekly report here:\n'
              'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
              '\n\n'
-             'From your dashboard, you have 0 Outstanding Items. (Of these, '
-             '0 have a Resolved status and need your verification to close '
-             'the ticket.)'
+             'Your dashboard shows 0 Outstanding Items. Of these, '
+             '0 have a Resolved status and just need your verification '
+             'to close the ticket.'
              '\n\n'
-             '(Note: PMT Weekly reports end on Sundays at 23:59.)')
+             '(PMT Weekly reports end on Sundays at 23:59.)')
             .format(self.u.username)
         )
 
@@ -130,15 +130,15 @@ class UserModelTest(TestCase):
         })
         self.assertEqual(
             r,
-            ('This week, you have resolved 0 items while logging '
-             '1.0 hours. Review your full weekly report here:\n'
+            ('Thus far this week, you have resolved 0 item(s) while logging '
+             '1.0 hours. Review your weekly report here:\n'
              'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
              '\n\n'
-             'From your dashboard, you have 0 Outstanding Items. (Of these, '
-             '0 have a Resolved status and need your verification to close '
-             'the ticket.)'
+             'Your dashboard shows 0 Outstanding Items. Of these, '
+             '0 have a Resolved status and just need your verification '
+             'to close the ticket.'
              '\n\n'
-             '(Note: PMT Weekly reports end on Sundays at 23:59.)')
+             '(PMT Weekly reports end on Sundays at 23:59.)')
             .format(self.u.username)
         )
 
