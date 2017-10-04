@@ -312,8 +312,8 @@ class UserProfile(models.Model):
             'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
             '\n\n'
             'Your dashboard shows {} Outstanding Items. Of these, '
-            '{} have a Resolved status and just need your verification to close '
-            'the ticket.'
+            '{} have a Resolved status and just need your verification '
+            'to close the ticket.'
             '\n\n'
             '(PMT Weekly reports end on Sundays at 23:59.)'
         ).format(
