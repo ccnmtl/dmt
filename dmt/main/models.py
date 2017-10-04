@@ -87,7 +87,7 @@ class UserProfile(models.Model):
     def resolved_items_for_interval(self, start, end):
         # TODO - can this query return Items instead of Comments?
         return Comment.objects.filter(
-            Q(event__status='RESOLVED') | Q(event__status='VERIFIED'),
+            event__status='RESOLVED',
             author=self.user,
             created_at__gt=start,
             created_at__lt=end
