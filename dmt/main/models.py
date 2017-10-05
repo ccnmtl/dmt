@@ -85,9 +85,22 @@ class UserProfile(models.Model):
         return sorted(set(list(projects)), key=lambda x: x.name.lower())
 
     def resolved_items_for_interval(self, start, end):
+        """Returns all resolved items for this user in the given interval.
+
+        If the user resolving the item was the item owner and the
+        assignee at time of resolution, the item is automatically
+        verified. No "RESOLVED" event (really a comment, in this case)
+        is created. So, this method handles that, and includes those
+        items that were automatically verified for this reason.
+        """
         # TODO - can this query return Items instead of Comments?
         return Comment.objects.filter(
-            Q(event__status='RESOLVED') | Q(event__status='VERIFIED'),
+            Q(event__status='RESOLVED') |
+            (
+                Q(event__status='VERIFIED') &
+                Q(event__item__owner_user=self.user) &
+                Q(event__item__assigned_user=self.user)
+            ),
             author=self.user,
             created_at__gt=start,
             created_at__lt=end

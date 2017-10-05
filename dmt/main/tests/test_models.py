@@ -88,12 +88,45 @@ class UserModelTest(TestCase):
     def test_recent_active_projects(self):
         self.assertEqual(self.u.recent_active_projects(), [])
 
-    def test_resolved_items_for_interval(self):
+    def test_resolved_items_for_interval_empty(self):
         start = datetime(year=2013, month=12, day=16).replace(tzinfo=utc)
         end = datetime(year=2013, month=12, day=23).replace(tzinfo=utc)
         self.assertEqual(
             len(self.u.resolved_items_for_interval(start, end)),
             0)
+
+    def test_resolved_items_for_interval_with_items(self):
+        with freeze_time('2013-12-20'):
+            ItemFactory()
+            ItemFactory()
+            i = ItemFactory()
+            i.resolve(self.u, 'WORKSFORME', 'resolved')
+            i2 = ItemFactory()
+            i2.resolve(self.u, 'FIXED', 'done')
+            i3 = ItemFactory()
+            i3.verify(self.u, 'verified')
+
+            start = datetime(year=2013, month=12, day=16).replace(tzinfo=utc)
+            end = datetime(year=2013, month=12, day=23).replace(tzinfo=utc)
+            self.assertEqual(
+                len(self.u.resolved_items_for_interval(start, end)),
+                2)
+
+    def test_resolved_items_for_interval_with_auto_verified(self):
+        with freeze_time('2013-12-20'):
+            i = ItemFactory()
+            i.resolve(self.u, 'WORKSFORME', 'resolved')
+            i2 = ItemFactory(owner_user=self.u.user, assigned_user=self.u.user)
+            i2.verify(self.u, 'done')
+            i3 = ItemFactory()
+            i3.verify(self.u, 'verified')
+
+            start = datetime(year=2013, month=12, day=16).replace(tzinfo=utc)
+            end = datetime(year=2013, month=12, day=23).replace(tzinfo=utc)
+
+            self.assertEqual(
+                len(self.u.resolved_items_for_interval(start, end)),
+                2)
 
     def test_total_resolve_times(self):
         self.assertEqual(self.u.total_resolve_times(), 0.)
