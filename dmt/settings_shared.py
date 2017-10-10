@@ -64,7 +64,8 @@ BROKER_URL = "amqp://localhost:5672//dmt"
 CELERYD_CONCURRENCY = 2
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',),
 
     'DEFAULT_MODEL_SERIALIZER_CLASS':
     'rest_framework.serializers.HyperlinkedModelSerializer',
