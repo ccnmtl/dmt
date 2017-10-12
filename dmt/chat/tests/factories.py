@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import factory
 
 from dmt.main.tests.factories import ProjectFactory, UserFactory

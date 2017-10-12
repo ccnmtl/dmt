@@ -8,6 +8,7 @@ from django.db.models import Max, Q, Sum
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.utils.encoding import force_text
 from datetime import datetime, timedelta
 from dateutil import parser
 from taggit.managers import TaggableManager
@@ -1463,13 +1464,13 @@ Please do not reply to this message.
 
     def send_new_subscriber_mail(self, user, subscriber):
         body = '{} has subscribed you to this PMT item:\n\t{}\n'.format(
-            unicode(user.userprofile),
+            force_text(user.userprofile),
             'https://pmt.ccnmtl.columbia.edu{}'.format(
                 self.get_absolute_url()))
 
         send_email.delay(
-            '[PMT Item] {}'.format(self.title),
-            body, [subscriber.userprofile.get_email()])
+            '[PMT Item] {}'.format(force_text(self.title)),
+            force_text(body), [subscriber.userprofile.get_email()])
 
 
 def truncate_string(full_string, length=20):
