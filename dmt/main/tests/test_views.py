@@ -73,7 +73,7 @@ class BasicTest(TestCase):
     def test_search_empty(self):
         response = self.c.get("/search/?q=")
         self.assertEquals(response.status_code, 200)
-        self.assertTrue("alert-danger" in response.content)
+        self.assertContains(response, "alert-danger")
 
     def test_dashboard(self):
         response = self.c.get("/dashboard/")
@@ -83,7 +83,7 @@ class BasicTest(TestCase):
         response = self.c.get(
             reverse('owned_items', args=[self.u.userprofile.username]))
         self.assertEquals(response.status_code, 200)
-        self.assertTrue("Owned Items" in response.content)
+        self.assertContains(response, "Owned Items")
 
 
 class TestClientViews(TestCase):
@@ -112,7 +112,7 @@ class TestClientViews(TestCase):
     def test_add_client_form(self):
         r = self.client.get(reverse('add_client'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue("Add New Client" in r.content)
+        self.assertContains(r, "Add New Client")
 
     @unittest.skipIf(
         settings.DATABASES['default']['ENGINE'] ==
@@ -148,8 +148,8 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
     def test_all_projects_page(self):
         r = self.c.get(reverse('project_list'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(self.p.name in r.content)
-        self.assertTrue(self.p.get_absolute_url() in r.content)
+        self.assertContains(r, self.p.name)
+        self.assertContains(r, self.p.get_absolute_url())
 
     def test_project_page(self):
         r = self.c.get(self.p.get_absolute_url())
@@ -178,8 +178,8 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
             dict(subject='node subject', body="this is the body"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(self.p.get_absolute_url())
-        self.assertTrue("node subject" in r.content)
-        self.assertTrue("this is the body" in r.content)
+        self.assertContains(r, "node subject")
+        self.assertContains(r, "this is the body")
 
     def test_add_node_with_tags(self):
         r = self.c.post(
@@ -188,8 +188,8 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                  tags="tagone, tagtwo"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(self.p.get_absolute_url())
-        self.assertTrue("node subject" in r.content)
-        self.assertTrue("this is the body" in r.content)
+        self.assertContains(r, "node subject")
+        self.assertContains(r, "this is the body")
 
     def test_add_node_empty_body(self):
         r = self.c.post(
@@ -203,13 +203,13 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
             dict(body="xyzzy"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(self.p.get_absolute_url())
-        self.assertTrue("xyzzy" in r.content)
+        self.assertContains(r, "xyzzy")
 
         r = self.c.get(self.u.userprofile.get_absolute_url())
-        self.assertTrue("xyzzy" in r.content)
+        self.assertContains(r, "xyzzy")
 
         r = self.c.get("/status/")
-        self.assertTrue("xyzzy" in r.content)
+        self.assertContains(r, "xyzzy")
 
     def test_add_status_empty_body(self):
         r = self.c.post(
@@ -698,7 +698,7 @@ class MyProjectViewTests(TestCase):
         r = self.client.get(
             reverse('project_tag', args=[i.milestone.project.pid, 'foo']))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(i.get_absolute_url() in r.content)
+        self.assertContains(r, i.get_absolute_url())
 
 
 class TestMilestoneViews(TestCase):
@@ -904,7 +904,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         i = ItemFactory()
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(i.title in r.content)
+        self.assertContains(r, i.title)
 
     def test_item_view_notification_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
@@ -912,7 +912,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         n = NotifyFactory(item=i, user=self.u)
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue("input_notification" in r.content)
+        self.assertContains(r, "input_notification")
         self.assertTrue(r.context['assigned_to_current_user'])
         self.assertTrue(
             r.context['notifications_enabled_for_current_user'])
@@ -923,7 +923,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         i = ItemFactory()
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue("input_notification" in r.content)
+        self.assertContains(r, "input_notification")
         self.assertFalse(r.context['assigned_to_current_user'])
         self.assertFalse(
             r.context['notifications_enabled_for_current_user'])
@@ -933,8 +933,8 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         i = ItemFactory()
         r = self.c.get(i.milestone.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(i.title in r.content)
-        self.assertTrue(i.get_absolute_url() in r.content)
+        self.assertContains(r, i.title)
+        self.assertContains(r, i.get_absolute_url())
 
     def test_delete_item_view(self):
         i = ItemFactory()
@@ -952,7 +952,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         i = ItemFactory()
         r = self.c.get(i.get_absolute_url() + "delete/")
         self.assertEquals(r.status_code, 200)
-        self.assertTrue("<form" in r.content)
+        self.assertContains(r, "<form")
 
     def test_add_attachment(self):
         i = ItemFactory()
@@ -985,7 +985,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
                 AWS_SECRET_KEY='',
                 AWS_S3_UPLOAD_BUCKET=''):
             r = self.c.get(
-                "/sign_s3/?s3_object_name=default_name&s3_object_type=foo")
+                '/sign_s3/?s3_object_name=default_name&s3_object_type=foo')
             self.assertEqual(r.status_code, 200)
             j = json.loads(r.content)
             self.assertTrue('signed_request' in j)
@@ -1023,12 +1023,12 @@ class TestItemTagViews(LoggedInTestMixin, TestCase):
                         dict(tags="tagone, tagtwo"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("tagone" in r.content)
+        self.assertContains(r, "tagone")
         r = self.c.get("/tag/")
-        self.assertTrue("tagone" in r.content)
+        self.assertContains(r, "tagone")
         r = self.c.get("/tag/tagone/")
-        self.assertTrue("tagone" in r.content)
-        self.assertTrue(str(i.iid) in r.content)
+        self.assertContains(r, "tagone")
+        self.assertContains(r, str(i.iid))
 
     def test_remove_tag(self):
         i = ItemFactory()
@@ -1037,8 +1037,8 @@ class TestItemTagViews(LoggedInTestMixin, TestCase):
         r = self.c.get(i.get_absolute_url() + "remove_tag/tagtwo/")
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("tagtwo" not in r.content)
-        self.assertTrue("tagone" in r.content)
+        self.assertNotContains(r, "tagtwo")
+        self.assertContains(r, "tagone")
 
 
 class TestTagViews(LoggedInTestMixin, TestCase):
@@ -1050,7 +1050,7 @@ class TestTagViews(LoggedInTestMixin, TestCase):
         i.tags.add('testtag', 'testtag2')
         r = self.client.get(reverse('merge_tag', args=['testtag']))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('value="testtag2"' in r.content)
+        self.assertContains(r, 'value="testtag2"')
 
     def test_merge_tags(self):
         i = ItemFactory()
@@ -1080,7 +1080,7 @@ class TestItemWorkflow(TestCase):
             dict(comment='this is a comment'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("this is a comment" in r.content)
+        self.assertContains(r, "this is a comment")
 
     def test_add_comment_unicode(self):
         i = ItemFactory()
@@ -1089,7 +1089,7 @@ class TestItemWorkflow(TestCase):
             dict(comment=u'Here is a bullet point: \u2022'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue('Here is a bullet point:' in r.content)
+        self.assertContains(r, 'Here is a bullet point:')
 
     def test_add_comment_ccs_user(self):
         """ PMT #103873
@@ -1187,9 +1187,9 @@ class TestItemWorkflow(TestCase):
                  r_status='FIXED'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("this is a comment" in r.content)
-        self.assertTrue("RESOLVED" in r.content)
-        self.assertTrue("FIXED" in r.content)
+        self.assertContains(r, "this is a comment")
+        self.assertContains(r, "RESOLVED")
+        self.assertContains(r, "FIXED")
 
     def test_resolve_with_time(self):
         i = ItemFactory()
@@ -1200,10 +1200,10 @@ class TestItemWorkflow(TestCase):
                  r_status='FIXED'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("this is a comment" in r.content)
-        self.assertTrue("RESOLVED" in r.content)
-        self.assertTrue("FIXED" in r.content)
-        self.assertTrue("2h 30m" in r.content)
+        self.assertContains(r, "this is a comment")
+        self.assertContains(r, "RESOLVED")
+        self.assertContains(r, "FIXED")
+        self.assertContains(r, "2h 30m")
 
     def test_resolve_self_assigned(self):
         i = ItemFactory(owner_user=self.u,
@@ -1214,8 +1214,8 @@ class TestItemWorkflow(TestCase):
                  r_status='FIXED'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("this is a comment" in r.content)
-        self.assertTrue("VERIFIED" in r.content)
+        self.assertContains(r, "this is a comment")
+        self.assertContains(r, "VERIFIED")
 
     def test_inprogress(self):
         i = ItemFactory()
@@ -1224,8 +1224,8 @@ class TestItemWorkflow(TestCase):
             dict(comment='this is a comment'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("this is a comment" in r.content)
-        self.assertTrue("INPROGRESS" in r.content)
+        self.assertContains(r, "this is a comment")
+        self.assertContains(r, "INPROGRESS")
 
     def test_verify(self):
         i = ItemFactory(status='RESOLVED', r_status='FIXED')
@@ -1234,8 +1234,8 @@ class TestItemWorkflow(TestCase):
             dict(comment='this is a comment'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("this is a comment" in r.content)
-        self.assertTrue("VERIFIED" in r.content)
+        self.assertContains(r, "this is a comment")
+        self.assertContains(r, "VERIFIED")
 
     def test_reopen(self):
         i = ItemFactory(status='RESOLVED', r_status='FIXED')
@@ -1244,8 +1244,8 @@ class TestItemWorkflow(TestCase):
             dict(comment='this is a comment'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("this is a comment" in r.content)
-        self.assertTrue("OPEN" in r.content)
+        self.assertContains(r, "this is a comment")
+        self.assertContains(r, "OPEN")
 
     def test_split(self):
         i = ItemFactory()
@@ -1257,9 +1257,9 @@ class TestItemWorkflow(TestCase):
                  title_2="sub item three"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("VERIFIED" in r.content)
-        self.assertTrue("Split" in r.content)
-        self.assertTrue("sub item two" in r.content)
+        self.assertContains(r, "VERIFIED")
+        self.assertContains(r, "Split")
+        self.assertContains(r, "sub item two")
         # make sure there are three more items now
         self.assertEqual(Item.objects.all().count(), cnt + 3)
 
@@ -1284,7 +1284,7 @@ class TestItemWorkflow(TestCase):
         self.assertEqual(r.status_code, 302)
 
         r = self.c.get(project.get_absolute_url())
-        self.assertTrue("this is a todo" in r.content)
+        self.assertContains(r, "this is a todo")
 
         i = Item.objects.get(title="this is a todo")
         self.assertEqual(i.owner_user, self.u)
@@ -1310,7 +1310,7 @@ class TestItemWorkflow(TestCase):
                  assigned_to=i.assigned_user.userprofile.username,
                  tags="tagone, tagtwo"))
         r = self.c.get(project.get_absolute_url())
-        self.assertTrue("test bug" in r.content)
+        self.assertContains(r, "test bug")
 
     def test_add_bug_no_tags(self):
         i = ItemFactory()
@@ -1323,14 +1323,14 @@ class TestItemWorkflow(TestCase):
                  assigned_to=i.assigned_user.userprofile.username,
                  tags=""))
         r = self.c.get(project.get_absolute_url())
-        self.assertTrue("test bug" in r.content)
+        self.assertContains(r, "test bug")
 
     def test_change_priority(self):
         i = ItemFactory()
         r = self.c.get(i.get_absolute_url() + "priority/4/")
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("CRITICAL" in r.content)
+        self.assertContains(r, "CRITICAL")
 
     def test_reassign(self):
         i = ItemFactory()
@@ -1339,7 +1339,7 @@ class TestItemWorkflow(TestCase):
                         dict(assigned_to=u.username))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue(u.fullname in r.content)
+        self.assertContains(r, u.fullname)
 
     def test_change_owner(self):
         i = ItemFactory()
@@ -1348,7 +1348,7 @@ class TestItemWorkflow(TestCase):
                         dict(owner=u.username))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue(u.fullname in r.content)
+        self.assertContains(r, u.fullname)
         # make sure owner is in subscription list too
         all_notifies = [n.user for n in Notify.objects.filter(
             item=i.iid)]
@@ -1371,8 +1371,8 @@ class TestHistory(TestCase):
         c2 = CommentFactory(item=i, event=e2)
         r = self.c.get(i.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(c2.comment in r.content)
-        self.assertTrue(c1.comment in r.content)
+        self.assertContains(r, c2.comment)
+        self.assertContains(r, c1.comment)
 
 
 class TestForum(TestCase):
@@ -1519,19 +1519,19 @@ class TestFeeds(TestCase):
         i = ItemFactory()
         r = self.c.get("/feeds/project/%s/" % i.milestone.project.pid)
         self.assertEquals(r.status_code, 200)
-        self.assertFalse("dmt.ccnmtl.columbia.edu" in r.content)
-        self.assertTrue("https://newbase.com" in r.content)
+        self.assertNotContains(r, "dmt.ccnmtl.columbia.edu")
+        self.assertContains(r, "https://newbase.com")
 
         StatusUpdateFactory()
         r = self.c.get("/feeds/status/")
-        self.assertFalse("dmt.ccnmtl.columbia.edu" in r.content)
-        self.assertTrue("https://newbase.com" in r.content)
-        self.assertTrue("<link>https://newbase.com/project" in r.content)
+        self.assertNotContains(r, "dmt.ccnmtl.columbia.edu")
+        self.assertContains(r, "https://newbase.com")
+        self.assertContains(r, "<link>https://newbase.com/project")
 
         NodeFactory()
         r = self.c.get("/feeds/forum/rss/")
-        self.assertFalse("dmt.ccnmtl.columbia.edu" in r.content)
-        self.assertTrue("https://newbase.com" in r.content)
+        self.assertNotContains(r, "dmt.ccnmtl.columbia.edu")
+        self.assertContains(r, "https://newbase.com")
 
 
 class TestDRFViews(TestCase):

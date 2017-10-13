@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import factory
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User

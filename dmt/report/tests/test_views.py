@@ -138,7 +138,7 @@ class ResolvedItemsTest(LoggedInTestMixin, TestCase):
         i = ItemFactory(status='RESOLVED')
         r = self.client.get(reverse('resolved_items_report'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(i.title in r.content)
+        self.assertContains(r, i.title)
 
 
 class InprogressItemsViewTest(LoggedInTestMixin, TestCase):
@@ -146,7 +146,7 @@ class InprogressItemsViewTest(LoggedInTestMixin, TestCase):
         i = ItemFactory(status='INPROGRESS')
         r = self.client.get(reverse('inprogress_items_report'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(i.title in r.content)
+        self.assertContains(r, i.title)
 
 
 class PassedMilestonesViewTests(LoggedInTestMixin, TestCase):
