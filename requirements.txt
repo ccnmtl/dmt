@@ -84,7 +84,7 @@ billiard==3.5.0.3
 parse-type==0.4.2
 parse==1.8.2
 wsgi_intercept==1.5.1
-mechanize==0.3.5
+mechanize==0.3.6
 recordtype==1.1
 urlparse2==1.1.1
 sqlparse==0.2.4
