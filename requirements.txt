@@ -37,7 +37,7 @@ prompt_toolkit==1.0.15
 pygments==2.2.0
 ipython==5.5.0 # pyup: <6.0.0
 ipdb==0.10.3
-isodate==0.5.4
+isodate==0.6.0
 SPARQLWrapper==1.8.0
 rdflib==4.2.2
 
