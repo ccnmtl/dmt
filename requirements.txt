@@ -67,6 +67,7 @@ python-dateutil==2.6.1
 pytz==2017.2
 simpleduration==0.1.0
 ipaddress==1.0.18
+Unidecode==0.04.21  # for faker
 Faker==0.8.5
 factory_boy==2.9.2
 ldap3==2.3
