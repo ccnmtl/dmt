@@ -21,9 +21,9 @@
                                     {% if user.user.id == object.caretaker_user.id %}
                                     selected="selected"
                                     {% endif %}
-                                    >{% firstof user.fullname user.username %}{% ifequal user.user.id object.caretaker_user.id %}
+                                    >{% firstof user.fullname user.username %}{% if user.user.id == object.caretaker_user.id %}
                                     *
-                                    {% endifequal %}</option>
+                                    {% endif %}</option>
                             {% endfor %}
                         </select>
                         <div class="instructions">* Caretaker</div>
@@ -44,9 +44,9 @@
                             {% for milestone in object.milestone_set.all %}
                             <option
                                  value="{{milestone.mid}}"
-                                 {% ifequal milestone.mid upcoming_milestone.mid %}
+                                 {% if milestone.mid == upcoming_milestone.mid %}
                                  selected="selected"
-                                 {% endifequal %}
+                                 {% endif %}
                                  >
                                 {{milestone.name}}
                                 {% if not milestone.is_open %}[CLOSED]{% endif %}

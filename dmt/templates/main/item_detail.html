@@ -145,11 +145,11 @@
           <a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
           <ul class="dropdown-menu">
             <li><p class="navbar-text">Change to...</p></li>
-            {% ifequal object.priority 0 %}{% else %}<li><a href="priority/0/" class="pr0">ICING</a></li>{% endifequal %}
-            {% ifequal object.priority 1 %}{% else %}<li><a href="priority/1/" class="pr1">LOW</a></li>{% endifequal %}
-            {% ifequal object.priority 2 %}{% else %}<li><a href="priority/2/" class="pr2">MEDIUM</a></li>{% endifequal %}
-            {% ifequal object.priority 3 %}{% else %}<li><a href="priority/3/" class="pr3">HIGH</a></li>{% endifequal %}
-            {% ifequal object.priority 4 %}{% else %}<li><a href="priority/4/" class="pr4">CRITICAL</a></li>{% endifequal %}
+            {% if object.priority == 0 %}{% else %}<li><a href="priority/0/" class="pr0">ICING</a></li>{% endif %}
+            {% if object.priority == 1 %}{% else %}<li><a href="priority/1/" class="pr1">LOW</a></li>{% endif %}
+            {% if object.priority == 2 %}{% else %}<li><a href="priority/2/" class="pr2">MEDIUM</a></li>{% endif %}
+            {% if object.priority == 3 %}{% else %}<li><a href="priority/3/" class="pr3">HIGH</a></li>{% endif %}
+            {% if object.priority == 4 %}{% else %}<li><a href="priority/4/" class="pr4">CRITICAL</a></li>{% endif %}
           </ul>
         </div>
       </dd>

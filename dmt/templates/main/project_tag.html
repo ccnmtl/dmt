@@ -25,10 +25,10 @@
         width="14" height="14"/>
  {% endif %}
 <a href="{{item.get_absolute_url}}">{{item.title|truncatechars:40}}</a>
-{% ifequal item.status "OPEN" %}
+{% if item.status == "OPEN" %}
 {% else %}
 <span class="{{item.status_class}} badge pull-right">{{item.status_display}}</span>
-{% endifequal %}
+{% endif %}
 </td>
         <td class="pr{{item.priority}}">{{item.priority_label}}</td>
             <td><a href="{{item.owner_user.userprofile.get_absolute_url}}">{{item.owner_user.userprofile.get_fullname}}</a></td>

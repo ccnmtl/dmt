@@ -24,9 +24,9 @@
     <td>
         <select name="project_{{p.pid}}">
             {% for u in p.all_personnel_in_project %}
-            {% ifnotequal u.username user.username %}
+            {% if u.username != user.username %}
             <option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
-            {% endifnotequal %}
+            {% endif %}
             {% endfor %}
         </select>
     </td>
@@ -58,9 +58,9 @@
     <td><a href="{{i.milestone.project.get_absolute_url}}">{{i.milestone.project.name}}</a></td>
     <td><select name="item_assigned_{{i.iid}}">
             {% for u in i.milestone.project.all_personnel_in_project %}
-            {% ifnotequal user.username u.username %}
+            {% if user.username != u.username %}
             <option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
-            {% endifnotequal %}
+            {% endif %}
             {% endfor %}
             </select>
     </td>
@@ -94,9 +94,9 @@
     <td><a href="{{i.milestone.project.get_absolute_url}}">{{i.milestone.project.name}}</a></td>
     <td><select name="item_owner_{{i.iid}}">
             {% for u in i.milestone.project.all_personnel_in_project %}
-            {% ifnotequal u.username user.username %}
+            {% if u.username != user.username %}
             <option value="{{u.username}}">{% firstof u.fullname u.username %}</option>
-            {% endifnotequal %}
+            {% endif %}
             {% endfor %}
             </select>
     </td>
