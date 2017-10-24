@@ -30,9 +30,9 @@
                             {% for milestone in object.milestone_set.all %}
                             <option
                                  value="{{milestone.mid}}"
-                                 {% ifequal milestone.mid upcoming_milestone.mid %}
+                                 {% if milestone.mid == upcoming_milestone.mid %}
                                  selected="selected"
-                                 {% endifequal %}
+                                 {% endif %}
                                  >
                                 {{milestone.name}} ({{milestone.target_date}})
                                 {% if not milestone.is_open %}[CLOSED]{% endif %}
