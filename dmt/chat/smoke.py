@@ -45,7 +45,7 @@ class BrokerConnectivity(SmokeTest):
             else:
                 raise IOError("Timeout connecting to broker")
             self.assertTrue(True)
-        except:
+        except Exception:
             self.assertTrue(False)
         finally:
             socket.close()
