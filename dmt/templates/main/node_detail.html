@@ -78,9 +78,8 @@ by <a href="{{object.user.userprofile.get_absolute_url}}">{{ object.user.userpro
     {% else %}
     <div class="tab-pane fade in active" id="add-reply">
     {% endif %}
-      <div class="forum-reply">
-      <div class="instructions"><span class="glyphicon glyphicon-question-sign"></span>
-      For text formatting, please see the <a href="http://wiki.ccnmtl.columbia.edu/index.php/Markdown_syntax_cheat_sheet" target="_blank">Markdown cheat sheet</a> for syntax rules.</div>
+    <div class="forum-reply">
+        {% include 'main/markdown_note.html' %}
       <form action="reply/" method="post">{% csrf_token %}
       <fieldset>
       <div class="form-group">
