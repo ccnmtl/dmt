@@ -28,6 +28,10 @@ class ClientFilter(FilterSet):
 
 
 class ProjectFilter(FilterSet):
+    class Meta:
+        model = Project
+        fields = ['name', 'projnum', 'caretaker_user', 'description']
+
     name = CharFilter(label='Project Name', lookup_expr='icontains')
     projnum = NumberFilter(label='Project Number')
     caretaker_user = ModelChoiceFilter(
@@ -35,9 +39,10 @@ class ProjectFilter(FilterSet):
             ~Q(username__startswith='grp_')).order_by('username'))
     description = CharFilter(lookup_expr='icontains')
 
-    class Meta:
-        model = Project
-        fields = ['name', 'projnum', 'caretaker_user', 'description']
+    @property
+    def qs(self):
+        parent = super(ProjectFilter, self).qs
+        return parent.filter(~Q(status='Defunct'))
 
 
 class UserFilter(FilterSet):

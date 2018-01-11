@@ -12,7 +12,7 @@ class InGroupAdmin(admin.ModelAdmin):
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['name']
-    list_filter = ('caretaker_user',)
+    list_filter = ('status', 'caretaker_user')
 
 
 @admin.register(UserProfile)
