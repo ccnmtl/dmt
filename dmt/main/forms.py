@@ -201,8 +201,16 @@ class ItemCreateForm(ModelForm):
         self.fields['status'].initial = 'OPEN'
         self.fields['type'].widget = forms.HiddenInput()
         self.fields['type'].initial = 'action item'
-
         return r
+
+    def clean(self):
+        cleaned_data = super(ItemCreateForm, self).clean()
+
+        if cleaned_data['target_date'] is None:
+            cleaned_data['target_date'] = \
+                cleaned_data['milestone'].target_date
+
+        return cleaned_data
 
     def save(self, commit=True):
         instance = super(ItemCreateForm, self).save(commit=commit)
@@ -259,6 +267,15 @@ class BugCreateForm(ModelForm):
 
         return r
 
+    def clean(self):
+        cleaned_data = super(BugCreateForm, self).clean()
+
+        if cleaned_data['target_date'] is None:
+            cleaned_data['target_date'] = \
+                cleaned_data['milestone'].target_date
+
+        return cleaned_data
+
     def save(self, commit=True):
         instance = super(BugCreateForm, self).save(commit=commit)
         instance.add_event('OPEN', instance.created_by.userprofile,
@@ -285,6 +302,15 @@ class ItemUpdateForm(ModelForm):
         project = Project.objects.get(milestone=milestone)
         project_milestones = project.milestone_set.all()
         self.fields['milestone'].queryset = project_milestones
+
+    def clean(self):
+        cleaned_data = super(ItemUpdateForm, self).clean()
+
+        if cleaned_data['target_date'] is None:
+            cleaned_data['target_date'] = \
+                cleaned_data['milestone'].target_date
+
+        return cleaned_data
 
     class Meta:
         model = Item
