@@ -638,6 +638,18 @@ class TestItemUpdate(LoggedInTestMixin, TestCase):
         # TODO why doesn't this work?
         # self.assertEqual(Reminder.objects.count(), 0)
 
+    def test_update_null_target_date(self):
+        self.formdata.update({
+            'target_date': ''
+        })
+
+        r = self.c.post(self.url, self.formdata)
+        self.assertEqual(r.status_code, 302)
+
+        self.item.refresh_from_db()
+        self.assertEqual(self.item.target_date,
+                         self.item.milestone.target_date)
+
 
 class MyProjectViewTests(TestCase):
     def setUp(self):
@@ -2052,6 +2064,17 @@ class TestItemCreateView(LoggedInTestMixin, TestCase):
         self.assertEqual(Item.objects.count(), 0)
         self.assertFormError(r, 'form', 'project', 'This field is required.')
 
+    def test_post_null_target_date(self):
+        self.form_data.update({
+            'target_date': ''
+        })
+        url = reverse('item_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 302)
+
+        item = Item.objects.first()
+        self.assertEqual(item.target_date, item.milestone.target_date)
+
 
 class TestBugCreateView(LoggedInTestMixin, TestCase):
     def setUp(self):
@@ -2152,3 +2175,14 @@ class TestBugCreateView(LoggedInTestMixin, TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
         self.assertFormError(r, 'form', 'project', 'This field is required.')
+
+    def test_post_null_target_date(self):
+        self.form_data.update({
+            'target_date': ''
+        })
+        url = reverse('bug_create') + '?mid={}'.format(self.milestone.mid)
+        r = self.client.post(url, self.form_data)
+        self.assertEqual(r.status_code, 302)
+
+        item = Item.objects.first()
+        self.assertEqual(item.target_date, item.milestone.target_date)
