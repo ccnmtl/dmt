@@ -10,7 +10,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="description" content="dmt">
-  <meta name="author" content="CCNMTL">
+  <meta name="author" content="Columbia University CTL">
 
   <link href="{% bootstrap_css_url %}" rel="stylesheet">
   {% compress css %}
@@ -239,7 +239,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a href="{% url 'forum_list' %}">Forums</a></li>
-                <li><a href="http://wiki.ccnmtl.columbia.edu/" target="_blank">Wiki</a></li>
+                <li><a href="http://wiki.ctl.columbia.edu/" target="_blank">Wiki</a></li>
               </ul>
             </li>
           </ul><!-- /.navbar-nav -->
@@ -277,7 +277,7 @@
 <script src="https://cdn.ravenjs.com/3.20.1/raven.min.js" crossorigin="anonymous"></script>
 <script>
 Raven.config('https://8b82fbb74e9045a59148be4e1f516ad3@sentry.io/101853', {
-    whitelistUrls: [/pmt\.ccnmtl\.columbia\.edu/]
+    whitelistUrls: [/pmt\.ccnmtl\.columbia\.edu/, /pmt\.ctl\.columbia\.edu/]
 }).install();
 {% if not request.user.is_anonymous %}
 Raven.setUserContext({
