@@ -15,7 +15,7 @@ locals().update(
         cloudfront="dbc5vd2wjeil7",
     ))
 
-BASE_URL = "https://pmt.ccnmtl.columbia.edu"
+BASE_URL = "https://pmt.ctl.columbia.edu"
 
 try:
     from local_settings import *

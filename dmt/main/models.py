@@ -312,7 +312,7 @@ class UserProfile(models.Model):
         body = (
             'Reminder: This PMT item is due in {}:\n'.format(
                 simpleduration_string(reminder.reminder_time)) +
-            'https://pmt.ccnmtl.columbia.edu{}'.format(
+            'https://pmt.ctl.columbia.edu{}'.format(
                 reminder.item.get_absolute_url()))
 
         send_email.delay(
@@ -323,7 +323,7 @@ class UserProfile(models.Model):
         s = (
             'Thus far this week, you have resolved {} item(s) while logging '
             '{:.1f} hours. Review your weekly report here:\n'
-            'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
+            'https://pmt.ctl.columbia.edu/report/user/{}/weekly'
             '\n\n'
             'Your dashboard shows {} Outstanding Items. Of these, '
             '{} have a Resolved status and just need your verification '
@@ -747,7 +747,7 @@ Forum title: %s
 
 
 -- \nThis message sent automatically by the PMT forum.
-To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n
+To reply, please visit <https://pmt.ctl.columbia.edu%s>\n
         """ % (
             self.name,
             user.fullname,
@@ -1396,7 +1396,7 @@ Target date:\t%s
 Assigned to:\t%s
 Project:\t%s
 Milestone:\t%s
-URL:\thttps://pmt.ccnmtl.columbia.edu%s
+URL:\thttps://pmt.ctl.columbia.edu%s
 
 %s
 
@@ -1465,7 +1465,7 @@ Please do not reply to this message.
     def send_new_subscriber_mail(self, user, subscriber):
         body = '{} has subscribed you to this PMT item:\n\t{}\n'.format(
             force_text(user.userprofile),
-            'https://pmt.ccnmtl.columbia.edu{}'.format(
+            'https://pmt.ctl.columbia.edu{}'.format(
                 self.get_absolute_url()))
 
         send_email.delay(
@@ -1649,7 +1649,7 @@ class Node(models.Model):
                 self.project.name, user.fullname, reply.subject, body)
         body += (
             "\n\n\n-- \nThis message sent automatically by the PMT forum.\n"
-            "To reply, please visit <https://pmt.ccnmtl.columbia.edu%s>\n\r"
+            "To reply, please visit <https://pmt.ctl.columbia.edu%s>\n\r"
             % (self.get_absolute_url()))
 
         send_email.delay(clean_subject(subject), body,

@@ -1458,7 +1458,7 @@ class TestForum(TestCase):
         self.assertEquals(r.status_code, 404)
 
     def test_linkify_infinite_loop(self):
-        # see https://pmt.ccnmtl.columbia.edu/item/101115/
+        # see https://pmt.ctl.columbia.edu/item/101115/
         n = NodeFactory(body=(
             '<a href="https://www1.columbia.edu/sec/cu/lweb/reserves/">'
             'https://www1.columbia.edu/sec/cu/lweb/reserves/</a>. '
@@ -1930,7 +1930,7 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
 
         body = '{} has subscribed you to this PMT item:\n\t{}\n'.format(
             unicode(self.u.userprofile),
-            'https://pmt.ccnmtl.columbia.edu{}'.format(
+            'https://pmt.ctl.columbia.edu{}'.format(
                 self.i.get_absolute_url()))
         self.assertEqual(email.body, body)
 
