@@ -147,7 +147,7 @@ class UserModelTest(TestCase):
             r,
             ('Thus far this week, you have resolved 0 item(s) while logging '
              '0.0 hours. Review your weekly report here:\n'
-             'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
+             'https://pmt.ctl.columbia.edu/report/user/{}/weekly'
              '\n\n'
              'Your dashboard shows 0 Outstanding Items. Of these, '
              '0 have a Resolved status and just need your verification '
@@ -165,7 +165,7 @@ class UserModelTest(TestCase):
             r,
             ('Thus far this week, you have resolved 0 item(s) while logging '
              '1.0 hours. Review your weekly report here:\n'
-             'https://pmt.ccnmtl.columbia.edu/report/user/{}/weekly'
+             'https://pmt.ctl.columbia.edu/report/user/{}/weekly'
              '\n\n'
              'Your dashboard shows 0 Outstanding Items. Of these, '
              '0 have a Resolved status and just need your verification '
@@ -191,7 +191,7 @@ class UserModelTest(TestCase):
         expected_body = (
             'Reminder: This PMT item is due in {}:\n'.format(
                 simpleduration_string(r.reminder_time)) +
-            'https://pmt.ccnmtl.columbia.edu{}'.format(
+            'https://pmt.ctl.columbia.edu{}'.format(
                 r.item.get_absolute_url()))
 
         self.assertEqual(mail.outbox[0].body, expected_body)
