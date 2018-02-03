@@ -612,9 +612,9 @@ class NodeDeleteView(LoggedInMixin, DeleteView):
 class MilestoneDetailView(LoggedInMixin, DetailView):
     model = Milestone
 
-    @staticmethod
-    def move_items(request, items, new_milestone):
+    def move_items(self, request, items, new_milestone):
         item_names = []
+
         for pk in items:
             item = get_object_or_404(Item, iid=pk)
             item.milestone = new_milestone
@@ -622,6 +622,11 @@ class MilestoneDetailView(LoggedInMixin, DetailView):
             item_names.append(
                 '<a href="{}">{}</a>'.format(
                     item.get_absolute_url(), item.title))
+
+        # Update the milestone's status, because it might be empty
+        # now.
+        milestone = self.get_object()
+        milestone.update_milestone()
 
         if len(item_names) > 0:
             msg = 'Moved the following items to ' + \
