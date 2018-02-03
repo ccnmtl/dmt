@@ -41,7 +41,7 @@ isodate==0.6.0
 SPARQLWrapper==1.8.0
 rdflib==4.2.2
 
-coverage==4.4.2
+coverage==4.5
 pyasn1==0.4.2
 pyOpenSSL==17.5.0
 ndg-httpsclient==0.4.4
