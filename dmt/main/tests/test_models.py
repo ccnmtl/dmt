@@ -406,20 +406,25 @@ class ItemTest(TestCase):
         self.assertEqual(i.target_date_status(), "late")
 
     def test_add_project_notification(self):
+        self.assertEqual(Notify.objects.count(), 0)
         i = ItemFactory()
         i.add_project_notification()
+        self.assertEqual(Notify.objects.count(), 1)
+        n = Notify.objects.first()
+        self.assertEqual(n.item, i)
+        self.assertEqual(n.user, i.milestone.project.caretaker_user)
 
-    def test_add_cc_active_user(self):
+    def test_add_subscriber_active_user(self):
         i = ItemFactory()
         u = UserProfileFactory()
-        i.add_cc(u)
+        i.add_subscriber(u)
         self.assertEqual(
             Notify.objects.filter(item=i.iid, user=u.user).count(), 1)
 
-    def test_add_cc_inactive_user(self):
+    def test_add_subscriber_inactive_user(self):
         i = ItemFactory()
         u = UserProfileFactory(status='inactive')
-        i.add_cc(u)
+        i.add_subscriber(u)
         with self.assertRaises(Notify.DoesNotExist):
             Notify.objects.get(item=i.iid, user=u.user)
 
