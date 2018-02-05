@@ -96,13 +96,13 @@ class ProjectFeed(Feed):
         return "Recent project activity"
 
     def items(self, obj):
-        # write a custom query here insetead of using project method,
+        # write a custom query here instead of using project method,
         # since we care about the order
         active_pmt_items = Item.objects.filter(milestone__project=obj,
                                                status__in=['OPEN',
                                                            'RESOLVED',
                                                            'INPROGRESS']
-                                               ).order_by('last_mod')
+                                               ).order_by('-last_mod')
         return active_pmt_items
 
     def item_title(self, item):
