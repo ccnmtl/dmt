@@ -3,6 +3,7 @@ import unittest
 import urllib
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 from simpleduration import Duration
 from .factories import (
@@ -872,6 +873,42 @@ class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
         m2_items = m2.active_items().order_by('title')
         self.assertEqual(m1_items.count(), 1)
         self.assertEqual(m2_items.count(), 2)
+
+        r = self.client.get(r.url)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(
+            r,
+            u'Moved the following items to <strong>{}</strong>:'.format(
+                m2.name))
+
+    def test_post_move_with_all_selected(self):
+        # Make this an overdue milestone
+        self.m.target_date = timezone.now().date() - timedelta(days=2)
+        self.m.save()
+
+        m2 = MilestoneFactory(project=self.m.project)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        ItemFactory(milestone=self.m)
+        self.assertEqual(self.m.active_items().count(), 3)
+
+        items = self.m.active_items().order_by('title')
+        r = self.client.post(self.m.get_absolute_url(), {
+            'action': 'move',
+            'move_to': m2.mid,
+            '_selected_action': [items[0].pk, items[1].pk, items[2].pk],
+        })
+        self.assertEqual(r.status_code, 302)
+
+        m1_items = self.m.active_items().order_by('title')
+        m2_items = m2.active_items().order_by('title')
+        self.assertEqual(m1_items.count(), 0)
+        self.assertEqual(m2_items.count(), 3)
+
+        self.m.refresh_from_db()
+        m2.refresh_from_db()
+        self.assertEqual(self.m.status, 'CLOSED')
+        self.assertEqual(m2.status, 'OPEN')
 
         r = self.client.get(r.url)
         self.assertEqual(r.status_code, 200)
