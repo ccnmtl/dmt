@@ -249,6 +249,10 @@ class UserProfile(models.Model):
     def clients(self):
         return Client.objects.filter(user__userprofile=self)
 
+    # TODO: manager_on, developer_on, guest_on should all be
+    # removed. We aren't really using these roles. A user is other on
+    # a project or not. And that user is either the caretaker for the
+    # project, or not.
     def manager_on(self):
         return [w.project for w in self.user.workson_set.filter(
                 auth='manager').select_related('project')]
@@ -1220,7 +1224,7 @@ class Item(models.Model):
             comment_src=comment_src,
             comment=rendered_comment,
             add_date_time=timezone.now())
-        self.add_cc(user)
+        self.add_subscriber(user)
 
     def add_reminder(self, reminder_duration, user):
         """Add a reminder to this Item.
@@ -1317,7 +1321,7 @@ class Item(models.Model):
             comment="<b>Reassigned to %s</b><br />\n%s" % (
                 assigned_to.fullname, comment),
             add_date_time=timezone.now())
-        self.add_cc(assigned_to)
+        self.add_subscriber(assigned_to)
 
     def change_owner(self, user, owner, comment):
         self.owner_user = owner.user
@@ -1333,7 +1337,7 @@ class Item(models.Model):
             comment="<b>Ownership changed to %s</b><br />\n%s" % (
                 owner.fullname, comment),
             add_date_time=timezone.now())
-        self.add_cc(owner)
+        self.add_subscriber(owner)
 
     def set_priority(self, priority, user):
         old_priority = self.priority
@@ -1359,14 +1363,13 @@ class Item(models.Model):
             add_date_time=timezone.now())
 
     def setup_default_notification(self):
-        self.add_cc(self.owner_user.userprofile)
-        self.add_cc(self.assigned_user.userprofile)
+        self.add_subscriber(self.owner_user.userprofile)
+        self.add_subscriber(self.assigned_user.userprofile)
 
     def add_project_notification(self):
-        for u in self.milestone.project.managers():
-            self.add_cc(u)
+        self.add_subscriber(self.milestone.project.caretaker_user.userprofile)
 
-    def add_cc(self, user):
+    def add_subscriber(self, user):
         if user.status == "inactive":
             # don't bother with inactive users
             return
