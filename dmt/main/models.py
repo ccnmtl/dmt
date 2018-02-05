@@ -476,6 +476,14 @@ PROJECT_STATUS_CHOICES = [
 ]
 
 
+PROJECT_TECHNOLOGY_CHOICES = [
+    'Django',
+    'Hugo',
+    'Drupal 5',
+    'Drupal 7',
+]
+
+
 class Project(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField("Project name", max_length=255)
@@ -500,6 +508,10 @@ class Project(models.Model):
     scale = models.CharField(max_length=20, blank=True)
     distrib = models.CharField("Distribution", max_length=20, blank=True)
     internal = models.BooleanField(default=False)
+    technology = models.CharField(
+        max_length=255,
+        null=True, blank=True,
+        choices=[(c, c) for c in PROJECT_TECHNOLOGY_CHOICES])
 
     class Meta:
         db_table = u'projects'
