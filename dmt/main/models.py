@@ -266,9 +266,11 @@ class UserProfile(models.Model):
                 auth='guest').select_related('project')]
 
     def personnel_on(self):
-        return [w.project for w
-                in self.user.workson_set.all(
-                ).select_related('project').order_by('project__name')]
+        return [
+            w.project for w in
+            self.user.workson_set.all().select_related('project')
+            .filter(~Q(project__status='Defunct')).order_by('project__name')
+        ]
 
     def total_group_time(self, start, end):
         return interval_sum(
