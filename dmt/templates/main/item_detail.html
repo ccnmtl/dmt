@@ -83,33 +83,49 @@
     <div class="item-description">{{object.description|commonmark|linkify|emoji_replace}}</div>
 
     <dl class="dl-horizontal">
+        {% if object.resolvable %}
+      <dt>Resolve as</dt>
+      <dd>
+          <a class="btn btn-primary btn-xs btn-resolved" href="#" data-toggle="modal"
+             data-target="#resolve-fixed">
+              <span class="glyphicon glyphicon-ok"></span> Fixed</a>
+          <a class="btn btn-primary btn-xs btn-resolved" href="#" data-toggle="modal"
+             data-target="#resolve-invalid">
+              <span class="glyphicon glyphicon-remove"></span> Invalid</a>
+          <a class="btn btn-primary btn-xs btn-resolved" href="#" data-toggle="modal"
+             data-target="#resolve-worksforme">
+              <span class="glyphicon glyphicon-ok"></span> Works for Me</a>
+          <a class="btn btn-primary btn-xs btn-resolved" href="#" data-toggle="modal"
+             data-target="#resolve-wontfix">
+              <span class="glyphicon glyphicon-remove"></span> Won't Fix</a>
+          <a class="btn btn-primary btn-xs btn-resolved" href="#" data-toggle="modal"
+             data-target="#resolve-duplicate">
+              <span class="glyphicon glyphicon-tags"></span> Duplicate</a>
+          <a class="btn btn-primary btn-xs btn-resolved" href="#" data-toggle="modal"
+             data-target="#resolve-needinfo">
+              <span class="glyphicon glyphicon-question-sign"></span> Need Info</a>
+      </dd>
+      {% endif %}
+
       <dt>Change status</dt>
       <dd>
-        <div class="btn-group">
-        {% if object.resolvable %}
-        <a class="btn btn-primary btn-xs btn-resolved" href="#" data-toggle="modal"
-        data-target="#resolve"><span class="glyphicon
-        glyphicon-ok"></span> Resolve</a>
-        {% endif %}
+          {% if object.inprogressable %}
+          <a class="btn btn-default btn-xs btn-inprogress" href="#" data-toggle="modal"
+             data-target="#mark-in-progress">
+              <span class="glyphicon glyphicon-record"></span> Mark as in-progress</a>
+          {% endif %}
 
-        {% if object.inprogressable %}
-        <a class="btn btn-default btn-xs btn-inprogress" href="#" data-toggle="modal"
-        data-target="#mark-in-progress"><span class="glyphicon
-        glyphicon-record"></span> Mark as in-progress</a>
-        {% endif %}
+          {% if object.verifiable %}
+          <a class="btn btn-success btn-xs btn-verify" href="#" data-toggle="modal"
+             data-target="#verify">
+              <span class="glyphicon glyphicon-ok"></span> Verify</a>
+          {% endif %}
 
-        {% if object.verifiable %}
-        <a class="btn btn-success btn-xs btn-verify" href="#" data-toggle="modal"
-        data-target="#verify"><span class="glyphicon
-        glyphicon-ok"></span> Verify</a>
-        {% endif %}
-
-        {% if object.reopenable %}
-        <a class="btn btn-danger btn-xs" href="#" data-toggle="modal"
-        data-target="#reopen"><span class="glyphicon
-        glyphicon-repeat"></span> Reopen</a>
-        {% endif %}
-        </div>
+          {% if object.reopenable %}
+          <a class="btn btn-danger btn-xs" href="#" data-toggle="modal"
+             data-target="#reopen">
+              <span class="glyphicon glyphicon-repeat"></span> Reopen</a>
+          {% endif %}
       </dd>
 
       {% if object.created_by %}
@@ -342,22 +358,196 @@
 
 {% if object.resolvable %}
 <form action="resolve/" method="post" role="form">{% csrf_token %}
-<div class="modal fade" id="resolve" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
+<div class="modal fade" id="resolve-fixed" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="resolve-label">Resolve Item</h4>
+        <h4 class="modal-title" id="resolve-label-1">Resolve Item: FIXED</h4>
       </div>
       <div class="modal-body">
-                <div class="form-group">
-                    <label for="resolve-status">Resolve Status</label>
-                    <select class="form-control" id="resolve-status" name="r_status">
+                <div class="form-group hidden">
+                    <select class="form-control" id="resolve-status-1" name="r_status">
                         <option value="FIXED">FIXED</option>
+                    </select>
+                </div>
+
+                {% with modalname='resolve' %}
+                {% include 'main/item_detail_textarea_preview.html' %}
+                {% endwith %}
+
+                <div class="form-group">
+                    <label for="resolve-time-input">Time</label>
+                    <input type="text" name="time" placeholder="time"
+                                 id="resolve-time-input-1"
+                                 class="form-control" />
+                </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="Resolve as Fixed" />
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+<form action="resolve/" method="post" role="form">{% csrf_token %}
+<div class="modal fade" id="resolve-invalid" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="resolve-label-2">Resolve Item: INVALID</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group hidden">
+                    <select class="form-control" id="resolve-status-2" name="r_status">
                         <option value="INVALID">INVALID</option>
+                    </select>
+                </div>
+
+                {% with modalname='resolve' %}
+                {% include 'main/item_detail_textarea_preview.html' %}
+                {% endwith %}
+
+                <div class="form-group">
+                    <label for="resolve-time-input">Time</label>
+                    <input type="text" name="time" placeholder="time"
+                                 id="resolve-time-input-2"
+                                 class="form-control" />
+                </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="Resolve as Invalid" />
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+<form action="resolve/" method="post" role="form">{% csrf_token %}
+<div class="modal fade" id="resolve-worksforme" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="resolve-label-3">Resolve Item: WORKSFORME</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group hidden">
+                    <select class="form-control" id="resolve-status-3" name="r_status">
                         <option value="WORKSFORME">WORKSFORME</option>
+                    </select>
+                </div>
+
+                {% with modalname='resolve' %}
+                {% include 'main/item_detail_textarea_preview.html' %}
+                {% endwith %}
+
+                <div class="form-group">
+                    <label for="resolve-time-input">Time</label>
+                    <input type="text" name="time" placeholder="time"
+                                 id="resolve-time-input-3"
+                                 class="form-control" />
+                </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="Resolve as Works for Me" />
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+<form action="resolve/" method="post" role="form">{% csrf_token %}
+<div class="modal fade" id="resolve-wontfix" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="resolve-label-4">Resolve Item: WONTFIX</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group hidden">
+                    <select class="form-control" id="resolve-status-4" name="r_status">
                         <option value="WONTFIX">WONTFIX</option>
+                    </select>
+                </div>
+
+                {% with modalname='resolve' %}
+                {% include 'main/item_detail_textarea_preview.html' %}
+                {% endwith %}
+
+                <div class="form-group">
+                    <label for="resolve-time-input">Time</label>
+                    <input type="text" name="time" placeholder="time"
+                                 id="resolve-time-input-4"
+                                 class="form-control" />
+                </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="Resolve as Won't Fix" />
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+<form action="resolve/" method="post" role="form">{% csrf_token %}
+<div class="modal fade" id="resolve-duplicate" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="resolve-label-5">Resolve Item: DUPLICATE</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group hidden">
+                    <select class="form-control" id="resolve-status-5" name="r_status">
                         <option value="DUPLICATE">DUPLICATE</option>
+                    </select>
+                </div>
+
+                {% with modalname='resolve' %}
+                {% include 'main/item_detail_textarea_preview.html' %}
+                {% endwith %}
+
+                <div class="form-group">
+                    <label for="resolve-time-input">Time</label>
+                    <input type="text" name="time" placeholder="time"
+                                 id="resolve-time-input-5"
+                                 class="form-control" />
+                </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="Resolve as Duplicate" />
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>
+
+<form action="resolve/" method="post" role="form">{% csrf_token %}
+<div class="modal fade" id="resolve-needinfo" tabindex="-1" role="dialog" aria-labelledby="resolve-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="resolve-label-6">Resolve Item: NEEDINFO</h4>
+      </div>
+      <div class="modal-body">
+                <div class="form-group hidden">
+                    <select class="form-control" id="resolve-status-6" name="r_status">
                         <option value="NEEDINFO">NEEDINFO</option>
                     </select>
                 </div>
@@ -369,14 +559,14 @@
                 <div class="form-group">
                     <label for="resolve-time-input">Time</label>
                     <input type="text" name="time" placeholder="time"
-                                 id="resolve-time-input"
+                                 id="resolve-time-input-6"
                                  class="form-control" />
                 </div>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-primary" value="Resolve" />
+        <input type="submit" class="btn btn-primary" value="Resolve as Need Info" />
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
