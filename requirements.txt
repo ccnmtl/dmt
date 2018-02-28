@@ -54,7 +54,7 @@ cffi==1.11.4
 asn1crypto==0.24.0
 
 requests==2.18.4
-packaging==16.8
+packaging==17.0
 appdirs==1.4.3
 logilab-common==1.4.1
 logilab-astng==0.24.3
