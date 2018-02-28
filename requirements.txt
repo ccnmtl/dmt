@@ -50,7 +50,7 @@ pyOpenSSL==17.5.0
 cryptography==2.1.4
 idna==2.6
 urllib3==1.22
-cffi==1.11.4
+cffi==1.11.5
 asn1crypto==0.24.0
 
 requests==2.18.4
