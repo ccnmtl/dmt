@@ -4,7 +4,7 @@ sudo: false
 addons:
   postgresql: "9.6"
 python:
-  - "2.7"
+  - "2.7.6"
 before_script:
   - psql -c 'create database ci_test;' -U postgres
 script:
