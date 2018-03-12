@@ -2,9 +2,10 @@ from datetime import timedelta
 from django.test import TestCase
 from django.utils import timezone
 from dmt.main.models import UserProfile
-from dmt.main.tests.factories import UserProfileFactory
+from dmt.main.tests.factories import (ProjectFactory, UserProfileFactory)
 from dmt.report.calculators import (
-    ActiveProjectsCalculator, StaffReportCalculator
+    ActiveProjectsCalculator, StaffReportCalculator,
+    TimeSpentByUserCalculator, TimeSpentByProjectCalculator
 )
 
 
@@ -35,3 +36,25 @@ class StaffReportCalculatorTests(TestCase):
     def test_calc_on_empty_db(self):
         calc = StaffReportCalculator(UserProfile.objects.all())
         calc.calc(self.week_start, self.week_end)
+
+
+class TimeSpentByUserCalculatorTest(TestCase):
+    def test_calc(self):
+        ProjectFactory()
+        calc = TimeSpentByUserCalculator()
+        calc.calc()
+
+    def test_calc_on_empty_db(self):
+        calc = TimeSpentByUserCalculator()
+        calc.calc()
+
+
+class TimeSpentByProjectCalculatorTest(TestCase):
+    def test_calc(self):
+        ProjectFactory()
+        calc = TimeSpentByProjectCalculator()
+        calc.calc()
+
+    def test_calc_on_empty_db(self):
+        calc = TimeSpentByProjectCalculator()
+        calc.calc()
