@@ -29,16 +29,6 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
         '.columbia.edu',
     )
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'HOST': '',
-            'USER': '',
-            'PASSWORD': '',
-            'ATOMIC_REQUESTS': True,
-        }
-    }
-
 PROJECT_APPS = [
     'dmt.api',
     'dmt.main',

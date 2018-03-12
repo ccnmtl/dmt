@@ -1,4 +1,6 @@
+import unittest
 from datetime import timedelta
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 from dmt.main.models import UserProfile
@@ -38,6 +40,10 @@ class StaffReportCalculatorTests(TestCase):
         calc.calc(self.week_start, self.week_end)
 
 
+@unittest.skipIf(
+    settings.DATABASES['default']['ENGINE'] !=
+    'django.db.backends.postgresql_psycopg2',
+    "This test uses a raw PostgreSQL query")
 class TimeSpentByUserCalculatorTest(TestCase):
     def test_calc(self):
         ProjectFactory()
@@ -49,6 +55,10 @@ class TimeSpentByUserCalculatorTest(TestCase):
         calc.calc()
 
 
+@unittest.skipIf(
+    settings.DATABASES['default']['ENGINE'] !=
+    'django.db.backends.postgresql_psycopg2',
+    "This test uses a raw PostgreSQL query")
 class TimeSpentByProjectCalculatorTest(TestCase):
     def test_calc(self):
         ProjectFactory()
