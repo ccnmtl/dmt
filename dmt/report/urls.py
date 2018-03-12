@@ -36,4 +36,9 @@ urlpatterns = [
         name='inprogress_items_report'),
     url(r'^passed_milestones/$', views.PassedMilestonesView.as_view(),
         name='passed_milestones_report'),
+
+    url(r'^time_spent_by_user/$', views.TimeSpentByUser.as_view(),
+        name='time_spent_by_user_report'),
+    url(r'^time_spent_by_project/$', views.TimeSpentByProject.as_view(),
+        name='time_spent_by_project_report'),
 ]

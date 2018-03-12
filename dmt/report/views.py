@@ -12,6 +12,7 @@ from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
 from dmt.report.calculators import (
     ActiveProjectsCalculator, StaffReportCalculator,
+    TimeSpentByUserCalculator, TimeSpentByProjectCalculator
 )
 from dmt.report.mixins import PrevNextWeekMixin
 from dmt.report.utils import ReportFileGenerator
@@ -218,3 +219,30 @@ class PassedMilestonesView(LoggedInMixin, TemplateView):
             ).order_by("target_date").select_related('project')
 
         return context
+
+
+class TimeSpentByUser(LoggedInMixin, View):
+    def get(self, request, *args, **kwargs):
+        calc = TimeSpentByUserCalculator()
+        data = calc.calc()
+
+        filename = 'time-spent-by-user'
+        column_names = ['Project Name', 'Task Name', 'Assigned to',
+                        'Project Status', 'Estimated Time', 'Time Spent',
+                        'Task Due Date', 'Project Due Date']
+
+        generator = ReportFileGenerator()
+        return generator.generate(column_names, data, filename, 'csv')
+
+
+class TimeSpentByProject(LoggedInMixin, View):
+    def get(self, request, *args, **kwargs):
+        calc = TimeSpentByProjectCalculator()
+        data = calc.calc()
+
+        filename = 'time-spent-by-project'
+        column_names = ['Project Name', 'Status', 'Estimated Time',
+                        'Time Spent', 'Due Date']
+
+        generator = ReportFileGenerator()
+        return generator.generate(column_names, data, filename, 'csv')
