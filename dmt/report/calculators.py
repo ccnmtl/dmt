@@ -39,8 +39,8 @@ select
         items.title as task_title,
         users.fullname as assigned_to,
         projects.status as project_status,
-        extract(epoch from items.estimated_time) as estimated_time,
-        sum(extract(epoch from actual_times.actual_time)) as time_spent,
+        extract(epoch from items.estimated_time) / 3600 as estimated_time,
+        sum(extract(epoch from actual_times.actual_time)) / 3600 as time_spent,
         items.target_date as task_due_date,
         max(milestones.target_date) as project_due_date
 from projects
@@ -66,8 +66,8 @@ class TimeSpentByProjectCalculator(object):
             cursor.execute('''
 select
         projects.name, projects.status,
-        sum(extract(epoch from items.estimated_time)) as estimated_time,
-        sum(extract(epoch from actual_times.actual_time)) as time_spent,
+        sum(extract(epoch from items.estimated_time)) / 3600 as estimated_time,
+        sum(extract(epoch from actual_times.actual_time)) / 3600 as time_spent,
         max(milestones.target_date) as due_date
 from projects
 join milestones on (projects.pid = milestones.pid)
