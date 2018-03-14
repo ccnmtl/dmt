@@ -41,7 +41,7 @@ TEMPLATES[0]['OPTIONS']['context_processors'].extend([  # noqa
     'dmt.main.contextprocessors.dashboard_graph_timespan',
 ])
 
-MIDDLEWARE_CLASSES += [  # noqa
+MIDDLEWARE += [  # noqa
     'django.middleware.csrf.CsrfViewMiddleware',
 ]
 
