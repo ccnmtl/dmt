@@ -37,6 +37,7 @@ class TimeSpentByUserCalculator(object):
 select
         projects.name as project_name,
         items.title as task_title,
+        items.status as task_status,
         users.fullname as assigned_to,
         projects.status as project_status,
         extract(epoch from items.estimated_time) / 3600 as estimated_time,
