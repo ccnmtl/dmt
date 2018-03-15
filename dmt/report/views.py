@@ -227,9 +227,9 @@ class TimeSpentByUser(LoggedInMixin, View):
         data = calc.calc()
 
         filename = 'time-spent-by-user'
-        column_names = ['Project Name', 'Task Name', 'Assigned to',
-                        'Project Status', 'Estimated Time', 'Time Spent',
-                        'Task Due Date', 'Project Due Date']
+        column_names = ['Project Name', 'Task Name', 'Task Status',
+                        'Assigned to', 'Project Status', 'Estimated Time',
+                        'Time Spent', 'Task Due Date', 'Project Due Date']
 
         generator = ReportFileGenerator()
         return generator.generate(column_names, data, filename, 'csv')
