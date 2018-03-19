@@ -41,4 +41,6 @@ urlpatterns = [
         name='time_spent_by_user_report'),
     url(r'^time_spent_by_project/$', views.TimeSpentByProject.as_view(),
         name='time_spent_by_project_report'),
+    url(r'^project_status/$', views.ProjectStatus.as_view(),
+        name='project_status_report'),
 ]

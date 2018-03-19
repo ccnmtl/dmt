@@ -7,7 +7,8 @@ from dmt.main.models import UserProfile
 from dmt.main.tests.factories import (ProjectFactory, UserProfileFactory)
 from dmt.report.calculators import (
     ActiveProjectsCalculator, StaffReportCalculator,
-    TimeSpentByUserCalculator, TimeSpentByProjectCalculator
+    TimeSpentByUserCalculator, TimeSpentByProjectCalculator,
+    ProjectStatusCalculator,
 )
 
 
@@ -67,4 +68,22 @@ class TimeSpentByProjectCalculatorTest(TestCase):
 
     def test_calc_on_empty_db(self):
         calc = TimeSpentByProjectCalculator()
+        calc.calc()
+
+
+@unittest.skipIf(
+    settings.DATABASES['default']['ENGINE'] !=
+    'django.db.backends.postgresql_psycopg2',
+    "This test uses a raw PostgreSQL query")
+class ProjectStatusCalculatorTest(TestCase):
+    def test_calc(self):
+        ProjectFactory()
+        UserProfileFactory()
+        UserProfileFactory()
+        UserProfileFactory()
+        calc = ProjectStatusCalculator()
+        calc.calc()
+
+    def test_calc_on_empty_db(self):
+        calc = ProjectStatusCalculator()
         calc.calc()
