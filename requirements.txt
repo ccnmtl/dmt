@@ -47,7 +47,7 @@ chardet==3.0.4
 
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
 pyOpenSSL==17.5.0
-cryptography==2.1.4
+cryptography==2.2
 idna==2.6
 urllib3==1.22
 cffi==1.11.5
