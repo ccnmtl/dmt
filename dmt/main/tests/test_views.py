@@ -449,12 +449,20 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         test_pub_view = True
         test_target_date = '2020-04-28'
         test_wiki_category = ''
+        test_category = 'MOOC',
+        test_start_date = '2020-04-28'
+        test_due_date = '2020-04-28'
+        test_launch_date = '2020-04-28'
         r = self.c.post(reverse('project_create'), {
             'name': test_name,
             'description': test_desc,
             'pub_view': test_pub_view,
             'target_date': test_target_date,
-            'test_wiki_category': test_wiki_category
+            'test_wiki_category': test_wiki_category,
+            'category': test_category,
+            'start_date': test_start_date,
+            'due_date': test_due_date,
+            'launch_date': test_launch_date
         })
         self.assertEqual(r.status_code, 302)
         url = r.url
@@ -514,7 +522,11 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'description': 'description',
                      'pub_view': False,
                      'target_date': '2020-04-28',
-                     'test_wiki_category': ''})
+                     'test_wiki_category': '',
+                     'category': 'MOOC',
+                     'start_date': '2020-04-28',
+                     'due_date': '2020-04-28',
+                     'launch_date': '2020-04-28'})
 
     def test_create_project_post_adds_final_release_milestone(self):
         self.c.post(reverse('project_create'),
@@ -522,7 +534,11 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'description': 'description',
                      'pub_view': True,
                      'target_date': '2020-04-28',
-                     'test_wiki_category': ''})
+                     'test_wiki_category': '',
+                     'category': 'MOOC',
+                     'start_date': '2020-04-28',
+                     'due_date': '2020-04-28',
+                     'launch_date': '2020-04-28'})
         p = Project.objects.get(name='Test project name')
         self.assertEqual(
             Milestone.objects.filter(project=p, name='Final Release').count(),
@@ -534,7 +550,11 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'description': 'description',
                      'pub_view': True,
                      'target_date': '2020-04-28',
-                     'test_wiki_category': ''})
+                     'test_wiki_category': '',
+                     'category': 'MOOC',
+                     'start_date': '2020-04-28',
+                     'due_date': '2020-04-28',
+                     'launch_date': '2020-04-28'})
         p = Project.objects.get(name='Test project name')
         self.assertEqual(
             Milestone.objects.filter(project=p, name='Someday/Maybe').count(),
@@ -546,7 +566,11 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'description': 'description',
                      'pub_view': True,
                      'target_date': '2020-04-28',
-                     'test_wiki_category': ''})
+                     'test_wiki_category': '',
+                     'category': 'MOOC',
+                     'start_date': '2020-04-28',
+                     'due_date': '2020-04-28',
+                     'launch_date': '2020-04-28'})
         p = Project.objects.get(name='Test project name')
         self.assertTrue(self.u.userprofile in p.personnel_in_project())
 
