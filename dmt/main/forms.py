@@ -1,4 +1,5 @@
 import re
+import datetime
 from datetime import timedelta
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -60,11 +61,15 @@ class ProjectCreateForm(ModelForm):
     class Meta:
         model = Project
         fields = ['name', 'description', 'pub_view', 'target_date',
-                  'wiki_category']
+                  'wiki_category', 'category', 'start_date',
+                  'due_date', 'launch_date']
         widgets = {
             'pub_view': forms.RadioSelect(
                 choices=(('true', 'Public'),
-                         ('false', 'Private')))
+                         ('false', 'Private'))),
+            'start_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'due_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'launch_date': forms.DateInput(attrs={'class': 'datepicker'})
         }
 
     def clean_name(self):
@@ -72,6 +77,7 @@ class ProjectCreateForm(ModelForm):
 
     def clean_target_date(self):
         target_date = self.cleaned_data.get('target_date')
+
         if not re.match(r'\d{4}-\d{1,2}-\d{1,2}', target_date):
             raise forms.ValidationError(
                 'Invalid target date: %s' % target_date)
