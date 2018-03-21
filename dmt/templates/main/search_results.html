@@ -15,95 +15,153 @@
     characters to search for.</div>
 {% endif %}
 
-{% if tags %}
-<p>Tag Matches:</p>
-<ul>
-{% for t in tags %}
-<li><a href="/tag/{{t.slug}}/"><span class="label label-info">{{t.name}}</span></a></li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% if users %}
-<p>User Matches:</p>
-<ul>
-{% for u in users %}
-<li><a href="{{u.get_absolute_url}}">{% firstof u.fullname u.username %}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% if clients %}
-<p>Client matches:</p>
-<ul>
-{% for client in clients %}
-<li><a href="/client/{{client.client_id}}/">{{client.lastname}}, {{client.firstname}}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% if projects %}
-<p>Project matches:</p>
-<ul>
-{% for project in projects %}
-<li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% if milestones %}
-<p>Milestone matches:</p>
-<ul>
-{% for milestone in milestones %}
-<li><span class="{{milestone.status_class}}">{{milestone.status}}</span> <a href="{{milestone.get_absolute_url}}">{{milestone.project.name}}:
-        {{milestone.name}}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% if items %}
-<p>Item matches:</p>
-<ul>
-{% for item in items %}
-<li><span class="{{item.status_class}}">{{item.status}}</span> <a href="{{item.get_absolute_url}}">{{item.title}}</a>
- (<a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a>)</li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% if status_updates %}
-<p>Status Update Matches:</p>
-<ul>
-{% for su in status_updates %}
-<p><a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a>:
- {{su.body}}
- &mdash; <a href="{{su.user.get_absolute_url}}">{% firstof su.user.fullname su.user.username %}</a>
- ({{su.added.date}})</p>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% if nodes %}
-<p>Forum post matches:</p>
-<ul>
-{% for node in nodes %}
-<li><a href="{{node.get_absolute_url}}">[{{node.added}}]
-        {{node.subject}}</a> (<a href="{{node.user.userprofile.get_absolute_url}}">{% firstof node.author.fullname node.author.username %}</a>)</li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{% if chat_messages %}
-    <p>Chat Messages</p>
-    <ul>
-    {% for message in chat_messages %}
-        <li>
-            [<a href="{% url 'project-chat' message.project.pid %}">{{message.project.name}}</a>]
-            <a href="{{message.get_absolute_url}}">{{message.added}} - {{message.user.get_full_name}}</a>: 
-            <blockquote>{{message.text|commonmark|linkify|emoji_replace}}</blockquote>
-        </li>
-    {% endfor %}
-    </ul>
-{% endif %}
-
+  <ul class="nav nav-tabs project-tabs homepage-tabs">
+    <li class="active">
+        <a href="#items-match" data-toggle="tab">Items</a>
+    </li>
+    <li>
+        <a href="#projects-match" data-toggle="tab">Projects</a>
+    </li>
+    <li>
+        <a href="#milestones-match" data-toggle="tab">Milestones</a>
+    </li>
+    <li>
+        <a href="#tags-match" data-toggle="tab">Tags</a>
+    </li>
+    <li>
+        <a href="#users-match" data-toggle="tab">Users</a>
+    </li>
+    <li>
+        <a href="#clients-match" data-toggle="tab">Clients</a>
+    </li>
+    <li>
+        <a href="#status-match" data-toggle="tab">Status</a>
+    </li>
+    <li>
+        <a href="#forums-match" data-toggle="tab">Forums</a>
+    </li>
+    <li>
+        <a href="#chats-match" data-toggle="tab">Chats</a>
+    </li>
+  </ul>
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="items-match">
+        {% if items %}
+        <h2>Item matches:</h2>
+        <ul>
+        {% for item in items %}
+        <li><span class="{{item.status_class}}">{{item.status}}</span> <a href="{{item.get_absolute_url}}">{{item.title}}</a>
+         (<a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a>)</li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Items.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="projects-match">
+        {% if projects %}
+        <h2>Project matches:</h2>
+        <ul>
+        {% for project in projects %}
+        <li><a href="{{project.get_absolute_url}}">{{project.name}}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Projects.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="milestones-match">
+        {% if milestones %}
+        <h2>Milestone matches:</h2>
+        <ul>
+        {% for milestone in milestones %}
+        <li><span class="{{milestone.status_class}}">{{milestone.status}}</span> <a href="{{milestone.get_absolute_url}}">{{milestone.project.name}}:
+                {{milestone.name}}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Milestones.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="tags-match">
+        {% if tags %}
+        <h2>Tag matches:</h2>
+        <ul>
+        {% for t in tags %}
+        <li><a href="/tag/{{t.slug}}/"><span class="label label-info">{{t.name}}</span></a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Tags.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="users-match">
+        {% if users %}
+        <h2>User matches:</h2>
+        <ul>
+        {% for u in users %}
+        <li><a href="{{u.get_absolute_url}}">{% firstof u.fullname u.username %}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Users.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="clients-match">
+        {% if clients %}
+        <h2>Client matches:</h2>
+        <ul>
+        {% for client in clients %}
+        <li><a href="/client/{{client.client_id}}/">{{client.lastname}}, {{client.firstname}}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Clients.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="status-match">
+        {% if status_updates %}
+        <h2>Status Update Matches:</h2>
+        <ul>
+        {% for su in status_updates %}
+        <p><a href="{{su.project.get_absolute_url}}">{{su.project.name}}</a>:
+         {{su.body}}
+         &mdash; <a href="{{su.user.get_absolute_url}}">{% firstof su.user.fullname su.user.username %}</a>
+         ({{su.added.date}})</p>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Status Updates.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="forums-match">
+        {% if nodes %}
+        <h2>Forum post matches:</h2>
+        <ul>
+        {% for node in nodes %}
+        <li><a href="{{node.get_absolute_url}}">[{{node.added}}]
+                {{node.subject}}</a> (<a href="{{node.user.userprofile.get_absolute_url}}">{% firstof node.author.fullname node.author.username %}</a>)</li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Forums.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="chats-match">
+        {% if chat_messages %}
+        <h2>Chat Messages</h2>
+        <ul>
+        {% for message in chat_messages %}
+            <li>
+                [<a href="{% url 'project-chat' message.project.pid %}">{{message.project.name}}</a>]
+                <a href="{{message.get_absolute_url}}">{{message.added}} - {{message.user.get_full_name}}</a>: 
+                <blockquote>{{message.text|commonmark|linkify|emoji_replace}}</blockquote>
+            </li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>There are no results for "{{q}}" in Chats.</p>
+        {% endif %}
+    </div>
+</div><!-- ./tab-content -->
 {% endblock %}
