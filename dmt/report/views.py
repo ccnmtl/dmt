@@ -12,7 +12,8 @@ from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
 from dmt.report.calculators import (
     ActiveProjectsCalculator, StaffReportCalculator,
-    TimeSpentByUserCalculator, TimeSpentByProjectCalculator
+    TimeSpentByUserCalculator, TimeSpentByProjectCalculator,
+    ProjectStatusCalculator,
 )
 from dmt.report.mixins import PrevNextWeekMixin
 from dmt.report.utils import ReportFileGenerator
@@ -226,7 +227,9 @@ class TimeSpentByUser(LoggedInMixin, View):
         calc = TimeSpentByUserCalculator()
         data = calc.calc()
 
-        filename = 'time-spent-by-user'
+        now = timezone.now()
+        filename = 'time-spent-by-user-{}'.format(now.strftime('%Y-%m-%d'))
+
         column_names = ['Project Name', 'Task Name', 'Task Status',
                         'Assigned to', 'Project Status', 'Estimated Time',
                         'Time Spent', 'Task Due Date', 'Project Due Date']
@@ -240,9 +243,34 @@ class TimeSpentByProject(LoggedInMixin, View):
         calc = TimeSpentByProjectCalculator()
         data = calc.calc()
 
-        filename = 'time-spent-by-project'
+        now = timezone.now()
+        filename = 'time-spent-by-project-{}'.format(now.strftime('%Y-%m-%d'))
+
         column_names = ['Project Name', 'Status', 'Estimated Time',
                         'Time Spent', 'Due Date']
+
+        generator = ReportFileGenerator()
+        return generator.generate(column_names, data, filename, 'csv')
+
+
+class ProjectStatus(LoggedInMixin, View):
+    def get(self, request, *args, **kwargs):
+        calc = ProjectStatusCalculator()
+        data = calc.calc()
+
+        now = timezone.now()
+        filename = 'project-status-{}'.format(now.strftime('%Y-%m-%d'))
+
+        column_names = [
+            'Project Name',
+            'Project Status',
+            'Project Due Date',
+            '% of Tasks Open',
+            '% of Tasks In-Progress',
+            '% of Tasks Complete',
+            'Original Estimate',
+            'Time Spent',
+        ]
 
         generator = ReportFileGenerator()
         return generator.generate(column_names, data, filename, 'csv')

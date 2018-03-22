@@ -1,5 +1,7 @@
+from datetime import date
 from django.db import connection
-from dmt.main.models import Project
+from django.db.models import Q, Sum
+from dmt.main.models import Project, Item
 
 
 class ActiveProjectsCalculator(object):
@@ -83,3 +85,51 @@ limit 100000;
             report = cursor.fetchall()
 
         return report
+
+
+def percentage_of(a, b):
+    return 100 * round(a / b, 2) if b else None
+
+
+class ProjectStatusCalculator(object):
+    def calc(self):
+        report = []
+
+        projects = Project.objects.filter(
+            ~Q(status='Defunct') & ~Q(status='Non-project')
+        ).annotate(
+            estimate=Sum('milestone__item__estimated_time')
+        ).annotate(
+            time_spent=Sum('milestone__item__actualtime__actual_time')
+        ).order_by('name')
+
+        for project in projects:
+            milestones = project.milestones()
+            milestone = milestones.order_by('-target_date').first()
+            all_tasks = Item.objects.filter(milestone__in=milestones)
+            all_tasks_count = float(all_tasks.count())
+            open_tasks = all_tasks.filter(status='OPEN')
+            inprogress_tasks = all_tasks.filter(status='INPROGRESS')
+            completed_tasks = all_tasks.filter(
+                Q(status='RESOLVED') | Q(status='VERIFIED'))
+
+            estimate = 0
+            if project.estimate:
+                estimate = round(project.estimate.seconds / 3600.0, 2)
+
+            time_spent = 0
+            if project.time_spent:
+                time_spent = round(project.time_spent.seconds / 3600.0, 2)
+
+            report.append([
+                project.name,
+                project.status,
+                milestone.target_date if milestone else None,
+                percentage_of(open_tasks.count(), all_tasks_count),
+                percentage_of(inprogress_tasks.count(), all_tasks_count),
+                percentage_of(completed_tasks.count(), all_tasks_count),
+                estimate,
+                time_spent,
+            ])
+
+        return sorted(report, key=lambda row: row[2] or date(2000, 1, 1))
