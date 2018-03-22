@@ -120,10 +120,20 @@ class ProjectUpdateForm(ModelForm):
         self.fields['caretaker_user'].choices = [
             (user.user.pk, user.fullname) for user in
             self.instance.all_personnel_in_project()]
+        self.fields['start_date'].value = self.instance.start_date
+        self.fields['due_date'].value = self.instance.due_date
+        self.fields['launch_date'].value = self.instance.launch_date
 
     class Meta:
         model = Project
         exclude = ['pid']
+        widgets = {
+            'start_date': forms.DateInput(attrs={
+                'class': 'datepicker'}),
+            'due_date': forms.DateInput(attrs={
+                'class': 'datepicker'}),
+            'launch_date': forms.DateInput(attrs={'class': 'datepicker'})
+        }
 
 
 class MilestoneUpdateForm(ModelForm):
