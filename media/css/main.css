@@ -992,6 +992,16 @@ padding: 4px;
 
 .milestone-set .tablesorter tbody tr td:nth-child(1) { width: 185px; }
 
+.table-search-results>thead>tr>th {
+    border-left: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+.table-search-results .tablesorter-header-inner
+{
+    white-space: nowrap;
+}
+
 .status-update {
     margin: 0 0 20px 0;
     padding: 0;
