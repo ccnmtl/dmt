@@ -497,10 +497,6 @@ PROJECT_CATEGORIES = [
 ]
 
 
-def four_weeks_from_now():
-    return timezone.now() + timezone.timedelta(weeks=4)
-
-
 class Project(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField("Project name", max_length=255)
@@ -537,19 +533,17 @@ class Project(models.Model):
     start_date = models.DateField(
         'Project Start Date',
         null=True, blank=False,
-        help_text='This is the date that work starts.',
-        default=timezone.now)
+        help_text='This is the date that work starts.')
     due_date = models.DateField(
         'Project Due Date',
         null=True, blank=False,
         help_text='This is the date that the ' +
-        'project is completed and deployed.',
-        default=four_weeks_from_now)
+        'project is completed and deployed.')
     launch_date = models.DateField(
         'Project Launch Date',
+        null=True, blank=True,
         help_text='This is the date the project ' +
-        'launches, eg. a MOOC launch.',
-        null=True, blank=True)
+        'launches, eg. a MOOC launch.')
 
     class Meta:
         db_table = u'projects'
