@@ -76,7 +76,7 @@
                     </td>
                     <td class="hidden-xs {{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
                     <td class="hidden-xs">{% if item.estimated_time %}{{item.estimated_time|simpleduration}}{% endif %}</td>
-                    <td class="hidden-xs">workedon_total here</td>
+                    <td class="hidden-xs">{{item.workedon_total|simpleduration}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

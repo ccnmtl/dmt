@@ -111,6 +111,8 @@ class SearchView(LoggedInMixin, TemplateView):
                 Q(iid__iexact=q) |
                 Q(iid__iexact=item_id) |
                 Q(description__icontains=q)
+            ).annotate(
+                workedon_total=Sum('actualtime__actual_time')
             ),
             nodes=Node.objects.filter(
                 Q(body__icontains=q) |
