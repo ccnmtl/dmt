@@ -118,11 +118,13 @@ class ProjectStatusCalculator(object):
 
             estimate = 0
             if project.estimate:
-                estimate = round(project.estimate.seconds / 3600.0, 2)
+                estimate = round(
+                    project.estimate.total_seconds() / 3600.0, 2)
 
             time_spent = 0
             if project.time_spent:
-                time_spent = round(project.time_spent.seconds / 3600.0, 2)
+                time_spent = round(
+                    project.time_spent.total_seconds() / 3600.0, 2)
 
             report.append([
                 project.name,
