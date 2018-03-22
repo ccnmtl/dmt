@@ -1,6 +1,7 @@
 import re
 from datetime import timedelta
 from django import forms
+from django.utils import timezone
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.models import User
 from django.db.models.functions import Lower
@@ -58,13 +59,28 @@ class ProjectCreateForm(ModelForm):
     target_date = forms.CharField(label='Proposed release date')
 
     class Meta:
+        def now():
+            return timezone.now().strftime("%Y-%m-%d")
+
+        def four_weeks_from_now():
+            return (timezone.now() + timezone.timedelta(weeks=4))\
+                .strftime("%Y-%m-%d")
+
         model = Project
         fields = ['name', 'description', 'pub_view', 'target_date',
-                  'wiki_category']
+                  'wiki_category', 'category', 'start_date',
+                  'due_date', 'launch_date']
         widgets = {
             'pub_view': forms.RadioSelect(
                 choices=(('true', 'Public'),
-                         ('false', 'Private')))
+                         ('false', 'Private'))),
+            'start_date': forms.DateInput(attrs={
+                'class': 'datepicker',
+                'value': now()}),
+            'due_date': forms.DateInput(attrs={
+                'class': 'datepicker',
+                'value': four_weeks_from_now()}),
+            'launch_date': forms.DateInput(attrs={'class': 'datepicker'})
         }
 
     def clean_name(self):
@@ -72,6 +88,7 @@ class ProjectCreateForm(ModelForm):
 
     def clean_target_date(self):
         target_date = self.cleaned_data.get('target_date')
+
         if not re.match(r'\d{4}-\d{1,2}-\d{1,2}', target_date):
             raise forms.ValidationError(
                 'Invalid target date: %s' % target_date)
