@@ -1,5 +1,4 @@
 import re
-import datetime
 from datetime import timedelta
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
