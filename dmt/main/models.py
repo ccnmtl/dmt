@@ -529,28 +529,27 @@ class Project(models.Model):
         max_length=255,
         null=True, blank=True,
         choices=[(c, c) for c in PROJECT_TECHNOLOGY_CHOICES])
-    category = models.CharField("Project Category",
-                                max_length=32,
-                                null=True,
-                                blank=True,
-                                choices=[(c, c) for c in PROJECT_CATEGORIES])
-    start_date = models.DateField("Project Start Date",
-                                  null=True,
-                                  blank=False,
-                                  help_text="This is the date that \
-                                             work starts.",
-                                  default=timezone.now)
-    due_date = models.DateField("Project Due Date",
-                                null=True,
-                                blank=False,
-                                help_text="This is the date that the project \
-                                           is completed and deployed.",
-                                default=four_weeks_from_now)
-    launch_date = models.DateField("Project Launch Date",
-                                   help_text="This is the date the project \
-                                              launches, eg. a MOOC launch.",
-                                   null=True,
-                                   blank=True)
+    category = models.CharField(
+        'Project Category',
+        max_length=32,
+        null=True, blank=True,
+        choices=[(c, c) for c in PROJECT_CATEGORIES])
+    start_date = models.DateField(
+        'Project Start Date',
+        null=True, blank=False,
+        help_text='This is the date that work starts.',
+        default=timezone.now)
+    due_date = models.DateField(
+        'Project Due Date',
+        null=True, blank=False,
+        help_text='This is the date that the ' +
+        'project is completed and deployed.',
+        default=four_weeks_from_now)
+    launch_date = models.DateField(
+        'Project Launch Date',
+        help_text='This is the date the project ' +
+        'launches, eg. a MOOC launch.',
+        null=True, blank=True)
 
     class Meta:
         db_table = u'projects'
