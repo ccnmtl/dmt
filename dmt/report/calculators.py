@@ -79,7 +79,6 @@ join items on (milestones.mid = items.mid)
 left join actual_times on (items.iid = actual_times.iid)
 where projects.status != 'Defunct' and projects.status != 'Non-project'
     and projects.pub_view
-and actual_times.completed >= '2017-01-23'
 group by projects.pid
 order by due_date, projects.name
 limit 100000;
