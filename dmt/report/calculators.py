@@ -104,7 +104,7 @@ class ProjectStatusCalculator(object):
             estimate=Sum('milestone__item__estimated_time')
         ).annotate(
             time_spent=Sum('milestone__item__actualtime__actual_time')
-        ).order_by('name')
+        ).order_by('category', 'name')
 
         for project in projects:
             milestones = project.milestones()
@@ -127,6 +127,7 @@ class ProjectStatusCalculator(object):
                     project.time_spent.total_seconds() / 3600.0, 2)
 
             report.append([
+                project.category,
                 project.name,
                 project.status,
                 milestone.target_date if milestone else None,
@@ -137,4 +138,4 @@ class ProjectStatusCalculator(object):
                 time_spent,
             ])
 
-        return sorted(report, key=lambda row: row[2] or date(2000, 1, 1))
+        return sorted(report, key=lambda row: row[3] or date(2000, 1, 1))
