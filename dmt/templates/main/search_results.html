@@ -17,31 +17,31 @@
 
   <ul class="nav nav-tabs project-tabs homepage-tabs">
     <li class="active">
-        <a href="#items-match" data-toggle="tab">Items</a>
+        <a href="#items-match" data-toggle="tab">Items ({% if items %}{{ items.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#projects-match" data-toggle="tab">Projects</a>
+        <a href="#projects-match" data-toggle="tab">Projects ({% if projects %}{{ projects.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#milestones-match" data-toggle="tab">Milestones</a>
+        <a href="#milestones-match" data-toggle="tab">Milestones ({% if milestones %}{{ milestones.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#tags-match" data-toggle="tab">Tags</a>
+        <a href="#tags-match" data-toggle="tab">Tags ({% if tags %}{{ tags.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#users-match" data-toggle="tab">Users</a>
+        <a href="#users-match" data-toggle="tab">Users ({% if users %}{{ users.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#clients-match" data-toggle="tab">Clients</a>
+        <a href="#clients-match" data-toggle="tab">Clients ({% if clients %}{{ clients.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#status-match" data-toggle="tab">Status</a>
+        <a href="#status-match" data-toggle="tab">Status ({% if status_updates %}{{ status_updates.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#forums-match" data-toggle="tab">Forums</a>
+        <a href="#forums-match" data-toggle="tab">Forums ({% if nodes %}{{ nodes.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#chats-match" data-toggle="tab">Chats</a>
+        <a href="#chats-match" data-toggle="tab">Chats ({% if chat_messages %}{{ chat_messages.count}}{% else %}0{% endif%})</a>
     </li>
   </ul>
 <div class="tab-content">
