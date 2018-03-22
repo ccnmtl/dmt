@@ -1,6 +1,7 @@
 import re
 from datetime import timedelta
 from django import forms
+from django.utils import timezone
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.models import User
 from django.db.models.functions import Lower
@@ -58,6 +59,13 @@ class ProjectCreateForm(ModelForm):
     target_date = forms.CharField(label='Proposed release date')
 
     class Meta:
+        def now():
+            return timezone.now().strftime("%Y-%m-%d")
+
+        def four_weeks_from_now():
+            return (timezone.now() + timezone.timedelta(weeks=4))\
+                .strftime("%Y-%m-%d")
+
         model = Project
         fields = ['name', 'description', 'pub_view', 'target_date',
                   'wiki_category', 'category', 'start_date',
@@ -66,8 +74,12 @@ class ProjectCreateForm(ModelForm):
             'pub_view': forms.RadioSelect(
                 choices=(('true', 'Public'),
                          ('false', 'Private'))),
-            'start_date': forms.DateInput(attrs={'class': 'datepicker'}),
-            'due_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'start_date': forms.DateInput(attrs={
+                'class': 'datepicker',
+                'value': now()}),
+            'due_date': forms.DateInput(attrs={
+                'class': 'datepicker',
+                'value': four_weeks_from_now()}),
             'launch_date': forms.DateInput(attrs={'class': 'datepicker'})
         }
 
