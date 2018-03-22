@@ -58,7 +58,7 @@ class BasicTest(TestCase):
         params = urllib.urlencode({'q': item.iid})
         response = self.c.get('/search/?%s' % params)
         self.assertEquals(response.status_code, 200)
-        self.assertContains(response, 'Search for "%d"' % item.iid)
+        self.assertContains(response, 'Search results for "%d"' % item.iid)
         self.assertContains(response, item.title)
         self.assertContains(response, item.get_absolute_url())
 
@@ -67,7 +67,7 @@ class BasicTest(TestCase):
         params = urllib.urlencode({'q': '#%d' % item.iid})
         response = self.c.get('/search/?%s' % params)
         self.assertEquals(response.status_code, 200)
-        self.assertContains(response, 'Search for "#%d"' % item.iid)
+        self.assertContains(response, 'Search results for "#%d"' % item.iid)
         self.assertContains(response, item.title)
         self.assertContains(response, item.get_absolute_url())
 
