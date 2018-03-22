@@ -262,6 +262,7 @@ class ProjectStatus(LoggedInMixin, View):
         filename = 'project-status-{}'.format(now.strftime('%Y-%m-%d'))
 
         column_names = [
+            'Category',
             'Project Name',
             'Project Status',
             'Project Due Date',
