@@ -8,7 +8,7 @@
 
 {% block content %}
 
-<h1>Search for "{{q}}"</h1>
+<h1 class="page-title">Search results for "{{q}}"</h1>
 
 {% if error %}
 <div class="alert alert-danger">Sorry, I need at least three
@@ -48,12 +48,39 @@
     <div class="tab-pane fade in active" id="items-match">
         {% if items %}
         <h2>Item matches:</h2>
-        <ul>
-        {% for item in items %}
-        <li><span class="{{item.status_class}}">{{item.status}}</span> <a href="{{item.get_absolute_url}}">{{item.title}}</a>
-         (<a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a>)</li>
-        {% endfor %}
-        </ul>
+        
+        <table class="table table-condensed table-striped tablesorter tablesorter-default table-search-results"
+           id="search-items">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th class="hidden-xs">Project</th>
+                    <th class="hidden-xs">Project Category</th>
+                    <th class="hidden-xs">Assigned To</th>
+                    <th class="hidden-xs">Target Date</th>
+                    <th class="hidden-xs">Estimated time</th>
+                    <th class="hidden-xs">Time logged</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{% if item.is_bug %}<img src="{{STATIC_URL}}img/tinybug.gif"
+  width="14" height="14"/> {% endif %}<a href="{{item.get_absolute_url}}">{{item.title}}</a></td>
+                    <td class="{{item.status_class}}">{{item.status}} {{item.r_status|default:""}}</td>
+                    <td class="hidden-xs"><a href="{{item.milestone.project.get_absolute_url}}">{{item.milestone.project.name}}</a></td>
+                    <td class="hidden-xs">TBD</td>
+                    <td class="hidden-xs"><a href="{{item.assigned_user.userprofile.get_absolute_url}}"
+                      >{{ item.assigned_user.userprofile.get_fullname }}</a>
+                    </td>
+                    <td class="hidden-xs {{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
+                    <td class="hidden-xs">{% if item.estimated_time %}{{item.estimated_time|simpleduration}}{% endif %}</td>
+                    <td class="hidden-xs">workedon_total here</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% else %}
         <p>There are no results for "{{q}}" in Items.</p>
         {% endif %}
@@ -164,4 +191,15 @@
         {% endif %}
     </div>
 </div><!-- ./tab-content -->
+{% endblock %}
+
+
+{% block js %}
+<script>
+    $(document).ready(function() {
+        $("#search-items").tablesorter({
+            sortList: [[1,0], [0,0]]
+        });
+    });
+</script>
 {% endblock %}
