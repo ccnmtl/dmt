@@ -119,13 +119,28 @@
     </div>
     <div class="tab-pane fade" id="milestones-match">
         {% if milestones %}
-        <h2>Milestone matches:</h2>
-        <ul>
-        {% for milestone in milestones %}
-        <li><span class="{{milestone.status_class}}">{{milestone.status}}</span> <a href="{{milestone.get_absolute_url}}">{{milestone.project.name}}:
-                {{milestone.name}}</a></li>
-        {% endfor %}
-        </ul>
+        <h3>Milestone matches:</h3>
+        <table class="table table-condensed table-striped tablesorter tablesorter-default table-search-results"
+           id="search-milestones">
+            <thead>
+                <tr>
+                    <th>Milestone</th>
+                    <th>In Project</th>
+                    <th>Milestone Status</th>
+                    <th>Target Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for milestone in milestones %}
+                <tr>
+                    <td><a href="{{milestone.get_absolute_url}}">{{milestone.name}}</a></td>
+                    <td><a href="{{milestone.project.get_absolute_url}}">{{milestone.project.name}}</a></td>
+                    <td class="{{milestone.status_class}}">{{milestone.status}}</td>
+                    <td>{{milestone.target_date}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% else %}
         <p>There are no results for "{{q}}" in Milestones.</p>
         {% endif %}
