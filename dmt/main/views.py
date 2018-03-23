@@ -97,11 +97,8 @@ class SearchView(LoggedInMixin, TemplateView):
                 Q(comments__icontains=q)
             ),
             projects=Project.objects.filter(
-                ~Q(status='Defunct') &
-                (
-                    Q(name__icontains=q) |
-                    Q(description__icontains=q)
-                )
+                Q(name__icontains=q) |
+                Q(description__icontains=q)
             ),
             milestones=Milestone.objects.filter(
                 Q(name__icontains=q) |
@@ -110,13 +107,10 @@ class SearchView(LoggedInMixin, TemplateView):
             # TODO: comments/events for items should also be searched
             # and merged in.
             items=Item.objects.filter(
-                ~Q(milestone__project__status='Defunct') &
-                (
-                    Q(title__icontains=q) |
-                    Q(iid__iexact=q) |
-                    Q(iid__iexact=item_id) |
-                    Q(description__icontains=q)
-                )
+                Q(title__icontains=q) |
+                Q(iid__iexact=q) |
+                Q(iid__iexact=item_id) |
+                Q(description__icontains=q)
             ).annotate(
                 workedon_total=Sum('actualtime__actual_time')
             ),
