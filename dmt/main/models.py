@@ -532,11 +532,11 @@ class Project(models.Model):
         choices=[(c, c) for c in PROJECT_CATEGORIES])
     start_date = models.DateField(
         'Project Start Date',
-        null=True, blank=False,
+        null=True, blank=True,
         help_text='This is the date that work starts.')
     due_date = models.DateField(
         'Project Due Date',
-        null=True, blank=False,
+        null=True, blank=True,
         help_text='This is the date that the ' +
         'project is completed and deployed.')
     launch_date = models.DateField(
