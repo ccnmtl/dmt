@@ -163,12 +163,22 @@ class StaffCapacityCalculator(object):
                                   holidays=self.holidays())
 
     def capacity_for_range(self):
-        return self.days() * 6
+        return self.days() * 6  # in hours
 
     def calc(self):
+        capacity = self.capacity_for_range()
         user_data = []
         for user in self.users:
+            booked = user.assigned_time_for_interval(
+                self.interval_start, self.interval_end)
+            avail = capacity - booked
+
             user_data.append({
                 'user': user,
+                'capacity': capacity,
+                'booked': booked,
+                'percent_booked': format(booked / capacity * 100, '.1f'),
+                'available': avail,
+                'percent_available': format(avail / capacity * 100, '.1f'),
             })
         return user_data

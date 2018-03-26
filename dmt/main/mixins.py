@@ -62,6 +62,12 @@ class DaterangeMixin(object):
         self.prev_interval, self.next_interval = self.calc_prev_next_times(
             self.interval_start, self.interval_end)
 
+    def get_default_start(self):
+        return self.today() - self.delta
+
+    def get_default_end(self):
+        return self.today()
+
     def get_params(self):
         """Update the interval based on request params."""
         self.interval_start = self.request.GET.get('interval_start', None)
@@ -77,9 +83,9 @@ class DaterangeMixin(object):
             pass
 
         if not self.interval_start:
-            self.interval_start = self.today() - self.delta
+            self.interval_start = self.get_default_start()
         if not self.interval_end:
-            self.interval_end = self.today()
+            self.interval_end = self.get_default_end()
 
         self.calc_interval()
 
