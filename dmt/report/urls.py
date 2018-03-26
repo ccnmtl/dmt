@@ -43,4 +43,11 @@ urlpatterns = [
         name='time_spent_by_project_report'),
     url(r'^project_status/$', views.ProjectStatus.as_view(),
         name='project_status_report'),
+
+    url(r'^capacity/$', views.StaffCapacityView.as_view(),
+        name='staff_capacity'),
+    url(r'^staff/capacity\w{0,50}$', views.StaffCapacityExportView.as_view(),
+        name='staff_capacity_export'),
+
+
 ]

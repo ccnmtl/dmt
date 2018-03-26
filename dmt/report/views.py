@@ -1,19 +1,21 @@
-import pytz
 from datetime import datetime, timedelta
+
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, View
 from django.utils import timezone
 from django.utils.dateparse import parse_date
+from django.views.generic import TemplateView, View
+import pytz
+
 from dmt.main.mixins import DaterangeMixin
 from dmt.main.models import UserProfile, Item, Milestone, Project
-from dmt.main.views import LoggedInMixin
 from dmt.main.utils import interval_to_hours
+from dmt.main.views import LoggedInMixin
 from dmt.report.calculators import (
     ActiveProjectsCalculator, StaffReportCalculator,
     TimeSpentByUserCalculator, TimeSpentByProjectCalculator,
-    ProjectStatusCalculator,
+    ProjectStatusCalculator, StaffCapacityCalculator
 )
 from dmt.report.mixins import PrevNextWeekMixin
 from dmt.report.utils import ReportFileGenerator
@@ -275,3 +277,50 @@ class ProjectStatus(LoggedInMixin, View):
 
         generator = ReportFileGenerator()
         return generator.generate(column_names, data, filename, 'csv')
+
+
+class StaffCapacityView(LoggedInMixin, DaterangeMixin, TemplateView):
+    template_name = "report/staff_capacity.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(StaffCapacityView, self).get_context_data(**kwargs)
+
+        calc = StaffCapacityCalculator(
+            UserProfile.objects.filter(status='active', grp=False),
+            self.interval_start, self.interval_end)
+
+        data = calc.calc()
+
+        context.update({
+            'days': calc.days,
+            'capacity': calc.capacity_for_range(),
+            'interval_start': self.interval_start,
+            'interval_end': self.interval_end,
+            'users': data
+        })
+        return context
+
+
+class StaffCapacityExportView(LoggedInMixin, DaterangeMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        self.get_params()
+        calc = StaffCapacityCalculator(
+            UserProfile.objects.filter(status='active', grp=False),
+            self.interval_start, self.interval_end)
+        data = calc.calc()
+
+        start_str = self.interval_start.strftime('%Y%m%d')
+        end_str = self.interval_end.strftime('%Y%m%d')
+        filename = "staff-capacity-%s-%s" % (start_str, end_str)
+
+        column_names = ['Staff Member', 'Capacity']
+
+        rows = [
+            [x['user'].fullname,
+             calc.capacity_for_range()]
+            for x in data]
+
+        generator = ReportFileGenerator()
+        return generator.generate(
+            column_names, rows, filename, self.request.GET.get('format'))

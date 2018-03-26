@@ -1,14 +1,17 @@
-import unittest
 from datetime import timedelta
+import unittest
+
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
+from django.utils.dateparse import parse_datetime
+
 from dmt.main.models import UserProfile
 from dmt.main.tests.factories import (ProjectFactory, UserProfileFactory)
 from dmt.report.calculators import (
     ActiveProjectsCalculator, StaffReportCalculator,
     TimeSpentByUserCalculator, TimeSpentByProjectCalculator,
-    ProjectStatusCalculator,
+    ProjectStatusCalculator, StaffCapacityCalculator
 )
 
 
@@ -87,3 +90,26 @@ class ProjectStatusCalculatorTest(TestCase):
     def test_calc_on_empty_db(self):
         calc = ProjectStatusCalculator()
         calc.calc()
+
+
+class StaffCapacityCalculatorTest(TestCase):
+
+    def test_capacity_skip_weekend(self):
+        UserProfileFactory()
+        start = parse_datetime('2018-05-14 00:00:00-04:00')
+        end = parse_datetime('2018-05-25 23:59:59.999999-04:00')
+
+        calc = StaffCapacityCalculator(
+            UserProfile.objects.all(), start, end)
+        self.assertEquals(calc.days(), 10)
+        self.assertEquals(calc.capacity_for_range(), 60)
+
+    def test_capacity_skip_holiday(self):
+        UserProfileFactory()
+        start = parse_datetime('2018-05-28 00:00:00-04:00')
+        end = parse_datetime('2018-06-01 23:59:59.999999-04:00')
+
+        calc = StaffCapacityCalculator(
+            UserProfile.objects.all(), start, end)
+        self.assertEquals(calc.days(), 4)
+        self.assertEquals(calc.capacity_for_range(), 24)
