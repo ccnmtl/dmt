@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load dmttags %}
+
+{% block title %}Staff Capacity{% endblock %}
+
+{% block primarynavtabs %}
+{% endblock %}
+
+{% block primarynavtabsright %}
+{% endblock %}
+
+{% block content %}
+<ul class="breadcrumb">
+    <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+    <li><a href="{% url 'report_list' %}">Reports</a></li>
+    <li class="active">Staff Capacity</li>
+</ul>
+
+<h2>Staff Report</h2>
+
+{% include 'main/daterange_form.html' %}
+
+<div class="col-md-3">
+    Export as:
+    <a href="{% url 'staff_capacity_export' %}?format=csv&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
+    >.csv</a>,
+    <a href="{% url 'staff_capacity_export' %}?format=xlsx&interval_start={{interval_start|format_ymd}}&interval_end={{interval_end|format_ymd}}"
+    >.xlsx</a>
+</div>
+
+<div class="clearfix"></div>
+<p class="help-block">Calculated {{days}} business days in this period. 2018 holidays are excluded.</p>
+
+<table class="table table-striped table-condensed tablesorter tablesorter-default" id="staff-report">
+    <thead>
+        <th>Staff Member</th>
+        <th>Capacity</th>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>
+                <a href="{% url 'user_detail' user.user.username %}">
+                    {% firstof user.user.fullname user.user.username %}
+                </a>
+            </td>
+            <td>{{capacity}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+    $("#staff-report").tablesorter({
+        // Sort by items resolved, descending, then hours logged, descending.
+        sortList: [[1, 1], [2, 1]]
+    });
+});
+</script>
+{% endblock %}
