@@ -68,7 +68,7 @@
                     <td class="hidden-xs"><a href="{{item.assigned_user.userprofile.get_absolute_url}}"
                       >{{ item.assigned_user.userprofile.get_fullname }}</a>
                     </td>
-                    <td class="hidden-xs {{item.target_date_status}}">{{item.target_date|date:"Y-m-d"}}</td>
+                    <td class="hidden-xs">{{item.target_date|date:"Y-m-d"}}</td>
                     <td class="hidden-xs">{% if item.estimated_time %}{{item.estimated_time|simpleduration}}{% endif %}</td>
                     <td class="hidden-xs">{{item.workedon_total|simpleduration}}</td>
                 </tr>
