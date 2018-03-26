@@ -24,7 +24,6 @@ from django_statsd.clients import statsd
 from extra_views import FormSetView, UpdateWithInlinesView
 from taggit.models import Tag
 from taggit.utils import parse_tags
-from dmt.chat.models import Message
 from dmt.main.mixins import DaterangeMixin
 from dmt.main.models import (
     Comment, Project, Milestone, Item, InGroup, Node, UserProfile, Client,
@@ -87,15 +86,6 @@ class SearchView(LoggedInMixin, TemplateView):
                 Q(bio__icontains=q) |
                 Q(username__icontains=q)
             ),
-            clients=Client.objects.filter(
-                Q(email__icontains=q) |
-                Q(firstname__icontains=q) |
-                Q(lastname__icontains=q) |
-                Q(title__icontains=q) |
-                Q(department__icontains=q) |
-                Q(school__icontains=q) |
-                Q(comments__icontains=q)
-            ),
             projects=Project.objects.filter(
                 ~Q(status='Defunct') &
                 (
@@ -126,7 +116,6 @@ class SearchView(LoggedInMixin, TemplateView):
             ),
             tags=Tag.objects.filter(name__icontains=q),
             status_updates=StatusUpdate.objects.filter(body__icontains=q),
-            chat_messages=Message.objects.filter(text__icontains=q),
         )
 
 
