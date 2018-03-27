@@ -131,6 +131,20 @@ class UserProfile(models.Model):
                     assigned_user=self.user,
                     status='OPEN')]).total_seconds() / 3600.
 
+    def assigned_time_for_interval(self, start, end):
+        items = Item.objects.exclude(
+            milestone__name='Someday/Maybe').exclude(
+                milestone__project__status='Defunct').filter(
+                    assigned_user=self.user,
+                    target_date__gte=start,
+                    target_date__lte=end,
+                    status__in=['OPEN', 'INPROGRESS'])
+
+        return interval_sum(
+            [
+                i.estimated_time
+                for i in items]).total_seconds() / 3600.
+
     def interval_time(self, start, end):
         return interval_sum(
             [a.actual_time

@@ -34,7 +34,12 @@
 <table class="table table-striped table-condensed tablesorter tablesorter-default" id="staff-report">
     <thead>
         <th>Staff Member</th>
+        <th>Primary Group</th>
         <th>Capacity</th>
+        <th>Booked</th>
+        <th>% Booked</th>
+        <th>Available</th>
+        <th>% Available</th>
     </thead>
     <tbody>
         {% for user in users %}
@@ -44,7 +49,12 @@
                     {% firstof user.user.fullname user.user.username %}
                 </a>
             </td>
-            <td>{{capacity}}</td>
+            <td>{{user.user.primary_group.group_fullname|capfirst}}</td>
+            <td>{{user.capacity}}</td>
+            <td>{{user.booked}}</td>
+            <td>{{user.percent_booked}}%</td>
+            <td>{{user.available}}</td>
+            <td>{{user.percent_available}}%</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -57,7 +67,7 @@
 $(document).ready(function() {
     $("#staff-report").tablesorter({
         // Sort by items resolved, descending, then hours logged, descending.
-        sortList: [[1, 1], [2, 1]]
+        sortList: [[1, 0], [3, 1]]
     });
 });
 </script>

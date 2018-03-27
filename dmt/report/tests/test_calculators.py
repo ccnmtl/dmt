@@ -7,7 +7,8 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
 from dmt.main.models import UserProfile
-from dmt.main.tests.factories import (ProjectFactory, UserProfileFactory)
+from dmt.main.tests.factories import (
+    ProjectFactory, UserProfileFactory, ItemFactory)
 from dmt.report.calculators import (
     ActiveProjectsCalculator, StaffReportCalculator,
     TimeSpentByUserCalculator, TimeSpentByProjectCalculator,
@@ -113,3 +114,29 @@ class StaffCapacityCalculatorTest(TestCase):
             UserProfile.objects.all(), start, end)
         self.assertEquals(calc.days(), 4)
         self.assertEquals(calc.capacity_for_range(), 24)
+
+    def test_calc(self):
+        start = parse_datetime('2017-05-15 00:00:00-04:00')
+        end = parse_datetime('2017-05-26 23:59:59.999999-04:00')
+        target = parse_datetime('2017-05-16 00:00:00-04:00')
+
+        profile = UserProfileFactory()
+        ItemFactory(assigned_user=profile.user,
+                    estimated_time=timedelta(hours=5),
+                    target_date=target)
+        ItemFactory(assigned_user=profile.user,
+                    estimated_time=timedelta(hours=1))
+
+        calc = StaffCapacityCalculator(
+            UserProfile.objects.filter(user__id=profile.user.id),
+            start, end)
+        self.assertEquals(calc.days(), 10)
+        self.assertEquals(calc.capacity_for_range(), 60)
+
+        data = calc.calc()
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]['user'], profile)
+        self.assertEquals(data[0]['booked'], 5)
+        self.assertEquals(data[0]['percent_booked'], '8.3')
+        self.assertEquals(data[0]['available'], 55)
+        self.assertEquals(data[0]['percent_available'], '91.7')

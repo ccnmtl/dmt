@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -282,6 +283,12 @@ class ProjectStatus(LoggedInMixin, View):
 class StaffCapacityView(LoggedInMixin, DaterangeMixin, TemplateView):
     template_name = "report/staff_capacity.html"
 
+    def get_default_start(self):
+        return self.today()
+
+    def get_default_end(self):
+        return self.today() + relativedelta(days=6)
+
     def get_context_data(self, **kwargs):
         context = super(StaffCapacityView, self).get_context_data(**kwargs)
 
@@ -293,7 +300,6 @@ class StaffCapacityView(LoggedInMixin, DaterangeMixin, TemplateView):
 
         context.update({
             'days': calc.days,
-            'capacity': calc.capacity_for_range(),
             'interval_start': self.interval_start,
             'interval_end': self.interval_end,
             'users': data
@@ -302,6 +308,11 @@ class StaffCapacityView(LoggedInMixin, DaterangeMixin, TemplateView):
 
 
 class StaffCapacityExportView(LoggedInMixin, DaterangeMixin, View):
+
+    def user_group(self, user_profile):
+        if user_profile.primary_group:
+            return user_profile.primary_group.group_fullname().capitalize()
+        return ''
 
     def get(self, request, *args, **kwargs):
         self.get_params()
@@ -314,11 +325,17 @@ class StaffCapacityExportView(LoggedInMixin, DaterangeMixin, View):
         end_str = self.interval_end.strftime('%Y%m%d')
         filename = "staff-capacity-%s-%s" % (start_str, end_str)
 
-        column_names = ['Staff Member', 'Capacity']
+        column_names = ['Staff Member', 'Group', 'Capacity', 'Booked',
+                        '% Booked', 'Available', '% Available']
 
         rows = [
             [x['user'].fullname,
-             calc.capacity_for_range()]
+             self.user_group(x['user']),
+             x['capacity'],
+             x['booked'],
+             x['percent_booked'],
+             x['available'],
+             x['percent_available']]
             for x in data]
 
         generator = ReportFileGenerator()
