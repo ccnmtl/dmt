@@ -114,7 +114,7 @@ require([
             zIndexOffset: 1040
         });
 
-        $('input .datepicker').datepicker({
+        $('input.datepicker').datepicker({
             autoclose: true,
             format: 'yyyy-mm-dd',
             todayHighlight: true,
