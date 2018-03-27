@@ -32,12 +32,8 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Status</th>
-            <th>Type</th>
-            <th>Discipline</th>
-            <th>Approach</th>
-            <th>Scale</th>
             <th>Category</th>
+            <th>Status</th>
             <th>Start Date</th>
             <th>Due Date</th>
             <th>Launch Date</th>
@@ -48,12 +44,8 @@
         {% for project in object_list %}
         <tr>
             <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
-            <td>{{project.status}}</td>
-            <td>{{project.type}}</td>
-            <td>{{project.area}}</td>
-            <td>{{project.approach}}</td>
-            <td>{{project.scale}}</td>
             <td>{{project.category}}</td>
+            <td>{{project.status}}</td>
             <td>{{project.start_date}}</td>
             <td>{{project.due_date}}</td>
             <td>{{project.launch_date}}</td>
