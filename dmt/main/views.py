@@ -758,6 +758,8 @@ class ProjectDetailView(LoggedInMixin, DaterangeMixin, DetailView):
             if m in m_set]
         ctx['users_active_in_range'] = ctx['object'].users_active_between(
             self.interval_start, self.interval_end)
+        ctx['estimated_time_report'] = \
+            ctx['object'].user_estimated_time_report()
         ctx['total_hours'] = round(
             sum([u.hours_logged.total_seconds()
                  for u in ctx['users_active_in_range']]) / 3600, 2)
