@@ -958,6 +958,20 @@ WHERE p.pid = m.pid
 
         return active_users
 
+    def user_estimated_time_report(self):
+        """Returns a project report that lists user stats."""
+        # items = Item.objects.filter(
+        #     milestone__in=self.milestone_set.all()).annotate(user=item__assigned_user)
+        # return items
+        items = Item.objects.filter(
+            ~Q(milestone__name='Someday/Maybe'),
+            milestone__project=self,
+            assigned_user__userprofile__status='active'
+        )
+        .annotate(assigned_user=
+        .aggregate(Sum('estimated_time'))
+        return items
+
     def timeline(self, start=None, end=None):
         all_events = []
         if end is None:
