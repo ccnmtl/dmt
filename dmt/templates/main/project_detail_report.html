@@ -42,13 +42,13 @@
         </tr>
     </thead>
     <tbody>
-        {% for u in all_users %}
+        {% for row in estimated_time_report %}
         <tr>
             <td>
-                <a href="{% url 'user_detail' u.userprofile.username %}"
-                   >{{ u.userprofile.get_fullname }}</a>
+                <a href="{% url 'user_detail' row.assigned_user.userprofile.username %}"
+                   >{{ row.assigned_user.userprofile.get_fullname }}</a>
             </td>
-            <td>{{ u.estimated_time|interval_to_hours }}</td>
+            <td>{{ row.estimated_time|interval_to_hours }}</td>
         </tr>
         {% endfor %}
     </tbody>

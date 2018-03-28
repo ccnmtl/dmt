@@ -960,12 +960,17 @@ WHERE p.pid = m.pid
 
     def user_estimated_time_report(self):
         """Returns a project report that lists user stats."""
-        return User.objects.filter(
-            item__milestone__project=self,
-            userprofile__status='active'
-        ).annotate(
-            estimated_time=Sum('item__estimated_time'),
-        ).order_by('-estimated_time')
+        # items = Item.objects.filter(
+        #     milestone__in=self.milestone_set.all()).annotate(user=item__assigned_user)
+        # return items
+        items = Item.objects.filter(
+            ~Q(milestone__name='Someday/Maybe'),
+            milestone__project=self,
+            assigned_user__userprofile__status='active'
+        )
+        .annotate(assigned_user=
+        .aggregate(Sum('estimated_time'))
+        return items
 
     def timeline(self, start=None, end=None):
         all_events = []
