@@ -235,7 +235,8 @@ class TimeSpentByUser(LoggedInMixin, View):
 
         column_names = ['Project Name', 'Task Name', 'Task Status',
                         'Assigned to', 'Project Status', 'Estimated Time',
-                        'Time Spent', 'Task Due Date', 'Project Due Date']
+                        'Time Spent', 'Task Due Date', 'Project Due Date',
+                        'Caretaker']
 
         generator = ReportFileGenerator()
         return generator.generate(column_names, data, filename, 'csv')
@@ -250,7 +251,7 @@ class TimeSpentByProject(LoggedInMixin, View):
         filename = 'time-spent-by-project-{}'.format(now.strftime('%Y-%m-%d'))
 
         column_names = ['Project Name', 'Status', 'Estimated Time',
-                        'Time Spent', 'Due Date']
+                        'Time Spent', 'Due Date', 'Caretaker']
 
         generator = ReportFileGenerator()
         return generator.generate(column_names, data, filename, 'csv')
@@ -268,6 +269,7 @@ class ProjectStatus(LoggedInMixin, View):
             'Category',
             'Project Name',
             'Project Status',
+            'Caretaker',
             'Project Due Date',
             '% of Tasks Open',
             '% of Tasks In-Progress',

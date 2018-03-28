@@ -48,16 +48,20 @@ select
         extract(epoch from items.estimated_time) / 3600 as estimated_time,
         sum(extract(epoch from actual_times.actual_time)) / 3600 as time_spent,
         items.target_date as task_due_date,
-        max(milestones.target_date) as project_due_date
+        projects.due_date as project_due_date,
+        caretakers.fullname as caretaker
 from projects
 join milestones on (projects.pid = milestones.pid)
 join items on (milestones.mid = items.mid)
 left join actual_times on (items.iid = actual_times.iid)
+left join users as "caretakers" on
+            (caretakers.user_id = projects.caretaker_user_id)
 join users on (items.assigned_user = users.user_id)
 where projects.status != 'Defunct' and projects.status != 'Non-project'
     and projects.pub_view
 and milestones.name != 'Someday/Maybe'
-group by items.iid, users.fullname, projects.pid, milestones.name
+group by items.iid, users.fullname, projects.pid, milestones.name,
+    caretakers.fullname
 order by assigned_to, task_due_date, project_name
 limit 100000;
             ''')
@@ -75,14 +79,17 @@ select
         projects.name, projects.status,
         sum(extract(epoch from items.estimated_time)) / 3600 as estimated_time,
         sum(extract(epoch from actual_times.actual_time)) / 3600 as time_spent,
-        max(milestones.target_date) as due_date
+        projects.due_date as due_date,
+        caretakers.fullname as caretaker
 from projects
 join milestones on (projects.pid = milestones.pid)
 join items on (milestones.mid = items.mid)
 left join actual_times on (items.iid = actual_times.iid)
+left join users as "caretakers" on
+            (caretakers.user_id = projects.caretaker_user_id)
 where projects.status != 'Defunct' and projects.status != 'Non-project'
     and projects.pub_view
-group by projects.pid
+group by projects.pid, caretakers.fullname
 order by due_date, projects.name
 limit 100000;
             ''')
@@ -132,6 +139,7 @@ class ProjectStatusCalculator(object):
                 project.category,
                 project.name,
                 project.status,
+                project.caretaker_user.userprofile.fullname,
                 milestone.target_date if milestone else None,
                 percentage_of(open_tasks.count(), all_tasks_count),
                 percentage_of(inprogress_tasks.count(), all_tasks_count),
