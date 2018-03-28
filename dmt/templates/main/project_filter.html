@@ -37,6 +37,7 @@
             <th>Start Date</th>
             <th>Due Date</th>
             <th>Launch Date</th>
+            <th>Caretaker</th>
         </tr>
     </thead>
 
@@ -46,9 +47,12 @@
             <td><a href="{{project.get_absolute_url}}">{{project.name}}</a></td>
             <td>{{project.category}}</td>
             <td>{{project.status}}</td>
-            <td>{{project.start_date}}</td>
-            <td>{{project.due_date}}</td>
-            <td>{{project.launch_date}}</td>
+            <td>{{project.start_date | date:"Y/m/d"}}</td>
+            <td>{{project.due_date | date:"Y/m/d"}}</td>
+            <td>{{project.launch_date | date:"Y/m/d"}}</td>
+            <td><a href="/user/{{project.caretaker_user.username}}/">
+                    {{project.caretaker_user.userprofile.fullname}}
+                </a></td>
         </tr>
         {% endfor %}
     </tbody>
