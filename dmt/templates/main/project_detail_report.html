@@ -33,6 +33,27 @@
     </tbody>
 </table>
 
+<table id="project-estimated-time-report"
+       class="table table-bordered table-striped tablesorter">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Assigned time estimate</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in estimated_time_report %}
+        <tr>
+            <td>
+                <a href="{% url 'user_detail' row.user.username %}"
+                   >{{ row.user.get_fullname }}</a>
+            </td>
+            <td>{{ row.time|interval_to_hours }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 <img src="{{GRAPHITE_BASE}}?target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_logged&target=ccnmtl.app.gauges.dmt.projects.{{project.pid}}.hours_estimated&_salt=1369503684.466&height=50&colorList=%2366cc66%2C%23cc6666&hideLegend=true&hideAxes=true&yMin=0&width=800&bgcolor=%23ffffff&hideGrid=true&graphOnly=true&areaMode=stacked&from=-1years"
      width="100%" />
 

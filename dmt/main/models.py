@@ -131,6 +131,15 @@ class UserProfile(models.Model):
                     assigned_user=self.user,
                     status='OPEN')]).total_seconds() / 3600.
 
+    def total_estimated_time_by_project(self, project):
+        return interval_sum([
+            i.estimated_time
+            for i in Item.objects.filter(
+                    ~Q(milestone__name='Someday/Maybe'),
+                    milestone__project=project,
+                    assigned_user=self.user)
+        ])
+
     def assigned_time_for_interval(self, start, end):
         items = Item.objects.exclude(
             milestone__name='Someday/Maybe').exclude(
@@ -825,17 +834,29 @@ To reply, please visit <https://pmt.ctl.columbia.edu%s>\n
         send_email.delay(clean_subject(subject), body,
                          addresses)
 
-    def personnel_in_project(self):
+    def personnel_in_project(self, include_groups=True):
         """ return list of all users/groups in project
 
         sorted with groups first, then individual users,
         sorted alphabetically by fullname """
-        return sorted(
-            [
+        personnel = []
+
+        if include_groups:
+            personnel = [
                 w.user.userprofile for w in WorksOn.objects.filter(
                     project=self
                 ).select_related('user')
-                if w.user.userprofile.status == 'active'],
+                if w.user.userprofile.status == 'active']
+        else:
+            personnel = [
+                w.user.userprofile for w in WorksOn.objects.filter(
+                    project=self
+                ).select_related('user')
+                if w.user.userprofile.status == 'active' and
+                not w.user.userprofile.grp]
+
+        return sorted(
+            personnel,
             key=lambda user: (not user.grp, user.fullname.lower()))
 
     def all_personnel_in_project(self):
@@ -957,6 +978,17 @@ WHERE p.pid = m.pid
         ).order_by('-hours_logged')
 
         return active_users
+
+    def user_estimated_time_report(self):
+        """Returns a project report that lists user stats."""
+        rows = []
+        for u in self.personnel_in_project(False):
+            rows.append({
+                'user': u,
+                'time': u.total_estimated_time_by_project(self),
+            })
+
+        return sorted(rows, key=lambda x: x.get('time'))
 
     def timeline(self, start=None, end=None):
         all_events = []
