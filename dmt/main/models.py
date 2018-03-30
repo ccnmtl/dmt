@@ -988,7 +988,7 @@ WHERE p.pid = m.pid
                 'time': u.total_estimated_time_by_project(self),
             })
 
-        return sorted(rows, key=lambda x: x.get('time'))
+        return sorted(rows, key=lambda x: x.get('time'), reverse=True)
 
     def timeline(self, start=None, end=None):
         all_events = []
