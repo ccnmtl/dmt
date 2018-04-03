@@ -61,7 +61,7 @@ class StatusUpdateFeed(Feed):
 
     def item_link(self, item):
         return (settings.BASE_URL + item.project.get_absolute_url() +
-                "#status-" + str(item.id))
+                '#updates')
 
     def item_author_name(self, item):
         return item.author.userprofile.get_fullname()
