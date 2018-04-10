@@ -95,7 +95,7 @@ sqlparse==0.2.4
 requirements/src/whitelistaffilmapper-0.1.0-py2-none-any.whl
 boto==2.48.0
 unicodecsv==0.14.1
-XlsxWriter==1.0.2
+XlsxWriter==1.0.3
 splinter==0.7.7
 shortuuid==0.5.0
 contextlib2==0.5.5
