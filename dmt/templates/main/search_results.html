@@ -23,6 +23,9 @@
         <a href="#projects-match" data-toggle="tab">Projects ({% if projects %}{{ projects.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
+        <a href="#defunctprojects-match" data-toggle="tab">Defunct ({% if defunctprojects %}{{ defunctprojects.count}}{% else %}0{% endif%})</a>
+    </li>
+    <li>
         <a href="#milestones-match" data-toggle="tab">Milestones ({% if milestones %}{{ milestones.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
@@ -109,6 +112,38 @@
         </table>
         {% else %}
         <p>There are no results for "{{q}}" in Projects.</p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="defunctprojects-match">
+        {% if defunctprojects %}
+        <h3>Defunct Project matches:</h3>
+        <table class="table table-condensed table-striped tablesorter tablesorter-default table-search-results"
+           id="search-defunctprojects">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Start Date</th>
+                    <th>Due Date</th>
+                    <th>Launch Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for defunctproject in defunctprojects %}
+                <tr>
+                    <td><a href="{{defunctproject.get_absolute_url}}">{{defunctproject.name}}</a></td>
+                    <td>{{defunctproject.category}}</td>
+                    <td>{{defunctproject.status}}</td>
+                    <td>{{defunctproject.start_date}}</td>
+                    <td>{{defunctproject.due_date}}</td>
+                    <td>{{defunctproject.launch_date}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>There are no results for "{{q}}" in Defunct Projects.</p>
         {% endif %}
     </div>
     <div class="tab-pane fade" id="milestones-match">
@@ -202,6 +237,9 @@
             sortList: [[1,0], [0,0]]
         });
         $("#search-projects").tablesorter({
+            sortList: [[0,0]]
+        });
+        $("#search-defunctprojects").tablesorter({
             sortList: [[0,0]]
         });
     });
