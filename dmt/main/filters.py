@@ -42,7 +42,7 @@ class ProjectFilter(FilterSet):
     @property
     def qs(self):
         parent = super(ProjectFilter, self).qs
-        return parent.filter(~Q(status='Defunct'))
+        return parent.exclude(status='Defunct').filter(pub_view=True)
 
 
 class UserFilter(FilterSet):
