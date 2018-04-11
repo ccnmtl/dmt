@@ -76,6 +76,24 @@ class BasicTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertContains(response, "alert-danger")
 
+    def test_search_projects(self):
+        project = ProjectFactory(name='Foo')
+        defunct = ProjectFactory(name='Fooish', status='Defunct')
+
+        ProjectFactory(name='Bar')
+        ProjectFactory(name='Barish', status='Defunct')
+
+        response = self.c.get("/search/?q=foo")
+        self.assertEquals(response.status_code, 200)
+
+        self.assertEquals(response.context_data['defunctprojects'].count(),
+                          1)
+        self.assertEquals(response.context_data['defunctprojects'].first(),
+                          defunct)
+
+        self.assertEquals(response.context_data['projects'].count(), 1)
+        self.assertEquals(response.context_data['projects'].first(), project)
+
     def test_dashboard(self):
         response = self.c.get("/dashboard/")
         self.assertEqual(response.status_code, 200)
