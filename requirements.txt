@@ -69,7 +69,7 @@ six==1.11.0
 python-dateutil==2.7.2
 pytz==2018.4
 simpleduration==0.1.0
-ipaddress==1.0.19
+ipaddress==1.0.21
 text-unidecode==1.2  # for faker
 Faker==0.8.13
 factory_boy==2.10.0
