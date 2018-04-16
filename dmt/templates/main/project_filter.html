@@ -37,6 +37,7 @@
             <th>Start Date</th>
             <th>Due Date</th>
             <th>Launch Date</th>
+            <th>Project Manager</th>
             <th>Caretaker</th>
         </tr>
     </thead>
@@ -50,6 +51,9 @@
             <td>{{project.start_date | date:"Y/m/d"}}</td>
             <td>{{project.due_date | date:"Y/m/d"}}</td>
             <td>{{project.launch_date | date:"Y/m/d"}}</td>
+            <td><a href="/user/{{project.project_manager_user.username}}/">
+                    {{project.project_manager_user.userprofile.fullname}}
+                </a></td>
             <td><a href="/user/{{project.caretaker_user.username}}/">
                     {{project.caretaker_user.userprofile.fullname}}
                 </a></td>

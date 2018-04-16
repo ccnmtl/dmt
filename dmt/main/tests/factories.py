@@ -50,6 +50,7 @@ class ProjectFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Test Project {0}'.format(n))
     pub_view = True
     caretaker_user = factory.SubFactory(UserFactory)
+    project_manager_user = factory.SubFactory(UserFactory)
 
 
 class MilestoneFactory(factory.DjangoModelFactory):

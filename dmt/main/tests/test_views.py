@@ -480,7 +480,9 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
             'category': test_category,
             'start_date': test_start_date,
             'due_date': test_due_date,
-            'launch_date': test_launch_date
+            'launch_date': test_launch_date,
+            'caretaker_user': self.u.pk,
+            'project_manager_user': self.u.pk
         })
         self.assertEqual(r.status_code, 302)
         url = r.url
@@ -556,7 +558,9 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'category': 'MOOC',
                      'start_date': '2020-04-28',
                      'due_date': '2020-04-28',
-                     'launch_date': '2020-04-28'})
+                     'launch_date': '2020-04-28',
+                     'caretaker_user': self.u.pk,
+                     'project_manager_user': self.u.pk})
         p = Project.objects.get(name='Test project name')
         self.assertEqual(
             Milestone.objects.filter(project=p, name='Final Release').count(),
@@ -572,13 +576,15 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'category': 'MOOC',
                      'start_date': '2020-04-28',
                      'due_date': '2020-04-28',
-                     'launch_date': '2020-04-28'})
+                     'launch_date': '2020-04-28',
+                     'caretaker_user': self.u.pk,
+                     'project_manager_user': self.u.pk})
         p = Project.objects.get(name='Test project name')
         self.assertEqual(
             Milestone.objects.filter(project=p, name='Someday/Maybe').count(),
             1)
 
-    def test_create_project_post_adds_current_user_to_personnel(self):
+    def test_create_project_post_adds_users_to_personnel(self):
         self.c.post(reverse('project_create'),
                     {'name': 'Test project name',
                      'description': 'description',
@@ -588,7 +594,9 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'category': 'MOOC',
                      'start_date': '2020-04-28',
                      'due_date': '2020-04-28',
-                     'launch_date': '2020-04-28'})
+                     'launch_date': '2020-04-28',
+                     'caretaker_user': self.u.pk,
+                     'project_manager_user': self.u.pk})
         p = Project.objects.get(name='Test project name')
         self.assertTrue(self.u.userprofile in p.personnel_in_project())
 

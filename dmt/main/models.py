@@ -526,6 +526,8 @@ class Project(models.Model):
     projnum = models.IntegerField("Project number", null=True, blank=True)
     pub_view = models.BooleanField("Reportable", default=False)
     caretaker_user = models.ForeignKey(User, null=True)
+    project_manager_user = models.ForeignKey(User, null=True,
+                                             related_name='project_manager')
     description = models.TextField(blank=True)
     url = models.CharField("Project URL", max_length=255, blank=True)
     info_url = models.CharField("Information URL", max_length=255, blank=True)
@@ -632,6 +634,7 @@ class Project(models.Model):
     def remove_personnel(self, user):
         WorksOn.objects.filter(project=self, user=user.user).delete()
         self.ensure_caretaker_in_personnel()
+        self.ensure_project_manager_in_personnel()
 
     def ensure_caretaker_in_personnel(self):
         """ if the caretaker is not in the list of project personnel,
@@ -639,6 +642,13 @@ class Project(models.Model):
         if WorksOn.objects.filter(project=self,
                                   user=self.caretaker_user).count() < 1:
             self.add_manager(self.caretaker_user.userprofile)
+
+    def ensure_project_manager_in_personnel(self):
+        """ if the project manager exists and is not in the list
+            of project personnel, add them """
+        if (self.project_manager_user and WorksOn.objects.filter(
+                project=self, user=self.project_manager_user).count() < 1):
+            self.add_manager(self.project_manager_user.userprofile)
 
     def all_users_not_in_project(self):
         already_in = set(
@@ -1064,6 +1074,7 @@ WHERE p.pid = m.pid
 
 def project_save_hook(sender, instance, created, **kwargs):
     instance.ensure_caretaker_in_personnel()
+    instance.ensure_project_manager_in_personnel()
 
 
 post_save.connect(project_save_hook, sender=Project)
@@ -1458,6 +1469,8 @@ class Item(models.Model):
 
     def add_project_notification(self):
         self.add_subscriber(self.milestone.project.caretaker_user.userprofile)
+        self.add_subscriber(
+            self.milestone.project.project_manager_user.userprofile)
 
     def add_subscriber(self, user):
         if user.status == "inactive":

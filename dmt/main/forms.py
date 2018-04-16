@@ -1,14 +1,17 @@
-import re
 from datetime import timedelta
+import re
+
 from django import forms
-from django.utils import timezone
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from django.forms import ModelForm, TextInput, URLInput
+from django.utils import timezone
+from django.utils.encoding import smart_unicode
 from django_markwhat.templatetags.markup import commonmark
 from extra_views import InlineFormSet
 from simpleduration import Duration, InvalidDuration
+
 from dmt.main.models import (
     Comment,
     StatusUpdate, Node, UserProfile, Project, Milestone, Item,
@@ -55,8 +58,26 @@ class UserUpdateForm(ModelForm):
         }
 
 
+class UserFullnameChoiceField(forms.ModelChoiceField):
+    # https://stackoverflow.com/questions/3966483/
+    # django-show-get-full-name-instead-or-username-in-model-form
+
+    def label_from_instance(self, obj):
+        return smart_unicode(obj.get_full_name())
+
+
 class ProjectCreateForm(ModelForm):
     target_date = forms.CharField(label='Proposed release date')
+    caretaker_user = UserFullnameChoiceField(
+        queryset=User.objects.filter(
+            userprofile__status='active', userprofile__grp=False).order_by(
+                'userprofile__fullname'),
+        required=True)
+    project_manager_user = UserFullnameChoiceField(
+        queryset=User.objects.filter(
+            userprofile__status='active', userprofile__grp=False).order_by(
+                'userprofile__fullname'),
+        required=True)
 
     class Meta:
         def now():
@@ -67,7 +88,9 @@ class ProjectCreateForm(ModelForm):
                 .strftime("%Y-%m-%d")
 
         model = Project
-        fields = ['name', 'description', 'pub_view', 'target_date',
+        fields = ['name', 'description', 'pub_view',
+                  'caretaker_user', 'project_manager_user',
+                  'target_date',
                   'wiki_category', 'category', 'start_date',
                   'due_date', 'launch_date']
         widgets = {
@@ -118,6 +141,9 @@ class ProjectUpdateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProjectUpdateForm, self).__init__(*args, **kwargs)
         self.fields['caretaker_user'].choices = [
+            (user.user.pk, user.fullname) for user in
+            self.instance.all_personnel_in_project()]
+        self.fields['project_manager_user'].choices = [
             (user.user.pk, user.fullname) for user in
             self.instance.all_personnel_in_project()]
         self.fields['start_date'].value = self.instance.start_date
