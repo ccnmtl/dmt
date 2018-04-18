@@ -30,11 +30,15 @@ class ClientFilter(FilterSet):
 class ProjectFilter(FilterSet):
     class Meta:
         model = Project
-        fields = ['name', 'projnum', 'caretaker_user', 'description']
+        fields = ['name', 'projnum', 'caretaker_user',
+                  'project_manager_user', 'description']
 
     name = CharFilter(label='Project Name', lookup_expr='icontains')
     projnum = NumberFilter(label='Project Number')
     caretaker_user = ModelChoiceFilter(
+        queryset=User.objects.filter(
+            ~Q(username__startswith='grp_')).order_by('username'))
+    project_manager_user = ModelChoiceFilter(
         queryset=User.objects.filter(
             ~Q(username__startswith='grp_')).order_by('username'))
     description = CharFilter(lookup_expr='icontains')

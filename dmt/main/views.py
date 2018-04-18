@@ -707,7 +707,6 @@ class ProjectCreateView(LoggedInMixin, CreateView):
     form_class = ProjectCreateForm
 
     def form_valid(self, form):
-        form.instance.caretaker_user = self.request.user
         form.instance.save()
 
         try:
