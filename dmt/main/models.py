@@ -514,6 +514,7 @@ PROJECT_CATEGORIES = [
     'Funded',
     'Hybrid RFP',
     'MOOC',
+    'Research & Analysis',
     'Small RFP',
     'Strategic',
     'Support'
