@@ -248,6 +248,13 @@
           </a>
       </dd>
 
+      <dt>Project Manager</dt>
+      <dd>
+          <a href="{% url 'user_detail' object.project_manager_user.userprofile.username %}">
+              {% firstof object.project_manager_user.get_full_name object.project_manager_user.username %}
+          </a>
+      </dd>
+
       <dt>Description</dt>
       <dd>{{object.description|commonmark|linkify|emoji_replace}}</dd>
 
@@ -321,13 +328,25 @@
   </div>
 
   <div class="tab-pane fade" id="personnel">
-    <ul>
+    <h4>Current</h4>
+    <br />
+    <table class="table table-bordered">
+        <tr><th>User</th><th>Role</th><th>Actions</th></tr>
         {% for u in object.personnel_in_project %}
-            <li><span class="personnel"><a href="{{u.get_absolute_url}}">{% firstof u.user.get_full_name u.user.username %}</a>{% if u.user.id == object.caretaker_user.id %} (Caretaker) {% endif %} {% if u.user.id != object.caretaker_user.id %}<a href="/project/{{object.pid}}/remove_user/{{u.username}}/"
-        title="remove user from project" class="remove-link">[remove]</a>{% endif %}</span></li>
+            <tr>
+            <td><span class="personnel"><a href="{{u.get_absolute_url}}">{% firstof u.user.get_full_name u.user.username %}</a></td>
+            <td>
+                {% if u.user.id == object.caretaker_user.id %} Caretaker{% if u.user.id == object.project_manager_user.id %},{% endif %} {% endif %}
+                {% if u.user.id == object.project_manager_user.id %} Project Manager {% endif %} 
+            </td>
+            <td>
+                {% if u.user.id != object.caretaker_user.id and u.user.id != object.project_manager_user.id %}<a href="/project/{{object.pid}}/remove_user/{{u.username}}/" title="remove user from project">remove</a>{% endif %}</span>
+            </td>
+            </tr>
         {% endfor %}
-    </ul>
-
+    </table>
+    <br />
+    <h4>Manage</h4>
     <script>
     if (typeof django === 'undefined') {
         var django = {
