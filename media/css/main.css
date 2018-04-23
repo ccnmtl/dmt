@@ -1291,6 +1291,113 @@ padding: 4px;
 .headerSortUp,
 .headerSortDown { background-color: #faedba; }
 
+/* Project personnel widget */ 
+
+.project-personnel-widget .selector  {
+    width: 100%;
+    min-width: 450px;
+}
+
+.project-personnel-widget .selector select {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.project-personnel-widget .selector h2 {
+    font-size: 14px;
+    font-weight: 400;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.project-personnel-widget .selector .selector-available h2 {
+    background-color: #ddd;
+}
+
+.project-personnel-widget .selector .selector-chosen h2 {
+    background-color: #337ab7;
+}
+
+.project-personnel-widget .selector .selector-available {
+    width: 42%;
+    margin: 0;
+    padding: 0;
+}
+
+.project-personnel-widget .selector .selector-chooser {
+    width: 72px;
+    margin: 8em 0 1em 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+.project-personnel-widget .selector .selector-chosen {
+    width: 42%;
+    margin: 0;
+    padding: 0;
+}
+
+.project-personnel-widget #id_personnel_input {
+    width: 100%;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #ccc;
+    margin: 0;
+}
+
+.project-personnel-widget .selector .selector-available #id_personnel_filter label {
+    display: none;
+}
+
+.project-personnel-widget .selector .selector-available select {
+    height: 14.4em;
+}
+
+.project-personnel-widget .selector .selector-chooser li {
+    margin: 0 auto 0.5em auto;
+    padding: 0;
+    width: 32px;
+    display: block;
+}
+
+.project-personnel-widget .selector-chooser .selector-add
+{
+    height: 32px;
+    width: 32px;
+    background-size: 32px;
+    background-position: 0px -194px;
+}
+
+.project-personnel-widget .selector-chooser .active.selector-add:focus,
+.project-personnel-widget .selector-chooser .active.selector-add:hover {
+    background-position: 0px -226px;
+}
+
+.project-personnel-widget .selector-chooser .selector-remove
+{
+    height: 32px;
+    width: 32px;
+    background-size: 32px;
+    background-position: 0px -130px;
+}
+
+.project-personnel-widget .selector-chooser .active.selector-remove:focus,
+.project-personnel-widget .selector-chooser .active.selector-remove:hover {
+    background-position: 0px -162px;
+}
+
+.project-personnel-widget #id_personnel_remove_all_link,
+.project-personnel-widget #id_personnel_add_all_link {
+    font-size: 16px;
+}
+
+.add-chosen-personnel {
+    margin-left: 63%;
+}
+
+.project-personnel-widget {
+}
+
 /* ------ REsponsive CSS below ------ */
 
 @media (max-width: 991px) and (min-width: 768px) {

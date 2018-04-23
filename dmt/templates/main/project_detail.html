@@ -329,7 +329,6 @@
 
   <div class="tab-pane fade" id="personnel">
     <h4>Current</h4>
-    <br />
     <table class="table table-bordered">
         <tr><th>User</th><th>Role</th><th>Actions</th></tr>
         {% for u in object.personnel_in_project %}
@@ -357,12 +356,11 @@
     <script src="/admin/jsi18n"></script>
     {{ personnel_form.media }}
     <form action="/project/{{object.pid}}/add_personnel/" method="post">{% csrf_token %}
-        <div class="form-group">
+        <div class="form-group project-personnel-widget clearfix">
             {{ personnel_form }}
         </div>
-        <div class="clearfix"></div>
         <div class="form-group">
-            <input type="submit" value="add" class="btn btn-primary" />
+            <input type="submit" value="Add chosen personnel" class="btn btn-primary add-chosen-personnel" />
         </div>
     </form>
   </div>
