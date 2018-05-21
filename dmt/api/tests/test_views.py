@@ -423,7 +423,9 @@ class ExternalAddItemTests(APITestCase):
         )
         self.assertEqual(
             mail.outbox[0].to,
-            [self.owner.email, self.project.caretaker_user.userprofile.email])
+            [self.owner.email,
+             self.project.caretaker_user.userprofile.email,
+             self.project.project_manager_user.userprofile.email])
 
     def test_post_redirects_client(self):
         redirect_url = 'http://example.com'

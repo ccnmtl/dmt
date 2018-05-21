@@ -76,6 +76,24 @@ class BasicTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertContains(response, "alert-danger")
 
+    def test_search_projects(self):
+        project = ProjectFactory(name='Foo')
+        defunct = ProjectFactory(name='Fooish', status='Defunct')
+
+        ProjectFactory(name='Bar')
+        ProjectFactory(name='Barish', status='Defunct')
+
+        response = self.c.get("/search/?q=foo")
+        self.assertEquals(response.status_code, 200)
+
+        self.assertEquals(response.context_data['defunctprojects'].count(),
+                          1)
+        self.assertEquals(response.context_data['defunctprojects'].first(),
+                          defunct)
+
+        self.assertEquals(response.context_data['projects'].count(), 1)
+        self.assertEquals(response.context_data['projects'].first(), project)
+
     def test_dashboard(self):
         response = self.c.get("/dashboard/")
         self.assertEqual(response.status_code, 200)
@@ -462,7 +480,9 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
             'category': test_category,
             'start_date': test_start_date,
             'due_date': test_due_date,
-            'launch_date': test_launch_date
+            'launch_date': test_launch_date,
+            'caretaker_user': self.u.pk,
+            'project_manager_user': self.u.pk
         })
         self.assertEqual(r.status_code, 302)
         url = r.url
@@ -538,7 +558,9 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'category': 'MOOC',
                      'start_date': '2020-04-28',
                      'due_date': '2020-04-28',
-                     'launch_date': '2020-04-28'})
+                     'launch_date': '2020-04-28',
+                     'caretaker_user': self.u.pk,
+                     'project_manager_user': self.u.pk})
         p = Project.objects.get(name='Test project name')
         self.assertEqual(
             Milestone.objects.filter(project=p, name='Final Release').count(),
@@ -554,13 +576,15 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'category': 'MOOC',
                      'start_date': '2020-04-28',
                      'due_date': '2020-04-28',
-                     'launch_date': '2020-04-28'})
+                     'launch_date': '2020-04-28',
+                     'caretaker_user': self.u.pk,
+                     'project_manager_user': self.u.pk})
         p = Project.objects.get(name='Test project name')
         self.assertEqual(
             Milestone.objects.filter(project=p, name='Someday/Maybe').count(),
             1)
 
-    def test_create_project_post_adds_current_user_to_personnel(self):
+    def test_create_project_post_adds_users_to_personnel(self):
         self.c.post(reverse('project_create'),
                     {'name': 'Test project name',
                      'description': 'description',
@@ -570,7 +594,9 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                      'category': 'MOOC',
                      'start_date': '2020-04-28',
                      'due_date': '2020-04-28',
-                     'launch_date': '2020-04-28'})
+                     'launch_date': '2020-04-28',
+                     'caretaker_user': self.u.pk,
+                     'project_manager_user': self.u.pk})
         p = Project.objects.get(name='Test project name')
         self.assertTrue(self.u.userprofile in p.personnel_in_project())
 

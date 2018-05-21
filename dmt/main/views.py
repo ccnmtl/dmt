@@ -93,6 +93,13 @@ class SearchView(LoggedInMixin, TemplateView):
                     Q(description__icontains=q)
                 )
             ),
+            defunctprojects=Project.objects.filter(
+                Q(status='Defunct') &
+                (
+                    Q(name__icontains=q) |
+                    Q(description__icontains=q)
+                )
+            ),
             milestones=Milestone.objects.filter(
                 Q(name__icontains=q) |
                 Q(description__icontains=q)
@@ -700,7 +707,6 @@ class ProjectCreateView(LoggedInMixin, CreateView):
     form_class = ProjectCreateForm
 
     def form_valid(self, form):
-        form.instance.caretaker_user = self.request.user
         form.instance.save()
 
         try:

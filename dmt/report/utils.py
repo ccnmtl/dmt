@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.utils.encoding import smart_text
 
 
 class ReportFileGenerator(object):
@@ -50,7 +51,7 @@ class ReportFileGenerator(object):
 
         i = 1
         for row in self.rows:
-            rowdata = [str(x) for x in row]
+            rowdata = [smart_text(x) for x in row]
             worksheet.write_row(i, 0, rowdata)
             i += 1
 
