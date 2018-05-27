@@ -86,7 +86,7 @@ celery==3.1.26.post2 # pyup: <4.0.0
 enum34==1.1.6
 billiard==3.5.0.3
 parse-type==0.4.2
-parse==1.8.2
+parse==1.8.4
 wsgi_intercept==1.7.0
 mechanize==0.3.6
 recordtype==1.1
