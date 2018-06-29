@@ -67,7 +67,7 @@ astroid==1.6.5
 
 six==1.11.0
 python-dateutil==2.7.3
-pytz==2018.4
+pytz==2018.5
 simpleduration==0.1.0
 ipaddress==1.0.21
 text-unidecode==1.2  # for faker
