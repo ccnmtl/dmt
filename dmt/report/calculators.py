@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import timedelta
 
 from django.db import connection
 from django.db.models import Q, Sum
@@ -160,15 +161,16 @@ class StaffCapacityCalculator(object):
 
     def holidays(self):
         # http://hr.columbia.edu/events/holidays
-        dates = ['2018-01-01', '2018-01-02', '2018-01-15', '2018-02-19',
-                 '2018-05-28', '2018-07-04', '2018-09-03', '2018-11-06',
-                 '2018-11-22', '2018-11-23', '2018-12-24', '2018-12-25',
-                 '2018-12-31', '2019-01-01']
-        return [numpy.datetime64(x) for x in dates]
+        return ['2018-01-01', '2018-01-02', '2018-01-15', '2018-02-19',
+                '2018-05-28', '2018-07-04', '2018-09-03', '2018-11-06',
+                '2018-11-22', '2018-11-23', '2018-12-24', '2018-12-25',
+                '2018-12-31', '2019-01-01']
 
     def days(self):
-        return numpy.busday_count(self.interval_start, self.interval_end,
-                                  holidays=self.holidays())
+        start = self.interval_start.strftime('%Y-%m-%d')
+        end = (self.interval_end + timedelta(days=1)).strftime('%Y-%m-%d')
+        return numpy.busday_count(
+            start, end, holidays=self.holidays())
 
     def capacity_for_range(self):
         return self.days() * 6  # in hours
