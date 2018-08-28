@@ -11,7 +11,7 @@ pycodestyle==2.3.1 # pyup: <2.4.0
 flake8==3.5.0
 
 mccabe==0.6.1
-certifi==2018.8.13
+certifi==2018.8.24
 
 pyparsing==2.2.0
 backports.ssl_match_hostname==3.5.0.1
@@ -95,7 +95,7 @@ sqlparse==0.2.4
 requirements/src/whitelistaffilmapper-0.1.0-py2-none-any.whl
 boto==2.49.0
 unicodecsv==0.14.1
-XlsxWriter==1.0.8
+XlsxWriter==1.0.9
 splinter==0.8.0
 shortuuid==0.5.0
 contextlib2==0.5.5
@@ -117,7 +117,7 @@ django-waffle==0.14.0
 django-jenkins==0.110.0
 django-smoketest==1.1.0
 django-extensions==2.1.2
-typing==3.6.4 # needed for django-extensions
+typing==3.6.6 # needed for django-extensions
 django-stagingcontext==0.1.0
 django-ga-context==0.1.0
 django-impersonate==1.3
