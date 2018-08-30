@@ -12,7 +12,8 @@
   <meta name="description" content="dmt">
   <meta name="author" content="Columbia University CTL">
 
-  <link href="{% bootstrap_css_url %}" rel="stylesheet">
+  {% bootstrap_css %}
+
   {% compress css %}
   <link href="{{STATIC_URL}}css/main.css?dmt" rel="stylesheet">
   {% endcompress %}
