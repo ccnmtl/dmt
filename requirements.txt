@@ -142,7 +142,7 @@ freezegun==0.3.10
 gunicorn==19.8.1
 django-storages==1.7
 django-cacheds3storage==0.1.2
-django-markwhat==1.6.0
+django-markwhat==1.6.1
 
 django-s3sign==0.1.4
 django-smtp-ssl==1.0
