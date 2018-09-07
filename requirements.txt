@@ -1,7 +1,7 @@
 Django==1.11.15 # pyup: <2.0
 configparser==3.5.0
 future==0.16.0
-CommonMark==0.8.0
+commonmark==0.8.1
 psycopg2==2.7.5
 versiontools==1.9.1
 statsd==3.3.0
@@ -142,7 +142,7 @@ freezegun==0.3.10
 gunicorn==19.8.1
 django-storages==1.7
 django-cacheds3storage==0.1.2
-django-markwhat==1.6.0
+django-markwhat==1.6.1
 
 django-s3sign==0.1.4
 django-smtp-ssl==1.0
