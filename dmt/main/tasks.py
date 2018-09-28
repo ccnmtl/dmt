@@ -247,7 +247,7 @@ def send_email(self, subject, body, to_addresses):
     try:
         send_mail(
             subject,
-            body, settings.SERVER_EMAIL,
+            body, 'PMT Notification <{}>'.format(settings.SERVER_EMAIL),
             to_addresses, fail_silently=settings.DEBUG)
     except (smtplib.SMTPAuthenticationError,
             smtplib.SMTPServerDisconnected,
