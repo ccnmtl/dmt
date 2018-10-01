@@ -89,7 +89,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
-SERVER_EMAIL = 'pmt@ctl.columbia.edu'
+SERVER_EMAIL = 'pmt@mail.ctl.columbia.edu'
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
 
 EMAIL_MAX_RETRIES = 10
