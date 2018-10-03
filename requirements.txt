@@ -135,7 +135,7 @@ django-braces==1.13.0
 oauthlib==2.1.0
 django-oauth-toolkit==1.1.2  # pyup: <1.2.0
 django-extra-views==0.10.0
-bleach==2.1.4
+bleach==3.0.0
 webencodings==0.5.1
 html5lib==1.0.1
 freezegun==0.3.10
