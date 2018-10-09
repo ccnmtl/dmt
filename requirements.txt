@@ -18,7 +18,7 @@ backports.ssl_match_hostname==3.5.0.1
 tornado==4.5.3 # pyup: <5.0
 cssselect==1.0.3
 BeautifulSoup==3.2.1
-lxml==4.2.4
+lxml==4.2.5
 fuzzywuzzy==0.17.0
 sure==1.4.11
 traitlets==4.3.2
