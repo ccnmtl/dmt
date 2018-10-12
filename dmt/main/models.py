@@ -143,7 +143,8 @@ class UserProfile(models.Model):
     def assigned_time_for_interval(self, start, end):
         items = Item.objects.exclude(
             milestone__name='Someday/Maybe').exclude(
-                milestone__project__status='Defunct').filter(
+                Q(milestone__project__status='Defunct')
+                | Q(milestone__project__status='Archived')).filter(
                     assigned_user=self.user,
                     target_date__gte=start,
                     target_date__lte=end,
@@ -292,7 +293,9 @@ class UserProfile(models.Model):
         return [
             w.project for w in
             self.user.workson_set.all().select_related('project')
-            .filter(~Q(project__status='Defunct')).order_by('project__name')
+            .filter(
+                ~Q(project__status='Defunct') & ~Q(project__status='Archived')
+            ).order_by('project__name')
         ]
 
     def total_group_time(self, start, end):
@@ -497,7 +500,7 @@ def clean_subject(s):
 
 PROJECT_STATUS_CHOICES = [
     "New", "Development", "Deployment", "Defunct",
-    "Deferred", "Non-project",
+    "Deferred", "Non-project", "Archived",
 ]
 
 
