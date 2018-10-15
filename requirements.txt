@@ -11,7 +11,7 @@ pycodestyle==2.3.1 # pyup: <2.4.0
 flake8==3.5.0
 
 mccabe==0.6.1
-certifi==2018.8.24
+certifi==2018.10.15
 
 pyparsing==2.2.2
 backports.ssl_match_hostname==3.5.0.1
