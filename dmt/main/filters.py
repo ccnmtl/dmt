@@ -46,7 +46,9 @@ class ProjectFilter(FilterSet):
     @property
     def qs(self):
         parent = super(ProjectFilter, self).qs
-        return parent.exclude(status='Defunct').filter(pub_view=True)
+        return parent.exclude(
+            Q(status='Defunct') | Q(status='Archived')
+        ).filter(pub_view=True)
 
 
 class UserFilter(FilterSet):

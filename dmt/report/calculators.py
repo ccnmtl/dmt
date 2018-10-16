@@ -59,6 +59,7 @@ left join users as "caretakers" on
             (caretakers.user_id = projects.caretaker_user_id)
 join users on (items.assigned_user = users.user_id)
 where projects.status != 'Defunct' and projects.status != 'Non-project'
+    and projects.status != 'Archived'
     and projects.pub_view
 and milestones.name != 'Someday/Maybe'
 group by items.iid, users.fullname, projects.pid, milestones.name,
@@ -89,6 +90,7 @@ left join actual_times on (items.iid = actual_times.iid)
 left join users as "caretakers" on
             (caretakers.user_id = projects.caretaker_user_id)
 where projects.status != 'Defunct' and projects.status != 'Non-project'
+    and projects.status != 'Archived'
     and projects.pub_view
 group by projects.pid, caretakers.fullname
 order by due_date, projects.name
@@ -109,6 +111,7 @@ class ProjectStatusCalculator(object):
 
         projects = Project.objects.filter(
             ~Q(status='Defunct') & ~Q(status='Non-project')
+            & ~Q(status='Archived')
             & Q(pub_view=True)
         ).annotate(
             estimate=Sum('milestone__item__estimated_time')
