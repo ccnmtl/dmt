@@ -28,6 +28,9 @@ class TestHelpers(TestCase):
 
     def test_seconds_to_hours(self):
         self.assertEqual(seconds_to_hours(3600), 1.)
+        self.assertEqual(seconds_to_hours(None), 0)
+        self.assertEqual(seconds_to_hours(0), 0)
+        self.assertEqual(seconds_to_hours(3600 / 2), 0.5)
 
 
 class TestBumpSomedayMaybe(TestCase):

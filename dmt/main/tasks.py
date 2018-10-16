@@ -122,6 +122,9 @@ def hours_logged_report():
 
 
 def seconds_to_hours(seconds):
+    if not seconds:
+        seconds = 0
+
     return seconds / 3600.
 
 
