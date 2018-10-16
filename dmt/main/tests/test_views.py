@@ -78,18 +78,18 @@ class BasicTest(TestCase):
 
     def test_search_projects(self):
         project = ProjectFactory(name='Foo')
-        defunct = ProjectFactory(name='Fooish', status='Defunct')
+        archived = ProjectFactory(name='Fooish', status='Archived')
 
         ProjectFactory(name='Bar')
-        ProjectFactory(name='Barish', status='Defunct')
+        ProjectFactory(name='Barish', status='Archived')
 
         response = self.c.get("/search/?q=foo")
         self.assertEquals(response.status_code, 200)
 
-        self.assertEquals(response.context_data['defunctprojects'].count(),
+        self.assertEquals(response.context_data['archivedprojects'].count(),
                           1)
-        self.assertEquals(response.context_data['defunctprojects'].first(),
-                          defunct)
+        self.assertEquals(response.context_data['archivedprojects'].first(),
+                          archived)
 
         self.assertEquals(response.context_data['projects'].count(), 1)
         self.assertEquals(response.context_data['projects'].first(), project)

@@ -23,7 +23,7 @@
         <a href="#projects-match" data-toggle="tab">Projects ({% if projects %}{{ projects.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
-        <a href="#defunctprojects-match" data-toggle="tab">Defunct ({% if defunctprojects %}{{ defunctprojects.count}}{% else %}0{% endif%})</a>
+        <a href="#archivedprojects-match" data-toggle="tab">Archived ({% if archivedprojects %}{{ archivedprojects.count}}{% else %}0{% endif%})</a>
     </li>
     <li>
         <a href="#milestones-match" data-toggle="tab">Milestones ({% if milestones %}{{ milestones.count}}{% else %}0{% endif%})</a>
@@ -114,11 +114,11 @@
         <p>There are no results for "{{q}}" in Projects.</p>
         {% endif %}
     </div>
-    <div class="tab-pane fade" id="defunctprojects-match">
-        {% if defunctprojects %}
-        <h3>Defunct Project matches:</h3>
+    <div class="tab-pane fade" id="archivedprojects-match">
+        {% if archivedprojects %}
+        <h3>Archived Project matches:</h3>
         <table class="table table-condensed table-striped tablesorter tablesorter-default table-search-results"
-           id="search-defunctprojects">
+           id="search-archivedprojects">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -130,20 +130,20 @@
                 </tr>
             </thead>
             <tbody>
-                {% for defunctproject in defunctprojects %}
+                {% for archivedproject in archivedprojects %}
                 <tr>
-                    <td><a href="{{defunctproject.get_absolute_url}}">{{defunctproject.name}}</a></td>
-                    <td>{{defunctproject.category}}</td>
-                    <td>{{defunctproject.status}}</td>
-                    <td>{{defunctproject.start_date}}</td>
-                    <td>{{defunctproject.due_date}}</td>
-                    <td>{{defunctproject.launch_date}}</td>
+                    <td><a href="{{archivedproject.get_absolute_url}}">{{archivedproject.name}}</a></td>
+                    <td>{{archivedproject.category}}</td>
+                    <td>{{archivedproject.status}}</td>
+                    <td>{{archivedproject.start_date}}</td>
+                    <td>{{archivedproject.due_date}}</td>
+                    <td>{{archivedproject.launch_date}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         {% else %}
-        <p>There are no results for "{{q}}" in Defunct Projects.</p>
+        <p>There are no results for "{{q}}" in Archived Projects.</p>
         {% endif %}
     </div>
     <div class="tab-pane fade" id="milestones-match">
@@ -239,7 +239,7 @@
         $("#search-projects").tablesorter({
             sortList: [[0,0]]
         });
-        $("#search-defunctprojects").tablesorter({
+        $("#search-archivedprojects").tablesorter({
             sortList: [[0,0]]
         });
     });
