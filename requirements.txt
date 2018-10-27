@@ -66,7 +66,7 @@ pylint==1.9.3 # pyup: <2.0.0
 astroid==1.6.5 # pyup: <2.0.0
 
 six==1.11.0
-python-dateutil==2.7.3
+python-dateutil==2.7.5
 pytz==2018.5
 simpleduration==0.1.0
 ipaddress==1.0.22
