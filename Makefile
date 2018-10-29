@@ -4,6 +4,7 @@ JS_FILES=media/js/src/ media/js/tests
 REQUIREJS=$(NODE_MODULES)/.bin/r.js
 PY_DIRS=$(APP)
 MAX_COMPLEXITY=7
+FLAKE8_IGNORE=W605
 
 all: jstest js jenkins
 
