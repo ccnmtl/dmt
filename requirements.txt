@@ -7,8 +7,8 @@ versiontools==1.9.1
 statsd==3.3.0
 pep8==1.7.1
 pyflakes==2.0.0
-pycodestyle==2.3.1 # pyup: <2.4.0
-flake8==3.5.0
+pycodestyle==2.4.0
+flake8==3.6.0
 
 mccabe==0.6.1
 certifi==2018.10.15
@@ -67,7 +67,7 @@ astroid==1.6.5 # pyup: <2.0.0
 
 six==1.11.0
 python-dateutil==2.7.5
-pytz==2018.5
+pytz==2018.7
 simpleduration==0.1.0
 ipaddress==1.0.22
 text-unidecode==1.2  # for faker
