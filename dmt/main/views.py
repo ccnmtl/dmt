@@ -87,14 +87,14 @@ class SearchView(LoggedInMixin, TemplateView):
                 Q(username__icontains=q)
             ),
             projects=Project.objects.filter(
-                ~Q(status='Defunct') &
+                ~Q(status='Archived') &
                 (
                     Q(name__icontains=q) |
                     Q(description__icontains=q)
                 )
             ),
-            defunctprojects=Project.objects.filter(
-                Q(status='Defunct') &
+            archivedprojects=Project.objects.filter(
+                Q(status='Archived') &
                 (
                     Q(name__icontains=q) |
                     Q(description__icontains=q)
@@ -107,7 +107,7 @@ class SearchView(LoggedInMixin, TemplateView):
             # TODO: comments/events for items should also be searched
             # and merged in.
             items=Item.objects.filter(
-                ~Q(milestone__project__status='Defunct') &
+                ~Q(milestone__project__status='Archived') &
                 (
                     Q(title__icontains=q) |
                     Q(iid__iexact=q) |

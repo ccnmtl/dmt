@@ -30,7 +30,7 @@ class ClientFilter(FilterSet):
 class ProjectFilter(FilterSet):
     class Meta:
         model = Project
-        fields = ['name', 'projnum', 'caretaker_user',
+        fields = ['name', 'status', 'projnum', 'caretaker_user',
                   'project_manager_user', 'description']
 
     name = CharFilter(label='Project Name', lookup_expr='icontains')
@@ -46,9 +46,17 @@ class ProjectFilter(FilterSet):
     @property
     def qs(self):
         parent = super(ProjectFilter, self).qs
-        return parent.exclude(
-            Q(status='Defunct') | Q(status='Archived')
-        ).filter(pub_view=True)
+        s = self.data.get('status')
+
+        # If the user is looking for a Defunct or Archived project,
+        # don't ignore them from the query.
+        if s == 'Defunct' or s == 'Archived':
+            return parent.filter(pub_view=True)
+        else:
+            # Defunct and Archived are ignored by default.
+            return parent.exclude(
+                Q(status='Defunct') | Q(status='Archived')
+            ).filter(pub_view=True)
 
 
 class UserFilter(FilterSet):
