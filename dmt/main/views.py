@@ -1555,13 +1555,14 @@ class GroupListView(LoggedInMixin, ListView):
 class AddTrackersView(LoggedInMixin, FormSetView):
     template_name = "main/add_trackers.html"
     form_class = AddTrackerForm
-    extra = 10
     success_message = 'Tracker added for project: ' + \
                       '<strong>' + \
                       '<a href="%(project_link)s">%(project_name)s</a>' + \
                       '</strong>'
     error_message = 'Error adding tracker: ' + \
                     '<strong>%(error_text)s</strong>'
+
+    factory_kwargs = {'extra': 10}
 
     def formset_valid(self, formset):
         for form in formset.forms:
