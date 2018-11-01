@@ -198,8 +198,7 @@ class ReminderForm(ModelForm):
 class RemindersInlineFormSet(InlineFormSet):
     model = Reminder
     form_class = ReminderForm
-    min_num = 1
-    max_num = 1
+    factory_kwargs = {'max_num': 1, 'min_num': 1}
 
 
 class UserModelChoiceField(forms.ModelChoiceField):
