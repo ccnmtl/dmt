@@ -1,5 +1,8 @@
 from __future__ import unicode_literals
-from urlparse import urljoin
+try:
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
 from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -729,7 +732,7 @@ class ProjectCreateView(LoggedInMixin, CreateView):
                 'appear on a homepage or in time ' +
                 'estimates.')
             return super(ProjectCreateView, self).form_valid(form)
-        except forms.ValidationError, e:
+        except forms.ValidationError as e:
             form.errors['target_date'] = [e.message]
             return super(ProjectCreateView, self).form_invalid(form)
 
@@ -1298,7 +1301,7 @@ class ProjectAddMilestoneView(LoggedInMixin, View):
                 target_date=request.POST.get('target_date',
                                              timezone.now().date())
             )
-        except ValidationError, e:
+        except ValidationError as e:
             for mesg in e.messages:
                 messages.error(
                     self.request,

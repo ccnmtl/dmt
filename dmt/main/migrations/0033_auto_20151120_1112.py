@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='Reminder',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('reminder_time', models.DurationField(help_text=b'Enter time and unit. For example: <code>1d</code> to be reminded one day before the target date.')),
+                ('reminder_time', models.DurationField(help_text='Enter time and unit. For example: <code>1d</code> to be reminded one day before the target date.')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('item', models.ForeignKey(to='main.Item')),

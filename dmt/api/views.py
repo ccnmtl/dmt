@@ -1,6 +1,7 @@
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
+from django.utils.encoding import smart_text
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
@@ -73,7 +74,7 @@ class ExternalAddItemView(APIView):
     def redirect_or_return_item(self, request, item, redirect_url, append_iid):
         if redirect_url:
             if append_iid:
-                redirect_url += 'iid=' + unicode(item.pk)
+                redirect_url += 'iid=' + smart_text(item.pk)
             return redirect(redirect_url)
         else:
             data = ItemSerializer(item, context={'request': request}).data

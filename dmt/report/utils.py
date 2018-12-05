@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.http import HttpResponse
 from django.utils.encoding import smart_text
 
@@ -30,12 +32,12 @@ class ReportFileGenerator(object):
         """
         Generates the report as an MS Excel file. Returns an HttpResponse.
         """
-        import StringIO
+        from io import BytesIO
         import xlsxwriter
 
         # Excel
         filename = self.filename + '.xlsx'
-        output = StringIO.StringIO()
+        output = BytesIO()
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-' +
             'officedocument.spreadsheetml.sheet')

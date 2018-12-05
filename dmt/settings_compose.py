@@ -1,5 +1,5 @@
 # flake8: noqa
-from settings_shared import *
+from dmt.settings_shared import *
 
 DEBUG = True
 DATABASES = {
@@ -16,6 +16,6 @@ DATABASES = {
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 try:
-    from local_settings import *
+    from dmt.local_settings import *
 except ImportError:
     pass

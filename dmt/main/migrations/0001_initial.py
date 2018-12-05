@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 ('website_url', models.CharField(max_length=255, blank=True)),
             ],
             options={
-                'ordering': [b'lastname', b'firstname'],
+                'ordering': ['lastname', 'firstname'],
                 'db_table': 'clients',
             },
             bases=(models.Model,),
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('username', models.CharField(max_length=32)),
             ],
             options={
-                'ordering': [b'add_date_time'],
+                'ordering': ['add_date_time'],
                 'db_table': 'comments',
             },
             bases=(models.Model,),
@@ -105,7 +105,7 @@ class Migration(migrations.Migration):
                 ('event_date_time', models.DateTimeField(null=True, blank=True)),
             ],
             options={
-                'ordering': [b'event_date_time'],
+                'ordering': ['event_date_time'],
                 'db_table': 'events',
             },
             bases=(models.Model,),
@@ -113,7 +113,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='comment',
             name='event',
-            field=models.ForeignKey(db_column=b'event', blank=True, to='main.Events', null=True),
+            field=models.ForeignKey(db_column='event', blank=True, to='main.Events', null=True),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -130,11 +130,11 @@ class Migration(migrations.Migration):
             name='Item',
             fields=[
                 ('iid', models.AutoField(serialize=False, primary_key=True)),
-                ('type', models.CharField(max_length=12, choices=[(b'bug', b'bug'), (b'action item', b'action item')])),
+                ('type', models.CharField(max_length=12, choices=[('bug', 'bug'), ('action item', 'action item')])),
                 ('title', models.CharField(max_length=255)),
-                ('status', models.CharField(max_length=16, choices=[(b'OPEN', b'OPEN'), (b'INPROGRESS', b'IN PROGRESS'), (b'RESOLVED', b'RESOLVED'), (b'VERIFIED', b'VERIFIED')])),
+                ('status', models.CharField(max_length=16, choices=[('OPEN', 'OPEN'), ('INPROGRESS', 'IN PROGRESS'), ('RESOLVED', 'RESOLVED'), ('VERIFIED', 'VERIFIED')])),
                 ('description', models.TextField(blank=True)),
-                ('priority', models.IntegerField(blank=True, null=True, choices=[(0, b'ICING'), (1, b'LOW'), (2, b'MEDIUM'), (3, b'HIGH'), (4, b'CRITICAL')])),
+                ('priority', models.IntegerField(blank=True, null=True, choices=[(0, 'ICING'), (1, 'LOW'), (2, 'MEDIUM'), (3, 'HIGH'), (4, 'CRITICAL')])),
                 ('r_status', models.CharField(max_length=16, blank=True)),
                 ('last_mod', models.DateTimeField(null=True, blank=True)),
                 ('target_date', models.DateField(null=True, blank=True)),
@@ -150,25 +150,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='events',
             name='item',
-            field=models.ForeignKey(to='main.Item', db_column=b'item'),
+            field=models.ForeignKey(to='main.Item', db_column='item'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='comment',
             name='item',
-            field=models.ForeignKey(db_column=b'item', blank=True, to='main.Item', null=True),
+            field=models.ForeignKey(db_column='item', blank=True, to='main.Item', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='attachment',
             name='item',
-            field=models.ForeignKey(to='main.Item', db_column=b'item_id'),
+            field=models.ForeignKey(to='main.Item', db_column='item_id'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='actualtime',
             name='item',
-            field=models.ForeignKey(to='main.Item', db_column=b'iid'),
+            field=models.ForeignKey(to='main.Item', db_column='iid'),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -176,7 +176,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('client', models.ForeignKey(to='main.Client')),
-                ('item', models.ForeignKey(to='main.Item', db_column=b'iid')),
+                ('item', models.ForeignKey(to='main.Item', db_column='iid')),
             ],
             options={
                 'db_table': 'item_clients',
@@ -189,11 +189,11 @@ class Migration(migrations.Migration):
                 ('mid', models.AutoField(serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('target_date', models.DateField()),
-                ('status', models.CharField(default=b'OPEN', max_length=8)),
+                ('status', models.CharField(default='OPEN', max_length=8)),
                 ('description', models.TextField(blank=True)),
             ],
             options={
-                'ordering': [b'target_date', b'name'],
+                'ordering': ['target_date', 'name'],
                 'db_table': 'milestones',
             },
             bases=(models.Model,),
@@ -201,7 +201,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='item',
             name='milestone',
-            field=models.ForeignKey(to='main.Milestone', db_column=b'mid'),
+            field=models.ForeignKey(to='main.Milestone', db_column='mid'),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -219,7 +219,7 @@ class Migration(migrations.Migration):
                 ('tags', taggit.managers.TaggableManager(to='taggit.Tag', through='taggit.TaggedItem', help_text='A comma-separated list of tags.', verbose_name='Tags')),
             ],
             options={
-                'ordering': [b'-modified'],
+                'ordering': ['-modified'],
                 'db_table': 'nodes',
             },
             bases=(models.Model,),
@@ -228,7 +228,7 @@ class Migration(migrations.Migration):
             name='Notify',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('item', models.ForeignKey(to='main.Item', db_column=b'iid')),
+                ('item', models.ForeignKey(to='main.Item', db_column='iid')),
             ],
             options={
                 'db_table': 'notify',
@@ -268,7 +268,7 @@ class Migration(migrations.Migration):
                 ('wiki_category', models.CharField(max_length=256, blank=True)),
             ],
             options={
-                'ordering': [b'name'],
+                'ordering': ['name'],
                 'db_table': 'projects',
             },
             bases=(models.Model,),
@@ -276,25 +276,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='notifyproject',
             name='pid',
-            field=models.ForeignKey(to='main.Project', db_column=b'pid'),
+            field=models.ForeignKey(to='main.Project', db_column='pid'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='node',
             name='project',
-            field=models.ForeignKey(db_column=b'project', to='main.Project', null=True),
+            field=models.ForeignKey(db_column='project', to='main.Project', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='milestone',
             name='project',
-            field=models.ForeignKey(to='main.Project', db_column=b'pid'),
+            field=models.ForeignKey(to='main.Project', db_column='pid'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='document',
             name='pid',
-            field=models.ForeignKey(to='main.Project', db_column=b'pid'),
+            field=models.ForeignKey(to='main.Project', db_column='pid'),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -303,7 +303,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('role', models.CharField(max_length=255, blank=True)),
                 ('client', models.ForeignKey(to='main.Client')),
-                ('pid', models.ForeignKey(to='main.Project', db_column=b'pid')),
+                ('pid', models.ForeignKey(to='main.Project', db_column='pid')),
             ],
             options={
                 'db_table': 'project_clients',
@@ -319,7 +319,7 @@ class Migration(migrations.Migration):
                 ('project', models.ForeignKey(to='main.Project')),
             ],
             options={
-                'ordering': [b'-added'],
+                'ordering': ['-added'],
             },
             bases=(models.Model,),
         ),
@@ -344,7 +344,7 @@ class Migration(migrations.Migration):
                 ('room', models.TextField(blank=True)),
             ],
             options={
-                'ordering': [b'fullname'],
+                'ordering': ['fullname'],
                 'db_table': 'users',
             },
             bases=(models.Model,),
@@ -358,77 +358,77 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='caretaker',
-            field=models.ForeignKey(to='main.User', db_column=b'caretaker'),
+            field=models.ForeignKey(to='main.User', db_column='caretaker'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='notifyproject',
             name='username',
-            field=models.ForeignKey(to='main.User', db_column=b'username'),
+            field=models.ForeignKey(to='main.User', db_column='username'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='notify',
             name='username',
-            field=models.ForeignKey(to='main.User', db_column=b'username'),
+            field=models.ForeignKey(to='main.User', db_column='username'),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
             name='notify',
-            unique_together=set([(b'item', b'username')]),
+            unique_together=set([('item', 'username')]),
         ),
         migrations.AddField(
             model_name='node',
             name='author',
-            field=models.ForeignKey(to='main.User', db_column=b'author'),
+            field=models.ForeignKey(to='main.User', db_column='author'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='item',
             name='owner',
-            field=models.ForeignKey(to='main.User', db_column=b'owner'),
+            field=models.ForeignKey(to='main.User', db_column='owner'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='item',
             name='assigned_to',
-            field=models.ForeignKey(to='main.User', db_column=b'assigned_to'),
+            field=models.ForeignKey(to='main.User', db_column='assigned_to'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='ingroup',
             name='username',
-            field=models.ForeignKey(db_column=b'username', blank=True, to='main.User', null=True),
+            field=models.ForeignKey(db_column='username', blank=True, to='main.User', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='ingroup',
             name='grp',
-            field=models.ForeignKey(to='main.User', db_column=b'grp'),
+            field=models.ForeignKey(to='main.User', db_column='grp'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='document',
             name='author',
-            field=models.ForeignKey(to='main.User', db_column=b'author'),
+            field=models.ForeignKey(to='main.User', db_column='author'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='client',
             name='contact',
-            field=models.ForeignKey(db_column=b'contact', blank=True, to='main.User', null=True),
+            field=models.ForeignKey(db_column='contact', blank=True, to='main.User', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='attachment',
             name='author',
-            field=models.ForeignKey(to='main.User', db_column=b'author'),
+            field=models.ForeignKey(to='main.User', db_column='author'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='actualtime',
             name='resolver',
-            field=models.ForeignKey(to='main.User', db_column=b'resolver'),
+            field=models.ForeignKey(to='main.User', db_column='resolver'),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -436,8 +436,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('auth', models.CharField(max_length=16)),
-                ('project', models.ForeignKey(to='main.Project', db_column=b'pid')),
-                ('username', models.ForeignKey(to='main.User', db_column=b'username')),
+                ('project', models.ForeignKey(to='main.Project', db_column='pid')),
+                ('username', models.ForeignKey(to='main.User', db_column='username')),
             ],
             options={
                 'db_table': 'works_on',

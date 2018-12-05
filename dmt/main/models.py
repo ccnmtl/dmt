@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import pytz
 import uuid
 from django import forms
@@ -9,7 +11,9 @@ from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.utils import timezone
-from django.utils.encoding import force_text
+from django.utils.encoding import (
+    python_2_unicode_compatible, force_text
+)
 from datetime import datetime, timedelta
 from dateutil import parser
 from taggit.managers import TaggableManager
@@ -24,6 +28,7 @@ import re
 import textwrap
 
 
+@python_2_unicode_compatible
 class UserProfile(models.Model):
     username = models.CharField(max_length=32, primary_key=True)
     fullname = models.CharField(max_length=128, blank=True)
@@ -50,7 +55,7 @@ class UserProfile(models.Model):
         db_table = u'users'
         ordering = ['fullname']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.fullname or self.username
 
     def get_absolute_url(self):
@@ -509,6 +514,7 @@ PROJECT_CATEGORIES = [
 ]
 
 
+@python_2_unicode_compatible
 class Project(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField("Project name", max_length=255)
@@ -563,7 +569,7 @@ class Project(models.Model):
         db_table = u'projects'
         ordering = ['name', ]
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -1096,6 +1102,7 @@ class Document(models.Model):
         db_table = u'documents'
 
 
+@python_2_unicode_compatible
 class Milestone(models.Model):
     mid = models.AutoField(primary_key=True)
     name = models.TextField()
@@ -1198,7 +1205,7 @@ class Milestone(models.Model):
     def sorted_items(self):
         return self.item_set.order_by('status', '-target_date')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -1646,6 +1653,7 @@ class HistoryComment(HistoryItem):
         return UserProfile.objects.get(username=self.c.username)
 
 
+@python_2_unicode_compatible
 class Notify(models.Model):
     item = models.ForeignKey(Item,
                              null=False,
@@ -1657,7 +1665,7 @@ class Notify(models.Model):
         db_table = u'notify'
         unique_together = ('item', 'user')
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.user.userprofile.username)
 
 
@@ -1795,6 +1803,7 @@ class Events(models.Model):
         return s
 
 
+@python_2_unicode_compatible
 class InGroup(models.Model):
     grp = models.ForeignKey(UserProfile, db_column='grp',
                             related_name='group_members')
@@ -1805,7 +1814,7 @@ class InGroup(models.Model):
     def verbose_name(name):
         return re.sub(r' \(group\)$', '', name).title()
 
-    def __unicode__(self):
+    def __str__(self):
         return InGroup.verbose_name(self.grp.fullname)
 
     class Meta:
@@ -1917,6 +1926,7 @@ class Comment(models.Model):
         return False
 
 
+@python_2_unicode_compatible
 class StatusUpdate(models.Model):
     project = models.ForeignKey(Project)
     author = models.ForeignKey(User)
@@ -1929,7 +1939,7 @@ class StatusUpdate(models.Model):
     def get_absolute_url(self):
         return "/status/%d/" % self.id
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s - %s" % (self.project.name,
                             self.author.userprofile.get_fullname())
 

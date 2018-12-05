@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from datetime import timedelta
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -154,7 +156,7 @@ class PassedMilestonesViewTests(LoggedInTestMixin, TestCase):
         m = MilestoneFactory(target_date='2000-01-01', status='OPEN')
         r = self.client.get(reverse('passed_milestones_report'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(m.name in r.content)
+        self.assertContains(r, m.name)
 
 
 class ProjectHoursViewTests(LoggedInTestMixin, TestCase):

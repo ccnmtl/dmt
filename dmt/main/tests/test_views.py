@@ -1,9 +1,15 @@
 import json
 import unittest
-import urllib
+
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
+
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from django.utils.encoding import smart_text
 
 from simpleduration import Duration
 from .factories import (
@@ -55,7 +61,7 @@ class BasicTest(TestCase):
         # Search terms need to be at least 3 characters long, so only
         # test this on items that have a sufficiently long ID.
         item = ItemFactory(iid=FuzzyInteger(100, 999999))
-        params = urllib.urlencode({'q': item.iid})
+        params = urlencode({'q': item.iid})
         response = self.c.get('/search/?%s' % params)
         self.assertEquals(response.status_code, 200)
         self.assertContains(response, 'Search results for "%d"' % item.iid)
@@ -64,7 +70,7 @@ class BasicTest(TestCase):
 
     def test_search_item2(self):
         item = ItemFactory(iid=FuzzyInteger(100, 999999))
-        params = urllib.urlencode({'q': '#%d' % item.iid})
+        params = urlencode({'q': '#%d' % item.iid})
         response = self.c.get('/search/?%s' % params)
         self.assertEquals(response.status_code, 200)
         self.assertContains(response, 'Search results for "#%d"' % item.iid)
@@ -243,14 +249,14 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
             dict(body="xyzzy"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(s.get_absolute_url())
-        self.assertTrue("xyzzy" in r.content)
+        self.assertContains(r, "xyzzy")
 
     def test_remove_user(self):
         u = UserProfileFactory()
         self.p.add_manager(u)
         r = self.c.get(
             self.p.get_absolute_url() + "remove_user/%s/" % u.username)
-        self.assertTrue(u.fullname in r.content)
+        self.assertContains(r, u.fullname)
         self.assertTrue(u in self.p.managers())
         self.c.post(
             self.p.get_absolute_url() + "remove_user/%s/" % u.username)
@@ -270,7 +276,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                              target_date="2020-01-01"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(self.p.get_absolute_url())
-        self.assertTrue("NEW TEST MILESTONE" in r.content)
+        self.assertContains(r, "NEW TEST MILESTONE")
         m = Milestone.objects.get(name="NEW TEST MILESTONE")
         self.assertEqual(m.description, "NEW DESCRIPTION")
 
@@ -316,7 +322,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                              target_date="2020-01-01"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(self.p.get_absolute_url())
-        self.assertTrue("Untitled milestone" in r.content)
+        self.assertContains(r, "Untitled milestone")
 
     def test_add_action_item_empty_request(self):
         r = self.c.post(self.p.get_absolute_url() + "add_action_item/",
@@ -459,7 +465,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
     def test_create_project_get(self):
         r = self.c.get(reverse('project_create'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('Create new project' in r.content)
+        self.assertContains(r, 'Create new project')
 
     def test_create_project_post(self):
         test_name = 'Test project'
@@ -506,7 +512,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                          'target_date': '2020-04-28',
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('This field is required.' in r.content)
+        self.assertContains(r, 'This field is required.')
 
         r = self.c.post(reverse('project_create'),
                         {'name': '      ',
@@ -515,7 +521,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                          'target_date': '2020-04-28',
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('This field is required.' in r.content)
+        self.assertContains(r, 'This field is required.')
 
     def test_create_project_post_requires_target_date(self):
         r = self.c.post(reverse('project_create'),
@@ -524,7 +530,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                          'pub_view': True,
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('This field is required.' in r.content)
+        self.assertContains(r, 'This field is required.')
 
     def test_create_project_post_requires_valid_target_date(self):
         r = self.c.post(reverse('project_create'),
@@ -534,7 +540,7 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
                          'target_date': '2309ur03j30',
                          'test_wiki_category': ''})
         self.assertEqual(r.status_code, 200)
-        self.assertTrue('Invalid target date' in r.content)
+        self.assertContains(r, 'Invalid target date')
 
     def test_create_project_post_private(self):
         self.c.post(reverse('project_create'),
@@ -714,8 +720,8 @@ class MyProjectViewTests(TestCase):
         p.add_personnel(self.u.userprofile)
         r = self.client.get(reverse('my_project_list'))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(p.name in r.content)
-        self.assertTrue(reverse('project_detail', args=(p.pid,)) in r.content)
+        self.assertContains(r, p.name)
+        self.assertContains(r, reverse('project_detail', args=(p.pid,)))
 
     def test_project_view_queryparams(self):
         p = ProjectFactory()
@@ -747,13 +753,13 @@ class MyProjectViewTests(TestCase):
         p = ProjectFactory()
         r = self.client.get(reverse('my_project_list'))
         self.assertEqual(r.status_code, 200)
-        self.assertFalse(p.name in r.content)
+        self.assertNotContains(r, p.name)
 
     def test_project_tag_list(self):
         p = ProjectFactory()
         r = self.client.get(reverse('project_tag_list', args=[p.pid]))
         self.assertEqual(r.status_code, 200)
-        self.assertTrue("Project Tags for" in r.content)
+        self.assertContains(r, "Project Tags for")
 
     def test_project_tag_detail(self):
         i = ItemFactory()
@@ -776,8 +782,8 @@ class TestMilestoneViews(TestCase):
         m = MilestoneFactory()
         r = self.c.get(m.project.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue(m.name in r.content)
-        self.assertTrue(m.get_absolute_url() in r.content)
+        self.assertContains(r, m.name)
+        self.assertContains(r, m.get_absolute_url())
 
     def test_milestone_index(self):
         r = self.c.get("/milestone/")
@@ -795,7 +801,7 @@ class TestMilestoneViews(TestCase):
                         dict())
         self.assertEqual(r.status_code, 302)
         r = self.c.get(p.get_absolute_url())
-        self.assertFalse(m.name in r.content)
+        self.assertNotContains(r, m.name)
 
 
 class TestMilestoneDetailView(LoggedInTestMixin, TestCase):
@@ -1015,7 +1021,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         self.assertTrue(r.context['assigned_to_current_user'])
         self.assertTrue(
             r.context['notifications_enabled_for_current_user'])
-        self.assertItemsEqual(r.context['notified_users'], [n.user])
+        self.assertEqual(r.context['notified_users'], [n.user])
 
     def test_item_view_notification_not_present(self):
         Flag.objects.create(name='notification_ui', everyone=True)
@@ -1499,7 +1505,7 @@ class TestForum(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get(n.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue("this is a comment" in r.content)
+        self.assertContains(r, "this is a comment")
 
     def test_node_reply_with_no_project(self):
         n = NodeFactory(replies=0)
@@ -1512,7 +1518,7 @@ class TestForum(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.c.get(n.get_absolute_url())
         self.assertEqual(r.status_code, 200)
-        self.assertTrue("this is a comment" in r.content)
+        self.assertContains(r, "this is a comment")
 
     def test_node_reply_empty_body(self):
         n = NodeFactory()
@@ -1525,19 +1531,19 @@ class TestForum(TestCase):
         n = NodeFactory()
         r = self.c.get(n.get_absolute_url() + "edit/")
         self.assertEqual(r.status_code, 200)
-        self.assertTrue("<form" in r.content)
+        self.assertContains(r, "<form")
         r = self.c.post(
             n.get_absolute_url() + "edit/",
             dict(subject='new subject', body='xyzzy'))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(n.get_absolute_url())
-        self.assertTrue("new subject" in r.content)
-        self.assertTrue("xyzzy" in r.content)
+        self.assertContains(r, "new subject")
+        self.assertContains(r, "xyzzy")
 
     def test_delete_node(self):
         n = NodeFactory()
         r = self.c.get(n.get_absolute_url() + "delete/")
-        self.assertTrue("<form" in r.content)
+        self.assertContains(r, "<form")
         r = self.c.post(
             n.get_absolute_url() + "delete/",
             params=dict())
@@ -1569,12 +1575,12 @@ class TestForumTagViews(TestCase):
                         dict(tags="tagone, tagtwo"))
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("tagone" in r.content)
+        self.assertContains(r, "tagone")
         r = self.c.get("/tag/")
-        self.assertTrue("tagone" in r.content)
+        self.assertContains(r, "tagone")
         r = self.c.get("/tag/tagone/")
-        self.assertTrue("tagone" in r.content)
-        self.assertTrue(str(i.nid) in r.content)
+        self.assertContains(r, "tagone")
+        self.assertContains(r, str(i.nid))
 
     def test_remove_tag(self):
         i = NodeFactory()
@@ -1583,8 +1589,8 @@ class TestForumTagViews(TestCase):
         r = self.c.get(i.get_absolute_url() + "remove_tag/tagtwo/")
         self.assertEqual(r.status_code, 302)
         r = self.c.get(i.get_absolute_url())
-        self.assertTrue("tagtwo" not in r.content)
-        self.assertTrue("tagone" in r.content)
+        self.assertNotContains(r, "tagtwo")
+        self.assertContains(r, "tagone")
 
 
 class TestFeeds(TestCase):
@@ -1600,12 +1606,16 @@ class TestFeeds(TestCase):
         s = StatusUpdateFactory()
         r = self.c.get("/feeds/status/")
         self.assertEquals(r.status_code, 200)
-        self.assertTrue("<author>{} ({})</author>".format(
-            s.author.userprofile.email,
-            s.author.userprofile.get_fullname()) in r.content)
-        self.assertTrue("<pubDate>{}</pubDate>".format(
-            s.added.strftime("%a, %d %b %Y %H:%M:%S %z")) in r.content)
-        self.assertTrue("<content:encoded>" in r.content)
+        self.assertContains(
+            r,
+            "<author>{} ({})</author>".format(
+                s.author.userprofile.email,
+                s.author.userprofile.get_fullname()))
+        self.assertContains(
+            r,
+            "<pubDate>{}</pubDate>".format(
+                s.added.strftime("%a, %d %b %Y %H:%M:%S %z")))
+        self.assertContains(r, "<content:encoded>")
 
     def test_project_feed(self):
         p = ProjectFactory()
@@ -1685,7 +1695,7 @@ class GroupTest(TestCase):
     def test_group_list(self):
         response = self.client.get(reverse('group_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(str(self.group) in response.content)
+        self.assertContains(response, str(self.group))
 
     def test_group_detail(self):
         inactive_user = UserProfileFactory(
@@ -1715,8 +1725,8 @@ class GroupTest(TestCase):
         self.assertEqual(
             response.context['eligible_users'].count(), 1)
 
-        self.assertTrue(str(self.group) in response.content)
-        self.assertTrue(self.group.username.username in response.content)
+        self.assertContains(response, str(self.group))
+        self.assertContains(response, self.group.username.username)
 
     def test_remove_user_from_group(self):
         grp_username = self.group.grp.username
@@ -1728,7 +1738,7 @@ class GroupTest(TestCase):
         r = self.client.get(
             reverse('group_detail', args=(grp_username,)))
         user_url = self.group.username.get_absolute_url()
-        self.assertFalse(user_url in r.content)
+        self.assertNotContains(r, user_url)
 
     def test_add_user_to_group(self):
         grp_username = self.group.grp.username
@@ -1739,13 +1749,13 @@ class GroupTest(TestCase):
         self.assertEqual(r.status_code, 302)
         r = self.client.get(
             reverse('group_detail', args=(grp_username,)))
-        self.assertTrue(u.get_absolute_url() in r.content)
+        self.assertContains(r, u.get_absolute_url())
 
     def test_create_group(self):
         r = self.client.post(reverse('group_create'), dict(group='foo'))
         self.assertEqual(r.status_code, 302)
         r = self.client.get(reverse('group_list'))
-        self.assertTrue('grp_foo' in r.content)
+        self.assertContains(r, 'grp_foo')
 
     def test_nonexistent_group(self):
         r = self.client.get(reverse('group_detail', args=('not_real',)))
@@ -1946,13 +1956,13 @@ class TestUserViews(LoggedInTestMixin, TestCase):
         u2 = UserProfileFactory(status='inactive')
         r = self.client.get(
             reverse('user_list') + "?status=active")
-        self.assertTrue(u1.username in r.content)
-        self.assertFalse(u2.username in r.content)
+        self.assertContains(r, u1.username)
+        self.assertNotContains(r, u2.username)
 
         r = self.client.get(
             reverse('user_list') + "?status=inactive")
-        self.assertFalse(u1.username in r.content)
-        self.assertTrue(u2.username in r.content)
+        self.assertNotContains(r, u1.username)
+        self.assertContains(r, u2.username)
 
 
 class TestActualTimeDeletion(TestCase):
@@ -2016,7 +2026,7 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
         self.assertEqual(email.subject, '[PMT Item] {}'.format(self.i.title))
 
         body = '{} has subscribed you to this PMT item:\n\t{}\n'.format(
-            unicode(self.u.userprofile),
+            smart_text(self.u.userprofile),
             'https://pmt.ctl.columbia.edu{}'.format(
                 self.i.get_absolute_url()))
         self.assertEqual(email.body, body)
@@ -2034,7 +2044,7 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
         self.assertContains(
             r,
             '<strong>{}</strong> has been subscribed to this item.'.format(
-                unicode(subscriber.userprofile)))
+                smart_text(subscriber.userprofile)))
         self.assertEqual(Notify.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 0)
 

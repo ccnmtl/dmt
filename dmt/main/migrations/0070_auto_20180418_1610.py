@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='category',
-            field=models.CharField(blank=True, choices=[(b'Admin', b'Admin'), (b'Curriculum RFP', b'Curriculum RFP'), (b'Funded', b'Funded'), (b'Hybrid RFP', b'Hybrid RFP'), (b'MOOC', b'MOOC'), (b'Research & Analysis', b'Research & Analysis'), (b'Small RFP', b'Small RFP'), (b'Strategic', b'Strategic'), (b'Support', b'Support')], max_length=32, null=True, verbose_name=b'Category'),
+            field=models.CharField(blank=True, choices=[('Admin', 'Admin'), ('Curriculum RFP', 'Curriculum RFP'), ('Funded', 'Funded'), ('Hybrid RFP', 'Hybrid RFP'), ('MOOC', 'MOOC'), ('Research & Analysis', 'Research & Analysis'), ('Small RFP', 'Small RFP'), ('Strategic', 'Strategic'), ('Support', 'Support')], max_length=32, null=True, verbose_name='Category'),
         ),
     ]

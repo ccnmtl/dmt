@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
             model_name='project',
             name='pub_view',
             field=models.BooleanField(
-                default=False, verbose_name=b'Reportable'),
+                default=False, verbose_name='Reportable'),
         ),
     ]

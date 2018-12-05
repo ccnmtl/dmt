@@ -17,11 +17,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='item',
             name='assigned_to',
-            field=models.ForeignKey(blank=True, db_column=b'assigned_to', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='assigned_items', to='main.UserProfile'),
+            field=models.ForeignKey(blank=True, db_column='assigned_to', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='assigned_items', to='main.UserProfile'),
         ),
         migrations.AlterField(
             model_name='item',
             name='owner',
-            field=models.ForeignKey(blank=True, db_column=b'owner', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='owned_items', to='main.UserProfile'),
+            field=models.ForeignKey(blank=True, db_column='owner', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='owned_items', to='main.UserProfile'),
         ),
     ]

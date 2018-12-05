@@ -17,10 +17,10 @@ class Migration(migrations.Migration):
             name='technology',
             field=models.CharField(
                 blank=True,
-                choices=[(b'Django', b'Django'),
-                         (b'Hugo', b'Hugo'),
-                         (b'Drupal 5', b'Drupal 5'),
-                         (b'Drupal 7', b'Drupal 7')],
+                choices=[('Django', 'Django'),
+                         ('Hugo', 'Hugo'),
+                         ('Drupal 5', 'Drupal 5'),
+                         ('Drupal 7', 'Drupal 7')],
                 max_length=255, null=True),
         ),
     ]
