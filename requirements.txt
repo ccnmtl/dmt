@@ -84,7 +84,7 @@ kombu==3.0.37 # pyup: <4.0.0
 librabbitmq==2.0.0
 celery==3.1.26.post2 # pyup: <4.0.0
 enum34==1.1.6; python_version < '3.4'
-billiard==3.5.0.4
+billiard==3.5.0.5
 parse-type==0.4.2
 parse==1.9.0
 wsgi_intercept==1.8.0
