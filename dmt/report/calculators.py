@@ -50,11 +50,26 @@ select
         sum(extract(epoch from actual_times.actual_time)) / 3600 as time_spent,
         items.target_date as task_due_date,
         projects.due_date as project_due_date,
-        caretakers.fullname as caretaker
+        caretakers.fullname as caretaker,
+        items.description as task_description,
+        string_agg(
+            distinct to_char(comments.add_date_time, 'MM/DD/YYYY') || '; ' ||
+            comments.username || '; ' || comments.comment_src,
+            '\\\\ ')
+            as comment_history
 from projects
 join milestones on (projects.pid = milestones.pid)
 join items on (milestones.mid = items.mid)
 left join actual_times on (items.iid = actual_times.iid)
+left join (
+            select distinct
+            comments.comment_src,
+            comments.add_date_time,
+            comments.username,
+            comments.item
+            from comments
+            order by comments.add_date_time asc
+) as comments on (items.iid = comments.item)
 left join users as "caretakers" on
             (caretakers.user_id = projects.caretaker_user_id)
 join users on (items.assigned_user = users.user_id)
