@@ -233,10 +233,12 @@ class TimeSpentByUser(LoggedInMixin, View):
         now = timezone.now()
         filename = 'time-spent-by-user-{}'.format(now.strftime('%Y-%m-%d'))
 
-        column_names = ['Project Name', 'Task Name', 'Task Status',
-                        'Assigned to', 'Project Status', 'Estimated Time',
-                        'Time Spent', 'Task Due Date', 'Project Due Date',
-                        'Caretaker']
+        column_names = [
+            'Project Name', 'Task Name', 'Task Status',
+            'Assigned to', 'Project Status', 'Estimated Time',
+            'Time Spent', 'Task Due Date', 'Project Due Date',
+            'Caretaker', 'Task Description', 'Comment History'
+        ]
 
         generator = ReportFileGenerator()
         return generator.generate(column_names, data, filename, 'csv')
