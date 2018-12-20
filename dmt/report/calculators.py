@@ -52,7 +52,7 @@ select
         projects.due_date as project_due_date,
         caretakers.fullname as caretaker,
         items.description as task_description,
-        string_agg(
+        '\\\\ ' || string_agg(
             distinct to_char(comments.add_date_time, 'MM/DD/YYYY') || '; ' ||
             comments.username || '; ' || comments.comment_src,
             '\\\\ ')
