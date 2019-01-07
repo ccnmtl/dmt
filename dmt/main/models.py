@@ -501,6 +501,7 @@ def clean_subject(s):
 PROJECT_STATUS_CHOICES = [
     "New", "Development", "Deployment", "Defunct",
     "Deferred", "Non-project", "Archived",
+    "MigratedToJira",
 ]
 
 
