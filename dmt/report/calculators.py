@@ -42,6 +42,7 @@ class TimeSpentByUserCalculator(object):
             cursor.execute('''
 select
         projects.name as project_name,
+        milestones.name as milestone_name,
         items.title as task_title,
         items.status as task_status,
         users.fullname as assigned_to,
