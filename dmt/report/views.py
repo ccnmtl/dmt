@@ -234,7 +234,7 @@ class TimeSpentByUser(LoggedInMixin, View):
         filename = 'time-spent-by-user-{}'.format(now.strftime('%Y-%m-%d'))
 
         column_names = [
-            'Project Name', 'Task Name', 'Task Status',
+            'Project Name', 'Milestone Name', 'Task Name', 'Task Status',
             'Assigned to', 'Project Status', 'Estimated Time',
             'Time Spent', 'Task Due Date', 'Project Due Date',
             'Caretaker', 'Task Description', 'Comment History'
