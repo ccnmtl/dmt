@@ -123,7 +123,7 @@ django-ga-context==0.1.0
 django-impersonate==1.4
 django-filter==1.1.0 # pyup: <2.0.0
 django-crispy-forms==1.7.2
-djangorestframework==3.9.0
+djangorestframework==3.9.1
 django-taggit==0.23.0
 django-templatetag-sugar==1.0
 django-classy-tags==0.8.0
