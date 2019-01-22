@@ -77,7 +77,7 @@ ldap3==2.5.2
 anyjson==0.3.3
 
 vine==1.2.0
-amqp==2.3.2
+amqp==2.4.0
 
 amqplib==1.0.2
 kombu==3.0.37 # pyup: <4.0.0
