@@ -23,7 +23,7 @@ fuzzywuzzy==0.17.0
 sure==1.4.11
 traitlets==4.3.2
 ipython_genutils==0.2.0
-decorator==4.3.0
+decorator==4.3.1
 ptyprocess==0.6.0
 pexpect==4.6.0
 scandir==1.9.0
