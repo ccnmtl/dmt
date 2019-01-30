@@ -7,7 +7,7 @@ versiontools==1.9.1
 statsd==3.3.0
 pep8==1.7.1
 pyflakes==2.1.0
-pycodestyle==2.4.0
+pycodestyle==2.5.0
 flake8==3.7.1
 
 mccabe==0.6.1
@@ -33,7 +33,7 @@ simplegeneric==0.8.1
 path.py==11.5.0
 backports.shutil_get_terminal_size==1.0.0
 wcwidth==0.1.7
-prompt_toolkit==2.0.7
+prompt_toolkit==2.0.8
 pygments==2.3.1
 ipython==5.8.0 # pyup: <6.0.0
 ipdb==0.11
