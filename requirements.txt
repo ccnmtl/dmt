@@ -148,7 +148,7 @@ django-markwhat==1.6.1
 django-s3sign==0.1.4
 django-smtp-ssl==1.0
 
-ccnmtlsettings==1.4.0
+ccnmtlsettings==1.5.0
 
 pbr==5.1.2
 pyyaml==4.2b4
