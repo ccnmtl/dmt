@@ -170,13 +170,6 @@ def close_passed_milestones():
         milestone.update_milestone()
 
 
-@periodic_task(run_every=crontab(hour=12, minute=0, day_of_week='fri'))
-def weekly_report_emails():
-    from .models import UserProfile
-    for user in UserProfile.objects.filter(status='active', grp=False):
-        user_weekly_report_email.delay(username=user.username)
-
-
 @task
 def user_weekly_report_email(username):
     from .models import UserProfile
