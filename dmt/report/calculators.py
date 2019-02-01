@@ -50,6 +50,7 @@ select
         extract(epoch from items.estimated_time) / 3600 as estimated_time,
         sum(extract(epoch from actual_times.actual_time)) / 3600 as time_spent,
         items.target_date as task_due_date,
+        items.last_mod as task_modified_date,
         projects.due_date as project_due_date,
         caretakers.fullname as caretaker,
         items.description as task_description,

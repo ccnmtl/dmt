@@ -236,7 +236,8 @@ class TimeSpentByUser(LoggedInMixin, View):
         column_names = [
             'Project Name', 'Milestone Name', 'Task Name', 'Task Status',
             'Assigned to', 'Project Status', 'Estimated Time',
-            'Time Spent', 'Task Due Date', 'Project Due Date',
+            'Time Spent', 'Task Due Date', 'Task Modified Date',
+            'Project Due Date',
             'Caretaker', 'Task Description', 'Comment History'
         ]
 
