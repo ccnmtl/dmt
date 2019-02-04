@@ -9,7 +9,7 @@ pep8==1.7.1
 pyflakes==2.1.0
 pycodestyle==2.5.0
 entrypoints==0.3  # for flake8
-flake8==3.7.4
+flake8==3.7.5
 
 mccabe==0.6.1
 certifi==2018.11.29
