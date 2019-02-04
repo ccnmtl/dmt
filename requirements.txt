@@ -131,7 +131,7 @@ django-classy-tags==0.8.0
 requirements/src/django_taggit_templatetags2-1.4.1.ccnmtl-py2.py3-none-any.whl
 django-celery==3.2.2
 django-bootstrap3==11.0.0
-django-emoji==2.2.0
+django-emoji==2.2.2
 django-braces==1.13.0
 oauthlib==3.0.1
 django-oauth-toolkit==1.1.3  # pyup: <1.2.0
