@@ -102,7 +102,7 @@ shortuuid==0.5.0
 contextlib2==0.5.5
 tblib==1.3.2
 
-pyzmq==17.1.2
+pyzmq==17.1.3
 websocket-client==0.47.0 # pyup: <0.48.0
 
 djangowind==1.2.1
