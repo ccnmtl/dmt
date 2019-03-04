@@ -107,7 +107,7 @@ websocket-client==0.47.0 # pyup: <0.48.0
 
 djangowind==1.2.1
 django-staticmedia==0.2.2
-django-appconf==1.0.2
+django-appconf==1.0.3
 rcssmin==1.0.6  # django-compressor
 rjsmin==1.0.12  # django-compressor
 django-compressor==2.2
