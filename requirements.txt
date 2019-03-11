@@ -12,7 +12,7 @@ entrypoints==0.3  # for flake8
 flake8==3.7.7
 
 mccabe==0.6.1
-certifi==2018.11.29
+certifi==2019.3.9
 
 pyparsing==2.3.1
 backports.ssl_match_hostname==3.7.0.1
