@@ -72,7 +72,7 @@ pytz==2018.9
 simpleduration==0.1.0
 ipaddress==1.0.22
 text-unidecode==1.2  # for faker
-Faker==1.0.2
+Faker==1.0.4
 factory_boy==2.11.1
 ldap3==2.5.2
 anyjson==0.3.3
