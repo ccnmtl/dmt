@@ -2,7 +2,7 @@ Django==1.11.20 # pyup: <2.0
 configparser==3.7.4
 future==0.17.1
 commonmark==0.8.1
-psycopg2==2.8
+psycopg2==2.8.1
 versiontools==1.9.1
 statsd==3.3.0
 pep8==1.7.1
