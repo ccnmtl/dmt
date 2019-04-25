@@ -1,17 +1,5 @@
 db:
   image: postgres
-rabbitmq:
-  image: rabbitmq
-broker:
-  image: thraxil/windsock-broker
-windsock:
-  image: thraxil/windsock
-  ports:
-    - "5050:5050"
-  links:
-    - broker
-  volumes:
-    - ./windsock-docker.json:/go/src/github.com/thraxil/windsock/windsock-docker.json    
 web:
   image: ccnmtl/dmt
   command: manage runserver 0.0.0.0:8000
@@ -23,28 +11,3 @@ web:
     - "8000:8000"
   links:
     - db
-    - rabbitmq
-    - broker
-celery:
-  image: ccnmtl/dmt
-  command: worker
-  environment:
-    - SETTINGS=settings_compose
-    - C_FORCE_ROOT=true
-  volumes:
-    - .:/var/www/dmt/dmt
-  links:
-    - db
-    - rabbitmq
-
-beat:
-  image: ccnmtl/dmt
-  command: beat
-  environment:
-    - SETTINGS=settings_compose    
-    - C_FORCE_ROOT=true
-  volumes:
-    - .:/var/www/dmt/dmt
-  links:
-    - db
-    - rabbitmq

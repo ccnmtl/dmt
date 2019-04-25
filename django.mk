@@ -63,7 +63,6 @@ clean:
 	rm -rf $(VE)
 	rm -rf media/CACHE
 	rm -rf reports
-	rm -f celerybeat-schedule
 	rm -f .coverage
 	rm -rf node_modules
 	find . -name '*.pyc' -exec rm {} \;

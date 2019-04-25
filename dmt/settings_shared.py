@@ -21,8 +21,6 @@ locals().update(common(project=project, base=base))
 USE_TZ = True
 
 if 'test' in sys.argv or 'jenkins' in sys.argv:
-    CELERY_ALWAYS_EAGER = True
-
     WHITELIST_ORIGIN_URLS = (
         '.columbia.edu',
     )
@@ -60,9 +58,6 @@ INSTALLED_APPS += [  # noqa
 DEBUG_TOOLBAR_CONFIG = {
     'INSERT_BEFORE': '<span class="djdt-insert-here">',
 }
-
-BROKER_URL = "amqp://localhost:5672//dmt"
-CELERYD_CONCURRENCY = 2
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (

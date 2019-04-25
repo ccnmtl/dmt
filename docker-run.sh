@@ -24,14 +24,6 @@ if [ "$1" == "shell" ]; then
 		exec /ve/bin/python manage.py shell
 fi
 
-if [ "$1" == "worker" ]; then
-		exec /ve/bin/python manage.py celery worker
-fi
-
-if [ "$1" == "beat" ]; then
-		exec /ve/bin/python manage.py celery beat
-fi
-
 # run arbitrary commands
 if [ "$1" == "manage" ]; then
 		shift
