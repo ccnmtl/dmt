@@ -15,7 +15,7 @@
     "karma-html2js-preprocessor": "~1.1.0",
     "karma-junit-reporter": "~1.2.0",
     "karma-phantomjs-launcher": "~1.0.0",
-    "karma-qunit": "~1.2.1",
+    "karma-qunit": "~3.1.2",
     "karma-requirejs": "~1.1.0",
     "karma-sinon": "~1.0.4",
     "phantomjs-prebuilt": "~2.1.4",
