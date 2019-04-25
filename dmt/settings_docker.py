@@ -3,7 +3,6 @@ from settings_shared import *
 
 # required settings:
 SECRET_KEY = os.environ['SECRET_KEY']
-BROKER_URL = os.environ['BROKER_URL']
 
 # optional/defaulted settings
 DB_NAME = os.environ.get('DB_NAME', app)

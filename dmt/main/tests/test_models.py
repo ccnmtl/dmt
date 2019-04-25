@@ -14,7 +14,6 @@ from dmt.main.tests.factories import (
 )
 from datetime import datetime, timedelta
 from simpleduration import Duration
-from dmt.main.utils import simpleduration_string
 from dmt.main.models import (
     ActualTime, Events, InGroup, HistoryItem, Milestone, Notify, ProjectUser,
     truncate_string, HistoryEvent, Reminder, Project, WorksOn,
@@ -174,27 +173,6 @@ class UserModelTest(TestCase):
              '(PMT Weekly reports end on Sundays at 23:59.)')
             .format(self.u.username)
         )
-
-    def test_send_weekly_report(self):
-        self.u.send_weekly_report()
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, "PMT Weekly Report")
-
-    def test_send_reminder(self):
-        r = ReminderFactory(user=self.u.user)
-        self.u.send_reminder(r)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(
-            mail.outbox[0].subject,
-            '[PMT Reminder] {}'.format(r.item.title))
-
-        expected_body = (
-            'Reminder: This PMT item is due in {}:\n'.format(
-                simpleduration_string(r.reminder_time)) +
-            'https://pmt.ctl.columbia.edu{}'.format(
-                r.item.get_absolute_url()))
-
-        self.assertEqual(mail.outbox[0].body, expected_body)
 
     def test_timeline_empty(self):
         t = self.u.timeline()
