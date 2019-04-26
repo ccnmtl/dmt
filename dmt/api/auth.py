@@ -2,7 +2,10 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from rest_framework import authentication
 from rest_framework import permissions
-from urlparse import urlparse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 
 class SafeOriginAuthentication(authentication.BaseAuthentication):

@@ -12,7 +12,7 @@ def backfill_comment_authors(apps, schema_editor):
 
     # first, there are some old stray test comments to clear out:
     Comment.objects.filter(username='testuser2').delete()
-    Comment.objects.filter(username='testuserbob').delete()
+    Comment.objects.filter(username='testuserbo').delete()
 
     for c in Comment.objects.filter(author=None):
         print(c.cid)
@@ -23,7 +23,7 @@ def backfill_comment_authors(apps, schema_editor):
                 u = User.objects.get(username=c.username).userprofile
             c.author = u.user
             c.save()
-        except Exception, e:
+        except Exception as e:
             print(e)
             raise
 

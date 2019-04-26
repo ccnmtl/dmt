@@ -41,13 +41,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='item',
             name='assigned_user',
-            field=models.ForeignKey(related_name='assigned_to', db_column=b'assigned_user', to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='assigned_to', db_column='assigned_user', to=settings.AUTH_USER_MODEL, null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='item',
             name='owner_user',
-            field=models.ForeignKey(related_name='owned_items', db_column=b'owner_user', to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='owned_items', db_column='owner_user', to=settings.AUTH_USER_MODEL, null=True),
             preserve_default=True,
         ),
         migrations.AddField(

@@ -17,8 +17,8 @@ class Migration(migrations.Migration):
             name='pub_view',
             field=models.BooleanField(
                 default=False,
-                help_text=b'This checkbox determines whether ' +
-                b'this project is visible in reports.',
-                verbose_name=b'Public'),
+                help_text='This checkbox determines whether ' +
+                'this project is visible in reports.',
+                verbose_name='Public'),
         ),
     ]

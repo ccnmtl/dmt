@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='status',
-            field=models.CharField(blank=True, choices=[(b'New', b'New'), (b'Development', b'Development'), (b'Deployment', b'Deployment'), (b'Defunct', b'Defunct'), (b'Deferred', b'Deferred'), (b'Non-project', b'Non-project'), (b'Archived', b'Archived')], default=b'New', max_length=16),
+            field=models.CharField(blank=True, choices=[('New', 'New'), ('Development', 'Development'), ('Deployment', 'Deployment'), ('Defunct', 'Defunct'), ('Deferred', 'Deferred'), ('Non-project', 'Non-project'), ('Archived', 'Archived')], default='New', max_length=16),
         ),
     ]

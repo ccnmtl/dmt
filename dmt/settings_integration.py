@@ -1,5 +1,5 @@
 # flake8: noqa
-from settings_shared import *
+from dmt.settings_shared import *
 
 DATABASES = {
     'default': {

@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='due_date',
-            field=models.DateField(blank=True, help_text=b'This is the date that the project is completed and deployed.', null=True, verbose_name=b'Project Due Date'),
+            field=models.DateField(blank=True, help_text='This is the date that the project is completed and deployed.', null=True, verbose_name='Project Due Date'),
         ),
         migrations.AlterField(
             model_name='project',
             name='start_date',
-            field=models.DateField(blank=True, help_text=b'This is the date that work starts.', null=True, verbose_name=b'Project Start Date'),
+            field=models.DateField(blank=True, help_text='This is the date that work starts.', null=True, verbose_name='Project Start Date'),
         ),
     ]

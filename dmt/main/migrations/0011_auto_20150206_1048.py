@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='item',
             name='status',
-            field=models.CharField(db_index=True, max_length=16, choices=[(b'OPEN', b'OPEN'), (b'INPROGRESS', b'IN PROGRESS'), (b'RESOLVED', b'RESOLVED'), (b'VERIFIED', b'VERIFIED')]),
+            field=models.CharField(db_index=True, max_length=16, choices=[('OPEN', 'OPEN'), ('INPROGRESS', 'IN PROGRESS'), ('RESOLVED', 'RESOLVED'), ('VERIFIED', 'VERIFIED')]),
             preserve_default=True,
         ),
     ]
