@@ -107,7 +107,7 @@ django-debug-toolbar==1.11
 django-waffle==0.14.0 # pyup: < 0.15.0 
 django-jenkins==0.110.0
 django-smoketest==1.1.0
-django-extensions==2.1.6
+django-extensions==2.1.7
 # typing needed for django-extensions
 typing==3.6.6; python_version < '3.4'
 django-stagingcontext==0.1.0
