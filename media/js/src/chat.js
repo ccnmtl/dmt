@@ -152,7 +152,7 @@ require([
     var downgradeGone = function(now) {
         // any that haven't been seen in 5 * interval
         // get downgraded to 'gone'
-        for (var username in usersPresent)
+        for (var username in usersPresent) {
             // eslint-disable-next-line no-prototype-builtins
             if (usersPresent.hasOwnProperty(username)) {
                 var e = usersPresent[username];
