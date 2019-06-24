@@ -139,6 +139,7 @@ require([
         // if we haven't seen a user in 2 * heartbeatInterval
         // downgrade to 'recent'
         for (var username in usersPresent) {
+            // eslint-disable-next-line no-prototype-builtins
             if (usersPresent.hasOwnProperty(username)) {
                 var e = usersPresent[username];
                 if ((now - e.lastSeen) > (2 * heartbeatInterval)) {
@@ -151,7 +152,8 @@ require([
     var downgradeGone = function(now) {
         // any that haven't been seen in 5 * interval
         // get downgraded to 'gone'
-        for (var username in usersPresent) {
+        for (var username in usersPresent)
+            // eslint-disable-next-line no-prototype-builtins
             if (usersPresent.hasOwnProperty(username)) {
                 var e = usersPresent[username];
                 if ((now - e.lastSeen) > (5 * heartbeatInterval)) {
@@ -166,6 +168,7 @@ require([
         // in 10 * heartbeatInterval
         var toRemove = [];
         for (var username in usersPresent) {
+            // eslint-disable-next-line no-prototype-builtins
             if (usersPresent.hasOwnProperty(username)) {
                 var e = usersPresent[username];
                 if ((now - e.lastSeen) > (10 * heartbeatInterval)) {
@@ -194,6 +197,7 @@ require([
         $presenceBox.append($inner);
 
         for (var username in usersPresent) {
+            // eslint-disable-next-line no-prototype-builtins
             if (usersPresent.hasOwnProperty(username)) {
                 var e = usersPresent[username];
                 var entry = $('<div/>');
