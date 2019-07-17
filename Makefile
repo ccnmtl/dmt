@@ -6,7 +6,7 @@ PY_DIRS=$(APP)
 MAX_COMPLEXITY=7
 FLAKE8_IGNORE=W605
 
-all: jstest js jenkins
+all: js jenkins
 
 include *.mk
 
@@ -22,7 +22,7 @@ compose-migrate:
 media/main-built.js: $(JS_SENTINAL) build.js media/js/src media/js/libs
 	$(REQUIREJS) -o build.js
 
-travis: $(JS_SENTINAL) parallel-tests jstest integration jenkins
+travis: $(JS_SENTINAL) parallel-tests integration jenkins
 
 js: media/main-built.js
 
