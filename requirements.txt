@@ -88,7 +88,7 @@ futures==3.2.0; python_version < '3'
 s3transfer==0.2.1
 jmespath==0.9.4
 botocore==1.12.192
-boto3==1.9.180
+boto3==1.9.193
 unicodecsv==0.14.1
 XlsxWriter==1.1.8
 splinter==0.11.0
