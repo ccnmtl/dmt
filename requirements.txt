@@ -87,7 +87,7 @@ requirements/src/whitelistaffilmapper-0.1.1-py2.py3-none-any.whl
 futures==3.2.0; python_version < '3'
 s3transfer==0.2.1
 jmespath==0.9.4
-botocore==1.12.192
+botocore==1.12.193
 boto3==1.9.193
 unicodecsv==0.14.1
 XlsxWriter==1.1.8
@@ -111,7 +111,7 @@ django-debug-toolbar==1.11 # pyup: <2.0
 django-waffle==0.14.0 # pyup: < 0.15.0 
 django-jenkins==0.110.0
 django-smoketest==1.1.0
-django-extensions==2.1.9
+django-extensions==2.2.1
 # typing needed for django-extensions
 typing==3.7.4; python_version < '3.4'
 django-stagingcontext==0.1.0
@@ -124,10 +124,10 @@ django-taggit==0.24.0 # pyup: < 1.0.0
 django-templatetag-sugar==1.0
 django-classy-tags==0.9.0
 requirements/src/django_taggit_templatetags2-1.4.1.ccnmtl-py2.py3-none-any.whl
-django-bootstrap3==11.0.0
+django-bootstrap3==11.1.0
 django-emoji==2.2.2
 django-braces==1.13.0
-oauthlib==3.0.1
+oauthlib==3.0.2
 django-oauth-toolkit==1.1.3  # pyup: <1.2.0
 django-extra-views==0.12.0
 bleach==2.1.4 # pyup: <3.0.0
@@ -144,7 +144,7 @@ django-smtp-ssl==1.0
 
 ccnmtlsettings==1.5.0
 
-pbr==5.3.1
+pbr==5.4.1
 pyyaml==5.1.1
 stevedore>=1.20.0 # Apache-2.0
 bandit==1.6.2
