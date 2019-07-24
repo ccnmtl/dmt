@@ -87,9 +87,9 @@ requirements/src/whitelistaffilmapper-0.1.1-py2.py3-none-any.whl
 futures==3.2.0; python_version < '3'
 s3transfer==0.2.1
 jmespath==0.9.4
-botocore==1.12.193
 
-boto3==1.9.194
+botocore>=1.12.194,<1.13.0
+boto3>=1.9.194,<1.10.0
 
 unicodecsv==0.14.1
 XlsxWriter==1.1.8
