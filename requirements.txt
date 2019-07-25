@@ -14,7 +14,7 @@ flake8==3.7.7
 mccabe==0.6.1
 certifi==2019.6.16
 
-pyparsing==2.4.0
+pyparsing==2.4.1.1
 backports.ssl_match_hostname==3.7.0.1
 tornado==4.5.3 # pyup: <5.0
 cssselect==1.0.3
