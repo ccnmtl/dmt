@@ -18,7 +18,10 @@ pyparsing==2.4.2
 backports.ssl_match_hostname==3.7.0.1
 tornado==4.5.3 # pyup: <5.0
 cssselect==1.0.3
-lxml==4.4.0
+
+lxml==4.3.4  # pyup: <4.4.0
+#  for python 3.4
+
 fuzzywuzzy==0.17.0
 sure==1.4.11
 traitlets==4.3.2
@@ -34,7 +37,10 @@ path.py==11.5.2 # pyup: <12
 backports.shutil_get_terminal_size==1.0.0
 wcwidth==0.1.7
 prompt_toolkit==2.0.9
-pygments==2.4.2
+
+pygments==2.3.1  # pyup: <2.4.0
+# for py3.4
+
 ipython==5.8.0 # pyup: <6.0.0
 ipdb==0.12.2
 isodate==0.6.0
@@ -52,8 +58,10 @@ urllib3==1.24.3  # pyup: <1.25
 cffi==1.12.3
 asn1crypto==0.24.0
 
-requests==2.22.0
 packaging==19.1
+requests==2.21.0 # pyup: <2.22.0
+# pinning requests here for python 3.4 support
+
 appdirs==1.4.3
 logilab-common==1.4.3
 logilab-astng==0.24.3
@@ -115,7 +123,7 @@ django-jenkins==0.110.0
 django-smoketest==1.1.0
 django-extensions==2.2.1
 # typing needed for django-extensions
-typing==3.7.4; python_version < '3.4'
+typing==3.7.4; python_version < '3.5'
 django-stagingcontext==0.1.0
 django-ga-context==0.1.0
 django-impersonate==1.4.1
