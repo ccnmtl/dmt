@@ -105,7 +105,7 @@ djangowind==1.2.1
 django-staticmedia==0.2.2
 django-appconf==1.0.3
 rcssmin==1.0.6  # django-compressor
-rjsmin==1.0.12  # django-compressor
+rjsmin==1.1.0  # django-compressor
 django-compressor==2.3
 django-statsd-mozilla==0.4.0
 raven==6.10.0
