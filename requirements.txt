@@ -17,7 +17,7 @@ certifi==2019.6.16
 pyparsing==2.4.2
 backports.ssl_match_hostname==3.7.0.1
 tornado==4.5.3 # pyup: <5.0
-cssselect==1.0.3
+cssselect==1.1.0
 lxml==4.4.0
 fuzzywuzzy==0.17.0
 sure==1.4.11
