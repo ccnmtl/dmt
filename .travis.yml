@@ -5,6 +5,8 @@ addons:
 python:
   - "2.7"
   - "3.6"
+cache:
+  npm: false
 before_script:
   - psql -c 'create database ci_test;' -U postgres
   - npm install -g npm@latest 
