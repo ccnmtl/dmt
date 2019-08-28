@@ -151,6 +151,6 @@ pyyaml==5.1.2
 stevedore>=1.20.0 # Apache-2.0
 bandit==1.6.2
 
-numpy==1.16.4 # pyup: <1.17
+numpy==1.16.5 # pyup: <1.17
 entrypoints==0.3
 functools32==3.2.3-2; python_version < '3.0'
