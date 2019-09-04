@@ -146,7 +146,7 @@ django-smtp-ssl==1.0
 
 ccnmtlsettings==1.5.0
 
-pbr==5.4.2
+pbr==5.4.3
 pyyaml==5.1.2
 stevedore>=1.20.0 # Apache-2.0
 bandit==1.6.2
