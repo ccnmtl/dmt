@@ -101,7 +101,7 @@ tblib==1.4.0
 pyzmq==18.1.0
 websocket-client==0.47.0 # pyup: <0.48.0
 
-djangowind==1.2.1
+djangowind==1.2.2
 django-staticmedia==0.2.2
 django-appconf==1.0.3
 rcssmin==1.0.6  # django-compressor
