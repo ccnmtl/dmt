@@ -1,4 +1,4 @@
-Django==1.11.24 # pyup: <2.0
+Django==1.11.25 # pyup: <2.0
 configparser==4.0.2
 future==0.17.1
 commonmark==0.9.0
