@@ -33,7 +33,7 @@ simplegeneric==0.8.1
 path.py==11.5.2 # pyup: <12
 backports.shutil_get_terminal_size==1.0.0
 wcwidth==0.1.7
-prompt_toolkit==2.0.9
+prompt_toolkit==2.0.10
 pygments==2.4.2
 ipython==5.8.0 # pyup: <6.0.0
 ipdb==0.12.2
