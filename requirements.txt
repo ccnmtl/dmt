@@ -1,6 +1,6 @@
 Django==1.11.25 # pyup: <2.0
 configparser==4.0.2
-future==0.17.1
+future==0.18.0
 commonmark==0.9.0
 psycopg2==2.8.3
 versiontools==1.9.1
