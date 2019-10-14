@@ -50,7 +50,7 @@ cryptography==2.7
 idna==2.8
 urllib3==1.24.3  # pyup: <1.25
 cffi==1.12.3
-asn1crypto==1.0.0
+asn1crypto==1.1.0
 
 requests==2.22.0
 packaging==19.2
