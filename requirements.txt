@@ -49,7 +49,7 @@ pyOpenSSL==19.0.0
 cryptography==2.8
 idna==2.8
 urllib3==1.24.3  # pyup: <1.25
-cffi==1.13.1
+cffi==1.13.2
 asn1crypto==1.2.0
 
 requests==2.22.0
