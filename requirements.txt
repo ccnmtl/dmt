@@ -136,7 +136,7 @@ bleach==2.1.4 # pyup: <3.0.0
 webencodings==0.5.1
 html5lib==1.0.1
 freezegun==0.3.12
-gunicorn==19.9.0  # pyup: <20.0.0
+gunicorn==19.10.0  # pyup: <20.0.0
 django-storages==1.8
 django-cacheds3storage==0.2.1
 django-markwhat==1.6.2
