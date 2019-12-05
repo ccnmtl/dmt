@@ -36,7 +36,7 @@ wcwidth==0.1.7
 prompt_toolkit==2.0.10 # pyup: <3.0.0
 pygments==2.5.2
 ipython==5.8.0 # pyup: <6.0.0
-ipdb==0.12.2
+ipdb==0.12.3
 isodate==0.6.0
 SPARQLWrapper==1.8.4
 coverage==4.5.4
@@ -55,7 +55,7 @@ asn1crypto==1.2.0
 requests==2.22.0
 packaging==19.2
 appdirs==1.4.3
-logilab-common==1.5.1
+logilab-common==1.4.4 # pyup: < 1.5
 logilab-astng==0.24.3
 lazy-object-proxy==1.4.3
 wrapt==1.11.2
@@ -147,7 +147,7 @@ django-smtp-ssl==1.0
 ccnmtlsettings==1.7.0
 
 pbr==5.4.4
-pyyaml==5.1.2
+pyyaml==5.2
 stevedore>=1.20.0 # Apache-2.0
 bandit==1.6.2
 
