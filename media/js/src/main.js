@@ -75,8 +75,6 @@ require([
     'forms/project_action_item_modals',
     'item'
 ], function(domReady, $, _, Cookies) {
-    var csrftoken = Cookies.get('csrftoken');
-
     // The following is from
     // https://docs.djangoproject.com/en/1.9/ref/csrf/
     function csrfSafeMethod(method) {
@@ -86,7 +84,8 @@ require([
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                var token = $('meta[name="csrf-token"]').attr('content');
+                xhr.setRequestHeader('X-CSRFToken', token);
             }
         }
     });
