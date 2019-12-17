@@ -3,7 +3,6 @@ dist: xenial
 addons:
   postgresql: "9.6"
 python:
-  - "2.7"
   - "3.6"
 before_script:
   - psql -c 'create database ci_test;' -U postgres
