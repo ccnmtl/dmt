@@ -15,7 +15,6 @@ mccabe==0.6.1
 certifi==2019.11.28
 
 pyparsing==2.4.5
-backports.ssl_match_hostname==3.7.0.1
 tornado==4.5.3 # pyup: <5.0
 cssselect==1.1.0
 lxml==4.4.2
@@ -31,7 +30,6 @@ pathlib2==2.3.5
 pickleshare==0.7.5
 simplegeneric==0.8.1
 path.py==11.5.2 # pyup: <12
-backports.shutil_get_terminal_size==1.0.0
 wcwidth==0.1.7
 prompt_toolkit==2.0.10 # pyup: <3.0.0
 pygments==2.5.2
@@ -41,11 +39,9 @@ isodate==0.6.0
 SPARQLWrapper==1.8.4
 coverage==4.5.4
 pyasn1==0.4.8
-ndg-httpsclient==0.5.1
 chardet==3.0.4
 
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
-pyOpenSSL==19.1.0
 cryptography==2.8
 idna==2.8
 urllib3==1.24.3  # pyup: <1.25
@@ -75,7 +71,6 @@ factory_boy==2.12.0
 ldap3==2.6.1
 anyjson==0.3.3
 
-enum34==1.1.6; python_version < '3.4'
 parse-type==0.4.2
 parse==1.12.1
 wsgi_intercept==1.9.0
@@ -84,7 +79,6 @@ recordtype==1.3
 urlparse2==1.1.1
 sqlparse==0.3.0
 requirements/src/whitelistaffilmapper-0.1.1-py2.py3-none-any.whl
-futures==3.2.0; python_version < '3'
 s3transfer==0.2.1
 jmespath==0.9.4
 
@@ -115,7 +109,6 @@ django-jenkins==0.110.0
 django-smoketest==1.1.0
 django-extensions==2.2.5
 # typing needed for django-extensions
-typing==3.7.4.1; python_version < '3.4'
 django-stagingcontext==0.1.0
 django-ga-context==0.1.0
 django-impersonate==1.4.1
@@ -153,4 +146,3 @@ bandit==1.6.2
 
 numpy==1.16.5 # pyup: <1.17
 entrypoints==0.3
-functools32==3.2.3-2; python_version < '3.0'
