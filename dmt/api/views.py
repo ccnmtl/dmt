@@ -244,7 +244,7 @@ class NotifyView(APIView):
     permission_classes = ()
 
     def delete(self, request, pk, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             item = get_object_or_404(Item, iid=pk)
             Notify.objects.get(user=request.user, item=item).delete()
             return Response(status=204)
@@ -252,7 +252,7 @@ class NotifyView(APIView):
             return Response(status=403)
 
     def get(self, request, pk):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             user = request.user.userprofile
             pmt_username = user.username
             get_object_or_404(Notify,
@@ -264,7 +264,7 @@ class NotifyView(APIView):
             return Response(status=404)
 
     def post(self, request, pk):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return Response(status=403)
 
         item = get_object_or_404(Item, iid=pk)
@@ -273,7 +273,7 @@ class NotifyView(APIView):
         return Response(status=201)
 
     def put(self, request, pk):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return Response(status=403)
 
         item = get_object_or_404(Item, iid=pk)

@@ -1,23 +1,20 @@
+from datetime import datetime, timedelta
 import json
 
-from datetime import datetime, timedelta
-
-from django.core import mail
-from django.core.urlresolvers import reverse
-from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core import mail
+from django.test import TestCase
+from django.urls.base import reverse
 from django.utils.encoding import smart_text
-
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from dmt.api.serializers import ItemSerializer
 from dmt.main.models import ActualTime, Item, Notify
 from dmt.main.tests.factories import (
     ClientFactory, MilestoneFactory, ProjectFactory, UserProfileFactory
 )
 from dmt.main.tests.factories import ItemFactory, NotifyFactory
-
-from dmt.api.serializers import ItemSerializer
 
 
 class AddTrackerViewTest(TestCase):

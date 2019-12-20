@@ -21,8 +21,8 @@ class Migration(migrations.Migration):
                 ('reminder_time', models.DurationField(help_text='Enter time and unit. For example: <code>1d</code> to be reminded one day before the target date.')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('item', models.ForeignKey(to='main.Item')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('item', models.ForeignKey(to='main.Item', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.AlterUniqueTogether(

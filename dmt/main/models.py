@@ -1,31 +1,33 @@
 from __future__ import unicode_literals
 
-import pytz
+from datetime import datetime, timedelta
+import re
+import textwrap
 import uuid
+
+from dateutil import parser
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.db import connection, models
 from django.db.models import Max, Q, Sum
 from django.db.models.signals import post_save
-from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
+from django.urls.base import reverse
 from django.utils import timezone
 from django.utils.encoding import (
     python_2_unicode_compatible, force_text
 )
-from datetime import datetime, timedelta
-from dateutil import parser
-from taggit.managers import TaggableManager
 from django_statsd.clients import statsd
+import pytz
 from simpleduration import Duration, InvalidDuration
-from .utils import new_duration
-from .timeline import (
+from taggit.managers import TaggableManager
+
+from dmt.main.timeline import (
     TimeLineEvent, TimeLineComment,
     TimeLinePost, TimeLineActualTime, TimeLineStatus,
     TimeLineMilestone)
-import re
-import textwrap
+from dmt.main.utils import new_duration
 
 
 @python_2_unicode_compatible
@@ -45,11 +47,12 @@ class UserProfile(models.Model):
     campus = models.TextField(blank=True)
     building = models.TextField(blank=True)
     room = models.TextField(blank=True)
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     primary_group = models.ForeignKey('UserProfile',
                                       blank=True,
                                       null=True,
-                                      limit_choices_to={'grp': True})
+                                      limit_choices_to={'grp': True},
+                                      on_delete=models.CASCADE)
 
     class Meta:
         db_table = u'users'
@@ -520,9 +523,11 @@ class Project(models.Model):
     name = models.CharField("Project name", max_length=255)
     projnum = models.IntegerField("Project number", null=True, blank=True)
     pub_view = models.BooleanField("Reportable", default=False)
-    caretaker_user = models.ForeignKey(User, null=True)
-    project_manager_user = models.ForeignKey(User, null=True,
-                                             related_name='project_manager')
+    caretaker_user = models.ForeignKey(
+        User, null=True, on_delete=models.CASCADE)
+    project_manager_user = models.ForeignKey(
+        User, null=True, related_name='project_manager',
+        on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     url = models.CharField("Project URL", max_length=255, blank=True)
     info_url = models.CharField("Information URL", max_length=255, blank=True)
@@ -1079,8 +1084,8 @@ post_save.connect(project_save_hook, sender=Project)
 
 
 class ProjectPin(models.Model):
-    project = models.ForeignKey(Project)
-    user = models.ForeignKey(User)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['project__name']
@@ -1088,14 +1093,14 @@ class ProjectPin(models.Model):
 
 class Document(models.Model):
     did = models.AutoField(primary_key=True)
-    pid = models.ForeignKey(Project, db_column='pid')
+    pid = models.ForeignKey(Project, db_column='pid', on_delete=models.CASCADE)
     filename = models.CharField(max_length=255, blank=True)
     title = models.CharField(max_length=128, blank=True)
     type = models.CharField(max_length=8, blank=True)
     url = models.CharField(max_length=256, blank=True)
     description = models.TextField(blank=True)
     version = models.CharField(max_length=16, blank=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     last_mod = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -1107,7 +1112,8 @@ class Milestone(models.Model):
     mid = models.AutoField(primary_key=True)
     name = models.TextField()
     target_date = models.DateField()
-    project = models.ForeignKey(Project, db_column='pid')
+    project = models.ForeignKey(
+        Project, db_column='pid', on_delete=models.CASCADE)
     status = models.CharField(max_length=8, default='OPEN')
     description = models.TextField(blank=True)
 
@@ -1220,12 +1226,15 @@ class Item(models.Model):
         max_length=12,
         choices=[('bug', 'bug'), ('action item', 'action item')])
     owner_user = models.ForeignKey(User, db_column='owner_user',
-                                   related_name='owned_items')
+                                   related_name='owned_items',
+                                   on_delete=models.CASCADE)
     assigned_user = models.ForeignKey(User, db_column='assigned_user',
-                                      related_name='assigned_to')
-    created_by = models.ForeignKey(User, null=True)
+                                      related_name='assigned_to',
+                                      on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    milestone = models.ForeignKey(Milestone, db_column='mid', db_index=True)
+    milestone = models.ForeignKey(
+        Milestone, db_column='mid', db_index=True, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=16,
         db_index=True,
@@ -1658,8 +1667,9 @@ class Notify(models.Model):
     item = models.ForeignKey(Item,
                              null=False,
                              db_column='iid',
-                             related_name='notifies')
-    user = models.ForeignKey(User)
+                             related_name='notifies',
+                             on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         db_table = u'notify'
@@ -1680,7 +1690,7 @@ class Client(models.Model):
     add_affiliation = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=32, blank=True)
     email = models.CharField(max_length=128, blank=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     comments = models.TextField(blank=True)
     status = models.CharField(max_length=16, blank=True)
     email_secondary = models.CharField(max_length=128, blank=True)
@@ -1700,8 +1710,8 @@ class Client(models.Model):
 
 
 class ItemClient(models.Model):
-    item = models.ForeignKey(Item, db_column='iid')
-    client = models.ForeignKey(Client)
+    item = models.ForeignKey(Item, db_column='iid', on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     class Meta:
         db_table = u'item_clients'
@@ -1711,14 +1721,15 @@ class Node(models.Model):
     nid = models.AutoField(primary_key=True)
     subject = models.CharField(max_length=256, blank=True)
     body = models.TextField(blank=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     reply_to = models.IntegerField(null=True, blank=True)
     replies = models.IntegerField(null=True, blank=True)
     type = models.CharField(max_length=8)
     overflow = models.BooleanField(default=False)
     added = models.DateTimeField()
     modified = models.DateTimeField()
-    project = models.ForeignKey(Project, null=True, db_column='project')
+    project = models.ForeignKey(
+        Project, null=True, db_column='project', on_delete=models.CASCADE)
 
     tags = TaggableManager()
 
@@ -1778,8 +1789,9 @@ class Node(models.Model):
 
 
 class WorksOn(models.Model):
-    user = models.ForeignKey(User)
-    project = models.ForeignKey(Project, db_column='pid')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(
+        Project, db_column='pid', on_delete=models.CASCADE)
     auth = models.CharField(max_length=16)
 
     class Meta:
@@ -1790,7 +1802,7 @@ class Events(models.Model):
     eid = models.AutoField(primary_key=True)
     status = models.CharField(max_length=32)
     event_date_time = models.DateTimeField(null=True, blank=True)
-    item = models.ForeignKey(Item, db_column='item')
+    item = models.ForeignKey(Item, db_column='item', on_delete=models.CASCADE)
 
     class Meta:
         db_table = u'events'
@@ -1806,9 +1818,11 @@ class Events(models.Model):
 @python_2_unicode_compatible
 class InGroup(models.Model):
     grp = models.ForeignKey(UserProfile, db_column='grp',
-                            related_name='group_members')
+                            related_name='group_members',
+                            on_delete=models.CASCADE)
     username = models.ForeignKey(UserProfile, null=True,
-                                 db_column='username', blank=True)
+                                 db_column='username', blank=True,
+                                 on_delete=models.CASCADE)
 
     @staticmethod
     def verbose_name(name):
@@ -1822,8 +1836,8 @@ class InGroup(models.Model):
 
 
 class ProjectClient(models.Model):
-    pid = models.ForeignKey(Project, db_column='pid')
-    client = models.ForeignKey(Client)
+    pid = models.ForeignKey(Project, db_column='pid', on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     role = models.CharField(max_length=255, blank=True)
 
     class Meta:
@@ -1832,8 +1846,9 @@ class ProjectClient(models.Model):
 
 class ActualTime(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, null=False)
-    item = models.ForeignKey(Item, null=False, db_column='iid')
-    user = models.ForeignKey(User)
+    item = models.ForeignKey(
+        Item, null=False, db_column='iid', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     actual_time = models.DurationField(null=True, blank=True)
     completed = models.DateTimeField(primary_key=True)
 
@@ -1858,13 +1873,14 @@ WHERE a.user_id = u.user_id AND g.username = u.username
 
 
 class Attachment(models.Model):
-    item = models.ForeignKey(Item, db_column='item_id')
+    item = models.ForeignKey(
+        Item, db_column='item_id', on_delete=models.CASCADE)
     filename = models.CharField(max_length=255, blank=True)
     title = models.CharField(max_length=128, blank=True)
     type = models.CharField(max_length=8, blank=True)
     url = models.CharField(max_length=256, blank=True)
     description = models.TextField(blank=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     last_mod = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -1891,11 +1907,16 @@ class Comment(models.Model):
     comment = models.TextField()
     add_date_time = models.DateTimeField(null=True, blank=True)
     username = models.CharField(max_length=32)
-    item = models.ForeignKey(Item, null=True, db_column='item', blank=True)
-    event = models.ForeignKey(Events, null=True, db_column='event', blank=True)
+    item = models.ForeignKey(
+        Item, null=True, db_column='item', blank=True,
+        on_delete=models.CASCADE)
+    event = models.ForeignKey(
+        Events, null=True, db_column='event', blank=True,
+        on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
-    author = models.ForeignKey(User, null=True, blank=True)
+    author = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         db_table = u'comments'
@@ -1928,8 +1949,8 @@ class Comment(models.Model):
 
 @python_2_unicode_compatible
 class StatusUpdate(models.Model):
-    project = models.ForeignKey(Project)
-    author = models.ForeignKey(User)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
     body = models.TextField(blank=True, default=u"")
 
@@ -1956,7 +1977,7 @@ class Reminder(models.Model):
     reminder_time = models.DurationField(
         help_text='Enter time and unit. For example: <code>1d</code> ' +
         'to be reminded one day before the target date.')
-    user = models.ForeignKey(User)
-    item = models.ForeignKey(Item)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

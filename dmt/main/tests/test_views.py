@@ -1,39 +1,41 @@
+from datetime import timedelta
 import json
 import unittest
 
-try:
-    from urllib.parse import urlencode
-except ImportError:
-    from urllib import urlencode
-
-from datetime import timedelta
 from dateutil.relativedelta import relativedelta
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core import mail
+from django.test import TestCase, override_settings
+from django.urls.base import reverse
 from django.utils import timezone
+from django.utils.dateparse import parse_date
 from django.utils.encoding import smart_text
-
+from factory.fuzzy import FuzzyInteger
 from simpleduration import Duration
-from .factories import (
+from waffle.testutils import override_flag
+
+from dmt.main.models import (
+    ActualTime, Events,
+    Attachment, Comment, Item, ItemClient, Milestone, Project,
+    Client, Notify, Reminder
+)
+from dmt.main.models import UserProfile as PMTUser
+from dmt.main.tests.support.mixins import LoggedInTestMixin
+
+from dmt.main.tests.factories import (
     ActualTimeFactory,
     ClientFactory, ProjectFactory, MilestoneFactory,
     ItemFactory, NodeFactory, EventFactory, CommentFactory,
     UserProfileFactory, UserFactory,
     StatusUpdateFactory, NotifyFactory, GroupFactory,
     AttachmentFactory)
-from django.conf import settings
-from django.core import mail
-from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
-from django.test import TestCase, override_settings
-from django.utils.dateparse import parse_date
-from factory.fuzzy import FuzzyInteger
-from waffle.models import Flag
-from dmt.main.models import UserProfile as PMTUser
-from dmt.main.models import (
-    ActualTime, Events,
-    Attachment, Comment, Item, ItemClient, Milestone, Project,
-    Client, Notify, Reminder
-)
-from dmt.main.tests.support.mixins import LoggedInTestMixin
+
+
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
 
 
 class BasicTest(TestCase):
@@ -182,10 +184,10 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
         self.assertContains(r, self.p.name)
 
     def test_project_board(self):
-        Flag.objects.create(name='project_board', everyone=True)
-        r = self.c.get(self.p.get_absolute_url() + "board/")
-        self.assertEqual(r.status_code, 200)
-        self.assertContains(r, 'id="milestones"')
+        with override_flag('project_board', active=True):
+            r = self.c.get(self.p.get_absolute_url() + "board/")
+            self.assertEqual(r.status_code, 200)
+            self.assertContains(r, 'id="milestones"')
 
     def test_project_kanban(self):
         r = self.c.get(reverse('project_kanban', args=[self.p.pid]))
@@ -1012,27 +1014,27 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         self.assertContains(r, i.title)
 
     def test_item_view_notification_present(self):
-        Flag.objects.create(name='notification_ui', everyone=True)
-        i = ItemFactory(assigned_user=self.u)
-        n = NotifyFactory(item=i, user=self.u)
-        r = self.c.get(i.get_absolute_url())
-        self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "input_notification")
-        self.assertTrue(r.context['assigned_to_current_user'])
-        self.assertTrue(
-            r.context['notifications_enabled_for_current_user'])
-        self.assertEqual(r.context['notified_users'], [n.user])
+        with override_flag('notification_ui', active=True):
+            i = ItemFactory(assigned_user=self.u)
+            n = NotifyFactory(item=i, user=self.u)
+            r = self.c.get(i.get_absolute_url())
+            self.assertEqual(r.status_code, 200)
+            self.assertContains(r, "input_notification")
+            self.assertTrue(r.context['assigned_to_current_user'])
+            self.assertTrue(
+                r.context['notifications_enabled_for_current_user'])
+            self.assertEqual(r.context['notified_users'], [n.user])
 
     def test_item_view_notification_not_present(self):
-        Flag.objects.create(name='notification_ui', everyone=True)
-        i = ItemFactory()
-        r = self.c.get(i.get_absolute_url())
-        self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "input_notification")
-        self.assertFalse(r.context['assigned_to_current_user'])
-        self.assertFalse(
-            r.context['notifications_enabled_for_current_user'])
-        self.assertEqual(len(r.context['notified_users']), 0)
+        with override_flag('notification_ui', active=True):
+            i = ItemFactory()
+            r = self.c.get(i.get_absolute_url())
+            self.assertEqual(r.status_code, 200)
+            self.assertContains(r, "input_notification")
+            self.assertFalse(r.context['assigned_to_current_user'])
+            self.assertFalse(
+                r.context['notifications_enabled_for_current_user'])
+            self.assertEqual(len(r.context['notified_users']), 0)
 
     def test_milestone_view(self):
         i = ItemFactory()

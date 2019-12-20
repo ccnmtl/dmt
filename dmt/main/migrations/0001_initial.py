@@ -113,7 +113,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='comment',
             name='event',
-            field=models.ForeignKey(db_column='event', blank=True, to='main.Events', null=True),
+            field=models.ForeignKey(db_column='event', blank=True, to='main.Events', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -150,33 +150,33 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='events',
             name='item',
-            field=models.ForeignKey(to='main.Item', db_column='item'),
+            field=models.ForeignKey(to='main.Item', db_column='item', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='comment',
             name='item',
-            field=models.ForeignKey(db_column='item', blank=True, to='main.Item', null=True),
+            field=models.ForeignKey(db_column='item', blank=True, to='main.Item', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='attachment',
             name='item',
-            field=models.ForeignKey(to='main.Item', db_column='item_id'),
+            field=models.ForeignKey(to='main.Item', db_column='item_id', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='actualtime',
             name='item',
-            field=models.ForeignKey(to='main.Item', db_column='iid'),
+            field=models.ForeignKey(to='main.Item', db_column='iid', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.CreateModel(
             name='ItemClient',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('client', models.ForeignKey(to='main.Client')),
-                ('item', models.ForeignKey(to='main.Item', db_column='iid')),
+                ('client', models.ForeignKey(to='main.Client', on_delete=models.CASCADE)),
+                ('item', models.ForeignKey(to='main.Item', db_column='iid', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'item_clients',
@@ -201,7 +201,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='item',
             name='milestone',
-            field=models.ForeignKey(to='main.Milestone', db_column='mid'),
+            field=models.ForeignKey(to='main.Milestone', db_column='mid', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -228,7 +228,7 @@ class Migration(migrations.Migration):
             name='Notify',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('item', models.ForeignKey(to='main.Item', db_column='iid')),
+                ('item', models.ForeignKey(to='main.Item', db_column='iid', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'notify',
@@ -276,25 +276,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='notifyproject',
             name='pid',
-            field=models.ForeignKey(to='main.Project', db_column='pid'),
+            field=models.ForeignKey(to='main.Project', db_column='pid', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='node',
             name='project',
-            field=models.ForeignKey(db_column='project', to='main.Project', null=True),
+            field=models.ForeignKey(db_column='project', to='main.Project', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='milestone',
             name='project',
-            field=models.ForeignKey(to='main.Project', db_column='pid'),
+            field=models.ForeignKey(to='main.Project', db_column='pid', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='document',
             name='pid',
-            field=models.ForeignKey(to='main.Project', db_column='pid'),
+            field=models.ForeignKey(to='main.Project', db_column='pid', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -302,8 +302,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('role', models.CharField(max_length=255, blank=True)),
-                ('client', models.ForeignKey(to='main.Client')),
-                ('pid', models.ForeignKey(to='main.Project', db_column='pid')),
+                ('client', models.ForeignKey(to='main.Client', on_delete=models.CASCADE)),
+                ('pid', models.ForeignKey(to='main.Project', db_column='pid', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'project_clients',
@@ -316,7 +316,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('added', models.DateTimeField(auto_now_add=True)),
                 ('body', models.TextField(default='', blank=True)),
-                ('project', models.ForeignKey(to='main.Project')),
+                ('project', models.ForeignKey(to='main.Project', on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ['-added'],
@@ -352,25 +352,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='statusupdate',
             name='user',
-            field=models.ForeignKey(to='main.User'),
+            field=models.ForeignKey(to='main.User', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='project',
             name='caretaker',
-            field=models.ForeignKey(to='main.User', db_column='caretaker'),
+            field=models.ForeignKey(to='main.User', db_column='caretaker', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='notifyproject',
             name='username',
-            field=models.ForeignKey(to='main.User', db_column='username'),
+            field=models.ForeignKey(to='main.User', db_column='username', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='notify',
             name='username',
-            field=models.ForeignKey(to='main.User', db_column='username'),
+            field=models.ForeignKey(to='main.User', db_column='username', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -380,55 +380,55 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='node',
             name='author',
-            field=models.ForeignKey(to='main.User', db_column='author'),
+            field=models.ForeignKey(to='main.User', db_column='author', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='item',
             name='owner',
-            field=models.ForeignKey(to='main.User', db_column='owner'),
+            field=models.ForeignKey(to='main.User', db_column='owner', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='item',
             name='assigned_to',
-            field=models.ForeignKey(to='main.User', db_column='assigned_to'),
+            field=models.ForeignKey(to='main.User', db_column='assigned_to', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='ingroup',
             name='username',
-            field=models.ForeignKey(db_column='username', blank=True, to='main.User', null=True),
+            field=models.ForeignKey(db_column='username', blank=True, to='main.User', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='ingroup',
             name='grp',
-            field=models.ForeignKey(to='main.User', db_column='grp'),
+            field=models.ForeignKey(to='main.User', db_column='grp', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='document',
             name='author',
-            field=models.ForeignKey(to='main.User', db_column='author'),
+            field=models.ForeignKey(to='main.User', db_column='author', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='client',
             name='contact',
-            field=models.ForeignKey(db_column='contact', blank=True, to='main.User', null=True),
+            field=models.ForeignKey(db_column='contact', blank=True, to='main.User', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='attachment',
             name='author',
-            field=models.ForeignKey(to='main.User', db_column='author'),
+            field=models.ForeignKey(to='main.User', db_column='author', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='actualtime',
             name='resolver',
-            field=models.ForeignKey(to='main.User', db_column='resolver'),
+            field=models.ForeignKey(to='main.User', db_column='resolver', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.CreateModel(
@@ -436,8 +436,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('auth', models.CharField(max_length=16)),
-                ('project', models.ForeignKey(to='main.Project', db_column='pid')),
-                ('username', models.ForeignKey(to='main.User', db_column='username')),
+                ('project', models.ForeignKey(to='main.Project', db_column='pid', on_delete=models.CASCADE)),
+                ('username', models.ForeignKey(to='main.User', db_column='username', on_delete=models.CASCADE)),
             ],
             options={
                 'db_table': 'works_on',

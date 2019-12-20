@@ -6,6 +6,7 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
+    atomic = False
 
     dependencies = [
         ('main', '0001_initial'),

@@ -3,7 +3,7 @@ from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.template import loader
 from django.utils.feedgenerator import Rss201rev2Feed
-from .models import Node, StatusUpdate, Project, Item
+from dmt.main.models import Node, StatusUpdate, Project, Item
 
 
 class ExtendedRSSFeed(Rss201rev2Feed):
