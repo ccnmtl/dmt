@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
 
 from datetime import timedelta
+
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls.base import reverse
 from django.utils import timezone
 from freezegun import freeze_time
+
 from dmt.main.tests.factories import (
     ActualTimeFactory, ItemFactory, MilestoneFactory, UserProfileFactory
 )

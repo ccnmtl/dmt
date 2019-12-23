@@ -15,25 +15,25 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ingroup',
             name='grp',
-            field=models.ForeignKey(related_name='group_members', db_column='grp', to='main.UserProfile'),
+            field=models.ForeignKey(related_name='group_members', db_column='grp', to='main.UserProfile', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterField(
             model_name='item',
             name='assigned_to',
-            field=models.ForeignKey(related_name='assigned_items', db_column='assigned_to', to='main.UserProfile'),
+            field=models.ForeignKey(related_name='assigned_items', db_column='assigned_to', to='main.UserProfile', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterField(
             model_name='item',
             name='owner',
-            field=models.ForeignKey(related_name='owned_items', db_column='owner', to='main.UserProfile'),
+            field=models.ForeignKey(related_name='owned_items', db_column='owner', to='main.UserProfile', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterField(
             model_name='notify',
             name='item',
-            field=models.ForeignKey(related_name='notifies', db_column='iid', to='main.Item'),
+            field=models.ForeignKey(related_name='notifies', db_column='iid', to='main.Item', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterField(

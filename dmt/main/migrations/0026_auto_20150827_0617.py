@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='actualtime',
             name='user',
-            field=models.ForeignKey(default=None, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=None, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=False,
         ),
     ]

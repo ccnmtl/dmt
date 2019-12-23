@@ -1,19 +1,22 @@
 from __future__ import unicode_literals
-try:
-    from urllib.parse import urljoin
-except ImportError:
-    from urlparse import urljoin
+
+from datetime import timedelta
+import ntpath
+import re
+import uuid
+
+from dateutil.relativedelta import relativedelta
 from django import forms
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.core.urlresolvers import reverse
 from django.db.models import Q, Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.urls.base import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.utils.decorators import method_decorator
@@ -23,16 +26,14 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
+from django_markwhat.templatetags.markup import commonmark
 from django_statsd.clients import statsd
 from extra_views import FormSetView, UpdateWithInlinesView
+from s3sign.views import SignS3View as BaseSignS3View
+from simpleduration import Duration, InvalidDuration
 from taggit.models import Tag
 from taggit.utils import parse_tags
-from dmt.main.mixins import DaterangeMixin
-from dmt.main.models import (
-    Comment, Project, Milestone, Item, InGroup, Node, UserProfile, Client,
-    StatusUpdate, ActualTime, Notify, Attachment, Reminder
-)
-from dmt.main.models import interval_sum
+
 from dmt.main.filters import ClientFilter, ProjectFilter, UserFilter
 from dmt.main.forms import (
     AddTrackerForm, CommentUpdateForm,
@@ -41,17 +42,21 @@ from dmt.main.forms import (
     ProjectCreateForm, StatusUpdateForm, NodeUpdateForm, UserUpdateForm,
     ProjectUpdateForm, MilestoneUpdateForm, ProjectPersonnelForm
 )
+from dmt.main.mixins import DaterangeMixin
+from dmt.main.models import (
+    Comment, Project, Milestone, Item, InGroup, Node, UserProfile, Client,
+    StatusUpdate, ActualTime, Notify, Attachment, Reminder
+)
+from dmt.main.models import interval_sum
 from dmt.main.templatetags.dmttags import linkify
-from .utils import safe_basename, simpleduration_string
 
-from django_markwhat.templatetags.markup import commonmark
-from dateutil.relativedelta import relativedelta
-from datetime import timedelta
-from simpleduration import Duration, InvalidDuration
-from s3sign.views import SignS3View as BaseSignS3View
-import uuid
-import ntpath
-import re
+from dmt.main.utils import safe_basename, simpleduration_string
+
+
+try:
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
 
 
 class LoggedInMixin(object):
