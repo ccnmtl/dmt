@@ -37,7 +37,7 @@ ipython==5.8.0 # pyup: <6.0.0
 ipdb==0.12.3
 isodate==0.6.0
 SPARQLWrapper==1.8.4
-coverage==4.5.4
+coverage==5.0.1
 pyasn1==0.4.8
 chardet==3.0.4
 
