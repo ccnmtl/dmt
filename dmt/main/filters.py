@@ -5,7 +5,7 @@ from django_filters import (
     ChoiceFilter,
 )
 
-from .models import Client, Project
+from dmt.main.models import Client, Project
 
 
 class ClientFilter(FilterSet):

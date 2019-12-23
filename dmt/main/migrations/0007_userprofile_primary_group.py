@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='userprofile',
             name='primary_group',
-            field=models.ForeignKey(blank=True, to='main.UserProfile', null=True),
+            field=models.ForeignKey(blank=True, to='main.UserProfile', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

@@ -1,6 +1,4 @@
-import django.contrib.auth.views
 import django.views.static
-import djangowind.views
 
 from django.conf.urls import include, url
 from django.contrib import admin
@@ -42,16 +40,11 @@ from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
 redirect_after_logout = getattr(settings, 'LOGOUT_REDIRECT_URL', None)
 auth_urls = url(r'^accounts/', include('django.contrib.auth.urls'))
-logout_page = url(r'^accounts/logout/$', django.contrib.auth.views.logout,
-                  {'next_page': redirect_after_logout})
 if hasattr(settings, 'CAS_BASE'):
     auth_urls = url(r'^accounts/', include('djangowind.urls'))
-    logout_page = url(r'^accounts/logout/$', djangowind.views.logout,
-                      {'next_page': redirect_after_logout})
 
 urlpatterns = [
     auth_urls,
-    logout_page,
     url(r'^$', IndexView.as_view()),
     url(r'^admin/', admin.site.urls),
     url(r'^add_trackers/$', AddTrackersView.as_view(), name='add_trackers'),

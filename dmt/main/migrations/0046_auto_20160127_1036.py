@@ -16,13 +16,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='item',
             name='assigned_user',
-            field=models.ForeignKey(related_name='assigned_to', db_column='assigned_user', default=None, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='assigned_to', db_column='assigned_user', default=None, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name='item',
             name='owner_user',
-            field=models.ForeignKey(related_name='owned_items', db_column='owner_user', default=None, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='owned_items', db_column='owner_user', default=None, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=False,
         ),
     ]
