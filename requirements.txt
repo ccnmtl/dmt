@@ -80,7 +80,7 @@ tblib==1.6.0
 pyzmq==18.1.1
 websocket-client==0.57.0
 
-djangowind==1.2.2
+djangowind==1.2.3
 django-staticmedia==0.2.2
 django-appconf==1.0.3
 rcssmin==1.0.6  # django-compressor
