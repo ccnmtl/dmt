@@ -1,7 +1,7 @@
 language: python
 dist: xenial
 addons:
-  postgresql: "9.6"
+  postgresql: "10"
 python:
   - "3.6"
 before_script:
