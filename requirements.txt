@@ -18,7 +18,7 @@ pyparsing==2.4.6
 tornado==6.0.3
 cssselect==1.1.0
 lxml==4.5.0
-fuzzywuzzy==0.17.0
+fuzzywuzzy==0.18.0
 sure==1.4.11
 isodate==0.6.0
 SPARQLWrapper==1.8.5
