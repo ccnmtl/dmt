@@ -14,7 +14,7 @@ flake8==3.7.9
 mccabe==0.6.1
 certifi==2019.11.28
 
-pyparsing==2.4.6
+pyparsing==2.4.7
 tornado==6.0.4
 cssselect==1.1.0
 lxml==4.5.0
