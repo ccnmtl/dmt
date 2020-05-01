@@ -67,7 +67,7 @@ requirements/src/whitelistaffilmapper-0.1.1-py2.py3-none-any.whl
 s3transfer==0.3.3
 jmespath==0.9.5
 
-botocore>=1.15.0,<1.16.0
+botocore==1.16.1
 boto3>=1.12.0,<1.13.0
 
 unicodecsv==0.14.1
