@@ -56,7 +56,7 @@ factory_boy==2.12.0
 ldap3==2.7
 anyjson==0.3.3
 
-parse-type==0.4.2
+parse-type==0.5.2
 parse==1.15.0
 wsgi_intercept==1.9.2
 mechanize==0.4.5
