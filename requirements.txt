@@ -65,7 +65,7 @@ urlparse2==1.1.1
 sqlparse==0.3.1
 requirements/src/whitelistaffilmapper-0.1.1-py2.py3-none-any.whl
 s3transfer==0.3.3
-jmespath==0.9.5
+jmespath==0.10.0
 
 botocore>=1.15.0,<1.17.0
 boto3>=1.12.0,<1.14.0
