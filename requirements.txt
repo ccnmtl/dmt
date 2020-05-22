@@ -47,7 +47,7 @@ pylint==2.5.2
 
 astroid==2.4.1
 
-six==1.14.0
+six==1.15.0
 python-dateutil==2.8.1
 pytz==2020.1
 simpleduration==0.1.0
