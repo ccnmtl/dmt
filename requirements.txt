@@ -1,4 +1,4 @@
-Django>=2.2.12,<3
+Django==Django>=2.2.13,<3
 configparser==5.0.0
 future==0.18.2
 commonmark==0.9.1
