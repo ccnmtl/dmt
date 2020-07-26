@@ -58,7 +58,7 @@ ldap3==2.7
 anyjson==0.3.3
 
 parse-type==0.5.2
-parse==1.15.0
+parse==1.16.0
 wsgi_intercept==1.9.2
 mechanize==0.4.5
 recordtype==1.3
