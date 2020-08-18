@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import factory
+from factory.django import DjangoModelFactory
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -14,7 +15,7 @@ from dmt.main.models import (
 from dmt.main.models import create_user_profile
 
 
-class UserProfileFactory(factory.DjangoModelFactory):
+class UserProfileFactory(DjangoModelFactory):
     class Meta:
         model = UserProfile
 
@@ -27,7 +28,7 @@ class UserProfileFactory(factory.DjangoModelFactory):
                               userprofile=None)
 
 
-class UserFactory(factory.DjangoModelFactory):
+class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
@@ -42,7 +43,7 @@ class UserFactory(factory.DjangoModelFactory):
         return user
 
 
-class ProjectFactory(factory.DjangoModelFactory):
+class ProjectFactory(DjangoModelFactory):
     class Meta:
         model = Project
 
@@ -53,7 +54,7 @@ class ProjectFactory(factory.DjangoModelFactory):
     project_manager_user = factory.SubFactory(UserFactory)
 
 
-class MilestoneFactory(factory.DjangoModelFactory):
+class MilestoneFactory(DjangoModelFactory):
     class Meta:
         model = Milestone
 
@@ -64,7 +65,7 @@ class MilestoneFactory(factory.DjangoModelFactory):
     status = "OPEN"
 
 
-class ItemFactory(factory.DjangoModelFactory):
+class ItemFactory(DjangoModelFactory):
     class Meta:
         model = Item
 
@@ -80,7 +81,7 @@ class ItemFactory(factory.DjangoModelFactory):
     target_date = timezone.now()
 
 
-class NotifyFactory(factory.DjangoModelFactory):
+class NotifyFactory(DjangoModelFactory):
     class Meta:
         model = Notify
 
@@ -88,7 +89,7 @@ class NotifyFactory(factory.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
 
 
-class EventFactory(factory.DjangoModelFactory):
+class EventFactory(DjangoModelFactory):
     class Meta:
         model = Events
 
@@ -98,7 +99,7 @@ class EventFactory(factory.DjangoModelFactory):
     item = factory.SubFactory(ItemFactory)
 
 
-class CommentFactory(factory.DjangoModelFactory):
+class CommentFactory(DjangoModelFactory):
     class Meta:
         model = Comment
 
@@ -110,7 +111,7 @@ class CommentFactory(factory.DjangoModelFactory):
     event = factory.SubFactory(EventFactory)
 
 
-class NodeFactory(factory.DjangoModelFactory):
+class NodeFactory(DjangoModelFactory):
     class Meta:
         model = Node
 
@@ -120,7 +121,7 @@ class NodeFactory(factory.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
 
 
-class ActualTimeFactory(factory.DjangoModelFactory):
+class ActualTimeFactory(DjangoModelFactory):
     class Meta:
         model = ActualTime
 
@@ -130,7 +131,7 @@ class ActualTimeFactory(factory.DjangoModelFactory):
     completed = datetime(2013, 12, 20).replace(tzinfo=utc)
 
 
-class ClientFactory(factory.DjangoModelFactory):
+class ClientFactory(DjangoModelFactory):
     class Meta:
         model = Client
 
@@ -146,7 +147,7 @@ class ClientFactory(factory.DjangoModelFactory):
     status = 'active'
 
 
-class StatusUpdateFactory(factory.DjangoModelFactory):
+class StatusUpdateFactory(DjangoModelFactory):
     class Meta:
         model = StatusUpdate
 
@@ -155,7 +156,7 @@ class StatusUpdateFactory(factory.DjangoModelFactory):
     author = factory.SubFactory(UserFactory)
 
 
-class AttachmentFactory(factory.DjangoModelFactory):
+class AttachmentFactory(DjangoModelFactory):
     class Meta:
         model = Attachment
 
@@ -166,7 +167,7 @@ class AttachmentFactory(factory.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
 
 
-class GroupFactory(factory.DjangoModelFactory):
+class GroupFactory(DjangoModelFactory):
     class Meta:
         model = InGroup
 
@@ -174,7 +175,7 @@ class GroupFactory(factory.DjangoModelFactory):
     username = factory.SubFactory(UserProfileFactory)
 
 
-class ReminderFactory(factory.DjangoModelFactory):
+class ReminderFactory(DjangoModelFactory):
     class Meta:
         model = Reminder
 
