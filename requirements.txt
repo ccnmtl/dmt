@@ -32,7 +32,7 @@ chardet==3.0.4
 cryptography==3.1
 idna==2.10
 urllib3==1.25.10
-cffi==1.14.2
+cffi==1.14.3
 asn1crypto==1.4.0
 
 requests==2.24.0
