@@ -10,7 +10,7 @@ pyflakes==2.2.0
 pycodestyle==2.6.0
 entrypoints==0.3  # for flake8
 importlib-metadata==2.0.0  # for flake8
-zipp==3.3.0  # for flake8
+zipp==3.3.1  # for flake8
 flake8==3.8.4
 
 mccabe==0.6.1
@@ -19,7 +19,7 @@ certifi==2020.6.20
 pyparsing==2.4.7
 tornado==6.0.4
 cssselect==1.1.0
-lxml==4.5.2
+lxml==4.6.1
 fuzzywuzzy==0.18.0
 sure==1.4.11
 isodate==0.6.0
@@ -31,7 +31,7 @@ chardet==3.0.4
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
 cryptography==3.1.1
 idna==2.10
-urllib3==1.25.10
+urllib3==1.25.11
 cffi==1.14.3
 asn1crypto==1.4.0
 
@@ -68,7 +68,7 @@ requirements/src/whitelistaffilmapper-0.1.1-py2.py3-none-any.whl
 s3transfer==0.3.3
 jmespath==0.10.0
 
-botocore>=1.15.0,<1.19.0
+botocore>=1.15.0,<1.20.0
 boto3>=1.12.0,<1.17.0
 
 unicodecsv==0.14.1
@@ -125,7 +125,7 @@ django-smtp-ssl==1.0
 
 ccnmtlsettings==1.9.0
 
-pbr==5.5.0
+pbr==5.5.1
 pyyaml==5.3.1
 stevedore>=1.20.0 # Apache-2.0
 bandit==1.6.2
