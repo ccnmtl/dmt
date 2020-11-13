@@ -35,7 +35,7 @@ urllib3==1.25.11
 cffi==1.14.3
 asn1crypto==1.4.0
 
-requests==2.24.0
+requests==2.25.0
 packaging==20.4
 appdirs==1.4.4
 logilab-common==1.8.0
