@@ -14,7 +14,7 @@ zipp==3.4.0  # for flake8
 flake8==3.8.4
 
 mccabe==0.6.1
-certifi==2020.11.8
+certifi==2020.12.5
 
 pyparsing==2.4.7
 tornado==6.1
