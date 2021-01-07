@@ -9,7 +9,7 @@ from dmt.api.views import (
     ClientViewSet, ProjectViewSet,
     MilestoneViewSet, ItemViewSet,
     MilestoneItemList, NotifyView,
-    ExternalAddItemView
+    ExternalAddItemView, JiraExternalAddItemView
 )
 
 router = routers.DefaultRouter()
@@ -34,4 +34,6 @@ urlpatterns = [
     url(r'^git/$', GitUpdateView.as_view(), name='git-update'),
     url(r'^external_add_item/$', ExternalAddItemView.as_view(),
         name='external-add-item'),
+    url(r'^jira_add_item/$', JiraExternalAddItemView.as_view(),
+        name='jira-add-item'),
 ]
