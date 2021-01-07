@@ -23,6 +23,12 @@ from dmt.api.serializers import (
     ClientSerializer, ItemSerializer, MilestoneSerializer, NotifySerializer,
     ProjectSerializer, UserSerializer,
 )
+import requests
+from requests.auth import HTTPBasicAuth
+import json
+from rest_framework.permissions import AllowAny
+from django.http import HttpResponseRedirect
+from django.conf import settings
 
 
 class ClientViewSet(viewsets.ModelViewSet):
@@ -127,6 +133,79 @@ class ExternalAddItemView(APIView):
 
         return self.redirect_or_return_item(
             request, item, redirect_url, append_iid)
+
+
+class JiraExternalAddItemView(APIView):
+    """An endpoint to add an action item to Jira
+    """
+    authentication_classes = (SafeOriginAuthentication,)
+    permission_classes = (AllowAny,)
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(JiraExternalAddItemView, self).dispatch(*args, **kwargs)
+
+    def post(self, request, format=None):
+
+        summary = request.data.get('title', 'External issue report')
+        description = request.data.get('description', 'No description')
+        email = request.data.get('email', 'No email')
+        name = request.data.get('name', 'Anonymous')
+        issueType = request.data.get('issueType', '10015')
+        assignee = request.data.get('assignee')
+        debug_info = request.data.get('debug_info', '')
+        redirect_url = request.data.get('redirect_url', '')
+        description = get_description(description, debug_info, name, email)
+        project = request.data.get('project')
+
+        url = settings.JIRA_URL + "rest/api/3/issue"
+
+        auth = HTTPBasicAuth(settings.JIRA_EMAIL, settings.JIRA_API_TOKEN)
+
+        headers = {
+           "Accept": "application/json",
+           "Content-Type": "application/json"
+        }
+
+        payload = json.dumps( {
+          "fields": {
+            "summary": summary,
+            "issuetype": {
+              "id": "10015"
+            },
+            "project": {
+              "id": project
+            },
+            "assignee": {
+              "id": assignee
+            },
+            "description": {
+              "type": "doc",
+              "version": 1,
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "text": description,
+                      "type": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        } )
+
+        response = requests.request(
+            "POST",
+            url,
+            data=payload,
+            headers=headers,
+            auth=auth
+        )
+
+        return HttpResponseRedirect(redirect_url)
 
 
 def get_description(description, debug_info, name, email):
