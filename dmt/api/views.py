@@ -151,7 +151,6 @@ class JiraExternalAddItemView(APIView):
         description = request.data.get('description', 'No description')
         email = request.data.get('email', 'No email')
         name = request.data.get('name', 'Anonymous')
-        issueType = request.data.get('issueType', '10015')
         assignee = request.data.get('assignee')
         debug_info = request.data.get('debug_info', '')
         redirect_url = request.data.get('redirect_url', '')
@@ -167,7 +166,7 @@ class JiraExternalAddItemView(APIView):
            "Content-Type": "application/json"
         }
 
-        payload = json.dumps( {
+        payload = json.dumps({
           "fields": {
             "summary": summary,
             "issuetype": {
@@ -195,9 +194,9 @@ class JiraExternalAddItemView(APIView):
               ]
             }
           }
-        } )
+        })
 
-        response = requests.request(
+        requests.request(
             "POST",
             url,
             data=payload,
