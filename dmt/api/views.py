@@ -156,6 +156,7 @@ class JiraExternalAddItemView(APIView):
         redirect_url = request.data.get('redirect_url', '')
         description = get_description(description, debug_info, name, email)
         project = request.data.get('project')
+        reporter = request.data.get('reporter')
 
         url = settings.JIRA_URL + "rest/api/3/issue"
 
@@ -192,6 +193,9 @@ class JiraExternalAddItemView(APIView):
                   ]
                 }
               ]
+            },
+            "reporter": {
+                "id": reporter
             }
           }
         })
