@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ccnmtl/dmt.svg?branch=master)](https://travis-ci.org/ccnmtl/dmt)
+[![Actions Status](https://github.com/ccnmtl/dmt/workflows/build-and-test/badge.svg)](https://github.com/ccnmtl/dmt/actions)
 
 DMT is ccnmtl's new project management tool.
 
