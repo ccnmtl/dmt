@@ -98,7 +98,7 @@ django-extensions==3.1.0
 # typing needed for django-extensions
 django-stagingcontext==0.1.0
 django-ga-context==0.1.0
-django-impersonate==1.7.2
+django-impersonate==1.7.3
 django-filter==2.4.0
 django-crispy-forms==1.11.0
 djangorestframework==3.12.2
