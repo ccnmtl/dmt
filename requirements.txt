@@ -30,7 +30,7 @@ pyasn1==0.4.8
 chardet==3.0.4
 
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
-cryptography==3.3.1
+cryptography==3.3.2
 idna<3
 urllib3==1.26.3
 cffi==1.14.4
