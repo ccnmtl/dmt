@@ -27,7 +27,7 @@ isodate==0.6.0
 SPARQLWrapper==1.8.5
 coverage==5.5
 pyasn1==0.4.8
-chardet==3.0.4
+chardet==4.0.0
 
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
 cryptography==3.4.7
