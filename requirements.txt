@@ -81,7 +81,7 @@ shortuuid==1.0.1
 contextlib2==0.6.0.post1
 tblib==1.7.0
 
-pyzmq==22.0.3
+pyzmq==22.1.0
 websocket-client==1.0.1
 
 djangowind==1.2.3
@@ -111,7 +111,7 @@ requirements/src/django_taggit_templatetags2-1.4.1.ccnmtl-py2.py3-none-any.whl
 django-bootstrap3==15.0.0
 django-emoji==2.2.2
 django-braces==1.14.0
-oauthlib==3.1.0
+oauthlib==3.1.1
 jwcrypto>=0.8.0
 django-oauth-toolkit==1.5.0
 django-extra-views==0.13.0
