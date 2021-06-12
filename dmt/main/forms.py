@@ -9,7 +9,7 @@ from django.forms import ModelForm, TextInput, URLInput
 from django.utils import timezone
 from django.utils.encoding import smart_text
 from django_markwhat.templatetags.markup import commonmark
-from extra_views import InlineFormSet
+from extra_views import InlineFormSetFactory
 from simpleduration import Duration, InvalidDuration
 
 from dmt.main.models import (
@@ -195,7 +195,7 @@ class ReminderForm(ModelForm):
         'granularity for reminders is hourly.')
 
 
-class RemindersInlineFormSet(InlineFormSet):
+class RemindersInlineFormSet(InlineFormSetFactory):
     model = Reminder
     form_class = ReminderForm
     factory_kwargs = {'max_num': 1, 'min_num': 1}
