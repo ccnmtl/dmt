@@ -39,7 +39,7 @@ cffi==1.14.5
 asn1crypto==1.4.0
 
 requests==2.25.1
-packaging==20.9
+packaging==21.0
 appdirs==1.4.4
 logilab-common==1.8.1
 lazy-object-proxy==1.6.0
