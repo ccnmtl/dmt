@@ -75,7 +75,7 @@ botocore>=1.15.0,<1.22.0
 boto3>=1.12.0,<1.19.0
 
 unicodecsv==0.14.1
-XlsxWriter==1.4.4
+XlsxWriter==2.0.0
 splinter==0.15.0
 shortuuid==1.0.1
 contextlib2==21.6.0
