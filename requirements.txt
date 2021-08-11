@@ -82,7 +82,7 @@ contextlib2==21.6.0
 tblib==1.7.0
 
 pyzmq==22.2.1
-websocket-client==1.1.1
+websocket-client==1.2.0
 
 djangowind==1.2.3
 django-staticmedia==0.2.2
