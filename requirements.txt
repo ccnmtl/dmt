@@ -63,7 +63,7 @@ anyjson==0.3.3
 parse-type==0.5.2
 parse==1.19.0
 wsgi_intercept==1.9.2
-mechanize==0.4.5
+mechanize==0.4.6
 recordtype==1.3
 urlparse2==1.1.1
 sqlparse==0.4.1
