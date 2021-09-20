@@ -47,7 +47,7 @@ wrapt==1.12.1
 
 pylint==2.11.1
 
-astroid==2.7.3
+astroid==2.8.0
 
 six==1.16.0
 python-dateutil==2.8.2
