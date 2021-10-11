@@ -1,5 +1,4 @@
 /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-/* eslint "scanjs-rules/call_setTimeout": 0 */
 
 require.config({
     map: {
