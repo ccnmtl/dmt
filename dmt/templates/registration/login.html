@@ -6,9 +6,9 @@
 <div class="login-box">
   <div class="login-header"></div>
   <div class="login-form well">
-    <form method="get" action="{{ cas_base }}cas/login" class="login">
+    <form method="get" action="/cas/login" class="login">
       <label>To begin...</label>
-      <input type="hidden" name="destination" value="https://{{ request.get_host }}/accounts/caslogin/?next={{ next }}" />
+      <input type="hidden" name="next" value="{{next|default:'/'}}" />
       <input type="submit" value="Log in with your UNI" class="btn btn-lg btn-primary"/>
     </form>
   </div>

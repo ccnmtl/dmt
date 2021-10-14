@@ -1,9 +1,11 @@
 import django.views.static
-
+from django.urls import path
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
+from django_cas_ng import views as cas_views
+
 
 from dmt.main.views import (
     AddTrackersView, SearchView,
@@ -38,13 +40,12 @@ from dmt.main.views import (
 from dmt.main.feeds import ForumFeed, StatusUpdateFeed, ProjectFeed
 
 
-redirect_after_logout = getattr(settings, 'LOGOUT_REDIRECT_URL', None)
-auth_urls = url(r'^accounts/', include('django.contrib.auth.urls'))
-if hasattr(settings, 'CAS_BASE'):
-    auth_urls = url(r'^accounts/', include('djangowind.urls'))
-
 urlpatterns = [
-    auth_urls,
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+    path('cas/login', cas_views.LoginView.as_view(),
+         name='cas_ng_login'),
+    path('cas/logout', cas_views.LogoutView.as_view(),
+         name='cas_ng_logout'),
     url(r'^$', IndexView.as_view()),
     url(r'^admin/', admin.site.urls),
     url(r'^add_trackers/$', AddTrackersView.as_view(), name='add_trackers'),
