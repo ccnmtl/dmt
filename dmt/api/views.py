@@ -9,7 +9,7 @@ from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from simpleduration import Duration, InvalidDuration
-from datetime import timedelta
+from datetime import timedelta, date, datetime
 from dateutil import parser
 
 from dmt.main.models import (
@@ -146,7 +146,6 @@ class JiraExternalAddItemView(APIView):
         return super(JiraExternalAddItemView, self).dispatch(*args, **kwargs)
 
     def post(self, request, format=None):
-
         summary = request.data.get('title', 'External issue report')
         description = request.data.get('description', 'No description')
         email = request.data.get('email', 'No email')
@@ -157,6 +156,10 @@ class JiraExternalAddItemView(APIView):
         description = get_description(description, debug_info, name, email)
         project = request.data.get('project')
         reporter = request.data.get('reporter')
+        today = date.today()
+        start_date = today.strftime("%Y-%m-%d")
+        two_days = datetime.now() + timedelta(days=2)
+        duedate = two_days.strftime("%Y-%m-%d")
 
         url = settings.JIRA_URL + "rest/api/3/issue"
 
@@ -170,6 +173,8 @@ class JiraExternalAddItemView(APIView):
         payload = json.dumps({
           "fields": {
             "summary": summary,
+            "customfield_10015": start_date,
+            "duedate": duedate,
             "issuetype": {
               "id": "10015"
             },
