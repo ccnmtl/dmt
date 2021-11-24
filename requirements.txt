@@ -41,7 +41,7 @@ asn1crypto==1.4.0
 requests==2.26.0
 packaging==21.3
 appdirs==1.4.4
-logilab-common==1.8.1
+logilab-common==1.8.2
 lazy-object-proxy==1.6.0
 wrapt==1.13.3
 
