@@ -104,7 +104,7 @@ django-ga-context==0.1.0
 django-impersonate==1.7.3
 django-filter==21.1
 django-crispy-forms==1.13.0
-djangorestframework==3.12.4
+djangorestframework==3.13.1
 django-taggit==2.0.0
 django-templatetag-sugar==1.0
 django-classy-tags==2.0.0
