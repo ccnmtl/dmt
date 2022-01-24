@@ -14,7 +14,7 @@ typing_extensions==4.0.1
 zipp==3.6.0  # for flake8
 flake8==4.0.1
 
-mccabe==0.6.1
+mccabe==0.7.0
 certifi==2021.10.8
 
 pyparsing==3.0.7
