@@ -10,7 +10,7 @@ pyflakes==2.4.0
 pycodestyle==2.8.0
 entrypoints==0.4  # for flake8
 importlib-metadata<4.11 # for flake8
-typing_extensions==4.0.1
+typing_extensions==4.1.1
 zipp==3.6.0  # for flake8
 flake8==4.0.1
 
