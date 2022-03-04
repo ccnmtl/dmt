@@ -133,7 +133,7 @@ ccnmtlsettings==1.9.0
 pbr==5.8.1
 pyyaml==6.0
 stevedore>=1.20.0 # Apache-2.0
-bandit==1.7.1
+bandit==1.7.4
 
 numpy<1.22.0
 entrypoints==0.4
