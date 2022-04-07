@@ -15,9 +15,7 @@ from django.db.models import Max, Q, Sum
 from django.db.models.signals import post_save
 from django.urls.base import reverse
 from django.utils import timezone
-from django.utils.encoding import (
-    python_2_unicode_compatible, force_text
-)
+from django.utils.encoding import force_text
 from django_statsd.clients import statsd
 import pytz
 from simpleduration import Duration, InvalidDuration
@@ -30,7 +28,6 @@ from dmt.main.timeline import (
 from dmt.main.utils import new_duration
 
 
-@python_2_unicode_compatible
 class UserProfile(models.Model):
     username = models.CharField(max_length=32, primary_key=True)
     fullname = models.CharField(max_length=128, blank=True)
@@ -517,7 +514,6 @@ PROJECT_CATEGORIES = [
 ]
 
 
-@python_2_unicode_compatible
 class Project(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField("Project name", max_length=255)
@@ -1107,7 +1103,6 @@ class Document(models.Model):
         db_table = u'documents'
 
 
-@python_2_unicode_compatible
 class Milestone(models.Model):
     mid = models.AutoField(primary_key=True)
     name = models.TextField()
@@ -1662,7 +1657,6 @@ class HistoryComment(HistoryItem):
         return UserProfile.objects.get(username=self.c.username)
 
 
-@python_2_unicode_compatible
 class Notify(models.Model):
     item = models.ForeignKey(Item,
                              null=False,
@@ -1815,7 +1809,6 @@ class Events(models.Model):
         return s
 
 
-@python_2_unicode_compatible
 class InGroup(models.Model):
     grp = models.ForeignKey(UserProfile, db_column='grp',
                             related_name='group_members',
@@ -1947,7 +1940,6 @@ class Comment(models.Model):
         return False
 
 
-@python_2_unicode_compatible
 class StatusUpdate(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)

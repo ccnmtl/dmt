@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static %}
+{% load i18n static %}
 
 {% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" />
 {{ form.media }}
@@ -48,11 +48,11 @@
     <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
       <div class="form-row">
         {{ form.username.errors }}
-        {{ form.username.label_tag }} {{ form.username }}
+        <label for="id_username" class="required">{{ form.username.label }}:</label> {{ form.username }}
       </div>
       <div class="form-row">
         {{ form.password.errors }}
-        {{ form.password.label_tag }} {{ form.password }}
+        <label for="id_password" class="required">{% translate 'Password:' %}</label> {{ form.password }}
         <input type="hidden" name="next" value="{{ next }}" />
       </div>
       {% url 'admin_password_reset' as password_reset_url %}
@@ -72,5 +72,3 @@ document.getElementById('id_username').focus()
 </script>
 </div>
 {% endblock %}
-
-
