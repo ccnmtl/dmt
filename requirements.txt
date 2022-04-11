@@ -18,7 +18,7 @@ flake8==4.0.1
 mccabe==0.7.0
 certifi==2021.10.8
 
-pyparsing==3.0.7
+pyparsing==3.0.8
 tornado==6.1
 cssselect==1.1.0
 lxml==4.8.0
