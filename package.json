@@ -4,11 +4,11 @@
   "description": "Project management tool",
   "license": "GPL-2.0+",
   "devDependencies": {
-    "eslint": "~8.15.0",
+    "eslint": "~8.16.0",
     "eslint-plugin-security": "^1.4.0",
     "qunitjs": "~2.4.0",
     "requirejs": "~2.3.5",
-    "sinon": "~13.0.0",
+    "sinon": "~14.0.0",
     "sinon-qunit": "~2.0.0"
   },
   "repository": {
