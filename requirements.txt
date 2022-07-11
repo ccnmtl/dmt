@@ -56,7 +56,7 @@ pytz==2022.1
 simpleduration==0.1.0
 ipaddress==1.0.23
 text-unidecode==1.3  # for faker
-Faker==13.14.0
+Faker==13.15.0
 factory_boy==3.2.1
 ldap3==2.9.1
 
@@ -98,12 +98,12 @@ django-debug-toolbar==3.5.0
 django-waffle==2.5.0
 
 django-smoketest==1.2.0
-django-extensions==3.1.5
+django-extensions==3.2.0
 # typing needed for django-extensions
 django-stagingcontext==0.1.0
 django-ga-context==0.1.0
 django-impersonate==1.8.2
-django-filter==21.1
+django-filter==22.1
 django-crispy-forms==1.13.0
 djangorestframework==3.13.1
 django-taggit==3.0.0
