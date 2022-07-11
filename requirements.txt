@@ -28,7 +28,7 @@ isodate==0.6.1
 SPARQLWrapper==1.8.5
 coverage==6.4.1
 pyasn1==0.4.8
-chardet==4.0.0
+chardet==5.0.0
 
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
 cryptography==37.0.2
@@ -48,7 +48,7 @@ wrapt==1.14.1
 
 pylint==2.14.4
 
-astroid==2.11.6
+astroid==2.12.1
 
 six==1.16.0
 python-dateutil==2.8.2
