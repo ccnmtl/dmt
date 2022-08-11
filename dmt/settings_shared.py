@@ -47,7 +47,7 @@ INSTALLED_APPS += [  # noqa
     'crispy_forms',
 ]
 
-INSTALLED_APPS.remove('djangowind') # noqa
+INSTALLED_APPS.remove('djangowind')  # noqa
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 AUTHENTICATION_BACKENDS = [
@@ -87,6 +87,15 @@ DASHBOARD_GRAPH_TIMESPAN = '4weeks'
 CAS_SERVER_URL = 'https://cas.columbia.edu/cas/'
 CAS_VERSION = '3'
 CAS_ADMIN_REDIRECT = False
+
+# Translate CUIT's CAS user attributes to the Django user model.
+# https://cuit.columbia.edu/content/cas-3-ticket-validation-response
+CAS_APPLY_ATTRIBUTES_TO_USER = True
+CAS_RENAME_ATTRIBUTES = {
+    'givenName': 'first_name',
+    'lastName': 'last_name',
+    'mail': 'email',
+}
 
 TEMPLATES = [
     {
