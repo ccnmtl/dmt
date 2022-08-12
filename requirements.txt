@@ -110,7 +110,7 @@ django-taggit==3.0.0
 django-templatetag-sugar==1.0
 django-classy-tags==2.0.0
 requirements/src/django_taggit_templatetags2-1.4.1.ccnmtl-py2.py3-none-any.whl
-django-bootstrap3==21.1
+django-bootstrap3==22.1
 django-emoji==2.2.2
 django-braces==1.15.0
 oauthlib==3.2.0
