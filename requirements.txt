@@ -94,7 +94,7 @@ rjsmin==1.2.1  # django-compressor
 django-compressor>=3.1,<4.0
 django-statsd-mozilla==0.4.0
 raven==6.10.0
-django-debug-toolbar==3.5.0
+django-debug-toolbar==3.6.0
 django-waffle==2.6.0
 
 django-smoketest==1.2.0
