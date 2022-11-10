@@ -77,7 +77,7 @@ boto3>=1.12.0,<1.27.0
 unicodecsv==0.14.1
 XlsxWriter==3.0.3
 splinter==0.18.1
-shortuuid==1.0.9
+shortuuid==1.0.10
 contextlib2==21.6.0
 tblib==1.7.0
 
