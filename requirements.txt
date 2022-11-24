@@ -13,7 +13,7 @@ entrypoints==0.4  # for flake8
 importlib-metadata<5.1 # for flake8
 typing_extensions==4.4.0
 zipp==3.10.0  # for flake8
-flake8==5.0.4
+flake8==6.0.0
 
 mccabe==0.7.0
 certifi==2022.9.24
