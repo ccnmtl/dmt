@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import os.path
 import sys
 
-from ccnmtlsettings.shared import common
+from ctlsettings.shared import common
 from django.contrib import messages
 
 
@@ -33,12 +33,14 @@ MIDDLEWARE += [  # noqa
 
 INSTALLED_APPS += [  # noqa
     'django_extensions',
-    'django_cas_ng',
+    'waffle',
+    'django_markwhat',
     'rest_framework',
     'taggit',
     'taggit_templatetags2',
     'bootstrap3',
     'emoji',
+
     'dmt.main',
     'dmt.report',
     'dmt.api',
@@ -47,7 +49,6 @@ INSTALLED_APPS += [  # noqa
     'crispy_forms',
 ]
 
-INSTALLED_APPS.remove('djangowind')  # noqa
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 AUTHENTICATION_BACKENDS = [
@@ -83,19 +84,6 @@ DEFAULT_FROM_EMAIL = SERVER_EMAIL
 EMAIL_MAX_RETRIES = 10
 
 DASHBOARD_GRAPH_TIMESPAN = '4weeks'
-
-CAS_SERVER_URL = 'https://cas.columbia.edu/cas/'
-CAS_VERSION = '3'
-CAS_ADMIN_REDIRECT = False
-
-# Translate CUIT's CAS user attributes to the Django user model.
-# https://cuit.columbia.edu/content/cas-3-ticket-validation-response
-CAS_APPLY_ATTRIBUTES_TO_USER = True
-CAS_RENAME_ATTRIBUTES = {
-    'givenName': 'first_name',
-    'lastName': 'last_name',
-    'mail': 'email',
-}
 
 TEMPLATES = [
     {

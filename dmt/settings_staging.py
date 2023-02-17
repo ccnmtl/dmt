@@ -1,6 +1,6 @@
 # flake8: noqa
 from dmt.settings_shared import *
-from ccnmtlsettings.staging import common
+from ctlsettings.staging import common
 import os
 
 project = 'dmt'
