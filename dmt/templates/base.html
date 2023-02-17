@@ -1,5 +1,4 @@
 {% load bootstrap3 %}
-{% load compress %}
 {% load waffle_tags %}
 {% load static %}
 
@@ -15,18 +14,14 @@
 
   {% bootstrap_css %}
 
-  {% compress css %}
   <link href="{{STATIC_URL}}css/main.css?dmt" rel="stylesheet">
-  {% endcompress %}
 
-  {% compress css %}
   <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap-datepicker3.css">
   <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="{{STATIC_URL}}datatables/css/buttons.dataTables.css">
   <link rel="stylesheet" href="{{STATIC_URL}}css/theme.tablesorter.default.css">
   <link rel="stylesheet" href="{{STATIC_URL}}css/select2.min.css">
   <link rel="stylesheet" href="{{STATIC_URL}}css/emoji.css">
-  {% endcompress %}
 
   {% block css %}{% endblock %}
 
