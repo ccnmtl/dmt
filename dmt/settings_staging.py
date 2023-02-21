@@ -10,6 +10,7 @@ locals().update(
     common(
         project=project,
         base=base,
+        s3prefix="ccnmtl",
         STATIC_ROOT=STATIC_ROOT,
         INSTALLED_APPS=INSTALLED_APPS,
         cloudfront="d36erjh421b5om",
