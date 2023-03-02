@@ -1090,7 +1090,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         with self.settings(
                 AWS_ACCESS_KEY='',
                 AWS_SECRET_KEY='',
-                AWS_S3_UPLOAD_BUCKET=''):
+                AWS_S3_UPLOAD_BUCKET='test-bucket-name'):
             r = self.c.get(
                 '/sign_s3/?s3_object_name=default_name&s3_object_type=foo')
             self.assertEqual(r.status_code, 200)
