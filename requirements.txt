@@ -104,7 +104,7 @@ django-impersonate==1.9.1
 django-filter==23.2
 django-crispy-forms==2.0
 djangorestframework==3.14.0
-django-taggit==3.1.0
+django-taggit==4.0.0
 django-templatetag-sugar==1.0
 django-classy-tags==4.0.0
 requirements/src/django_taggit_templatetags2-1.4.1.ccnmtl-py2.py3-none-any.whl
