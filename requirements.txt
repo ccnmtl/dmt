@@ -40,7 +40,7 @@ pycparser==2.21
 cffi==1.15.1
 asn1crypto==1.5.1
 
-requests==2.30.0
+requests==2.31.0
 packaging==23.1
 appdirs==1.4.4
 logilab-common==1.9.8
