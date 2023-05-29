@@ -137,5 +137,5 @@ bandit==1.7.5
 
 numpy<1.25.0
 entrypoints==0.4
-Deprecated==1.2.13
+Deprecated==1.2.14
 charset-normalizer==3.1.0
