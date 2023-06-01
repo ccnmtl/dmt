@@ -113,7 +113,7 @@ django-emoji==2.2.2
 django-braces==1.15.0
 oauthlib==3.2.2
 jwcrypto>=0.8.0
-django-oauth-toolkit==2.2.0
+django-oauth-toolkit==2.3.0
 django-extra-views==0.14.0
 bleach==6.0.0
 webencodings==0.5.1
