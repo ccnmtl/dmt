@@ -83,7 +83,7 @@ contextlib2==21.6.0
 tblib==2.0.0
 
 pyzmq==25.1.0
-websocket-client==1.5.3
+websocket-client==1.6.1
 
 python-cas==1.6.0
 django-cas-ng==4.3.0
