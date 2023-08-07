@@ -3,7 +3,7 @@ asgiref==3.7.2
 configparser==6.0.0
 future==0.18.3
 commonmark==0.9.1
-psycopg2==2.9.6
+psycopg2==2.9.7
 versiontools==1.9.1
 statsd==4.0.1
 pep8==1.7.1
