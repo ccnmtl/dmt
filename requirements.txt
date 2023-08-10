@@ -95,7 +95,7 @@ raven==6.10.0
 django-debug-toolbar==4.1.0
 django-waffle==4.0.0
 
-django-smoketest==1.2.0
+django-smoketest==1.2.1
 django-extensions==3.2.3
 # typing needed for django-extensions
 django-stagingcontext==0.1.0
