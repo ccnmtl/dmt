@@ -124,7 +124,7 @@ django-storages==1.14
 django-cacheds3storage==0.3.0
 django-markwhat==1.6.2
 
-django-s3sign==0.3.3
+django-s3sign==0.4.0
 django-smtp-ssl==1.0
 
 ctlsettings==0.2.0
