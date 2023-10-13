@@ -8,7 +8,7 @@ versiontools==1.9.1
 statsd==4.0.1
 pep8==1.7.1
 pyflakes==3.1.0
-pycodestyle==2.11.0
+pycodestyle==2.11.1
 entrypoints==0.4  # for flake8
 importlib-metadata<6.9 # for flake8
 typing_extensions==4.8.0
