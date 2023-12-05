@@ -1,4 +1,4 @@
-Django>=3.2.14,<4
+Django>=3.2.14,<6
 asgiref==3.7.2
 configparser==6.0.0
 future==0.18.3
