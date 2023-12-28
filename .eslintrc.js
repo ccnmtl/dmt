@@ -9,7 +9,7 @@ module.exports = {
     ],
     "extends": [
         "eslint:recommended",
-        "plugin:security/recommended"
+        "plugin:security/recommended-legacy"
     ],  
     "rules": {
         "indent": [
