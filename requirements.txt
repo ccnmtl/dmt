@@ -103,7 +103,7 @@ django-extensions==3.2.3
 django-stagingcontext==0.1.0
 django-ga-context==0.1.0
 django-impersonate==1.9.2
-django-filter==23.5
+django-filter==24.1
 django-crispy-forms==2.1
 djangorestframework==3.14.0
 django-taggit==4.0.0
