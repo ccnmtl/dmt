@@ -5,7 +5,7 @@
   "license": "GPL-2.0+",
   "devDependencies": {
     "eslint": "~8.57.0",
-    "eslint-plugin-security": "^2.1.0",
+    "eslint-plugin-security": "^3.0.0",
     "qunitjs": "~2.4.0",
     "requirejs": "~2.3.5",
     "sinon": "~17.0.0",
