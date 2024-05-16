@@ -12,7 +12,7 @@ pycodestyle==2.11.1
 entrypoints==0.4  # for flake8
 importlib-metadata<7.2 # for flake8
 typing_extensions==4.11.0
-zipp==3.18.1  # for flake8
+zipp==3.18.2  # for flake8
 flake8==7.0.0
 
 mccabe==0.7.0
