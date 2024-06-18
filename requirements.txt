@@ -34,7 +34,7 @@ chardet==5.2.0
 cffi==1.16.0  # pyOpenSSL
 cryptography==42.0.8
 idna<3
-urllib3==2.2.1
+urllib3==2.2.2
 ply==3.11
 pycparser==2.22
 cffi==1.16.0
