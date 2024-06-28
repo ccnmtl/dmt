@@ -61,7 +61,7 @@ Faker==25.9.2
 factory_boy==3.3.0
 ldap3==2.9.1
 
-sentry-sdk==2.7.0  # for ctlsettings
+sentry-sdk==2.7.1  # for ctlsettings
 
 parse-type==0.6.2
 parse==1.20.2
