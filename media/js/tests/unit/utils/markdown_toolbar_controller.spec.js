@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-env qunit */
 define([
     '../../../src/utils/markdown_toolbar_controller'

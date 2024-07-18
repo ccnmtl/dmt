@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-env qunit */
 /* global sinon */
 define(
