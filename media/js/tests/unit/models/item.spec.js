@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-env qunit */
 define(['../../../src/models/item'], function(Item) {
     QUnit.test('should be able to create an instance', function(assert) {

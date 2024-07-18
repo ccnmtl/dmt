@@ -5,6 +5,7 @@ define(
         '../../../src/views/client',
         '../../../src/models/client',
     ], function($, ClientView, Client) {
+        // eslint-disable-next-line no-undef
         QUnit.test('should create an instance', function(assert) {
             assert.expect(1);
 
