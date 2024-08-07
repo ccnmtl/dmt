@@ -31,13 +31,13 @@ pyasn1==0.6.0
 chardet==5.2.0
 
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
-cffi==1.16.0  # pyOpenSSL
+cffi==1.17.0  # pyOpenSSL
 cryptography==43.0.0
 idna<4
 urllib3==2.2.2
 ply==3.11
 pycparser==2.22
-cffi==1.16.0
+cffi==1.17.0
 asn1crypto==1.5.1
 
 requests==2.32.3
