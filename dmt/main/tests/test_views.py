@@ -48,7 +48,7 @@ class BasicTest(TestCase):
 
     def test_root(self):
         response = self.c.get("/")
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_smoketest(self):
         self.c.get("/smoketest/")
@@ -57,7 +57,7 @@ class BasicTest(TestCase):
 
     def test_search(self):
         response = self.c.get("/search/?q=foo")
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_search_item(self):
         # Search terms need to be at least 3 characters long, so only
@@ -65,7 +65,7 @@ class BasicTest(TestCase):
         item = ItemFactory(iid=FuzzyInteger(100, 999999))
         params = urlencode({'q': item.iid})
         response = self.c.get('/search/?%s' % params)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Search results for "%d"' % item.iid)
         self.assertContains(response, item.title)
         self.assertContains(response, item.get_absolute_url())
@@ -74,14 +74,14 @@ class BasicTest(TestCase):
         item = ItemFactory(iid=FuzzyInteger(100, 999999))
         params = urlencode({'q': '#%d' % item.iid})
         response = self.c.get('/search/?%s' % params)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Search results for "#%d"' % item.iid)
         self.assertContains(response, item.title)
         self.assertContains(response, item.get_absolute_url())
 
     def test_search_empty(self):
         response = self.c.get("/search/?q=")
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, "alert-danger")
 
     def test_search_projects(self):
@@ -92,15 +92,15 @@ class BasicTest(TestCase):
         ProjectFactory(name='Barish', status='Archived')
 
         response = self.c.get("/search/?q=foo")
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
-        self.assertEquals(response.context_data['archivedprojects'].count(),
-                          1)
-        self.assertEquals(response.context_data['archivedprojects'].first(),
-                          archived)
+        self.assertEqual(response.context_data['archivedprojects'].count(),
+                         1)
+        self.assertEqual(response.context_data['archivedprojects'].first(),
+                         archived)
 
-        self.assertEquals(response.context_data['projects'].count(), 1)
-        self.assertEquals(response.context_data['projects'].first(), project)
+        self.assertEqual(response.context_data['projects'].count(), 1)
+        self.assertEqual(response.context_data['projects'].first(), project)
 
     def test_dashboard(self):
         response = self.c.get("/dashboard/")
@@ -109,7 +109,7 @@ class BasicTest(TestCase):
     def test_owned_items(self):
         response = self.c.get(
             reverse('owned_items', args=[self.u.userprofile.username]))
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Owned Items")
 
 
@@ -329,8 +329,8 @@ class TestProjectViews(LoggedInTestMixin, TestCase):
     def test_add_action_item_empty_request(self):
         r = self.c.post(self.p.get_absolute_url() + "add_action_item/",
                         dict())
-        self.assertEquals(r.status_code, 404)
-        self.assertEquals(Reminder.objects.count(), 0)
+        self.assertEqual(r.status_code, 404)
+        self.assertEqual(Reminder.objects.count(), 0)
 
     def test_timeline(self):
         r = self.c.get(reverse("project_timeline", args=[self.p.pid]))
@@ -1049,16 +1049,16 @@ class TestItemViews(LoggedInTestMixin, TestCase):
         milestone = i.milestone
         r = self.c.post(i.get_absolute_url() + "delete/")
         # should redirect us to the milestone
-        self.assertEquals(r.status_code, 302)
+        self.assertEqual(r.status_code, 302)
         self.assertTrue(r['Location'].endswith(milestone.get_absolute_url()))
         # make sure it's gone
         q = Item.objects.filter(iid=iid)
-        self.assertEquals(q.count(), 0)
+        self.assertEqual(q.count(), 0)
 
     def test_delete_item_confirm(self):
         i = ItemFactory()
         r = self.c.get(i.get_absolute_url() + "delete/")
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
         self.assertContains(r, "<form")
 
     def test_add_attachment(self):
@@ -1070,7 +1070,7 @@ class TestItemViews(LoggedInTestMixin, TestCase):
                 description="blah",
                 s3_url="https://s3/foo.jpg",
             ))
-        self.assertEquals(r.status_code, 302)
+        self.assertEqual(r.status_code, 302)
         self.assertTrue(Attachment.objects.filter(
             item=i, url="https://s3/foo.jpg").exists())
 
@@ -1550,7 +1550,7 @@ class TestForum(TestCase):
             n.get_absolute_url() + "delete/",
             params=dict())
         r = self.c.get(n.get_absolute_url())
-        self.assertEquals(r.status_code, 404)
+        self.assertEqual(r.status_code, 404)
 
     def test_linkify_infinite_loop(self):
         # see https://pmt.ctl.columbia.edu/item/101115/
@@ -1602,12 +1602,12 @@ class TestFeeds(TestCase):
     def test_forum_feed(self):
         NodeFactory()
         r = self.c.get("/feeds/forum/rss/")
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
 
     def test_status_feed(self):
         s = StatusUpdateFactory()
         r = self.c.get("/feeds/status/")
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
         self.assertContains(
             r,
             "<author>{} ({})</author>".format(
@@ -1623,13 +1623,13 @@ class TestFeeds(TestCase):
         p = ProjectFactory()
         ItemFactory()
         r = self.c.get("/feeds/project/%s/" % p.pid)
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
 
     @override_settings(BASE_URL="https://newbase.com")
     def test_base_url(self):
         i = ItemFactory()
         r = self.c.get("/feeds/project/%s/" % i.milestone.project.pid)
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
         self.assertNotContains(r, "dmt.ccnmtl.columbia.edu")
         self.assertContains(r, "https://newbase.com")
 
