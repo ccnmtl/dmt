@@ -224,8 +224,8 @@ class UserModelTest(TestCase):
         i = ItemFactory(owner_user=profile.user)
 
         qs = profile.open_owned_items()
-        self.assertEquals(qs.count(), 1)
-        self.assertEquals(qs.first(), i)
+        self.assertEqual(qs.count(), 1)
+        self.assertEqual(qs.first(), i)
 
 
 class ProjectUserTest(TestCase):

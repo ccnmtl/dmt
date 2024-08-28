@@ -102,8 +102,8 @@ class StaffCapacityCalculatorTest(TestCase):
 
         calc = StaffCapacityCalculator(
             UserProfile.objects.all(), start, end)
-        self.assertEquals(calc.days(), 10)
-        self.assertEquals(calc.capacity_for_range(), 60)
+        self.assertEqual(calc.days(), 10)
+        self.assertEqual(calc.capacity_for_range(), 60)
 
     def test_capacity_skip_holiday(self):
         UserProfileFactory()
@@ -112,8 +112,8 @@ class StaffCapacityCalculatorTest(TestCase):
 
         calc = StaffCapacityCalculator(
             UserProfile.objects.all(), start, end)
-        self.assertEquals(calc.days(), 4)
-        self.assertEquals(calc.capacity_for_range(), 24)
+        self.assertEqual(calc.days(), 4)
+        self.assertEqual(calc.capacity_for_range(), 24)
 
     def test_calc(self):
         start = parse_datetime('2017-05-15 00:00:00-04:00')
@@ -130,13 +130,13 @@ class StaffCapacityCalculatorTest(TestCase):
         calc = StaffCapacityCalculator(
             UserProfile.objects.filter(user__id=profile.user.id),
             start, end)
-        self.assertEquals(calc.days(), 10)
-        self.assertEquals(calc.capacity_for_range(), 60)
+        self.assertEqual(calc.days(), 10)
+        self.assertEqual(calc.capacity_for_range(), 60)
 
         data = calc.calc()
-        self.assertEquals(len(data), 1)
-        self.assertEquals(data[0]['user'], profile)
-        self.assertEquals(data[0]['booked'], 5)
-        self.assertEquals(data[0]['percent_booked'], '8.3')
-        self.assertEquals(data[0]['available'], 55)
-        self.assertEquals(data[0]['percent_available'], '91.7')
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]['user'], profile)
+        self.assertEqual(data[0]['booked'], 5)
+        self.assertEqual(data[0]['percent_booked'], '8.3')
+        self.assertEqual(data[0]['available'], 55)
+        self.assertEqual(data[0]['percent_available'], '91.7')
