@@ -24,7 +24,7 @@ cssselect==1.2.0
 lxml==5.3.0
 fuzzywuzzy==0.18.0
 sure==2.0.1
-isodate==0.7.0
+isodate==0.7.2
 SPARQLWrapper==1.8.5
 coverage==7.6.1
 pyasn1==0.6.1
