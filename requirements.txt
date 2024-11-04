@@ -134,7 +134,7 @@ ctlsettings==0.4.3
 pbr==6.1.0
 pyyaml==6.0.2
 stevedore>=1.20.0 # Apache-2.0
-rich==13.9.3 # bandit
+rich==13.9.4 # bandit
 bandit==1.7.10
 
 numpy<2.2.0
