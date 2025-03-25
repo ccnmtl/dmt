@@ -9,7 +9,7 @@
     "globals": "^16.0.0",
     "qunitjs": "~2.4.0",
     "requirejs": "~2.3.5",
-    "sinon": "~19.0.0",
+    "sinon": "~20.0.0",
     "sinon-qunit": "~2.0.0"
   },
   "repository": {
