@@ -122,7 +122,7 @@ webencodings==0.5.1
 html5lib==1.1
 freezegun==1.5.1
 gunicorn==23.0.0
-django-storages==1.14.5
+django-storages==1.14.6
 django-cacheds3storage==0.3.0
 django-markwhat==1.6.2
 
