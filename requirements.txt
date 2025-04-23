@@ -116,7 +116,7 @@ django-braces==1.17.0
 oauthlib==3.2.2
 jwcrypto>=0.8.0
 django-oauth-toolkit==3.0.1
-django-extra-views==0.15.0
+django-extra-views==0.16.0
 bleach==6.2.0
 webencodings==0.5.1
 html5lib==1.1
