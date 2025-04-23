@@ -75,7 +75,7 @@ s3transfer==0.11.5
 jmespath==1.0.1
 
 botocore>=1.15.0,<1.38.0
-boto3>=1.12.0,<1.38.0
+boto3>=1.12.0,<1.39.0
 
 unicodecsv==0.14.1
 XlsxWriter==3.2.3
