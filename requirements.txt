@@ -74,8 +74,8 @@ requirements/src/whitelistaffilmapper-0.1.1-py2.py3-none-any.whl
 s3transfer==0.12.0
 jmespath==1.0.1
 
+boto3>=1.12.0,<1.39.0
 botocore>=1.15.0,<1.39.0
-boto3>=1.12.0,<1.38.0
 
 unicodecsv==0.14.1
 XlsxWriter==3.2.3
