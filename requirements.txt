@@ -120,7 +120,7 @@ django-extra-views==0.16.0
 bleach==6.2.0
 webencodings==0.5.1
 html5lib==1.1
-freezegun==1.5.1
+freezegun==1.5.2
 gunicorn==23.0.0
 django-storages==1.14.6
 django-cacheds3storage==0.3.0
