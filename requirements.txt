@@ -84,7 +84,7 @@ shortuuid==1.0.13
 contextlib2==21.6.0
 tblib==3.1.0
 
-pyzmq==27.0.0
+pyzmq==27.0.1
 websocket-client==1.8.0
 
 python-cas==1.6.0
