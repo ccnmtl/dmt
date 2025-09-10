@@ -71,7 +71,7 @@ recordtype==1.4
 urlparse2==1.1.1
 sqlparse==0.5.3
 requirements/src/whitelistaffilmapper-0.1.1-py2.py3-none-any.whl
-s3transfer==0.13.1
+s3transfer==0.14.0
 jmespath==1.0.1
 
 botocore>=1.15.0,<1.41.0
