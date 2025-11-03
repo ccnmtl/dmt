@@ -29,6 +29,7 @@ PROJECT_APPS = [
 MIDDLEWARE += [  # noqa
     'django.middleware.csrf.CsrfViewMiddleware',
     'django_cas_ng.middleware.CASMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 INSTALLED_APPS += [  # noqa
@@ -40,6 +41,7 @@ INSTALLED_APPS += [  # noqa
     'taggit_templatetags2',
     'bootstrap3',
     'emoji',
+    'debug_toolbar',
 
     'dmt.main',
     'dmt.report',
