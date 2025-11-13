@@ -81,7 +81,7 @@ XlsxWriter==3.2.9
 splinter==0.21.0
 shortuuid==1.0.13
 contextlib2==21.6.0
-tblib==3.2.1
+tblib==3.2.2
 
 pyzmq==27.1.0
 websocket-client==1.9.0
