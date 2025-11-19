@@ -86,7 +86,7 @@ tblib==3.2.2
 pyzmq==27.1.0
 websocket-client==1.9.0
 
-python-cas==1.6.0
+python-cas==1.7.1
 django-cas-ng==5.0.1
 
 django-staticmedia==0.2.2
