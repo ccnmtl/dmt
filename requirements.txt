@@ -87,7 +87,7 @@ pyzmq==27.1.0
 websocket-client==1.9.0
 
 python-cas==1.7.1
-django-cas-ng==5.0.1
+django-cas-ng==5.1.0
 
 django-staticmedia==0.2.2
 django-appconf==1.2.0
