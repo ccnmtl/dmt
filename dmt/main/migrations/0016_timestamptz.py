@@ -18,7 +18,7 @@ def migrate_timestamptz(tbl, col):
 
     # Do nothing unless we're migrating postgresql.
     if settings.DATABASES['default']['ENGINE'] != \
-       'django.db.backends.postgresql_psycopg2':
+       'django.db.backends.postgresql':
         return migrations.RunPython(migrations.RunPython.noop)
 
     sql = "ALTER TABLE {:s} ALTER COLUMN {:s} SET DATA TYPE timestamptz " \

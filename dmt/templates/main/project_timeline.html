@@ -39,7 +39,7 @@
             <h3 class="text-muted pmt-timeline-timestamp">{{i.timestamp|date:"D, F jS Y"}}</h3>
     {% endifchanged %}
             <div class="pmt-timeline-item-row">
-            {% ifequal i.event_type "event" %}
+            {% if i.event_type == "event" %}
                 <span class="glyphicon glyphicon-check text-muted"></span>
             {% if i.body %}
                 <div class="event-body">{{i.body|commonmark|linkify|emoji_replace}}</div>
@@ -52,9 +52,9 @@
             {% endif %}
             item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
-            {% endifequal %}
+            {% endif %}
 
-            {% ifequal i.event_type "comment" %}
+            {% if i.event_type == "comment" %}
                 <span class="glyphicon glyphicon-comment text-muted"></span>
             {% if i.user %}
             <a class="text-primary"
@@ -63,9 +63,9 @@
             {% endif %}
             commented on item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
-            {% endifequal %}
+            {% endif %}
 
-            {% ifequal i.event_type "actual_time" %}
+            {% if i.event_type == "actual_time" %}
                 <span class="glyphicon glyphicon-time text-muted"></span>
             {% if i.user %}
             <a class="text-primary"
@@ -78,9 +78,9 @@
             {% endif %}
                 for item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
-            {% endifequal %}
+            {% endif %}
 
-            {% ifequal i.event_type "status_update" %}
+            {% if i.event_type == "status_update" %}
                 <span class="glyphicon glyphicon-info-sign text-muted"></span>
             {% if i.user %}
             <a class="text-primary"
@@ -91,9 +91,9 @@
             {% if i.body %}
                 <div class="status-body">“{{i.body|commonmark|linkify|emoji_replace}}”</div>
             {% endif %}
-            {% endifequal %}
+            {% endif %}
 
-            {% ifequal i.event_type "forum_post" %}
+            {% if i.event_type == "forum_post" %}
                 <span class="glyphicon glyphicon-comment text-muted"></span>
             {% if i.user %}
             <a class="text-primary"
@@ -102,14 +102,14 @@
             {% endif %}
                 posted a forum
              “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
-           {% endifequal %}
+           {% endif %}
 
-            {% ifequal i.event_type "milestone" %}
+            {% if i.event_type == "milestone" %}
                     <span class="glyphicon glyphicon-alert text-muted"></span>
                 Milestone
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
                 is overdue
-            {% endifequal %}
+            {% endif %}
 
             in <a href="{{i.project.get_absolute_url}}">{{i.project.name}}</a>
 

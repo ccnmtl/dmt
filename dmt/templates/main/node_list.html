@@ -49,15 +49,15 @@
   by <a href="{{n.user.userprofile.get_absolute_url}}">{{n.user.userprofile.get_fullname}}</a>
   | {{n.added}}
   | <a href="{{n.get_absolute_url}}#replies"><span class="glyphicon glyphicon-comment"></span>
-  {% ifequal n.replies 0 %}
+  {% if n.replies == 0 %}
     Add reply
   {% else %}
-    {% ifequal n.replies 1 %}
+    {% if n.replies == 1 %}
       {{n.replies}} reply
     {% else %}
       {{n.replies}} replies
-    {% endifequal %}
-  {% endifequal %}
+    {% endif %}
+  {% endif %}
   </a>
   </div>
 

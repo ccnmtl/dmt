@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core import mail
 from django.test import TestCase
 from django.urls.base import reverse
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -337,8 +337,8 @@ class ExternalAddItemTests(APITestCase):
             'title': self.title,
             'email': self.email,
             'name': self.name,
-            'pid': smart_text(self.project.pk),
-            'mid': smart_text(self.milestone.pk),
+            'pid': smart_str(self.project.pk),
+            'mid': smart_str(self.milestone.pk),
             'type': 'action item',
             'owner': self.owner.username,
             'assigned_to': self.assignee.username,
@@ -389,7 +389,7 @@ class ExternalAddItemTests(APITestCase):
                          r.data.get('assigned_user')['username'])
         self.assertTrue(self.debug_info in r.data.get('description'))
         self.assertTrue(
-            smart_text(self.milestone.pk) in r.data.get('milestone'))
+            smart_str(self.milestone.pk) in r.data.get('milestone'))
         self.assertEqual(r.data.get('estimated_time'), '01:00:00')
         self.assertEqual(r.data.get('target_date'), self.target_date)
 
@@ -455,14 +455,14 @@ class ExternalAddItemTests(APITestCase):
         )
         self.assertEqual(r.data.get('type'), 'action item')
         self.assertIn(
-            smart_text(self.owner.user.username),
+            smart_str(self.owner.user.username),
             r.data.get('owner_user').values())
         self.assertIn(
-            smart_text(self.assignee.user.username),
+            smart_str(self.assignee.user.username),
             r.data.get('assigned_user').values())
         self.assertTrue(self.debug_info in r.data.get('description'))
         self.assertTrue(
-            smart_text(self.milestone.pk) in r.data.get('milestone'))
+            smart_str(self.milestone.pk) in r.data.get('milestone'))
         self.assertEqual(r.data.get('estimated_time'), '01:00:00')
 
     def test_post_no_pid(self):

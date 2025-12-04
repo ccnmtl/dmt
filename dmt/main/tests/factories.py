@@ -5,8 +5,8 @@ from factory.django import DjangoModelFactory
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from django.utils import timezone
-from django.utils.timezone import utc
+from django.utils import timezone as django_timezone
+from datetime import timezone
 from dmt.main.models import (
     UserProfile, Project, Milestone, Item,
     Comment, Events, Node, ActualTime, StatusUpdate,
@@ -61,7 +61,7 @@ class MilestoneFactory(DjangoModelFactory):
     mid = factory.Sequence(lambda n: n)
     project = factory.SubFactory(ProjectFactory)
     name = factory.Sequence(lambda n: 'Test Milestone {0}'.format(n))
-    target_date = timezone.now().date() + timedelta(days=3650)
+    target_date = django_timezone.now().date() + timedelta(days=3650)
     status = "OPEN"
 
 
@@ -78,7 +78,7 @@ class ItemFactory(DjangoModelFactory):
     milestone = factory.SubFactory(MilestoneFactory)
     status = "OPEN"
     priority = 1
-    target_date = timezone.now()
+    target_date = django_timezone.now()
 
 
 class NotifyFactory(DjangoModelFactory):
@@ -95,7 +95,7 @@ class EventFactory(DjangoModelFactory):
 
     eid = factory.Sequence(lambda n: n)
     status = "OPEN"
-    event_date_time = datetime(2020, 12, 1).replace(tzinfo=utc)
+    event_date_time = datetime(2020, 12, 1).replace(tzinfo=timezone.utc)
     item = factory.SubFactory(ItemFactory)
 
 
@@ -105,7 +105,7 @@ class CommentFactory(DjangoModelFactory):
 
     cid = factory.Sequence(lambda n: n)
     comment = "a comment"
-    add_date_time = datetime(2020, 12, 1).replace(tzinfo=utc)
+    add_date_time = datetime(2020, 12, 1).replace(tzinfo=timezone.utc)
     username = factory.Sequence(lambda n: 'user{0}'.format(n))
     item = factory.SubFactory(ItemFactory)
     event = factory.SubFactory(EventFactory)
@@ -116,8 +116,8 @@ class NodeFactory(DjangoModelFactory):
         model = Node
 
     nid = factory.Sequence(lambda n: n)
-    added = datetime(2020, 12, 1).replace(tzinfo=utc)
-    modified = datetime(2020, 12, 1).replace(tzinfo=utc)
+    added = datetime(2020, 12, 1).replace(tzinfo=timezone.utc)
+    modified = datetime(2020, 12, 1).replace(tzinfo=timezone.utc)
     user = factory.SubFactory(UserFactory)
 
 
@@ -128,7 +128,7 @@ class ActualTimeFactory(DjangoModelFactory):
     item = factory.SubFactory(ItemFactory)
     user = factory.SubFactory(UserFactory)
     actual_time = timedelta(hours=1)
-    completed = datetime(2013, 12, 20).replace(tzinfo=utc)
+    completed = datetime(2013, 12, 20).replace(tzinfo=timezone.utc)
 
 
 class ClientFactory(DjangoModelFactory):
@@ -139,7 +139,7 @@ class ClientFactory(DjangoModelFactory):
     lastname = "clientlastname"
     firstname = "clientfirstname"
     title = "Dr."
-    registration_date = datetime(2013, 12, 20).replace(tzinfo=utc)
+    registration_date = datetime(2013, 12, 20).replace(tzinfo=timezone.utc)
     department = "Testing"
     school = "TestSchool"
     email = "testclient@columbia.edu"

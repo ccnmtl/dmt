@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, re_path
 
 from rest_framework import routers
 
@@ -20,20 +20,20 @@ router.register(r'milestones', MilestoneViewSet)
 router.register(r'items', ItemViewSet)
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^notify/(?P<pk>\d+)/$', NotifyView.as_view(), name='notify'),
-    url(r'^api-auth/', include('rest_framework.urls',
-                               namespace='rest_framework')),
-    url(r'^projects/(?P<pk>\d+)/milestones/$',
-        ProjectMilestoneList.as_view(), name='project-milestones'),
-    url(r'^milestones/(?P<pk>\d+)/items/$',
-        MilestoneItemList.as_view(), name='milestone-items'),
-    url(r'^trackers/add/', AddTrackerView.as_view(), name='add-tracker'),
-    url(r'^items/(?P<pk>\d+)/hours/$', ItemHoursView.as_view(),
-        name='item-hours'),
-    url(r'^git/$', GitUpdateView.as_view(), name='git-update'),
-    url(r'^external_add_item/$', ExternalAddItemView.as_view(),
-        name='external-add-item'),
-    url(r'^jira_add_item/$', JiraExternalAddItemView.as_view(),
-        name='jira-add-item'),
+    re_path(r'^', include(router.urls)),
+    re_path(r'^notify/(?P<pk>\d+)/$', NotifyView.as_view(), name='notify'),
+    re_path(r'^api-auth/', include('rest_framework.urls',
+                                   namespace='rest_framework')),
+    re_path(r'^projects/(?P<pk>\d+)/milestones/$',
+            ProjectMilestoneList.as_view(), name='project-milestones'),
+    re_path(r'^milestones/(?P<pk>\d+)/items/$',
+            MilestoneItemList.as_view(), name='milestone-items'),
+    re_path(r'^trackers/add/', AddTrackerView.as_view(), name='add-tracker'),
+    re_path(r'^items/(?P<pk>\d+)/hours/$', ItemHoursView.as_view(),
+            name='item-hours'),
+    re_path(r'^git/$', GitUpdateView.as_view(), name='git-update'),
+    re_path(r'^external_add_item/$', ExternalAddItemView.as_view(),
+            name='external-add-item'),
+    re_path(r'^jira_add_item/$', JiraExternalAddItemView.as_view(),
+            name='jira-add-item'),
 ]

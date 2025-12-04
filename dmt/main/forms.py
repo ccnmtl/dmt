@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from django.forms import ModelForm, TextInput, URLInput
 from django.utils import timezone
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django_markwhat.templatetags.markup import commonmark
 from extra_views import InlineFormSetFactory
 from simpleduration import Duration, InvalidDuration
@@ -63,7 +63,7 @@ class UserFullnameChoiceField(forms.ModelChoiceField):
     # django-show-get-full-name-instead-or-username-in-model-form
 
     def label_from_instance(self, obj):
-        return smart_text(obj.get_full_name())
+        return smart_str(obj.get_full_name())
 
 
 class ProjectCreateForm(ModelForm):

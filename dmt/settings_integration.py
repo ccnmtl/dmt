@@ -3,7 +3,7 @@ from dmt.settings_shared import *
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ci_test',
         'HOST': 'localhost',
         'PORT': '5432',
