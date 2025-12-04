@@ -47,7 +47,7 @@ class StaffReportCalculatorTests(TestCase):
 
 @unittest.skipIf(
     settings.DATABASES['default']['ENGINE'] !=
-    'django.db.backends.postgresql_psycopg2',
+    'django.db.backends.postgresql',
     "This test uses a raw PostgreSQL query")
 class TimeSpentByUserCalculatorTest(TestCase):
     def test_calc(self):
@@ -62,7 +62,7 @@ class TimeSpentByUserCalculatorTest(TestCase):
 
 @unittest.skipIf(
     settings.DATABASES['default']['ENGINE'] !=
-    'django.db.backends.postgresql_psycopg2',
+    'django.db.backends.postgresql',
     "This test uses a raw PostgreSQL query")
 class TimeSpentByProjectCalculatorTest(TestCase):
     def test_calc(self):
@@ -77,7 +77,7 @@ class TimeSpentByProjectCalculatorTest(TestCase):
 
 @unittest.skipIf(
     settings.DATABASES['default']['ENGINE'] !=
-    'django.db.backends.postgresql_psycopg2',
+    'django.db.backends.postgresql',
     "This test uses a raw PostgreSQL query")
 class ProjectStatusCalculatorTest(TestCase):
     def test_calc(self):

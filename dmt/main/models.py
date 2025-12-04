@@ -15,7 +15,7 @@ from django.db.models import Max, Q, Sum
 from django.db.models.signals import post_save
 from django.urls.base import reverse
 from django.utils import timezone
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django_statsd.clients import statsd
 import pytz
 from simpleduration import Duration, InvalidDuration
@@ -1577,13 +1577,13 @@ Please do not reply to this message.
 
     def send_new_subscriber_mail(self, user, subscriber):
         body = '{} has subscribed you to this PMT item:\n\t{}\n'.format(
-            force_text(user.userprofile),
+            force_str(user.userprofile),
             'https://pmt.ctl.columbia.edu{}'.format(
                 self.get_absolute_url()))
 
         send_mail(
-            '[PMT Item] {}'.format(force_text(self.title)),
-            force_text(body),
+            '[PMT Item] {}'.format(force_str(self.title)),
+            force_str(body),
             'PMT Notification <{}>'.format(settings.SERVER_EMAIL),
             [subscriber.userprofile.get_email()],
             fail_silently=settings.DEBUG)

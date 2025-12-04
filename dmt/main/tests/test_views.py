@@ -10,7 +10,7 @@ from django.test import TestCase, override_settings
 from django.urls.base import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_date
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from factory.fuzzy import FuzzyInteger
 from simpleduration import Duration
 from waffle.testutils import override_flag
@@ -143,7 +143,7 @@ class TestClientViews(TestCase):
 
     @unittest.skipIf(
         settings.DATABASES['default']['ENGINE'] ==
-        'django.db.backends.postgresql_psycopg2',
+        'django.db.backends.postgresql',
         "This test has intermittent issues with PostgreSQL")
     def test_add_client(self):
         r = self.client.post(
@@ -2028,7 +2028,7 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
         self.assertEqual(email.subject, '[PMT Item] {}'.format(self.i.title))
 
         body = '{} has subscribed you to this PMT item:\n\t{}\n'.format(
-            smart_text(self.u.userprofile),
+            smart_str(self.u.userprofile),
             'https://pmt.ctl.columbia.edu{}'.format(
                 self.i.get_absolute_url()))
         self.assertEqual(email.body, body)
@@ -2046,7 +2046,7 @@ class TestItemAddSubscriberView(LoggedInTestMixin, TestCase):
         self.assertContains(
             r,
             '<strong>{}</strong> has been subscribed to this item.'.format(
-                smart_text(subscriber.userprofile)))
+                smart_str(subscriber.userprofile)))
         self.assertEqual(Notify.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 0)
 
@@ -2100,10 +2100,11 @@ class TestItemCreateView(LoggedInTestMixin, TestCase):
         self.form_data['assigned_user'] = inactive_user
         url = reverse('item_create') + '?mid={}'.format(self.milestone.mid)
         r = self.client.post(url, self.form_data)
+        form = r.context['form']
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
         self.assertFormError(
-            r, 'form', 'assigned_user',
+            form, 'assigned_user',
             'Select a valid choice. That choice is not '
             'one of the available choices.')
 
@@ -2143,25 +2144,28 @@ class TestItemCreateView(LoggedInTestMixin, TestCase):
         del self.form_data['milestone']
         url = reverse('item_create')
         r = self.client.post(url, self.form_data)
+        form = r.context['form']
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
-        self.assertFormError(r, 'form', 'milestone', 'This field is required.')
+        self.assertFormError(form, 'milestone', 'This field is required.')
 
     def test_post_no_milestone(self):
         del self.form_data['milestone']
         url = reverse('item_create') + '?mid={}'.format(self.milestone.mid)
         r = self.client.post(url, self.form_data)
+        form = r.context['form']
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
-        self.assertFormError(r, 'form', 'milestone', 'This field is required.')
+        self.assertFormError(form, 'milestone', 'This field is required.')
 
     def test_post_no_project(self):
         del self.form_data['project']
         url = reverse('item_create') + '?mid={}'.format(self.milestone.mid)
         r = self.client.post(url, self.form_data)
+        form = r.context['form']
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
-        self.assertFormError(r, 'form', 'project', 'This field is required.')
+        self.assertFormError(form, 'project', 'This field is required.')
 
     def test_post_null_target_date(self):
         self.form_data.update({
@@ -2213,10 +2217,11 @@ class TestBugCreateView(LoggedInTestMixin, TestCase):
         self.form_data['assigned_user'] = inactive_user
         url = reverse('bug_create') + '?mid={}'.format(self.milestone.mid)
         r = self.client.post(url, self.form_data)
+        form = r.context['form']
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
         self.assertFormError(
-            r, 'form', 'assigned_user',
+            form, 'assigned_user',
             'Select a valid choice. That choice is not '
             'one of the available choices.')
 
@@ -2255,25 +2260,28 @@ class TestBugCreateView(LoggedInTestMixin, TestCase):
         del self.form_data['milestone']
         url = reverse('bug_create')
         r = self.client.post(url, self.form_data)
+        form = r.context['form']
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
-        self.assertFormError(r, 'form', 'milestone', 'This field is required.')
+        self.assertFormError(form, 'milestone', 'This field is required.')
 
     def test_post_no_milestone(self):
         del self.form_data['milestone']
         url = reverse('bug_create') + '?mid={}'.format(self.milestone.mid)
         r = self.client.post(url, self.form_data)
+        form = r.context['form']
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
-        self.assertFormError(r, 'form', 'milestone', 'This field is required.')
+        self.assertFormError(form, 'milestone', 'This field is required.')
 
     def test_post_no_project(self):
         del self.form_data['project']
         url = reverse('bug_create') + '?mid={}'.format(self.milestone.mid)
         r = self.client.post(url, self.form_data)
+        form = r.context['form']
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Item.objects.count(), 0)
-        self.assertFormError(r, 'form', 'project', 'This field is required.')
+        self.assertFormError(form, 'project', 'This field is required.')
 
     def test_post_null_target_date(self):
         self.form_data.update({

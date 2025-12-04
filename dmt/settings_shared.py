@@ -38,7 +38,6 @@ INSTALLED_APPS += [  # noqa
     'django_markwhat',
     'rest_framework',
     'taggit',
-    'taggit_templatetags2',
     'bootstrap3',
     'emoji',
     'debug_toolbar',

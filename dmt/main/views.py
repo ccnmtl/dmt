@@ -908,7 +908,7 @@ class ItemCreateView(LoggedInMixin, CreateView):
         return reverse('item_detail', args=(self.object.pk,))
 
     def get_context_data(self, **kwargs):
-        ctx = super(ItemCreateView, self).get_context_data(**kwargs)
+        ctx = super().get_context_data(**kwargs)
         mid = self.request.GET.get('mid')
         pid = self.request.GET.get('pid')
         fields = ctx['form'].fields

@@ -39,22 +39,22 @@
             <h3 class="text-muted pmt-timeline-timestamp">{{i.timestamp|date:"D, F jS Y"}}</h3>
     {% endifchanged %}
             <div class="pmt-timeline-item-row">
-            {% ifequal i.event_type "event" %}
+            {% if i.event_type == "event" %}
                 <span class="glyphicon glyphicon-check text-muted"></span>
             {% if i.body %}
                 <div class="event-body">{{i.body|commonmark|linkify|emoji_replace}}</div>
             {% endif %}
             item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
-            {% endifequal %}
+            {% endif %}
 
-            {% ifequal i.event_type "comment" %}
+            {% if i.event_type == "comment" %}
                 <span class="glyphicon glyphicon-comment text-muted"></span>
                 Commented on item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
-            {% endifequal %}
+            {% endif %}
 
-            {% ifequal i.event_type "actual_time" %}
+            {% if i.event_type == "actual_time" %}
                 <span class="glyphicon glyphicon-time text-muted"></span>
                 Logged
             {% if i.body %}
@@ -62,21 +62,21 @@
             {% endif %}
                 for item
             “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
-            {% endifequal %}
+            {% endif %}
 
-            {% ifequal i.event_type "status_update" %}
+            {% if i.event_type == "status_update" %}
                 <span class="glyphicon glyphicon-info-sign text-muted"></span>
                 Added status update
             {% if i.body %}
                 <div class="status-body">“{{i.body|commonmark|linkify|emoji_replace}}”</div>
             {% endif %}
-            {% endifequal %}
+            {% endif %}
 
-            {% ifequal i.event_type "forum_post" %}
+            {% if i.event_type == "forum_post" %}
                 <span class="glyphicon glyphicon-comment text-muted"></span>
                 Posted a forum
              “{% if i.url %}<a href="{{i.url}}">{% endif %}{{i.title|emoji_replace}}{% if i.url %}</a>{% endif %}”
-           {% endifequal %}
+           {% endif %}
 
             in <a href="{{i.project.get_absolute_url}}">{{i.project.name}}</a>
 
