@@ -26,7 +26,7 @@ fuzzywuzzy==0.18.0
 sure==3.0a2
 isodate==0.7.2
 SPARQLWrapper==1.8.5
-pyasn1==0.6.1
+pyasn1==0.6.2
 chardet==5.2.0
 
 # https://urllib3.readthedocs.io/en/latest/user-guide.html#ssl-py2
