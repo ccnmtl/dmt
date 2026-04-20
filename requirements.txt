@@ -21,7 +21,7 @@ certifi==2026.2.25
 pyparsing==3.3.2
 tornado==6.5.5
 cssselect==1.4.0
-lxml==6.0.4
+lxml==6.1.0
 fuzzywuzzy==0.18.0
 sure==3.0a2
 isodate==0.7.2
