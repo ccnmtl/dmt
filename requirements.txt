@@ -18,7 +18,7 @@ flake8==7.3.0
 mccabe==0.7.0
 certifi==2026.7.22
 
-pyparsing==3.3.2
+pyparsing==3.3.3
 tornado==6.5.10
 cssselect==1.5.0
 lxml==6.1.3
