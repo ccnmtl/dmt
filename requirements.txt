@@ -129,7 +129,7 @@ django-smtp-ssl==1.0
 
 ctlsettings==0.4.9
 
-pbr==7.0.3
+pbr==7.1.3
 pyyaml==6.0.3
 stevedore>=5.9.1 # Apache-2.0
 rich==15.0.0 # bandit
