@@ -43,7 +43,7 @@ requests==2.34.2
 packaging==26.3
 appdirs==1.4.4
 logilab-common==2.1.0
-lazy-object-proxy==1.12.0
+lazy-object-proxy==1.13.0
 wrapt==2.5.1
 
 pylint==4.1.3
