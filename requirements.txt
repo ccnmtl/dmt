@@ -35,7 +35,7 @@ cryptography==50.0.2
 idna<4
 urllib3==2.8.0
 ply==3.11
-pycparser==3.11
+pycparser==3.12
 cffi==2.1.1
 asn1crypto==1.5.1
 
