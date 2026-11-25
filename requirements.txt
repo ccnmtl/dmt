@@ -65,7 +65,7 @@ sentry-sdk==2.75.0  # for ctlsettings
 parse-type==0.6.6
 parse==1.22.4
 wsgi_intercept==1.13.1
-mechanize==0.4.10
+mechanize==0.4.11
 recordtype==1.4
 urlparse2==1.1.1
 sqlparse==0.6.1
